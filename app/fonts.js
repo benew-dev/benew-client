@@ -31,25 +31,25 @@ export const orbitron = localFont({
   src: [
     // Medium (500) - Titres h4, h5, h6 + Liens
     {
-      path: '../public/fonts/Orbitron-Medium.woff2',
+      path: '../public/fonts/Orbitron-Medium.ttf',
       weight: '500',
       style: 'normal',
     },
     // SemiBold (600) - Titres h3 + Boutons
     {
-      path: '../public/fonts/Orbitron-SemiBold.woff2',
+      path: '../public/fonts/Orbitron-SemiBold.ttf',
       weight: '600',
       style: 'normal',
     },
     // Bold (700) - Titres h2
     {
-      path: '../public/fonts/Orbitron-Bold.woff2',
+      path: '../public/fonts/Orbitron-Bold.ttf',
       weight: '700',
       style: 'normal',
     },
     // Black (900) - Titres h1 (impact maximal)
     {
-      path: '../public/fonts/Orbitron-Black.woff2',
+      path: '../public/fonts/Orbitron-Black.ttf',
       weight: '900',
       style: 'normal',
     },
@@ -153,8 +153,11 @@ export const inter = Inter({
  * ===== STRUCTURE FICHIERS ATTENDUE =====
  *
  * public/fonts/
- *   ├── Orbitron-Medium.woff2
- *   ├── Orbitron-SemiBold.woff2
- *   ├── Orbitron-Bold.woff2
- *   └── Orbitron-Black.woff2
+ *   ├── Orbitron-Medium.ttf
+ *   ├── Orbitron-SemiBold.ttf
+ *   ├── Orbitron-Bold.ttf
+ *   └── Orbitron-Black.ttf
+ *
+ * Note : Next.js convertira automatiquement les fichiers .ttf en .woff2
+ * pour une meilleure compression et performance web.
  */
