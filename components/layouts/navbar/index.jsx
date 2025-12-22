@@ -39,7 +39,7 @@ export default function Navbar() {
         {/* LOGO */}
         <Link href="/" className="navbar-logo" aria-label="Accueil BENEW">
           <Image
-            src="/benew_head_only_transparent_fixed.png"
+            src="/icon-64x64.png"
             alt="Logo BENEW"
             width={60}
             height={60}
