@@ -1,224 +1,197 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useState } from 'react';
+import './index.scss';
+import Sidebar from '../sidebar';
+import Image from 'next/image';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 
-import './index.scss';
+function Navbar() {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-export default function Navbar() {
-  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null);
-
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!isMobileMenuOpen);
-    if (!isMobileMenuOpen) {
-      setOpenDropdown(null);
-    }
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const toggleDropdown = (key) => {
-    setOpenDropdown(openDropdown === key ? null : key);
-  };
-
-  const closeMobileMenu = () => {
-    setMobileMenuOpen(false);
-    setOpenDropdown(null);
-  };
-
-  const menuVariants = {
-    open: { opacity: 1, y: 0, display: 'flex' },
-    closed: { opacity: 0, y: -10, transitionEnd: { display: 'none' } },
+  const closeDropdown = () => {
+    setIsDropdownOpen(false);
   };
 
   return (
-    <nav className="navbar">
-      <div className="navbar-wrapper">
-        {/* LOGO */}
-        <Link href="/" className="navbar-logo" aria-label="Accueil BENEW">
-          <Image
-            src="/icon-64x64.png"
-            alt="Logo BENEW"
-            width={60}
-            height={60}
-            priority
-          />
-        </Link>
+    <div className="navbar">
+      {/* Sidebar */}
+      <Sidebar />
 
-        {/* LIENS DESKTOP */}
-        <div className="navbar-links-desktop">
-          <Link href="/" className="navbar-link">
-            Accueil
-          </Link>
+      <div className="wrapper">
+        {/* Structure pour moyens et grands écrans */}
+        <div className="desktop-structure">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Link href="/">
+              <Image
+                priority={true}
+                src="/logo.png"
+                height={48}
+                width={60}
+                alt="BuyItNow"
+                className="logo"
+              />
+            </Link>
+          </motion.div>
 
-          <Link href="/presentation" className="navbar-link">
-            Présentation
-          </Link>
-
-          <div className="navbar-dropdown">
-            <button className="navbar-link dropdown-trigger">
-              Nos services
-              <MdKeyboardArrowDown className="dropdown-icon" />
-            </button>
-            <div className="dropdown-content">
-              <Link href="/templates" className="dropdown-link">
-                Nos boutiques
-              </Link>
-              <Link href="/blog" className="dropdown-link">
-                Blog
-              </Link>
-            </div>
-          </div>
-
-          <Link href="/contact" className="navbar-link">
-            Contact
-          </Link>
-        </div>
-
-        {/* RÉSEAUX SOCIAUX + HAMBURGER */}
-        <div className="navbar-actions">
-          {/* RÉSEAUX SOCIAUX DESKTOP */}
-          <div className="social-links">
-            <Link href="#" aria-label="Facebook">
+          <div className="social">
+            <Link href="#">
               <Image
                 src="/facebook.png"
                 alt="Facebook logo"
                 width={24}
                 height={24}
+                className="social-icon"
               />
             </Link>
-            <Link href="#" aria-label="Instagram">
+            <Link href="#">
               <Image
                 src="/instagram.png"
                 alt="Instagram logo"
                 width={24}
                 height={24}
+                className="social-icon"
               />
             </Link>
-            <Link href="#" aria-label="TikTok">
+            <Link href="#">
               <Image
-                src="/tiktok.png"
-                alt="TikTok logo"
+                src="/snapchat.png"
+                alt="Snapchat logo"
                 width={24}
                 height={24}
+                className="social-icon"
+              />
+            </Link>
+            <Link href="#">
+              <Image
+                src="/twitter.png"
+                alt="Twitter logo"
+                width={24}
+                height={24}
+                className="social-icon"
               />
             </Link>
           </div>
-
-          {/* HAMBURGER MOBILE */}
-          <button
-            className={`hamburger ${isMobileMenuOpen ? 'active' : ''}`}
-            onClick={toggleMobileMenu}
-            aria-label="Menu mobile"
-            aria-expanded={isMobileMenuOpen}
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
         </div>
-      </div>
 
-      {/* MENU MOBILE */}
-      <motion.div
-        className="navbar-mobile-menu"
-        initial="closed"
-        animate={isMobileMenuOpen ? 'open' : 'closed'}
-        variants={menuVariants}
-        transition={{ duration: 0.3 }}
-      >
-        <div className="mobile-menu-content">
-          {/* LIENS MOBILES */}
-          <div className="mobile-links">
-            <Link href="/" className="mobile-link" onClick={closeMobileMenu}>
-              Accueil
+        {/* Structure pour petits écrans */}
+        <div className="mobile-structure">
+          <motion.div
+            className="mobile-logo"
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Link href="/">
+              <Image
+                priority={true}
+                src="/logo.png"
+                height={48}
+                width={60}
+                alt="BuyItNow"
+                className="logo"
+              />
             </Link>
+          </motion.div>
 
-            <Link
-              href="/presentation"
-              className="mobile-link"
-              onClick={closeMobileMenu}
+          {/* Bouton Audio Player Mobile - NOUVEAU */}
+
+          <div className="mobile-social-container">
+            <button
+              className="social-dropdown-trigger"
+              onClick={toggleDropdown}
+              aria-label="Ouvrir le menu des réseaux sociaux"
             >
-              Présentation
-            </Link>
-
-            {/* DROPDOWN MOBILE */}
-            <div className="mobile-dropdown">
-              <button
-                className="mobile-link dropdown-trigger-mobile"
-                onClick={() => toggleDropdown('services')}
-                aria-expanded={openDropdown === 'services'}
-              >
-                Nos services
-                <MdKeyboardArrowDown
-                  className={`dropdown-icon ${openDropdown === 'services' ? 'open' : ''}`}
-                />
-              </button>
-              {openDropdown === 'services' && (
-                <div className="mobile-dropdown-content">
+              <Image
+                src="/social_websites.png"
+                alt="Réseaux sociaux"
+                width={24}
+                height={24}
+                className="social-websites-icon"
+              />
+              {/* REMPLACER le SVG par cette icône React */}
+              <MdKeyboardArrowDown
+                className={`dropdown-arrow ${isDropdownOpen ? 'open' : ''}`}
+              />
+            </button>
+            {isDropdownOpen && (
+              <div className="social-dropdown">
+                <div className="dropdown-backdrop" onClick={closeDropdown} />
+                <div className="dropdown-content">
                   <Link
-                    href="/templates"
-                    className="mobile-dropdown-link"
-                    onClick={closeMobileMenu}
+                    href="#"
+                    className="dropdown-item"
+                    onClick={closeDropdown}
                   >
-                    Nos boutiques
+                    <Image
+                      src="/facebook.png"
+                      alt="Facebook"
+                      width={20}
+                      height={20}
+                      className="dropdown-icon"
+                    />
+                    <span>Facebook</span>
                   </Link>
                   <Link
-                    href="/blog"
-                    className="mobile-dropdown-link"
-                    onClick={closeMobileMenu}
+                    href="#"
+                    className="dropdown-item"
+                    onClick={closeDropdown}
                   >
-                    Blog
+                    <Image
+                      src="/instagram.png"
+                      alt="Instagram"
+                      width={20}
+                      height={20}
+                      className="dropdown-icon"
+                    />
+                    <span>Instagram</span>
+                  </Link>
+                  <Link
+                    href="#"
+                    className="dropdown-item"
+                    onClick={closeDropdown}
+                  >
+                    <Image
+                      src="/snapchat.png"
+                      alt="Snapchat"
+                      width={20}
+                      height={20}
+                      className="dropdown-icon"
+                    />
+                    <span>Snapchat</span>
+                  </Link>
+                  <Link
+                    href="#"
+                    className="dropdown-item"
+                    onClick={closeDropdown}
+                  >
+                    <Image
+                      src="/twitter.png"
+                      alt="Twitter"
+                      width={20}
+                      height={20}
+                      className="dropdown-icon"
+                    />
+                    <span>Twitter</span>
                   </Link>
                 </div>
-              )}
-            </div>
-
-            <Link
-              href="/contact"
-              className="mobile-link"
-              onClick={closeMobileMenu}
-            >
-              Contact
-            </Link>
-          </div>
-
-          {/* RÉSEAUX SOCIAUX MOBILE */}
-          <div className="mobile-social-links">
-            <Link href="#" aria-label="Facebook" onClick={closeMobileMenu}>
-              <Image
-                src="/facebook.png"
-                alt="Facebook logo"
-                width={28}
-                height={28}
-              />
-            </Link>
-            <Link href="#" aria-label="Instagram" onClick={closeMobileMenu}>
-              <Image
-                src="/instagram.png"
-                alt="Instagram logo"
-                width={28}
-                height={28}
-              />
-            </Link>
-            <Link href="#" aria-label="TikTok" onClick={closeMobileMenu}>
-              <Image
-                src="/tiktok.png"
-                alt="TikTok logo"
-                width={28}
-                height={28}
-              />
-            </Link>
+              </div>
+            )}
           </div>
         </div>
-
-        {/* BACKDROP */}
-        {isMobileMenuOpen && (
-          <div className="mobile-menu-backdrop" onClick={closeMobileMenu}></div>
-        )}
-      </motion.div>
-    </nav>
+      </div>
+    </div>
   );
 }
+
+export default Navbar;
