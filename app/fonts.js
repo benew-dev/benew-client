@@ -1,8 +1,9 @@
 // app/fonts.js
 import localFont from 'next/font/local';
+import { Inter } from 'next/font/google';
 
 // =============================
-// ORBITRON - Titres et UI
+// ORBITRON - Titres et UI (LOCAL)
 // =============================
 export const orbitron = localFont({
   src: [
@@ -39,40 +40,18 @@ export const orbitron = localFont({
   ],
   variable: '--font-orbitron',
   display: 'swap',
-  // ✅ CORRECTION CRITIQUE : 'Arial' (string) au lieu de true
   adjustFontFallback: 'Arial',
   preload: true,
 });
 
 // =============================
-// INTER - Contenu et corps de texte
+// INTER - Contenu et corps de texte (GOOGLE FONTS)
 // =============================
-export const inter = localFont({
-  src: [
-    {
-      path: './fonts/Inter-Regular.ttf',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: './fonts/Inter-Medium.ttf',
-      weight: '500',
-      style: 'normal',
-    },
-    {
-      path: './fonts/Inter-SemiBold.ttf',
-      weight: '600',
-      style: 'normal',
-    },
-    {
-      path: './fonts/Inter-Bold.ttf',
-      weight: '700',
-      style: 'normal',
-    },
-  ],
+// ✅ Utilise next/font/google - pas besoin de télécharger
+export const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-inter',
   display: 'swap',
-  // ✅ CORRECTION CRITIQUE : 'Arial' (string) au lieu de true
-  adjustFontFallback: 'Arial',
   preload: true,
 });
