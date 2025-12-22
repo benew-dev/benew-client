@@ -7,32 +7,32 @@ import localFont from 'next/font/local';
 export const orbitron = localFont({
   src: [
     {
-      path: './fonts/Orbitron-Regular.ttf',
+      path: '/fonts/Orbitron-Regular.ttf',
       weight: '400',
       style: 'normal',
     },
     {
-      path: './fonts/Orbitron-Medium.ttf',
+      path: '/fonts/Orbitron-Medium.ttf',
       weight: '500',
       style: 'normal',
     },
     {
-      path: './fonts/Orbitron-SemiBold.ttf',
+      path: '/fonts/Orbitron-SemiBold.ttf',
       weight: '600',
       style: 'normal',
     },
     {
-      path: './fonts/Orbitron-Bold.ttf',
+      path: '/fonts/Orbitron-Bold.ttf',
       weight: '700',
       style: 'normal',
     },
     {
-      path: './fonts/Orbitron-ExtraBold.ttf',
+      path: '/fonts/Orbitron-ExtraBold.ttf',
       weight: '800',
       style: 'normal',
     },
     {
-      path: './fonts/Orbitron-Black.ttf',
+      path: '/fonts/Orbitron-Black.ttf',
       weight: '900',
       style: 'normal',
     },
@@ -50,22 +50,22 @@ export const orbitron = localFont({
 export const inter = localFont({
   src: [
     {
-      path: './fonts/Inter-Regular.ttf',
+      path: '/fonts/Inter-Regular.ttf',
       weight: '400',
       style: 'normal',
     },
     {
-      path: './fonts/Inter-Medium.ttf',
+      path: '/fonts/Inter-Medium.ttf',
       weight: '500',
       style: 'normal',
     },
     {
-      path: './fonts/Inter-SemiBold.ttf',
+      path: '/fonts/Inter-SemiBold.ttf',
       weight: '600',
       style: 'normal',
     },
     {
-      path: './fonts/Inter-Bold.ttf',
+      path: '/fonts/Inter-Bold.ttf',
       weight: '700',
       style: 'normal',
     },
