@@ -1,0 +1,290 @@
+@use 'sass:color';
+@use '../../../../app/styles/abstracts' as *;
+
+// ================================
+// 📄 _text-content.scss
+// ================================
+
+// =============================
+// CONTENEUR TEXTE DESKTOP - À DROITE
+// =============================
+@include from('medium-sm') {
+  .text-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    justify-content: center;
+
+    margin: 0;
+    padding: 0 1rem;
+
+    position: relative;
+    z-index: 10;
+  }
+}
+
+// =============================
+// CONTENEUR TEXTE MOBILE - AU PREMIER PLAN
+// =============================
+@include until('medium-sm') {
+  .text-container {
+    position: relative;
+    z-index: 10; // Au premier plan
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 2rem 1rem;
+    margin: 0;
+
+    @include small-screens {
+      padding: 1.5rem 0.8rem;
+    }
+
+    @include from('small-sm') {
+      padding: 1.55rem 0.85rem;
+    }
+
+    @include from('small-lg') {
+      padding: 1.6rem 0.9rem;
+    }
+
+    @include from('small-xl') {
+      padding: 1.65rem 0.95rem;
+    }
+
+    @include between('small-xl', 'medium-sm') {
+      padding: 1.8rem 1rem;
+    }
+  }
+}
+
+// =============================
+// STYLES DES TITRES (communs mais adaptés)
+// =============================
+.main-title {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  line-height: 1.2;
+  margin: 0 0 0.8rem 0;
+
+  color: $color-orange;
+  text-shadow:
+    0 3px 6px rgba($color-dark, 0.8),
+    0 0 25px rgba($color-orange, 0.5);
+
+  // Tailles responsives
+  font-size: 2.2rem;
+
+  @include small-screens {
+    font-size: 1.6rem;
+    letter-spacing: 0.8px;
+    margin: 0 0 0.5rem 0;
+
+    // ✅ Text-shadow renforcé pour mobile (lisibilité sur image)
+    text-shadow:
+      0 2px 4px rgba($color-dark, 0.9),
+      0 0 15px rgba($color-orange, 0.7),
+      0 0 30px rgba($color-orange, 0.4);
+  }
+
+  @include from('small-sm') {
+    font-size: 1.65rem;
+    letter-spacing: 0.82px;
+  }
+
+  @include from('small-lg') {
+    font-size: 1.7rem;
+    letter-spacing: 0.85px;
+  }
+
+  @include from('small-xl') {
+    font-size: 1.75rem;
+    letter-spacing: 0.88px;
+  }
+
+  @include between('small-xl', 'medium-sm') {
+    font-size: 1.9rem;
+
+    // ✅ Text-shadow renforcé pour tablette portrait
+    text-shadow:
+      0 3px 6px rgba($color-dark, 0.9),
+      0 0 20px rgba($color-orange, 0.6),
+      0 0 35px rgba($color-orange, 0.3);
+  }
+
+  @include from('medium-sm') {
+    font-size: 2.6rem;
+    letter-spacing: 1.2px;
+  }
+
+  @include from('medium-lg') {
+    font-size: 2.7rem;
+    letter-spacing: 1.25px;
+  }
+
+  @include from('medium-xxl') {
+    font-size: 2.8rem;
+    letter-spacing: 1.3px;
+  }
+
+  @include from('large-sm') {
+    font-size: 2.9rem;
+  }
+
+  @include from('large-xs') {
+    font-size: 3.4rem;
+    letter-spacing: 1.5px;
+    margin: 0 0 1rem 0;
+  }
+
+  // =============================
+  // BREAKPOINT DE TRANSITION SPÉCIAL
+  // =============================
+  @include between('medium-lg', 'large-xs') {
+    font-size: 2.4rem;
+  }
+}
+
+// =============================
+// BOUTON BLOG DANS MARKETING
+// =============================
+.profit-blog-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  // Style cohérent avec les autres boutons du site
+  background: linear-gradient(135deg, $color-orange, $color-pink);
+  color: $color-light;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+
+  // Dimensions
+  padding: 0.8rem 2rem;
+  border-radius: 50px;
+  border: 2px solid rgba($color-light, 0.2);
+
+  // Espacement par rapport aux titres
+  margin-top: 1.5rem;
+
+  // Ombres
+  box-shadow:
+    0 6px 20px rgba($color-orange, 0.3),
+    0 3px 10px rgba($color-pink, 0.2),
+    0 0 30px rgba($color-orange, 0.1);
+
+  text-shadow: 0 2px 4px rgba($color-dark, 0.6);
+
+  // Transitions
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  // Responsive
+  @include small-screens {
+    font-size: 0.85rem;
+    padding: 0.65rem 1.6rem;
+    margin-top: 1.2rem;
+    letter-spacing: 0.3px;
+  }
+
+  @include from('small-sm') {
+    font-size: 0.87rem;
+    padding: 0.67rem 1.65rem;
+    margin-top: 1.25rem;
+    letter-spacing: 0.32px;
+  }
+
+  @include from('small-lg') {
+    font-size: 0.88rem;
+    padding: 0.68rem 1.7rem;
+    margin-top: 1.28rem;
+    letter-spacing: 0.34px;
+  }
+
+  @include from('small-xl') {
+    font-size: 0.89rem;
+    padding: 0.69rem 1.75rem;
+    margin-top: 1.3rem;
+    letter-spacing: 0.36px;
+  }
+
+  @include between('small-xl', 'medium-sm') {
+    font-size: 0.9rem;
+    padding: 0.7rem 1.8rem;
+    margin-top: 1.3rem;
+  }
+
+  @include from('medium-sm') {
+    font-size: 0.95rem;
+    padding: 0.75rem 1.9rem;
+    margin-top: 1.4rem;
+  }
+
+  @include from('medium-lg') {
+    font-size: 0.98rem;
+    padding: 0.78rem 1.95rem;
+    margin-top: 1.45rem;
+  }
+
+  @include from('medium-xxl') {
+    font-size: 1rem;
+    padding: 0.8rem 2rem;
+    margin-top: 1.5rem;
+  }
+
+  @include from('large-xs') {
+    font-size: 1.1rem;
+    padding: 0.9rem 2.3rem;
+    margin-top: 2rem;
+    letter-spacing: 0.5px;
+  }
+
+  // Effets hover
+  &:hover {
+    transform: translateY(-2px) scale(1.03);
+    background: linear-gradient(
+      135deg,
+      color.adjust($color-orange, $lightness: 6%),
+      color.adjust($color-pink, $lightness: 6%)
+    );
+    box-shadow:
+      0 8px 25px rgba($color-orange, 0.4),
+      0 4px 15px rgba($color-pink, 0.3),
+      0 0 40px rgba($color-orange, 0.15);
+    border-color: rgba($color-light, 0.3);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: rgba($color-light, 0.5);
+    box-shadow:
+      0 8px 25px rgba($color-orange, 0.4),
+      0 4px 15px rgba($color-pink, 0.3),
+      0 0 0 3px rgba($color-light, 0.2);
+  }
+
+  &:active {
+    transform: translateY(-1px) scale(1.01);
+  }
+}
+
+// =============================
+// BREAKPOINT DE TRANSITION SPÉCIAL - TEXTE
+// =============================
+@include between('medium-lg', 'large-xs') {
+  .text-container {
+    padding: 0 0.8rem;
+  }
+}
