@@ -21,6 +21,7 @@ import PageTracker from '../analytics/PageTracker';
 const TemplateImageCarousel = memo(({ images, templateName }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoScrolling, setIsAutoScrolling] = useState(true);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   // Fallback si pas d'images
   const imageList = useMemo(() => {
@@ -32,16 +33,16 @@ const TemplateImageCarousel = memo(({ images, templateName }) => {
 
   // Auto-scroll avec 4 secondes d'intervalle
   useEffect(() => {
-    if (!isAutoScrolling || imageList.length <= 1) {
+    if (!isAutoScrolling || imageList.length <= 1 || isTransitioning) {
       return;
     }
 
     const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % imageList.length);
+      handleSlideChange((currentSlide + 1) % imageList.length);
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [isAutoScrolling, imageList.length]);
+  }, [isAutoScrolling, imageList.length, currentSlide, isTransitioning]);
 
   // Reprendre l'auto-scroll après 10 secondes d'inactivité
   useEffect(() => {
@@ -53,21 +54,31 @@ const TemplateImageCarousel = memo(({ images, templateName }) => {
     }
   }, [isAutoScrolling]);
 
-  // Navigation manuelle
-  const goToSlide = useCallback((index) => {
-    setCurrentSlide(index);
-    setIsAutoScrolling(false);
-  }, []);
+  // Gérer le changement de slide avec animation
+  const handleSlideChange = useCallback(
+    (newIndex) => {
+      if (isTransitioning) return;
 
-  const nextSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev + 1) % imageList.length);
-    setIsAutoScrolling(false);
-  }, [imageList.length]);
+      setIsTransitioning(true);
+      setCurrentSlide(newIndex);
 
-  const prevSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev - 1 + imageList.length) % imageList.length);
-    setIsAutoScrolling(false);
-  }, [imageList.length]);
+      // Fin de la transition après 600ms (durée de l'animation CSS)
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 600);
+    },
+    [isTransitioning],
+  );
+
+  // Navigation manuelle via dots
+  const goToSlide = useCallback(
+    (index) => {
+      if (index === currentSlide || isTransitioning) return;
+      setIsAutoScrolling(false);
+      handleSlideChange(index);
+    },
+    [currentSlide, isTransitioning, handleSlideChange],
+  );
 
   // Gestion du swipe tactile
   const [touchStart, setTouchStart] = useState(null);
@@ -84,19 +95,30 @@ const TemplateImageCarousel = memo(({ images, templateName }) => {
     setTouchEnd(e.targetTouches[0].clientX);
   };
 
-  const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
+  const onTouchEnd = useCallback(() => {
+    if (!touchStart || !touchEnd || isTransitioning) return;
 
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
 
     if (isLeftSwipe) {
-      nextSlide();
+      setIsAutoScrolling(false);
+      handleSlideChange((currentSlide + 1) % imageList.length);
     } else if (isRightSwipe) {
-      prevSlide();
+      setIsAutoScrolling(false);
+      handleSlideChange(
+        (currentSlide - 1 + imageList.length) % imageList.length,
+      );
     }
-  };
+  }, [
+    touchStart,
+    touchEnd,
+    currentSlide,
+    imageList.length,
+    isTransitioning,
+    handleSlideChange,
+  ]);
 
   // Si une seule image, pas besoin de carousel
   if (imageList.length === 1) {
@@ -127,56 +149,43 @@ const TemplateImageCarousel = memo(({ images, templateName }) => {
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
     >
-      {/* Images */}
+      {/* Images avec animation de défilement */}
       <div className="carousel-track">
-        {imageList.map((imgUrl, index) => (
-          <div
-            key={index}
-            className={`carousel-slide ${index === currentSlide ? 'active' : ''}`}
-            style={{
-              opacity: index === currentSlide ? 1 : 0,
-              transition: 'opacity 0.5s ease-in-out',
-            }}
-          >
-            <CldImage
-              src={imgUrl}
-              alt={`${templateName} - Image ${index + 1}`}
-              width={520}
-              height={460}
-              className="minimalImage"
-              loading={index === 0 ? 'eager' : 'lazy'}
-              quality="auto"
-              format="auto"
-              crop={{ type: 'fit', gravity: 'auto' }}
-              onError={(e) => {
-                e.currentTarget.src = '/placeholder-template.png';
-              }}
-            />
-          </div>
-        ))}
+        {imageList.map((imgUrl, index) => {
+          // Déterminer la position de chaque slide
+          let slidePosition = 'hidden-right';
+
+          if (index === currentSlide) {
+            slidePosition = isTransitioning ? 'entering' : 'active';
+          } else if (
+            index ===
+            (currentSlide - 1 + imageList.length) % imageList.length
+          ) {
+            slidePosition = isTransitioning ? 'exiting' : 'hidden-left';
+          }
+
+          return (
+            <div key={index} className={`carousel-slide ${slidePosition}`}>
+              <CldImage
+                src={imgUrl}
+                alt={`${templateName} - Image ${index + 1}`}
+                width={520}
+                height={460}
+                className="minimalImage"
+                loading={index === 0 ? 'eager' : 'lazy'}
+                quality="auto"
+                format="auto"
+                crop={{ type: 'fit', gravity: 'auto' }}
+                onError={(e) => {
+                  e.currentTarget.src = '/placeholder-template.png';
+                }}
+              />
+            </div>
+          );
+        })}
       </div>
 
-      {/* Boutons de navigation (desktop) */}
-      {imageList.length > 1 && (
-        <>
-          <button
-            onClick={prevSlide}
-            className="carousel-button carousel-button-prev"
-            aria-label="Image précédente"
-          >
-            ‹
-          </button>
-          <button
-            onClick={nextSlide}
-            className="carousel-button carousel-button-next"
-            aria-label="Image suivante"
-          >
-            ›
-          </button>
-        </>
-      )}
-
-      {/* Indicateurs (dots) */}
+      {/* Indicateurs (dots) - Toujours visibles */}
       {imageList.length > 1 && (
         <div className="carousel-indicators">
           {imageList.map((_, index) => (
@@ -185,6 +194,7 @@ const TemplateImageCarousel = memo(({ images, templateName }) => {
               onClick={() => goToSlide(index)}
               className={`carousel-dot ${index === currentSlide ? 'active' : ''}`}
               aria-label={`Aller à l'image ${index + 1}`}
+              disabled={isTransitioning}
             />
           ))}
         </div>
@@ -195,40 +205,48 @@ const TemplateImageCarousel = memo(({ images, templateName }) => {
 
 TemplateImageCarousel.displayName = 'TemplateImageCarousel';
 
-// Composant de carte simplifié avec carousel intégré
+// Composant de carte avec Link uniquement sur le titre
 const TemplateCard = memo(({ template, onClick }) => {
   const categoryIcons = [];
   const categoryLabel = [];
 
   if (template.template_has_web) {
     categoryIcons.push(<MdMonitor key="web" size={14} aria-hidden="true" />);
-    categoryLabel.push('Web');
+    categoryLabel.push('web');
   }
   if (template.template_has_mobile) {
     categoryIcons.push(
       <MdPhoneIphone key="mobile" size={14} aria-hidden="true" />,
     );
-    categoryLabel.push('Mobile');
+    categoryLabel.push('mobile');
   }
 
   return (
-    <Link
-      href={`/templates/${template.template_id}`}
+    <div
       className="minimalCard"
-      onClick={() => onClick(template)}
-      aria-label={`Voir le template ${template.template_name}`}
+      aria-label={`Template ${template.template_name}`}
     >
       <div className="minimalCardInner">
+        {/* Carousel SANS Link */}
         <TemplateImageCarousel
           images={template.template_images}
           templateName={template.template_name}
         />
+
         <div className="minimalContent">
           <div className="minimalCategory">
             {categoryIcons}
             <span>{categoryLabel.join(' & ')}</span>
           </div>
-          <h3 className="minimalTitle">{template.template_name}</h3>
+
+          {/* Link UNIQUEMENT sur le titre */}
+          <Link
+            href={`/templates/${template.template_id}`}
+            className="minimalTitleLink"
+            onClick={() => onClick(template)}
+          >
+            <h3 className="minimalTitle">{template.template_name}</h3>
+          </Link>
 
           {/* Affichage du nombre d'applications si > 0 */}
           {template.applications_count > 0 && (
@@ -242,7 +260,7 @@ const TemplateCard = memo(({ template, onClick }) => {
           )}
         </div>
       </div>
-    </Link>
+    </div>
   );
 });
 
