@@ -29,6 +29,7 @@ const ContactHome = () => {
             className="contact-logo-image"
             sizes="(max-width: 768px) 95vw, 45vw"
             priority={false}
+            unoptimized
           />
         </div>
       </div>
