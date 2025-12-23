@@ -105,8 +105,8 @@ const TemplateImageCarousel = memo(({ images, templateName }) => {
         <CldImage
           src={imageList[0]}
           alt={`Template ${templateName}`}
-          width={800}
-          height={600}
+          width={520}
+          height={460}
           className="minimalImage"
           loading="lazy"
           quality="auto"
