@@ -100,6 +100,7 @@ function Hero() {
           height={500}
           className="heroImage"
           priority
+          unoptimized
         />
       </div>
     </div>

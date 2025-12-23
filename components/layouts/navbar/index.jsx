@@ -35,7 +35,7 @@ function Navbar() {
             <Link href="/">
               <Image
                 priority={true}
-                src="/icon-64x64.png"
+                src="/icon-32x32.png"
                 height={48}
                 width={60}
                 alt="BuyItNow"
