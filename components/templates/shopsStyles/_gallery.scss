@@ -1,0 +1,409 @@
+@use 'sass:color';
+@use '../../../app/styles/abstracts' as *;
+
+// ================================
+// 📄 _gallery.scss - Modal gallery pour other_versions
+// ================================
+
+.gallery-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+
+  // 📱 MOBILE - Ajustement padding
+  padding: 1rem;
+
+  @include from('medium-sm') {
+    padding: 2rem;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.gallery-modal-content {
+  background: linear-gradient(
+    135deg,
+    rgba(css-var(background-color), 0.95),
+    rgba(css-var(background-color), 0.98)
+  );
+  border: 1px solid rgba(css-var(primary-color), 0.3);
+  border-radius: 16px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.4s ease;
+
+  // 📱 MOBILE FIRST
+  width: 100%;
+  max-width: 100%;
+  max-height: 90vh;
+  padding: 1rem;
+
+  @include from('medium-sm') {
+    width: 90%;
+    max-width: 900px;
+    padding: 1.5rem;
+  }
+
+  @include from('large-xs') {
+    max-width: 1000px;
+    padding: 2rem;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// =============================
+// HEADER GALLERY
+// =============================
+
+.gallery-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(css-var(primary-color), 0.2);
+
+  // 📱 MOBILE - Stack vertical
+  @include small-screens {
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+  }
+
+  @include from('medium-sm') {
+    flex-direction: row;
+  }
+
+  h3 {
+    color: css-var(primary-color);
+    margin: 0;
+
+    // 📱 MOBILE FIRST
+    font-size: 1.2rem;
+
+    @include from('medium-sm') {
+      font-size: 1.4rem;
+    }
+  }
+}
+
+.gallery-counter {
+  color: rgba(css-var(text-color), 0.7);
+  font-size: 0.95rem;
+  font-weight: 500;
+
+  @include until('small-sm') {
+    font-size: 0.85rem;
+  }
+}
+
+// =============================
+// BOUTON FERMETURE
+// =============================
+
+.gallery-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(css-var(background-color), 0.8);
+  border: 1px solid rgba(css-var(primary-color), 0.3);
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: css-var(primary-color);
+  transition: all 0.3s ease;
+  z-index: 10;
+
+  @include until('small-sm') {
+    width: 2.5rem;
+    height: 2.5rem;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+
+  &:hover {
+    background: rgba(css-var(primary-color), 0.9);
+    color: css-var(background-color);
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+// =============================
+// IMAGE CONTAINER
+// =============================
+
+.gallery-image-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(css-var(text-color), 0.03);
+  border-radius: 12px;
+  overflow: hidden;
+
+  // 📱 MOBILE FIRST
+  min-height: 300px;
+  max-height: 50vh;
+  margin-bottom: 1.5rem;
+
+  @include from('medium-sm') {
+    min-height: 400px;
+    max-height: 60vh;
+  }
+
+  @include from('large-xs') {
+    min-height: 500px;
+  }
+}
+
+.gallery-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+// =============================
+// BOUTONS NAVIGATION
+// =============================
+
+.gallery-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(css-var(background-color), 0.8);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(css-var(primary-color), 0.3);
+  color: css-var(primary-color);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 2rem;
+  font-weight: bold;
+
+  // 📱 MOBILE FIRST
+  width: 2.5rem;
+  height: 2.5rem;
+
+  @include from('medium-sm') {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  &:hover {
+    background: rgba(css-var(primary-color), 0.9);
+    color: css-var(background-color);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  &:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+
+  &.gallery-prev {
+    left: 0.5rem;
+
+    @include from('medium-sm') {
+      left: 1rem;
+    }
+  }
+
+  &.gallery-next {
+    right: 0.5rem;
+
+    @include from('medium-sm') {
+      right: 1rem;
+    }
+  }
+}
+
+// =============================
+// THUMBNAILS
+// =============================
+
+.gallery-thumbnails {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+
+  // Custom scrollbar
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(css-var(text-color), 0.1);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(css-var(primary-color), 0.5);
+    border-radius: 3px;
+
+    &:hover {
+      background: rgba(css-var(primary-color), 0.7);
+    }
+  }
+
+  @include until('small-sm') {
+    gap: 0.5rem;
+  }
+}
+
+.gallery-thumb {
+  flex-shrink: 0;
+  border: 2px solid rgba(css-var(text-color), 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(css-var(text-color), 0.05);
+
+  // 📱 MOBILE FIRST
+  width: 80px;
+  height: 60px;
+
+  @include from('medium-sm') {
+    width: 100px;
+    height: 75px;
+  }
+
+  &:hover {
+    border-color: rgba(css-var(primary-color), 0.5);
+    transform: scale(1.05);
+  }
+
+  &.active {
+    border-color: css-var(primary-color);
+    border-width: 3px;
+    box-shadow: 0 0 0 2px rgba(css-var(primary-color), 0.3);
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// =============================
+// BOUTON GALLERY DANS CARTE
+// =============================
+
+.btn-gallery {
+  background: transparent;
+  color: css-var(secondary-color);
+  border: 2px solid css-var(secondary-color);
+  backdrop-filter: blur(10px);
+
+  &:hover:not(:disabled) {
+    background: rgba(css-var(secondary-color), 0.15);
+    border-color: css-var(accent-color);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(css-var(secondary-color), 0.3);
+  }
+
+  svg {
+    transition: transform 0.3s ease;
+  }
+
+  &:hover svg {
+    transform: scale(1.1);
+  }
+
+  .btn-text {
+    @include small-screens {
+      display: none;
+    }
+
+    @include from('small-sm') {
+      display: none;
+    }
+
+    @include from('small-lg') {
+      display: inline;
+    }
+  }
+}
+
+// =============================
+// ADAPTATIONS RESPONSIVE
+// =============================
+
+@include mobile-landscape {
+  .gallery-modal-content {
+    max-height: 95vh;
+  }
+
+  .gallery-image-container {
+    max-height: 70vh;
+  }
+}
+
+@include reduced-motion {
+  .gallery-modal-overlay,
+  .gallery-modal-content {
+    animation: none;
+  }
+
+  .gallery-nav-btn,
+  .gallery-thumb,
+  .gallery-close-btn {
+    transition: none;
+
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+@include dark-mode {
+  .gallery-modal-content {
+    background: linear-gradient(
+      135deg,
+      rgba(css-var(background-color), 0.98),
+      rgba(css-var(background-color), 0.99)
+    );
+  }
+}
