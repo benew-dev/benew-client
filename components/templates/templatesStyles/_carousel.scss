@@ -1,0 +1,274 @@
+@use 'sass:color';
+@use '../../../app/styles/abstracts' as *;
+
+// ================================
+// 📄 _carousel.scss - Carousel pour images templates
+// ================================
+
+.carousel-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:not(.active) {
+    pointer-events: none;
+  }
+}
+
+// =============================
+// BOUTONS DE NAVIGATION
+// =============================
+
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+
+  background: rgba(css-var(background-color), 0.7);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(css-var(primary-color), 0.3);
+  color: css-var(primary-color);
+
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 1;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 10;
+
+  // Caché par défaut sur mobile
+  @include small-screens {
+    display: none;
+  }
+
+  // Visible sur tablettes et desktop
+  @include from('medium-sm') {
+    display: flex;
+  }
+
+  &:hover {
+    background: rgba(css-var(primary-color), 0.9);
+    color: css-var(background-color);
+    border-color: css-var(primary-color);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  &:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+
+  &:focus {
+    outline: 2px solid css-var(primary-color);
+    outline-offset: 2px;
+  }
+}
+
+.carousel-button-prev {
+  left: 0.5rem;
+
+  @include from('medium-sm') {
+    left: 1rem;
+  }
+}
+
+.carousel-button-next {
+  right: 0.5rem;
+
+  @include from('medium-sm') {
+    right: 1rem;
+  }
+}
+
+// =============================
+// INDICATEURS (DOTS)
+// =============================
+
+.carousel-indicators {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  gap: 0.5rem;
+
+  z-index: 10;
+
+  @include small-screens {
+    bottom: 0.75rem;
+    gap: 0.4rem;
+  }
+}
+
+.carousel-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+
+  background: rgba(css-var(text-color), 0.3);
+  border: 1px solid rgba(css-var(text-color), 0.2);
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  padding: 0;
+
+  &:hover {
+    background: rgba(css-var(primary-color), 0.6);
+    transform: scale(1.2);
+  }
+
+  &.active {
+    background: css-var(primary-color);
+    border-color: css-var(primary-color);
+    width: 1.5rem;
+    border-radius: 0.25rem;
+  }
+
+  &:focus {
+    outline: 2px solid css-var(primary-color);
+    outline-offset: 2px;
+  }
+}
+
+// =============================
+// COMPTEUR D'APPLICATIONS
+// =============================
+
+.applications-count {
+  margin-top: 0.75rem;
+
+  @include small-screens {
+    margin-top: 0.5rem;
+  }
+}
+
+.count-badge {
+  display: inline-flex;
+  align-items: center;
+
+  background: rgba(css-var(secondary-color), 0.1);
+  border: 1px solid rgba(css-var(secondary-color), 0.3);
+
+  color: css-var(secondary-color);
+
+  font-size: 0.75rem;
+  font-weight: 600;
+
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+
+  transition: all 0.3s ease;
+
+  @include small-screens {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+  }
+
+  .minimalCard:hover & {
+    background: rgba(css-var(secondary-color), 0.2);
+    border-color: css-var(secondary-color);
+    transform: translateY(-2px);
+  }
+}
+
+// =============================
+// ADAPTATIONS RESPONSIVE
+// =============================
+
+// Mode paysage mobile - Boutons plus petits
+@include mobile-landscape {
+  .carousel-button {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.2rem;
+  }
+
+  .carousel-indicators {
+    bottom: 0.5rem;
+  }
+
+  .carousel-dot {
+    width: 0.4rem;
+    height: 0.4rem;
+
+    &.active {
+      width: 1.2rem;
+    }
+  }
+}
+
+// Écrans tactiles - Amélioration zones tactiles
+@media (pointer: coarse) {
+  .carousel-dot {
+    width: 0.75rem;
+    height: 0.75rem;
+
+    &.active {
+      width: 1.75rem;
+    }
+  }
+}
+
+// Réduction des animations
+@include reduced-motion {
+  .carousel-slide {
+    transition: opacity 0.2s ease !important;
+  }
+
+  .carousel-button,
+  .carousel-dot,
+  .count-badge {
+    transition: none !important;
+
+    &:hover {
+      transform: none !important;
+    }
+  }
+}
+
+// Contraste élevé
+@include high-contrast {
+  .carousel-button {
+    border-width: 2px;
+    background: rgba(css-var(background-color), 0.9);
+  }
+
+  .carousel-dot {
+    border-width: 2px;
+
+    &.active {
+      border-width: 2px;
+    }
+  }
+
+  .count-badge {
+    border-width: 2px;
+  }
+}
