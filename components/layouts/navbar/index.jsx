@@ -40,6 +40,7 @@ function Navbar() {
                 width={60}
                 alt="BuyItNow"
                 className="logo"
+                unoptimized
               />
             </Link>
           </motion.div>
@@ -52,6 +53,7 @@ function Navbar() {
                 width={24}
                 height={24}
                 className="social-icon"
+                unoptimized
               />
             </Link>
             <Link href="#">
@@ -61,6 +63,7 @@ function Navbar() {
                 width={24}
                 height={24}
                 className="social-icon"
+                unoptimized
               />
             </Link>
             <Link href="#">
@@ -70,6 +73,7 @@ function Navbar() {
                 width={24}
                 height={24}
                 className="social-icon"
+                unoptimized
               />
             </Link>
             <Link href="#">
@@ -79,6 +83,7 @@ function Navbar() {
                 width={24}
                 height={24}
                 className="social-icon"
+                unoptimized
               />
             </Link>
           </div>
@@ -100,6 +105,7 @@ function Navbar() {
                 width={60}
                 alt="BuyItNow"
                 className="logo"
+                unoptimized
               />
             </Link>
           </motion.div>
@@ -118,6 +124,7 @@ function Navbar() {
                 width={24}
                 height={24}
                 className="social-websites-icon"
+                unoptimized
               />
               {/* REMPLACER le SVG par cette icône React */}
               <MdKeyboardArrowDown
@@ -139,6 +146,7 @@ function Navbar() {
                       width={20}
                       height={20}
                       className="dropdown-icon"
+                      unoptimized
                     />
                     <span>Facebook</span>
                   </Link>
@@ -153,6 +161,7 @@ function Navbar() {
                       width={20}
                       height={20}
                       className="dropdown-icon"
+                      unoptimized
                     />
                     <span>Instagram</span>
                   </Link>
@@ -167,6 +176,7 @@ function Navbar() {
                       width={20}
                       height={20}
                       className="dropdown-icon"
+                      unoptimized
                     />
                     <span>Snapchat</span>
                   </Link>
@@ -181,6 +191,7 @@ function Navbar() {
                       width={20}
                       height={20}
                       className="dropdown-icon"
+                      unoptimized
                     />
                     <span>Twitter</span>
                   </Link>
