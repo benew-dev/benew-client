@@ -1,7 +1,7 @@
 'use server';
 
 import { getClient } from '@/backend/dbConnect';
-import { captureException } from '../instrumentation';
+import { captureException } from '../sentry.server.config';
 import {
   validateOrderServer,
   prepareOrderDataFromFormData,

@@ -2,7 +2,7 @@
 // Sanitization ULTRA-SIMPLIFIÉE pour 500 visiteurs/jour
 // On arrête la paranoia !
 
-import { captureException } from '../../instrumentation';
+import { captureException } from '../../sentry.server.config';
 
 // =============================
 // SANITIZATION DE BASE

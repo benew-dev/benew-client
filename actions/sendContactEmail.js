@@ -2,7 +2,7 @@
 
 import { Resend } from 'resend';
 import { headers } from 'next/headers';
-import { captureException, captureEmailError } from '../instrumentation';
+import { captureException, captureEmailError } from '../sentry.server.config';
 import {
   validateContactEmail,
   prepareContactDataFromFormData,
