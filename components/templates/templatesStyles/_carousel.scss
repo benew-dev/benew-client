@@ -88,8 +88,8 @@
 }
 
 .carousel-dot {
-  width: 0.625rem;
-  height: 0.625rem;
+  width: 0.3rem;
+  height: 0.3rem;
   border-radius: 50%;
 
   background: rgba(css-var(text-color), 0.4);
@@ -109,8 +109,8 @@
   &.active {
     background: css-var(primary-color);
     border-color: css-var(primary-color);
-    width: 1.75rem;
-    border-radius: 0.3125rem;
+    width: 0.3rem;
+    border-radius: 50%;
     box-shadow: 0 2px 8px rgba(css-var(primary-color), 0.4);
   }
 
@@ -121,7 +121,7 @@
 
   &:disabled {
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: 0.8;
   }
 }
 

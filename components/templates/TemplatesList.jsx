@@ -252,7 +252,7 @@ const TemplateCard = memo(({ template, onClick }) => {
           {template.applications_count > 0 && (
             <div className="applications-count">
               <span className="count-badge">
-                {template.applications_count} application
+                {template.applications_count} magasin
                 {template.applications_count > 1 ? 's' : ''} disponible
                 {template.applications_count > 1 ? 's' : ''}
               </span>
