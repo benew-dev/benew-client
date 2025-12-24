@@ -10,8 +10,8 @@
   height: 100vh;
   display: flex;
 
-  // ✅ ALIGNEMENT VERTICAL - Plus bas sur mobile, centré sur desktop
-  align-items: flex-end; // Vers le bas sur mobile
+  // ✅ ALIGNEMENT VERTICAL - Entre centre et bas sur mobile, centré sur desktop
+  align-items: center; // Centré par défaut
 
   justify-content: center;
   position: relative;
@@ -22,40 +22,40 @@
   background-size: auto;
   background-position: center;
 
-  // 📱 MOBILE FIRST - Padding minimal en haut, plus grand en bas
-  // ✅ Padding-bottom plus grand pour éloigner du bas
-  padding: 1rem 1rem 3rem 1rem;
+  // 📱 MOBILE FIRST - Padding équilibré pour positionner entre centre et bas
+  // ✅ Plus de padding en haut = carte descend vers le bas
+  padding: 2.5rem 1rem 2rem 1rem;
 
-  // 📟 TRÈS PETITS ÉCRANS - Padding encore plus réduit en haut
+  // 📟 TRÈS PETITS ÉCRANS - Carte entre centre et bas
   @include small-screens {
-    padding: 0.5rem 0.75rem 3rem 0.75rem;
-    align-items: flex-end; // Garde vers le bas
+    padding: 2rem 0.75rem 1.5rem 0.75rem;
+    align-items: center;
   }
 
   @include from('small-sm') {
-    padding: 0.6rem 0.8rem 3.2rem 0.8rem;
-    align-items: flex-end;
+    padding: 2.2rem 0.8rem 1.6rem 0.8rem;
+    align-items: center;
   }
 
   @include from('small-lg') {
-    padding: 0.7rem 0.9rem 3.4rem 0.9rem;
-    align-items: flex-end;
+    padding: 2.3rem 0.9rem 1.7rem 0.9rem;
+    align-items: center;
   }
 
   @include from('small-xl') {
-    padding: 0.8rem 1rem 3.5rem 1rem;
-    align-items: flex-end;
+    padding: 2.4rem 1rem 1.8rem 1rem;
+    align-items: center;
   }
 
-  // 📟 MOYENS ÉCRANS - Transition vers centré
+  // 📟 MOYENS ÉCRANS - Transition vers centré complet
   @include between('small-xl', 'medium-sm') {
-    padding: 1rem 1.2rem 3rem 1.2rem;
-    align-items: flex-end;
+    padding: 2rem 1.2rem 2rem 1.2rem;
+    align-items: center;
   }
 
   @include from('medium-sm') {
-    padding: 1.2rem 1.3rem 2.5rem 1.3rem;
-    align-items: center; // ✅ COMMENCE À CENTRER
+    padding: 1.8rem 1.3rem 2rem 1.3rem;
+    align-items: center;
   }
 
   @include from('medium-lg') {

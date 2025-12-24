@@ -77,21 +77,21 @@
   transform: translateX(-50%);
 
   display: flex;
-  gap: 0.35rem; // ✅ Gap réduit partout
+  gap: 0.3rem; // ✅ Gap encore plus réduit partout
 
   z-index: 10;
 
   // ✅ MOBILE - Même configuration
   @include small-screens {
     bottom: 0.5rem;
-    gap: 0.35rem;
+    gap: 0.3rem;
   }
 }
 
 .carousel-dot {
-  // ✅ PETITS PARTOUT - 0.4rem au lieu de 0.5rem
-  width: 0.4rem;
-  height: 0.4rem;
+  // ✅ FORCER PETITE TAILLE PARTOUT - 0.35rem (plus petit qu'avant)
+  width: 0.35rem !important;
+  height: 0.35rem !important;
   border-radius: 50%;
 
   background: rgba(css-var(text-color), 0.4);
@@ -104,15 +104,16 @@
 
   &:hover:not(:disabled) {
     background: rgba(css-var(primary-color), 0.7);
-    transform: scale(1.3); // Légèrement plus gros au hover
+    transform: scale(1.3);
     border-color: css-var(primary-color);
   }
 
   &.active {
     background: css-var(primary-color);
     border-color: css-var(primary-color);
-    width: 0.7rem; // ✅ Actif légèrement plus large (0.7rem au lieu de 0.8rem)
-    border-radius: 50%;
+    width: 0.65rem !important; // ✅ Actif plus petit aussi (0.65rem au lieu de 0.7rem)
+    height: 0.35rem !important; // ✅ Hauteur constante
+    border-radius: 10px; // ✅ Forme ovale quand actif
     box-shadow: 0 2px 6px rgba(css-var(primary-color), 0.4);
   }
 
@@ -128,36 +129,20 @@
 }
 
 // =============================
-// ADAPTATIONS RESPONSIVE
+// ADAPTATIONS RESPONSIVE - DOTS UNIFORMES
 // =============================
 
-// Mode paysage mobile - ✅ DOTS RESTENT PETITS
+// Mode paysage mobile - ✅ DOTS UNIFORMES
 @include mobile-landscape {
   .carousel-indicators {
     bottom: 0.4rem;
-    gap: 0.35rem;
-  }
-
-  .carousel-dot {
-    width: 0.4rem;
-    height: 0.4rem;
-
-    &.active {
-      width: 0.7rem;
-    }
+    gap: 0.3rem;
   }
 }
 
-// Écrans tactiles - ✅ DOTS RESTENT PETITS
+// Écrans tactiles - ✅ PAS DE CHANGEMENT DE TAILLE
 @media (pointer: coarse) {
-  .carousel-dot {
-    width: 0.4rem;
-    height: 0.4rem;
-
-    &.active {
-      width: 0.7rem;
-    }
-  }
+  // Les dots gardent leur taille définie plus haut avec !important
 }
 
 // Réduction des animations
