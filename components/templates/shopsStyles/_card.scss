@@ -12,8 +12,8 @@
     rgba(css-var(background-color), 0.8),
     rgba(color.adjust($background-color, $lightness: 5%), 0.8)
   );
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 
   border-radius: 20px; // Plus arrondi sur mobile
   border: 1px solid rgba(css-var(primary-color), 0.25);
@@ -125,7 +125,7 @@
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(css-var(primary-color), 0.1),
+      rgba(css-var(primary-color), 0.3),
       transparent
     );
     transition: left 0.5s ease;
