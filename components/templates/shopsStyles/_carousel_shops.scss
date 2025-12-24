@@ -109,8 +109,8 @@
   &.active {
     background: css-var(primary-color);
     border-color: css-var(primary-color);
-    width: 1.5rem;
-    border-radius: 0.25rem;
+    width: 0.8rem;
+    border-radius: 50%;
     box-shadow: 0 2px 6px rgba(css-var(primary-color), 0.4);
   }
 
@@ -140,7 +140,7 @@
     height: 0.4rem;
 
     &.active {
-      width: 1.2rem;
+      width: 0.8rem;
     }
   }
 }
@@ -152,7 +152,7 @@
     height: 0.7rem;
 
     &.active {
-      width: 1.75rem;
+      width: 1rem;
     }
   }
 }
