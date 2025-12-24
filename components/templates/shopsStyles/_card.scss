@@ -105,7 +105,7 @@
 
   &:hover {
     transform: translateY(-10px); // Plus de mouvement sur mobile
-    box-shadow: 0 20px 60px rgba(css-var(primary-color), 0.25);
+    box-shadow: 0 20px 60px rgba(css-var(primary-color), 0.5);
     border-color: rgba(css-var(primary-color), 0.5);
   }
 
