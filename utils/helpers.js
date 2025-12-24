@@ -36,23 +36,23 @@ export function getApplicationLevelLabel(level) {
   const levels = {
     1: {
       short: 'MS',
-      long: 'MS / Magasin Simplifié',
+      long: 'Magasin Simplifié',
     },
     2: {
       short: 'MS+',
-      long: 'MS+ / Magasin Standard',
+      long: 'Magasin Standard',
     },
     3: {
       short: 'MS2+',
-      long: 'MS2+ / Magasin Supérieur',
+      long: 'Magasin Supérieur',
     },
     4: {
       short: 'MS*',
-      long: 'MS* / Magasin Sophistiqué',
+      long: 'Magasin Sophistiqué',
     },
     5: {
       short: 'MP',
-      long: 'MP / Magasin Premium',
+      long: 'Magasin Premium',
     },
   };
 
