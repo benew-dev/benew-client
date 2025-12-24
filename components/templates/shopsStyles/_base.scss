@@ -2,14 +2,17 @@
 @use '../../../app/styles/abstracts' as *;
 
 // ================================
-// 📄 _base.scss - AVEC BACKGROUND STARS
+// 📄 _base.scss - AVEC BACKGROUND STARS ET ALIGNEMENT BAS SUR MOBILE
 // ================================
 
 .projectSection {
   width: 100%;
   height: 100vh;
   display: flex;
-  align-items: center;
+
+  // ✅ ALIGNEMENT VERTICAL - Plus bas sur mobile, centré sur desktop
+  align-items: flex-end; // Vers le bas sur mobile
+
   justify-content: center;
   position: relative;
 
@@ -19,53 +22,65 @@
   background-size: auto;
   background-position: center;
 
-  // 📱 MOBILE FIRST - Padding minimal pour maximiser l'espace avec nouveaux breakpoints
-  padding: 1.5rem 1rem;
+  // 📱 MOBILE FIRST - Padding minimal en haut, plus grand en bas
+  // ✅ Padding-bottom plus grand pour éloigner du bas
+  padding: 1rem 1rem 3rem 1rem;
 
-  // 📟 TRÈS PETITS ÉCRANS - Padding encore plus réduit
+  // 📟 TRÈS PETITS ÉCRANS - Padding encore plus réduit en haut
   @include small-screens {
-    padding: 1rem 0.75rem;
+    padding: 0.5rem 0.75rem 3rem 0.75rem;
+    align-items: flex-end; // Garde vers le bas
   }
 
   @include from('small-sm') {
-    padding: 1.1rem 0.8rem;
+    padding: 0.6rem 0.8rem 3.2rem 0.8rem;
+    align-items: flex-end;
   }
 
   @include from('small-lg') {
-    padding: 1.2rem 0.9rem;
+    padding: 0.7rem 0.9rem 3.4rem 0.9rem;
+    align-items: flex-end;
   }
 
   @include from('small-xl') {
-    padding: 1.4rem 1rem;
+    padding: 0.8rem 1rem 3.5rem 1rem;
+    align-items: flex-end;
   }
 
-  // 📟 MOYENS ÉCRANS - Augmentation progressive
+  // 📟 MOYENS ÉCRANS - Transition vers centré
   @include between('small-xl', 'medium-sm') {
-    padding: 1.6rem 1.2rem;
+    padding: 1rem 1.2rem 3rem 1.2rem;
+    align-items: flex-end;
   }
 
   @include from('medium-sm') {
-    padding: 1.8rem 1.3rem;
+    padding: 1.2rem 1.3rem 2.5rem 1.3rem;
+    align-items: center; // ✅ COMMENCE À CENTRER
   }
 
   @include from('medium-lg') {
-    padding: 2rem 1.5rem;
+    padding: 1.5rem 1.5rem 2rem 1.5rem;
+    align-items: center;
   }
 
   @include from('medium-xxl') {
-    padding: 2.3rem 1.7rem;
+    padding: 1.8rem 1.7rem;
+    align-items: center;
   }
 
-  // 🖥️ GRANDS ÉCRANS - Desktop
+  // 🖥️ GRANDS ÉCRANS - Desktop centré
   @include from('large-xs') {
     padding: 2.5rem 2rem;
+    align-items: center;
   }
 
   @include from('large-lg') {
     padding: 2.8rem 2.2rem;
+    align-items: center;
   }
 
   @include from('large-xxl') {
     padding: 3rem; // Valeur desktop originale
+    align-items: center;
   }
 }

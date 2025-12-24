@@ -2,7 +2,7 @@
 @use '../../../app/styles/abstracts' as *;
 
 // ================================
-// 📄 _carousel_shops.scss - Carousel pour images applications
+// 📄 _carousel_shops.scss - Carousel avec DOTS PETITS PARTOUT
 // ================================
 
 .carousel-container {
@@ -67,7 +67,7 @@
 }
 
 // =============================
-// INDICATEURS (DOTS) - Pour applications - ✅ PETITS SUR TOUS LES ÉCRANS
+// INDICATEURS (DOTS) - ✅ VRAIMENT PETITS SUR TOUS LES ÉCRANS
 // =============================
 
 .carousel-indicators {
@@ -77,21 +77,21 @@
   transform: translateX(-50%);
 
   display: flex;
-  gap: 0.4rem;
+  gap: 0.35rem; // ✅ Gap réduit partout
 
   z-index: 10;
 
-  // ✅ MÊME ESPACEMENT SUR MOBILE
+  // ✅ MOBILE - Même configuration
   @include small-screens {
     bottom: 0.5rem;
-    gap: 0.4rem; // Gardé identique à desktop
+    gap: 0.35rem;
   }
 }
 
 .carousel-dot {
-  // ✅ MÊME TAILLE PARTOUT (petite comme desktop)
-  width: 0.5rem;
-  height: 0.5rem;
+  // ✅ PETITS PARTOUT - 0.4rem au lieu de 0.5rem
+  width: 0.4rem;
+  height: 0.4rem;
   border-radius: 50%;
 
   background: rgba(css-var(text-color), 0.4);
@@ -104,14 +104,14 @@
 
   &:hover:not(:disabled) {
     background: rgba(css-var(primary-color), 0.7);
-    transform: scale(1.2);
+    transform: scale(1.3); // Légèrement plus gros au hover
     border-color: css-var(primary-color);
   }
 
   &.active {
     background: css-var(primary-color);
     border-color: css-var(primary-color);
-    width: 0.8rem; // Légèrement plus large quand actif
+    width: 0.7rem; // ✅ Actif légèrement plus large (0.7rem au lieu de 0.8rem)
     border-radius: 50%;
     box-shadow: 0 2px 6px rgba(css-var(primary-color), 0.4);
   }
@@ -135,14 +135,15 @@
 @include mobile-landscape {
   .carousel-indicators {
     bottom: 0.4rem;
+    gap: 0.35rem;
   }
 
   .carousel-dot {
-    width: 0.5rem; // ✅ Gardé identique
-    height: 0.5rem; // ✅ Gardé identique
+    width: 0.4rem;
+    height: 0.4rem;
 
     &.active {
-      width: 0.8rem; // ✅ Gardé identique
+      width: 0.7rem;
     }
   }
 }
@@ -150,11 +151,11 @@
 // Écrans tactiles - ✅ DOTS RESTENT PETITS
 @media (pointer: coarse) {
   .carousel-dot {
-    width: 0.5rem; // ✅ Gardé identique au desktop
-    height: 0.5rem; // ✅ Gardé identique au desktop
+    width: 0.4rem;
+    height: 0.4rem;
 
     &.active {
-      width: 0.8rem; // ✅ Gardé identique
+      width: 0.7rem;
     }
   }
 }
