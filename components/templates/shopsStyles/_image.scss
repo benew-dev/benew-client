@@ -8,12 +8,10 @@
 .card-image {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(
-    135deg,
-    css-var(primary-color) 0%,
-    css-var(secondary-color) 50%,
-    css-var(accent-color) 100%
-  );
+  // ✅ MÊME BACKGROUND QUE LA CARTE - Glassmorphism avec blur
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   z-index: 2;
 
   // 📱 MOBILE FIRST - Image plus visible et impactante avec nouveaux breakpoints
@@ -22,6 +20,8 @@
   // 📟 TRÈS PETITS ÉCRANS - Toujours visible
   @include small-screens {
     height: 220px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
 
   @include from('small-sm') {
@@ -64,9 +64,11 @@
 
   @include from('large-xxl') {
     height: 200px; // Valeur desktop originale
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
   }
 
-  // Overlay subtil pour améliorer le contraste
+  // Overlay subtil pour améliorer le contraste (plus léger qu'avant)
   &::after {
     content: '';
     position: absolute;
@@ -77,7 +79,7 @@
     background: linear-gradient(
       to bottom,
       transparent 0%,
-      rgba(css-var(background-color), 0.1) 100%
+      rgba(css-var(background-color), 0.05) 100%
     );
     z-index: 1;
   }
