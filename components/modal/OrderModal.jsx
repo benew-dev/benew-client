@@ -192,241 +192,252 @@ const OrderModal = ({
   return (
     <div className="modalOverlay">
       <div className="modal">
-        {error && <div className="errorMessage">{error}</div>}
+        {/* ✅ NOUVEAU: Wrapper avec scroll pour tout le contenu */}
+        <div className="modal-content">
+          {error && <div className="errorMessage">{error}</div>}
 
-        {/* ÉTAPE 1 : Informations personnelles */}
-        {step === 1 && (
-          <div className="step">
-            <h2>Étape 1: Informations personnelles</h2>
-            <input
-              type="text"
-              name="lastName"
-              placeholder="Nom de famille"
-              value={formData.lastName}
-              onChange={handleInputChange}
-              required
-            />
-            <input
-              type="text"
-              name="firstName"
-              placeholder="Prénom"
-              value={formData.firstName}
-              onChange={handleInputChange}
-              required
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Adresse email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-            />
-            <input
-              type="tel"
-              name="phone"
-              placeholder="Numéro de téléphone"
-              value={formData.phone}
-              onChange={handleInputChange}
-              required
-            />
-            <div className="buttonContainer">
-              <button
-                onClick={() => closeModal('user_cancel_step1')}
-                className="cancelButton"
-              >
-                Annuler
-              </button>
-              <button onClick={handleNext} className="nextButton">
-                Suivant
-              </button>
+          {/* ÉTAPE 1 : Informations personnelles */}
+          {step === 1 && (
+            <div className="step">
+              <h2>Étape 1: Informations personnelles</h2>
+              <input
+                type="text"
+                name="lastName"
+                placeholder="Nom de famille"
+                value={formData.lastName}
+                onChange={handleInputChange}
+                required
+              />
+              <input
+                type="text"
+                name="firstName"
+                placeholder="Prénom"
+                value={formData.firstName}
+                onChange={handleInputChange}
+                required
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder="Adresse email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+              />
+              <input
+                type="tel"
+                name="phone"
+                placeholder="Numéro de téléphone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                required
+              />
+              <div className="buttonContainer">
+                <button
+                  onClick={() => closeModal('user_cancel_step1')}
+                  className="cancelButton"
+                >
+                  Annuler
+                </button>
+                <button onClick={handleNext} className="nextButton">
+                  Suivant
+                </button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* ÉTAPE 2 : Méthode de paiement */}
-        {step === 2 && (
-          <div className="step">
-            <h2>Étape 2: Méthode de paiement</h2>
-            <div className="checkboxGroup">
-              {platforms?.map((platform) => (
-                <label key={platform?.platform_id} className="radioLabel">
+          {/* ÉTAPE 2 : Méthode de paiement */}
+          {step === 2 && (
+            <div className="step">
+              <h2>Étape 2: Méthode de paiement</h2>
+              <div className="checkboxGroup">
+                {platforms?.map((platform) => (
+                  <label key={platform?.platform_id} className="radioLabel">
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value={platform?.platform_id}
+                      onChange={handleInputChange}
+                      checked={formData.paymentMethod === platform?.platform_id}
+                      required
+                    />
+                    <span className="platform-name">
+                      {platform?.is_cash_payment ? (
+                        <strong>💵 {platform?.platform_name} (Espèces)</strong>
+                      ) : (
+                        platform?.platform_name
+                      )}
+                    </span>
+                    {platform?.description && (
+                      <span className="platform-description">
+                        {platform?.description}
+                      </span>
+                    )}
+                  </label>
+                ))}
+              </div>
+
+              {/* Afficher les champs uniquement si ce n'est PAS CASH */}
+              {formData.paymentMethod && !isCashPayment && (
+                <>
                   <input
-                    type="radio"
-                    name="paymentMethod"
-                    value={platform?.platform_id}
+                    type="text"
+                    name="accountName"
+                    placeholder="Nom du compte"
+                    value={formData.accountName}
                     onChange={handleInputChange}
-                    checked={formData.paymentMethod === platform?.platform_id}
                     required
                   />
-                  <span className="platform-name">
-                    {platform?.is_cash_payment ? (
-                      <strong>💵 {platform?.platform_name} (Espèces)</strong>
-                    ) : (
-                      platform?.platform_name
-                    )}
+                  <input
+                    type="text"
+                    name="accountNumber"
+                    placeholder="Numéro du compte"
+                    value={formData.accountNumber}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </>
+              )}
+
+              {/* Message pour CASH */}
+              {isCashPayment && (
+                <div className="cash-info">
+                  <p className="cash-message">
+                    ✅ Paiement en espèces sélectionné. Aucune information de
+                    compte requise.
+                  </p>
+                </div>
+              )}
+
+              <div className="buttonContainer">
+                <button onClick={handleBack} className="backButton">
+                  Retour
+                </button>
+                <button onClick={handleNext} className="nextButton">
+                  Suivant
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* ÉTAPE 3 : Récapitulatif */}
+          {step === 3 && (
+            <div className="step">
+              <h2>Étape 3: Récapitulatif</h2>
+
+              <div className="summary-section">
+                <h3 className="summary-title">Informations personnelles</h3>
+                <div className="summary-item">
+                  <span className="summary-label">Nom complet :</span>
+                  <span className="summary-value">
+                    {formData.firstName} {formData.lastName}
                   </span>
-                  {platform?.description && (
-                    <span className="platform-description">
-                      {platform?.description}
-                    </span>
-                  )}
-                </label>
-              ))}
-            </div>
-
-            {/* Afficher les champs uniquement si ce n'est PAS CASH */}
-            {formData.paymentMethod && !isCashPayment && (
-              <>
-                <input
-                  type="text"
-                  name="accountName"
-                  placeholder="Nom du compte"
-                  value={formData.accountName}
-                  onChange={handleInputChange}
-                  required
-                />
-                <input
-                  type="text"
-                  name="accountNumber"
-                  placeholder="Numéro du compte"
-                  value={formData.accountNumber}
-                  onChange={handleInputChange}
-                  required
-                />
-              </>
-            )}
-
-            {/* Message pour CASH */}
-            {isCashPayment && (
-              <div className="cash-info">
-                <p className="cash-message">
-                  ✅ Paiement en espèces sélectionné. Aucune information de
-                  compte requise.
-                </p>
+                </div>
+                <div className="summary-item">
+                  <span className="summary-label">Email :</span>
+                  <span className="summary-value">{formData.email}</span>
+                </div>
+                <div className="summary-item">
+                  <span className="summary-label">Téléphone :</span>
+                  <span className="summary-value">{formData.phone}</span>
+                </div>
               </div>
-            )}
 
-            <div className="buttonContainer">
-              <button onClick={handleBack} className="backButton">
-                Retour
-              </button>
-              <button onClick={handleNext} className="nextButton">
-                Suivant
-              </button>
-            </div>
-          </div>
-        )}
+              <div className="summary-section">
+                <h3 className="summary-title">Informations de paiement</h3>
 
-        {/* ÉTAPE 3 : Récapitulatif */}
-        {step === 3 && (
-          <div className="step">
-            <h2>Étape 3: Récapitulatif</h2>
+                {platforms?.map((platform) => {
+                  if (platform.platform_id !== formData.paymentMethod)
+                    return null;
 
-            <div className="summary-section">
-              <h3 className="summary-title">Informations personnelles</h3>
-              <div className="summary-item">
-                <span className="summary-label">Nom complet :</span>
-                <span className="summary-value">
-                  {formData.firstName} {formData.lastName}
-                </span>
-              </div>
-              <div className="summary-item">
-                <span className="summary-label">Email :</span>
-                <span className="summary-value">{formData.email}</span>
-              </div>
-              <div className="summary-item">
-                <span className="summary-label">Téléphone :</span>
-                <span className="summary-value">{formData.phone}</span>
-              </div>
-            </div>
+                  return (
+                    <div
+                      key={platform.platform_id}
+                      className="platform-summary"
+                    >
+                      <div className="summary-item">
+                        <span className="summary-label">Plateforme :</span>
+                        <span className="summary-value platform-name-highlight">
+                          {platform.is_cash_payment ? (
+                            <strong>
+                              💵 {platform.platform_name} (Espèces)
+                            </strong>
+                          ) : (
+                            platform.platform_name
+                          )}
+                        </span>
+                      </div>
 
-            <div className="summary-section">
-              <h3 className="summary-title">Informations de paiement</h3>
-
-              {platforms?.map((platform) => {
-                if (platform.platform_id !== formData.paymentMethod)
-                  return null;
-
-                return (
-                  <div key={platform.platform_id} className="platform-summary">
-                    <div className="summary-item">
-                      <span className="summary-label">Plateforme :</span>
-                      <span className="summary-value platform-name-highlight">
-                        {platform.is_cash_payment ? (
-                          <strong>💵 {platform.platform_name} (Espèces)</strong>
-                        ) : (
-                          platform.platform_name
-                        )}
-                      </span>
+                      {!platform.is_cash_payment && (
+                        <>
+                          <div className="summary-item">
+                            <span className="summary-label">
+                              Nom du compte :
+                            </span>
+                            <span className="summary-value">
+                              {platform.account_name || formData.accountName}
+                            </span>
+                          </div>
+                          <div className="summary-item">
+                            <span className="summary-label">
+                              Numéro du compte :
+                            </span>
+                            <span className="summary-value">
+                              {platform.account_number ||
+                                formData.accountNumber}
+                            </span>
+                          </div>
+                        </>
+                      )}
                     </div>
+                  );
+                })}
+              </div>
 
-                    {!platform.is_cash_payment && (
-                      <>
-                        <div className="summary-item">
-                          <span className="summary-label">Nom du compte :</span>
-                          <span className="summary-value">
-                            {platform.account_name || formData.accountName}
-                          </span>
-                        </div>
-                        <div className="summary-item">
-                          <span className="summary-label">
-                            Numéro du compte :
-                          </span>
-                          <span className="summary-value">
-                            {platform.account_number || formData.accountNumber}
-                          </span>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+              <div className="summary-section summary-total">
+                <div className="summary-item">
+                  <span className="summary-label">Montant total :</span>
+                  <span className="summary-value total-amount">
+                    {applicationFee} FDJ
+                  </span>
+                </div>
+              </div>
 
-            <div className="summary-section summary-total">
-              <div className="summary-item">
-                <span className="summary-label">Montant total :</span>
-                <span className="summary-value total-amount">
-                  {applicationFee} FDJ
-                </span>
+              <div className="buttonContainer">
+                <button onClick={handleBack} className="backButton">
+                  Retour
+                </button>
+                <button
+                  onClick={handleNext}
+                  className="nextButton"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Traitement...' : 'Confirmer la commande'}
+                </button>
               </div>
             </div>
+          )}
 
-            <div className="buttonContainer">
-              <button onClick={handleBack} className="backButton">
-                Retour
-              </button>
+          {/* ÉTAPE 4 : Confirmation */}
+          {step === 4 && (
+            <div className="step confirmationStep">
+              <h2>Étape 4: Confirmation</h2>
+              <div className="confirmation-icon">✅</div>
+              <p>
+                Merci pour votre commande. Nous avons bien reçu vos informations
+                et nous vous contacterons dans les plus brefs délais pour
+                finaliser votre commande. Un email de confirmation vous sera
+                envoyé à l&apos;adresse fournie.
+              </p>
               <button
-                onClick={handleNext}
-                className="nextButton"
-                disabled={isSubmitting}
+                onClick={() => closeModal('purchase_complete')}
+                className="closeButton"
               >
-                {isSubmitting ? 'Traitement...' : 'Confirmer la commande'}
+                Fermer
               </button>
             </div>
-          </div>
-        )}
-
-        {/* ÉTAPE 4 : Confirmation */}
-        {step === 4 && (
-          <div className="step confirmationStep">
-            <h2>Étape 4: Confirmation</h2>
-            <div className="confirmation-icon">✅</div>
-            <p>
-              Merci pour votre commande. Nous avons bien reçu vos informations
-              et nous vous contacterons dans les plus brefs délais pour
-              finaliser votre commande. Un email de confirmation vous sera
-              envoyé à l&apos;adresse fournie.
-            </p>
-            <button
-              onClick={() => closeModal('purchase_complete')}
-              className="closeButton"
-            >
-              Fermer
-            </button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

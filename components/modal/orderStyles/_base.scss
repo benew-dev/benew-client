@@ -2,7 +2,7 @@
 @use '../../../app/styles/abstracts' as *;
 
 // ================================
-// 📄 _base.scss
+// 📄 _base.scss - AVEC LIMITATION HAUTEUR ET SCROLLING
 // ================================
 
 .modalOverlay {
@@ -35,53 +35,58 @@
   box-shadow:
     0 10px 30px #{'rgba(#{css-var(background-color)}, 0.6)'},
     0 0 20px #{'rgba(#{css-var(primary-color)}, 0.1)'};
-  overflow: hidden;
+  overflow: hidden; // Pour cacher le débordement général
   border: 1px solid #{'rgba(#{css-var(primary-color)}, 0.3)'};
   position: relative;
+
+  // ✅ LIMITATION DE HAUTEUR AVEC ESPACE AUX EXTRÉMITÉS
+  max-height: 90vh; // 90% de la hauteur de l'écran
+  display: flex;
+  flex-direction: column;
 
   // 📱 MOBILE FIRST - Dimensionnement optimisé
   width: 95%;
   max-width: 100%;
-  padding: 1.5rem;
+  padding: 0; // ✅ Padding géré par .modal-content
 
   @include from('small-sm') {
     width: 92%;
-    padding: 1.75rem;
+    max-height: 88vh; // Légèrement plus petit
   }
 
   @include from('small-lg') {
     width: 90%;
-    padding: 2rem;
+    max-height: 86vh;
   }
 
   @include from('small-xl') {
     width: 88%;
-    padding: 2.25rem;
+    max-height: 85vh;
   }
 
   // 📟 MOYENS ÉCRANS - Transition progressive
   @include from('medium-sm') {
     width: 85%;
     max-width: 500px;
-    padding: 2.5rem;
+    max-height: 84vh;
   }
 
   @include from('medium-lg') {
     width: 80%;
     max-width: 520px;
-    padding: 2.75rem;
+    max-height: 82vh;
   }
 
   @include from('medium-xxl') {
     max-width: 540px;
-    padding: 3rem;
+    max-height: 80vh;
   }
 
   // 🖥️ GRANDS ÉCRANS - Valeurs desktop
   @include from('large-xs') {
     width: 90%;
     max-width: 550px;
-    padding: 30px;
+    max-height: 80vh;
   }
 
   &::before {
@@ -97,6 +102,71 @@
       css-var(secondary-color),
       css-var(accent-color)
     );
+    z-index: 1;
+    flex-shrink: 0; // ✅ Ne pas rétrécir
+  }
+}
+
+// ✅ NOUVEAU: Conteneur avec scroll pour le contenu
+.modal-content {
+  overflow-y: auto; // ✅ Scrolling vertical
+  overflow-x: hidden;
+  flex: 1; // ✅ Prend tout l'espace disponible
+
+  // ✅ Padding déplacé ici
+  padding: 1.5rem;
+
+  // Styles du scrollbar (WebKit - Chrome, Safari, Edge)
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(css-var(text-color), 0.05);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(css-var(primary-color), 0.3);
+    border-radius: 4px;
+
+    &:hover {
+      background: rgba(css-var(primary-color), 0.5);
+    }
+  }
+
+  // Firefox
+  scrollbar-width: thin;
+  scrollbar-color: rgba(css-var(primary-color), 0.3)
+    rgba(css-var(text-color), 0.05);
+
+  // 📱 MOBILE FIRST - Padding adapté
+  @include from('small-sm') {
+    padding: 1.75rem;
+  }
+
+  @include from('small-lg') {
+    padding: 2rem;
+  }
+
+  @include from('small-xl') {
+    padding: 2.25rem;
+  }
+
+  @include from('medium-sm') {
+    padding: 2.5rem;
+  }
+
+  @include from('medium-lg') {
+    padding: 2.75rem;
+  }
+
+  @include from('medium-xxl') {
+    padding: 3rem;
+  }
+
+  @include from('large-xs') {
+    padding: 30px;
   }
 }
 
