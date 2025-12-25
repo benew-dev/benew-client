@@ -21,8 +21,7 @@ const OrderModal = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
-    lastName: '',
-    firstName: '',
+    name: '', // ✅ Un seul champ name
     email: '',
     phone: '',
     paymentMethod: '',
@@ -64,13 +63,14 @@ const OrderModal = ({
   };
 
   const validateStep1 = () => {
-    if (
-      !formData.lastName ||
-      !formData.firstName ||
-      !formData.email ||
-      !formData.phone
-    ) {
+    if (!formData.name || !formData.email || !formData.phone) {
       setError('Veuillez remplir tous les champs requis');
+      return false;
+    }
+
+    // Validation nom minimum 3 caractères
+    if (formData.name.trim().length < 3) {
+      setError('Le nom doit contenir au moins 3 caractères');
       return false;
     }
 
@@ -84,7 +84,9 @@ const OrderModal = ({
     // Basic phone validation
     const phoneRegex = /^\d{8,}$/;
     if (!phoneRegex.test(formData.phone.replace(/\D/g, ''))) {
-      setError('Veuillez fournir un numéro de téléphone valide');
+      setError(
+        'Veuillez fournir un numéro de téléphone valide (min. 8 chiffres)',
+      );
       return false;
     }
 
@@ -130,8 +132,7 @@ const OrderModal = ({
 
     try {
       const formDataToSubmit = new FormData();
-      formDataToSubmit.append('lastName', formData.lastName);
-      formDataToSubmit.append('firstName', formData.firstName);
+      formDataToSubmit.append('name', formData.name); // ✅ Un seul champ
       formDataToSubmit.append('email', formData.email);
       formDataToSubmit.append('phone', formData.phone);
       formDataToSubmit.append('paymentMethod', formData.paymentMethod);
@@ -149,6 +150,7 @@ const OrderModal = ({
         formDataToSubmit,
         applicationId,
         applicationFee,
+        isCashPayment, // ✅ Passer le flag isCashPayment
       );
 
       if (!result.success) {
@@ -192,7 +194,7 @@ const OrderModal = ({
   return (
     <div className="modalOverlay">
       <div className="modal">
-        {/* ✅ NOUVEAU: Wrapper avec scroll pour tout le contenu */}
+        {/* ✅ Wrapper scrollable pour tout le contenu */}
         <div className="modal-content">
           {error && <div className="errorMessage">{error}</div>}
 
@@ -200,22 +202,18 @@ const OrderModal = ({
           {step === 1 && (
             <div className="step">
               <h2>Étape 1: Informations personnelles</h2>
+
+              {/* ✅ UN SEUL CHAMP NAME */}
               <input
                 type="text"
-                name="lastName"
-                placeholder="Nom de famille"
-                value={formData.lastName}
+                name="name"
+                placeholder="Nom complet"
+                value={formData.name}
                 onChange={handleInputChange}
                 required
+                autoComplete="name"
               />
-              <input
-                type="text"
-                name="firstName"
-                placeholder="Prénom"
-                value={formData.firstName}
-                onChange={handleInputChange}
-                required
-              />
+
               <input
                 type="email"
                 name="email"
@@ -223,6 +221,7 @@ const OrderModal = ({
                 value={formData.email}
                 onChange={handleInputChange}
                 required
+                autoComplete="email"
               />
               <input
                 type="tel"
@@ -231,6 +230,7 @@ const OrderModal = ({
                 value={formData.phone}
                 onChange={handleInputChange}
                 required
+                autoComplete="tel"
               />
               <div className="buttonContainer">
                 <button
@@ -327,12 +327,13 @@ const OrderModal = ({
 
               <div className="summary-section">
                 <h3 className="summary-title">Informations personnelles</h3>
+
+                {/* ✅ AFFICHAGE DU NOM COMPLET */}
                 <div className="summary-item">
                   <span className="summary-label">Nom complet :</span>
-                  <span className="summary-value">
-                    {formData.firstName} {formData.lastName}
-                  </span>
+                  <span className="summary-value">{formData.name}</span>
                 </div>
+
                 <div className="summary-item">
                   <span className="summary-label">Email :</span>
                   <span className="summary-value">{formData.email}</span>
@@ -375,7 +376,7 @@ const OrderModal = ({
                               Nom du compte :
                             </span>
                             <span className="summary-value">
-                              {platform.account_name || formData.accountName}
+                              {formData.accountName}
                             </span>
                           </div>
                           <div className="summary-item">
@@ -383,8 +384,7 @@ const OrderModal = ({
                               Numéro du compte :
                             </span>
                             <span className="summary-value">
-                              {platform.account_number ||
-                                formData.accountNumber}
+                              {formData.accountNumber}
                             </span>
                           </div>
                         </>
