@@ -9,6 +9,7 @@ import {
   trackModalOpen,
   trackModalClose,
 } from '@/utils/analytics';
+import { formatPrice } from '@/utils/helpers';
 
 const OrderModal = ({
   isOpen,
@@ -398,7 +399,7 @@ const OrderModal = ({
                 <div className="summary-item">
                   <span className="summary-label">Montant total :</span>
                   <span className="summary-value total-amount">
-                    {applicationFee} FDJ
+                    {formatPrice(app.application_fee)}
                   </span>
                 </div>
               </div>
