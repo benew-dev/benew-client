@@ -1,30 +1,37 @@
 // utils/helpers.js
 
 /**
- * Formate un prix avec séparateurs de milliers
- * @param {number} price - Prix à formater
- * @returns {string} Prix formaté
+ * Formate un prix avec séparateurs de milliers et devise FDJ
+ * Exemples:
+ *   66000.00 → "66 000 FDJ"
+ *   5500.00  → "5 500 FDJ"
+ *   1200     → "1 200 FDJ"
+ *   500      → "500 FDJ"
+ *
+ * @param {number|string} price - Prix à formater
+ * @returns {string} Prix formaté avec espaces et devise
  */
-
-// Méthode pour formater les prix avec K si nécessaire
 export const formatPrice = (price) => {
   // Convertir en nombre si c'est une string
-  const numPrice = typeof price === 'string' ? parseInt(price) : price;
+  let numPrice = typeof price === 'string' ? parseFloat(price) : price;
 
-  // Vérifier si le nombre est divisible par 1000
-  if (numPrice >= 1000 && numPrice % 1000 === 0) {
-    return `${numPrice / 1000} K`;
+  // Gérer les cas invalides
+  if (isNaN(numPrice) || numPrice === null || numPrice === undefined) {
+    return '0 FDJ';
   }
-  // Vérifier si le nombre est supérieur à 1000 mais pas exactement divisible
-  else if (numPrice >= 1000) {
-    const kValue = numPrice / 1000;
-    // Si c'est un nombre décimal, garder une décimale
-    return kValue % 1 === 0 ? `${kValue} K` : `${kValue.toFixed(1)} K`;
-  }
-  // Retourner le nombre original si moins de 1000
-  else {
-    return numPrice.toString();
-  }
+
+  // Arrondir à l'entier le plus proche (supprimer les décimales)
+  numPrice = Math.round(numPrice);
+
+  // Formater avec séparateurs d'espaces pour les milliers
+  const formattedNumber = numPrice.toLocaleString('fr-FR', {
+    useGrouping: true,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
+
+  // Retourner avec la devise FDJ
+  return `${formattedNumber} FDJ`;
 };
 
 /**
@@ -143,4 +150,49 @@ export function getPlatformDisplayName(platform) {
  */
 export function isEmptyObject(obj) {
   return obj && Object.keys(obj).length === 0 && obj.constructor === Object;
+}
+
+/**
+ * Formate un montant sans devise (juste les espaces)
+ * Utile pour les calculs ou affichages intermédiaires
+ *
+ * @param {number|string} amount - Montant à formater
+ * @returns {string} Montant formaté avec espaces
+ */
+export function formatAmount(amount) {
+  let numAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
+
+  if (isNaN(numAmount) || numAmount === null || numAmount === undefined) {
+    return '0';
+  }
+
+  numAmount = Math.round(numAmount);
+
+  return numAmount.toLocaleString('fr-FR', {
+    useGrouping: true,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
+}
+
+/**
+ * Formate un prix avec décimales (si nécessaire)
+ * @param {number|string} price - Prix à formater
+ * @param {number} decimals - Nombre de décimales (défaut: 2)
+ * @returns {string} Prix formaté
+ */
+export function formatPriceWithDecimals(price, decimals = 2) {
+  let numPrice = typeof price === 'string' ? parseFloat(price) : price;
+
+  if (isNaN(numPrice) || numPrice === null || numPrice === undefined) {
+    return '0.00 FDJ';
+  }
+
+  const formattedNumber = numPrice.toLocaleString('fr-FR', {
+    useGrouping: true,
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  });
+
+  return `${formattedNumber} FDJ`;
 }
