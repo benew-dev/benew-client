@@ -280,7 +280,7 @@ export async function createOrder(
 
     // Log du temps de traitement
     const processingTime = Date.now() - startTime;
-    if (processingTime > 2000) {
+    if (processingTime > 5000) {
       captureException(new Error('Slow order creation'), {
         tags: { component: 'order_actions', severity: 'warning' },
         extra: { processingTime, orderId: newOrder.order_id },
