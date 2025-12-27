@@ -328,7 +328,7 @@
 }
 
 // =============================
-// BOUTON GALLERY DANS CARTE
+// ✅ BOUTON GALLERY DANS CARTE - TEXTE VISIBLE + ICÔNES CACHÉES
 // =============================
 
 .btn-gallery {
@@ -344,6 +344,7 @@
     box-shadow: 0 6px 20px rgba(css-var(secondary-color), 0.3);
   }
 
+  // Icônes avec transition (déjà gérées par .btn svg dans _buttons.scss)
   svg {
     transition: transform 0.3s ease;
   }
@@ -352,18 +353,9 @@
     transform: scale(1.1);
   }
 
+  // ✅ TEXTE - TOUJOURS VISIBLE
   .btn-text {
-    @include small-screens {
-      display: none;
-    }
-
-    @include from('small-sm') {
-      display: none;
-    }
-
-    @include from('small-lg') {
-      display: inline;
-    }
+    display: inline; // Visible partout
   }
 }
 

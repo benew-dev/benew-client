@@ -2,7 +2,7 @@
 @use '../../../app/styles/abstracts' as *;
 
 // ================================
-// 📄 _buttons.scss
+// 📄 _buttons.scss - TEXTE VISIBLE + ICÔNES CACHÉES SUR MOBILE
 // ================================
 
 .action-buttons {
@@ -141,7 +141,59 @@
   &:hover::before {
     left: 100%;
   }
+
+  // ✅ ICÔNES - CACHÉES SUR MOBILE/TABLET, VISIBLES SUR DESKTOP
+  svg {
+    transition: transform 0.3s ease;
+
+    // 📱 MOBILE - Cacher l'icône
+    @include small-screens {
+      display: none;
+    }
+
+    @include from('small-sm') {
+      display: none;
+    }
+
+    @include from('small-lg') {
+      display: none;
+    }
+
+    @include from('small-xl') {
+      display: none;
+    }
+
+    // 📟 MOYENS ÉCRANS - Cacher l'icône
+    @include between('small-xl', 'medium-sm') {
+      display: none;
+    }
+
+    @include from('medium-sm') {
+      display: none;
+    }
+
+    @include from('medium-lg') {
+      display: none;
+    }
+
+    @include from('medium-xxl') {
+      display: none;
+    }
+
+    // 🖥️ DESKTOP - Afficher l'icône
+    @include from('large-xs') {
+      display: inline-block;
+    }
+  }
+
+  &:hover svg {
+    transform: scale(1.1);
+  }
 }
+
+// =============================
+// BOUTON COMMANDER (btn-cart)
+// =============================
 
 .btn-cart {
   background: linear-gradient(
@@ -163,30 +215,15 @@
     box-shadow: 0 8px 25px rgba(css-var(secondary-color), 0.4);
   }
 
-  // Icône avec transition
-  svg {
-    transition: transform 0.3s ease;
-  }
-
-  &:hover svg {
-    transform: scale(1.1);
-  }
-
+  // ✅ TEXTE - TOUJOURS VISIBLE
   .btn-text {
-    // 📟 TRÈS PETITS ÉCRANS - Cacher le texte
-    @include small-screens {
-      display: none;
-    }
-
-    @include from('small-sm') {
-      display: none;
-    }
-
-    @include from('small-lg') {
-      display: inline;
-    }
+    display: inline; // Visible partout
   }
 }
+
+// =============================
+// BOUTON VOIR + (btn-preview)
+// =============================
 
 .btn-preview {
   background: transparent;
@@ -201,27 +238,8 @@
     box-shadow: 0 6px 20px rgba(css-var(primary-color), 0.3);
   }
 
-  // Icône avec transition
-  svg {
-    transition: transform 0.3s ease;
-  }
-
-  &:hover svg {
-    transform: scale(1.1);
-  }
-
+  // ✅ TEXTE - TOUJOURS VISIBLE
   .btn-text {
-    // 📟 TRÈS PETITS ÉCRANS - Cacher le texte
-    @include small-screens {
-      display: none;
-    }
-
-    @include from('small-sm') {
-      display: none;
-    }
-
-    @include from('small-lg') {
-      display: inline;
-    }
+    display: inline; // Visible partout
   }
 }
