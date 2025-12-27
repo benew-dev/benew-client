@@ -399,7 +399,7 @@ const OrderModal = ({
                 <div className="summary-item">
                   <span className="summary-label">Montant total :</span>
                   <span className="summary-value total-amount">
-                    {formatPrice(app.application_fee)}
+                    {formatPrice(applicationFee)}
                   </span>
                 </div>
               </div>
