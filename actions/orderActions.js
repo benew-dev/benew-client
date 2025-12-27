@@ -64,6 +64,12 @@ export async function createOrder(
     // ÉTAPE 2: VALIDATION PRÉLIMINAIRE
     // =============================
 
+    // Convertir applicationFee en number si c'est une string
+    const numericFee =
+      typeof applicationFee === 'string'
+        ? parseFloat(applicationFee)
+        : applicationFee;
+
     // Vérifier que applicationId et applicationFee sont valides
     if (!isValidUUID(applicationId)) {
       return {
@@ -73,7 +79,7 @@ export async function createOrder(
       };
     }
 
-    if (!isValidAmount(applicationFee)) {
+    if (!isValidAmount(numericFee)) {
       return {
         success: false,
         message: 'Montant invalide.',
@@ -88,7 +94,7 @@ export async function createOrder(
     const rawData = prepareOrderDataFromFormData(
       formData,
       applicationId,
-      applicationFee,
+      numericFee,
       isCashPayment,
     );
 
