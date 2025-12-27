@@ -1,6 +1,7 @@
+// components/modal/OrderModal.jsx
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { createOrder } from '../../actions/orderActions';
 import './orderStyles/index.scss';
 
@@ -22,7 +23,7 @@ const OrderModal = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
-    name: '', // ✅ Un seul champ name
+    name: '',
     email: '',
     phone: '',
     paymentMethod: '',
@@ -35,6 +36,18 @@ const OrderModal = ({
     (p) => p.platform_id === formData.paymentMethod,
   );
   const isCashPayment = selectedPlatform?.is_cash_payment || false;
+
+  // ✅ FILTRER LES PLATEFORMES ÉLECTRONIQUES (non-CASH)
+  const electronicPlatforms = useMemo(() => {
+    if (!platforms || platforms.length === 0) return [];
+
+    return platforms.filter(
+      (platform) =>
+        !platform.is_cash_payment &&
+        platform.account_name &&
+        platform.account_number,
+    );
+  }, [platforms]);
 
   // Tracker l'ouverture/fermeture de la modal
   useEffect(() => {
@@ -69,20 +82,17 @@ const OrderModal = ({
       return false;
     }
 
-    // Validation nom minimum 3 caractères
     if (formData.name.trim().length < 3) {
       setError('Le nom doit contenir au moins 3 caractères');
       return false;
     }
 
-    // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       setError('Veuillez fournir une adresse email valide');
       return false;
     }
 
-    // Basic phone validation
     const phoneRegex = /^\d{8,}$/;
     if (!phoneRegex.test(formData.phone.replace(/\D/g, ''))) {
       setError(
@@ -101,7 +111,6 @@ const OrderModal = ({
       return false;
     }
 
-    // Si ce n'est PAS un paiement CASH, vérifier les champs compte
     if (!isCashPayment) {
       if (!formData.accountName || !formData.accountNumber) {
         setError('Veuillez remplir le nom et le numéro de compte');
@@ -120,10 +129,10 @@ const OrderModal = ({
       }
     } else if (step === 2) {
       if (validateStep2()) {
-        setStep(3); // Aller à l'étape récapitulatif
+        setStep(3);
       }
     } else if (step === 3) {
-      submitOrder(); // Soumettre depuis le récapitulatif
+      submitOrder();
     }
   };
 
@@ -133,12 +142,11 @@ const OrderModal = ({
 
     try {
       const formDataToSubmit = new FormData();
-      formDataToSubmit.append('name', formData.name); // ✅ Un seul champ
+      formDataToSubmit.append('name', formData.name);
       formDataToSubmit.append('email', formData.email);
       formDataToSubmit.append('phone', formData.phone);
       formDataToSubmit.append('paymentMethod', formData.paymentMethod);
 
-      // Si CASH, envoyer des valeurs par défaut
       if (isCashPayment) {
         formDataToSubmit.append('accountName', 'CASH');
         formDataToSubmit.append('accountNumber', 'N/A');
@@ -151,7 +159,7 @@ const OrderModal = ({
         formDataToSubmit,
         applicationId,
         applicationFee,
-        isCashPayment, // ✅ Passer le flag isCashPayment
+        isCashPayment,
       );
 
       if (!result.success) {
@@ -195,7 +203,6 @@ const OrderModal = ({
   return (
     <div className="modalOverlay">
       <div className="modal">
-        {/* ✅ Wrapper scrollable pour tout le contenu */}
         <div className="modal-content">
           {error && <div className="errorMessage">{error}</div>}
 
@@ -204,7 +211,6 @@ const OrderModal = ({
             <div className="step">
               <h2>Étape 1: Informations personnelles</h2>
 
-              {/* ✅ UN SEUL CHAMP NAME */}
               <input
                 type="text"
                 name="name"
@@ -278,7 +284,6 @@ const OrderModal = ({
                 ))}
               </div>
 
-              {/* Afficher les champs uniquement si ce n'est PAS CASH */}
               {formData.paymentMethod && !isCashPayment && (
                 <>
                   <input
@@ -300,7 +305,6 @@ const OrderModal = ({
                 </>
               )}
 
-              {/* Message pour CASH */}
               {isCashPayment && (
                 <div className="cash-info">
                   <p className="cash-message">
@@ -329,7 +333,6 @@ const OrderModal = ({
               <div className="summary-section">
                 <h3 className="summary-title">Informations personnelles</h3>
 
-                {/* ✅ AFFICHAGE DU NOM COMPLET */}
                 <div className="summary-item">
                   <span className="summary-label">Nom complet :</span>
                   <span className="summary-value">{formData.name}</span>
@@ -419,17 +422,74 @@ const OrderModal = ({
             </div>
           )}
 
-          {/* ÉTAPE 4 : Confirmation */}
+          {/* ÉTAPE 4 : Confirmation avec plateformes de paiement */}
           {step === 4 && (
             <div className="step confirmationStep">
               <h2>Étape 4: Confirmation</h2>
+
               <div className="confirmation-icon">✅</div>
-              <p>
-                Merci pour votre commande. Nous avons bien reçu vos informations
-                et nous vous contacterons dans les plus brefs délais pour
-                finaliser votre commande. Un email de confirmation vous sera
-                envoyé à l&apos;adresse fournie.
-              </p>
+
+              <div className="confirmation-main-message">
+                <p>
+                  Merci pour votre commande. Nous avons bien reçu vos
+                  informations et nous vous contacterons dans les plus brefs
+                  délais pour finaliser votre commande.
+                </p>
+                <p>
+                  Un email de confirmation vous sera envoyé à l&apos;adresse
+                  fournie.
+                </p>
+              </div>
+
+              {/* ✅ SECTION PLATEFORMES DE PAIEMENT ÉLECTRONIQUE */}
+              {electronicPlatforms.length > 0 && (
+                <div className="payment-platforms-section">
+                  <h3 className="platforms-title">
+                    📱 Nos moyens de paiement électronique
+                  </h3>
+                  <p className="platforms-subtitle">
+                    Vous pouvez effectuer votre paiement via l&apos;un de ces
+                    comptes :
+                  </p>
+
+                  <div className="platforms-list">
+                    {electronicPlatforms.map((platform) => (
+                      <div key={platform.platform_id} className="platform-card">
+                        <div className="platform-card-header">
+                          <span className="platform-card-name">
+                            {platform.platform_name}
+                          </span>
+                        </div>
+                        <div className="platform-card-details">
+                          <div className="platform-detail-item">
+                            <span className="detail-label">
+                              Nom du compte :
+                            </span>
+                            <span className="detail-value">
+                              {platform.account_name}
+                            </span>
+                          </div>
+                          <div className="platform-detail-item">
+                            <span className="detail-label">Numéro :</span>
+                            <span className="detail-value account-number">
+                              {platform.account_number}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="payment-notice">
+                    <p>
+                      💡 <strong>Important :</strong> Après avoir effectué le
+                      paiement, veuillez nous contacter pour confirmer votre
+                      transaction.
+                    </p>
+                  </div>
+                </div>
+              )}
+
               <button
                 onClick={() => closeModal('purchase_complete')}
                 className="closeButton"
