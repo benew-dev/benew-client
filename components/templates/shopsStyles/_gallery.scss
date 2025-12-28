@@ -2,12 +2,14 @@
 @use '../../../app/styles/abstracts' as *;
 
 // ================================
-// 📄 _gallery.scss - VERSION CORRIGÉE
+// 📄 _gallery.scss - VERSION FINALE CORRIGÉE
 // ================================
 // ✅ CORRECTIONS APPLIQUÉES :
-// 1. Header restructuré : titre + compteur groupés (plus de chevauchement avec X)
-// 2. Thumbnails PETITES partout (60-70px max, pas 80-100px)
-// 3. Layout desktop optimisé : thumbs verticales à gauche visibles, image centrale adaptée
+// 1. Thumbnails AGRANDIES : 80-90px (visibles)
+// 2. Espacement RÉDUIT : gap 0.3-0.4rem (serrées pour beaucoup d'images)
+// 3. Bordure GRADIENT sur thumbnail active
+// 4. object-fit: contain (déjà appliqué)
+// 5. Auto-scroll 4s (déjà dans le JSX)
 
 // =============================
 // OVERLAY MODAL
@@ -102,8 +104,8 @@
 
 .gallery-header {
   display: flex;
-  justify-content: space-between; // ✅ Entre le groupe (titre+compteur) et... rien (X est absolu)
-  align-items: flex-start; // ✅ Alignement en haut
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid rgba(css-var(primary-color), 0.2);
@@ -117,13 +119,13 @@
     gap: 0.5rem;
     margin-bottom: 1rem;
     padding-bottom: 0.75rem;
-    padding-right: 2.5rem; // ✅ Espace pour le X
+    padding-right: 2.5rem;
   }
 
   @include from('medium-sm') {
     flex-direction: row;
     margin-bottom: 1.25rem;
-    padding-right: 3rem; // ✅ Espace pour le X
+    padding-right: 3rem;
   }
 
   @include from('large-xs') {
@@ -137,7 +139,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  flex: 1; // ✅ Prend l'espace disponible
+  flex: 1;
 
   // 📟 TABLET+ : Titre et compteur sur la même ligne
   @include from('medium-sm') {
@@ -149,7 +151,7 @@
   h3 {
     color: css-var(primary-color);
     margin: 0;
-    flex-shrink: 0; // ✅ Ne rétrécit pas
+    flex-shrink: 0;
 
     // 📱 MOBILE FIRST
     font-size: 1.2rem;
@@ -263,7 +265,7 @@
   overflow: hidden;
 
   // 📱 MOBILE + 📟 TABLET : Layout VERTICAL (image EN HAUT + thumbs EN BAS)
-  flex-direction: column-reverse; // ✅ CORRIGÉ : thumbs en dessous
+  flex-direction: column-reverse;
   gap: 1rem;
 
   @include from('medium-sm') {
@@ -278,7 +280,7 @@
 }
 
 // =============================
-// ✅ THUMBNAILS - PETITES PARTOUT (CORRECTION MAJEURE)
+// ✅ THUMBNAILS - AGRANDIES ET RAPPROCHÉES
 // =============================
 
 .gallery-thumbnails {
@@ -288,27 +290,27 @@
 
   // 📱 MOBILE + 📟 TABLET : HORIZONTALES en bas
   flex-direction: row;
-  gap: 0.5rem;
+  gap: 0.3rem; // ✅ RÉDUIT : plus proche (0.3rem au lieu de 0.5rem)
   padding: 0.5rem 0;
 
   @include from('medium-sm') {
-    gap: 0.6rem;
+    gap: 0.35rem; // ✅ RÉDUIT : 0.35rem au lieu de 0.6rem
   }
 
   // 🖥️ DESKTOP : VERTICALES à gauche
   @include from('large-xs') {
     flex-direction: column;
-    gap: 0.6rem;
+    gap: 0.4rem; // ✅ RÉDUIT : 0.4rem au lieu de 0.6rem
     padding: 0.5rem;
-    min-width: 70px; // ✅ Plus étroit (thumbs petites)
-    max-width: 70px;
+    min-width: 90px; // ✅ AGRANDI : 90px au lieu de 70px
+    max-width: 90px;
     overflow-y: auto;
     overflow-x: hidden;
   }
 
   @include from('large-xxl') {
-    min-width: 80px;
-    max-width: 80px;
+    min-width: 100px; // ✅ AGRANDI : 100px au lieu de 80px
+    max-width: 100px;
   }
 
   // Custom scrollbar
@@ -343,7 +345,7 @@
 }
 
 // =============================
-// ✅ THUMBNAILS INDIVIDUELLES - PETITES UNIFORMES
+// ✅ THUMBNAILS INDIVIDUELLES - AGRANDIES AVEC BORDURE GRADIENT
 // =============================
 
 .gallery-thumb {
@@ -354,41 +356,42 @@
   cursor: pointer;
   transition: all 0.3s ease;
   background: rgba(css-var(text-color), 0.05);
+  position: relative; // ✅ Pour le pseudo-élément gradient
 
-  // 📱 MOBILE : PETITES carrées 60px
-  width: 60px;
-  height: 60px;
+  // 📱 MOBILE : AGRANDIES 80-85px (au lieu de 60-65px)
+  width: 80px;
+  height: 80px;
 
   @include from('small-sm') {
-    width: 62px;
-    height: 62px;
+    width: 82px;
+    height: 82px;
   }
 
   @include from('small-lg') {
-    width: 65px;
-    height: 65px;
+    width: 85px;
+    height: 85px;
   }
 
-  // 📟 TABLET : MÊME TAILLE QUE MOBILE (60-65px max)
+  // 📟 TABLET : AGRANDIES 85-90px
   @include from('medium-sm') {
-    width: 65px; // ✅ CORRIGÉ : même taille que mobile
-    height: 65px;
+    width: 85px;
+    height: 85px;
   }
 
   @include from('medium-lg') {
-    width: 65px;
-    height: 65px;
+    width: 88px;
+    height: 88px;
   }
 
-  // 🖥️ DESKTOP : PETITES carrées verticales (même taille)
+  // 🖥️ DESKTOP : AGRANDIES 90-100px
   @include from('large-xs') {
-    width: 60px;
-    height: 60px;
+    width: 90px;
+    height: 90px;
   }
 
   @include from('large-xxl') {
-    width: 70px;
-    height: 70px;
+    width: 100px;
+    height: 100px;
   }
 
   &:hover {
@@ -396,16 +399,33 @@
     transform: scale(1.05);
   }
 
+  // ✅ BORDURE GRADIENT SUR ACTIVE
   &.active {
-    border-color: css-var(primary-color);
-    border-width: 3px;
+    border: none; // ✅ Retirer la bordure simple
+    padding: 3px; // ✅ Espace pour le gradient
+
+    // ✅ GRADIENT DE FOND (visible comme bordure)
+    background: linear-gradient(
+      135deg,
+      css-var(primary-color) 0%,
+      css-var(secondary-color) 50%,
+      css-var(accent-color) 100%
+    );
+
+    // ✅ OMBRE POUR ACCENTUER
     box-shadow: 0 0 0 2px rgba(css-var(primary-color), 0.3);
+
+    // ✅ IMAGE À L'INTÉRIEUR (fond blanc/noir pour cacher le gradient sous l'image)
+    img {
+      border-radius: 5px; // ✅ Arrondi légèrement plus petit
+      background: css-var(background-color); // ✅ Fond pour cacher le gradient
+    }
   }
 
   img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: contain; // ✅ CONTAIN (comme tu as corrigé)
   }
 }
 
@@ -441,7 +461,7 @@
   // 📟 TABLET
   @include from('medium-sm') {
     min-height: 350px;
-    max-height: 60vh; // ✅ Plus d'espace (thumbs plus petites)
+    max-height: 60vh;
   }
 
   @include from('medium-lg') {
@@ -454,10 +474,10 @@
     max-height: 65vh;
   }
 
-  // 🖥️ DESKTOP : Beaucoup d'espace (thumbs petites à gauche)
+  // 🖥️ DESKTOP : Beaucoup d'espace (thumbs à gauche)
   @include from('large-xs') {
     min-height: 450px;
-    max-height: 75vh; // ✅ Image centrale visible complètement
+    max-height: 75vh;
   }
 
   @include from('large-lg') {
@@ -478,14 +498,6 @@
   object-fit: contain;
   object-position: center;
 }
-
-// =============================
-// ✅ BOUTONS NAVIGATION - SUPPRIMÉS
-// =============================
-// Les flèches de navigation ont été retirées
-// Navigation uniquement via :
-// 1. Clic sur les thumbnails
-// 2. Auto-scroll automatique (si implémenté dans le composant)
 
 // =============================
 // ✅ BOUTON GALLERY DANS CARTE
@@ -537,19 +549,12 @@
     animation: none;
   }
 
-  .gallery-nav-btn,
   .gallery-thumb,
   .gallery-close-btn {
     transition: none;
 
     &:hover {
       transform: none;
-    }
-  }
-
-  .gallery-nav-btn {
-    &:hover {
-      transform: translateY(-50%);
     }
   }
 }
