@@ -2,7 +2,7 @@
 @use '../../../app/styles/abstracts' as *;
 
 // ================================
-// 📄 _gallery.scss - Modal gallery pour other_versions
+// 📄 _gallery.scss - Modal gallery pour other_versions (CORRIGÉ)
 // ================================
 
 .gallery-modal-overlay {
@@ -59,11 +59,17 @@
     width: 90%;
     max-width: 900px;
     padding: 1.5rem;
+    max-height: 92vh; // ✅ Un peu plus d'espace sur tablet
   }
 
   @include from('large-xs') {
     max-width: 1000px;
     padding: 2rem;
+    max-height: 95vh; // ✅ Encore plus d'espace sur desktop
+  }
+
+  @include from('large-xxl') {
+    max-width: 1200px; // ✅ Plus large sur grand écran
   }
 }
 
@@ -89,16 +95,24 @@
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid rgba(css-var(primary-color), 0.2);
+  flex-shrink: 0; // ✅ Ne se compresse jamais
 
   // 📱 MOBILE - Stack vertical
   @include small-screens {
     flex-direction: column;
     gap: 0.75rem;
     text-align: center;
+    margin-bottom: 1rem; // ✅ Réduction pour gagner de l'espace
+    padding-bottom: 0.75rem;
   }
 
   @include from('medium-sm') {
     flex-direction: row;
+    margin-bottom: 1.25rem;
+  }
+
+  @include from('large-xs') {
+    margin-bottom: 1.5rem;
   }
 
   h3 {
@@ -111,6 +125,10 @@
     @include from('medium-sm') {
       font-size: 1.4rem;
     }
+
+    @include from('large-xs') {
+      font-size: 1.5rem;
+    }
   }
 }
 
@@ -122,40 +140,65 @@
   @include until('small-sm') {
     font-size: 0.85rem;
   }
+
+  @include from('medium-sm') {
+    font-size: 1rem;
+  }
 }
 
 // =============================
-// BOUTON FERMETURE
+// ✅ BOUTON FERMETURE - VISIBLE SUR TOUS LES ÉCRANS
 // =============================
 
 .gallery-close-btn {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: rgba(css-var(background-color), 0.8);
-  border: 1px solid rgba(css-var(primary-color), 0.3);
+  background: rgba(css-var(background-color), 0.9);
+  border: 2px solid css-var(primary-color); // ✅ Border plus visible
   border-radius: 50%;
-  width: 3rem;
-  height: 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   color: css-var(primary-color);
   transition: all 0.3s ease;
-  z-index: 10;
+  z-index: 100; // ✅ Z-index très élevé pour rester au-dessus
 
-  @include until('small-sm') {
+  // 📱 MOBILE - Taille et position
+  width: 2.5rem;
+  height: 2.5rem;
+  top: 0.5rem;
+  right: 0.5rem;
+
+  @include small-screens {
     width: 2.5rem;
     height: 2.5rem;
     top: 0.5rem;
     right: 0.5rem;
   }
 
+  // 📟 TABLET - Taille augmentée pour meilleure visibilité
+  @include from('medium-sm') {
+    width: 3rem;
+    height: 3rem;
+    top: 1rem;
+    right: 1rem;
+    border-width: 2px; // ✅ Border bien visible
+  }
+
+  // 🖥️ DESKTOP - Encore plus grand et visible
+  @include from('large-xs') {
+    width: 3.5rem;
+    height: 3.5rem;
+    top: 1.5rem;
+    right: 1.5rem;
+    border-width: 2px;
+  }
+
   &:hover {
-    background: rgba(css-var(primary-color), 0.9);
+    background: css-var(primary-color);
     color: css-var(background-color);
     transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(css-var(primary-color), 0.4); // ✅ Ombre au hover
   }
 
   &:active {
@@ -164,7 +207,7 @@
 }
 
 // =============================
-// IMAGE CONTAINER
+// ✅ IMAGE CONTAINER - MEILLEURE GESTION DE L'ESPACE
 // =============================
 
 .gallery-image-container {
@@ -175,26 +218,65 @@
   background: rgba(css-var(text-color), 0.03);
   border-radius: 12px;
   overflow: hidden;
+  flex-grow: 1; // ✅ Prend l'espace restant disponible
+  flex-shrink: 1; // ✅ Peut se compresser si nécessaire
 
-  // 📱 MOBILE FIRST
-  min-height: 300px;
-  max-height: 50vh;
-  margin-bottom: 1.5rem;
+  // 📱 MOBILE FIRST - Hauteurs adaptées
+  min-height: 250px; // ✅ Minimum garanti même sur petit mobile
+  max-height: 50vh; // ✅ Maximum pour laisser place aux thumbnails
+  margin-bottom: 1rem; // ✅ Marge réduite pour gagner de l'espace
 
+  @include from('small-sm') {
+    min-height: 280px;
+    max-height: 52vh;
+  }
+
+  @include from('small-lg') {
+    min-height: 300px;
+    max-height: 55vh;
+  }
+
+  // 📟 TABLET - Plus d'espace pour l'image
   @include from('medium-sm') {
-    min-height: 400px;
+    min-height: 350px;
+    max-height: 58vh; // ✅ Plus d'espace sur tablet
+    margin-bottom: 1.25rem;
+  }
+
+  @include from('medium-lg') {
+    min-height: 380px;
     max-height: 60vh;
   }
 
+  @include from('medium-xxl') {
+    min-height: 400px;
+    max-height: 62vh;
+  }
+
+  // 🖥️ DESKTOP - Maximum d'espace pour l'image
   @include from('large-xs') {
+    min-height: 450px;
+    max-height: 65vh; // ✅ Beaucoup plus d'espace sur desktop
+    margin-bottom: 1.5rem;
+  }
+
+  @include from('large-lg') {
     min-height: 500px;
+    max-height: 68vh;
+  }
+
+  @include from('large-xxl') {
+    min-height: 550px;
+    max-height: 70vh; // ✅ Maximum sur grand écran
   }
 }
 
+// ✅ IMAGE CENTRALE - TOUJOURS EN CONTAIN
 .gallery-image {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: contain; // ✅ CONTAIN sur tous les écrans
+  object-position: center; // ✅ Centré
 }
 
 // =============================
@@ -205,9 +287,9 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(css-var(background-color), 0.8);
+  background: rgba(css-var(background-color), 0.9);
   backdrop-filter: blur(4px);
-  border: 1px solid rgba(css-var(primary-color), 0.3);
+  border: 2px solid css-var(primary-color); // ✅ Border visible
   color: css-var(primary-color);
   border-radius: 50%;
   cursor: pointer;
@@ -228,12 +310,20 @@
   @include from('medium-sm') {
     width: 3rem;
     height: 3rem;
+    font-size: 2.5rem;
+  }
+
+  @include from('large-xs') {
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: 3rem;
   }
 
   &:hover {
-    background: rgba(css-var(primary-color), 0.9);
+    background: css-var(primary-color);
     color: css-var(background-color);
     transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 4px 12px rgba(css-var(primary-color), 0.4);
   }
 
   &:active {
@@ -246,6 +336,10 @@
     @include from('medium-sm') {
       left: 1rem;
     }
+
+    @include from('large-xs') {
+      left: 1.5rem;
+    }
   }
 
   &.gallery-next {
@@ -254,11 +348,15 @@
     @include from('medium-sm') {
       right: 1rem;
     }
+
+    @include from('large-xs') {
+      right: 1.5rem;
+    }
   }
 }
 
 // =============================
-// THUMBNAILS
+// ✅ THUMBNAILS - TOUJOURS VISIBLES
 // =============================
 
 .gallery-thumbnails {
@@ -266,20 +364,36 @@
   gap: 0.75rem;
   overflow-x: auto;
   padding: 0.5rem 0;
+  flex-shrink: 0; // ✅ Ne se compresse JAMAIS
+  min-height: 80px; // ✅ Hauteur minimale garantie sur mobile
+
+  @include from('medium-sm') {
+    min-height: 95px; // ✅ Plus de hauteur sur tablet
+    gap: 1rem;
+  }
+
+  @include from('large-xs') {
+    min-height: 110px; // ✅ Encore plus sur desktop
+    gap: 1.25rem;
+  }
 
   // Custom scrollbar
   &::-webkit-scrollbar {
     height: 6px;
+
+    @include from('medium-sm') {
+      height: 8px;
+    }
   }
 
   &::-webkit-scrollbar-track {
     background: rgba(css-var(text-color), 0.1);
-    border-radius: 3px;
+    border-radius: 4px;
   }
 
   &::-webkit-scrollbar-thumb {
     background: rgba(css-var(primary-color), 0.5);
-    border-radius: 3px;
+    border-radius: 4px;
 
     &:hover {
       background: rgba(css-var(primary-color), 0.7);
@@ -288,6 +402,7 @@
 
   @include until('small-sm') {
     gap: 0.5rem;
+    min-height: 70px; // ✅ Minimum sur très petit mobile
   }
 }
 
@@ -301,12 +416,27 @@
   background: rgba(css-var(text-color), 0.05);
 
   // 📱 MOBILE FIRST
-  width: 80px;
-  height: 60px;
+  width: 70px; // ✅ Légèrement réduit pour tenir plus d'images
+  height: 52px;
+
+  @include from('small-sm') {
+    width: 80px;
+    height: 60px;
+  }
 
   @include from('medium-sm') {
     width: 100px;
     height: 75px;
+  }
+
+  @include from('large-xs') {
+    width: 120px; // ✅ Plus grand sur desktop
+    height: 90px;
+  }
+
+  @include from('large-xxl') {
+    width: 140px; // ✅ Encore plus grand sur grand écran
+    height: 105px;
   }
 
   &:hover {
@@ -369,7 +499,11 @@
   }
 
   .gallery-image-container {
-    max-height: 70vh;
+    max-height: 65vh; // ✅ Plus d'espace en mode paysage
+  }
+
+  .gallery-thumbnails {
+    min-height: 70px; // ✅ Réduit en paysage
   }
 }
 
@@ -386,6 +520,12 @@
 
     &:hover {
       transform: none;
+    }
+  }
+
+  .gallery-nav-btn {
+    &:hover {
+      transform: translateY(-50%);
     }
   }
 }
