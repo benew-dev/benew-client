@@ -266,21 +266,21 @@
 
   // 📱 MOBILE + 📟 TABLET : Layout VERTICAL (image EN HAUT + thumbs EN BAS)
   flex-direction: column-reverse;
-  gap: 1rem;
+  gap: 0.8rem; // ✅ RÉDUIT : 0.8rem au lieu de 1rem
 
   @include from('medium-sm') {
-    gap: 1.25rem;
+    gap: 1rem; // ✅ RÉDUIT : 1rem au lieu de 1.25rem
   }
 
   // 🖥️ DESKTOP : Layout HORIZONTAL (thumbs à gauche + image)
   @include from('large-xs') {
     flex-direction: row;
-    gap: 1.5rem;
+    gap: 0.8rem; // ✅ RÉDUIT : 0.8rem au lieu de 1.5rem (moins d'espace horizontal)
   }
 }
 
 // =============================
-// ✅ THUMBNAILS - AGRANDIES ET RAPPROCHÉES
+// ✅ THUMBNAILS - AGRANDIES ET PRESQUE COLLÉES
 // =============================
 
 .gallery-thumbnails {
@@ -290,26 +290,26 @@
 
   // 📱 MOBILE + 📟 TABLET : HORIZONTALES en bas
   flex-direction: row;
-  gap: 0.3rem; // ✅ RÉDUIT : plus proche (0.3rem au lieu de 0.5rem)
+  gap: 0.2rem; // ✅ TRÈS RÉDUIT : presque collées (0.2rem)
   padding: 0.5rem 0;
 
   @include from('medium-sm') {
-    gap: 0.35rem; // ✅ RÉDUIT : 0.35rem au lieu de 0.6rem
+    gap: 0.2rem; // ✅ Uniforme sur tablette aussi
   }
 
   // 🖥️ DESKTOP : VERTICALES à gauche
   @include from('large-xs') {
     flex-direction: column;
-    gap: 0.4rem; // ✅ RÉDUIT : 0.4rem au lieu de 0.6rem
+    gap: 0.2rem; // ✅ TRÈS RÉDUIT : presque collées verticalement
     padding: 0.5rem;
-    min-width: 90px; // ✅ AGRANDI : 90px au lieu de 70px
+    min-width: 90px; // ✅ AGRANDI : 90px
     max-width: 90px;
     overflow-y: auto;
     overflow-x: hidden;
   }
 
   @include from('large-xxl') {
-    min-width: 100px; // ✅ AGRANDI : 100px au lieu de 80px
+    min-width: 100px; // ✅ AGRANDI : 100px
     max-width: 100px;
   }
 
@@ -396,30 +396,39 @@
 
   &:hover {
     border-color: rgba(css-var(primary-color), 0.5);
-    transform: scale(1.05);
+    // ✅ SUPPRIMÉ : transform: scale(1.05) - pas d'agrandissement
   }
 
-  // ✅ BORDURE GRADIENT SUR ACTIVE
+  // ✅ BORDURE GRADIENT SUR ACTIVE - SANS AGRANDISSEMENT
   &.active {
     border: none; // ✅ Retirer la bordure simple
-    padding: 3px; // ✅ Espace pour le gradient
 
-    // ✅ GRADIENT DE FOND (visible comme bordure)
-    background: linear-gradient(
-      135deg,
-      css-var(primary-color) 0%,
-      css-var(secondary-color) 50%,
-      css-var(accent-color) 100%
-    );
+    // ✅ IMPORTANT : Pas de padding ! Sinon l'image rétrécit visuellement
+    // On utilise un pseudo-élément à la place pour le gradient
+
+    // ✅ Position relative pour le pseudo-élément
+    position: relative;
+
+    // ✅ Pseudo-élément pour la bordure gradient
+    &::before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      border-radius: 10px;
+      background: linear-gradient(
+        135deg,
+        css-var(primary-color) 0%,
+        css-var(secondary-color) 50%,
+        css-var(accent-color) 100%
+      );
+      z-index: -1;
+    }
 
     // ✅ OMBRE POUR ACCENTUER
-    box-shadow: 0 0 0 2px rgba(css-var(primary-color), 0.3);
-
-    // ✅ IMAGE À L'INTÉRIEUR (fond blanc/noir pour cacher le gradient sous l'image)
-    img {
-      border-radius: 5px; // ✅ Arrondi légèrement plus petit
-      background: css-var(background-color); // ✅ Fond pour cacher le gradient
-    }
+    box-shadow: 0 0 0 1px rgba(css-var(primary-color), 0.3);
   }
 
   img {
