@@ -2,7 +2,7 @@
 @use '../../../app/styles/abstracts' as *;
 
 // ================================
-// 📄 _gallery.scss - Modal gallery CORRIGÉE (Sans casser styles globaux)
+// 📄 _gallery.scss - NOUVELLE STRUCTURE AVEC THUMBNAILS VERTICALES DESKTOP
 // ================================
 
 .gallery-modal-overlay {
@@ -59,17 +59,17 @@
     width: 90%;
     max-width: 900px;
     padding: 1.5rem;
-    max-height: 92vh; // ✅ Un peu plus d'espace sur tablet
+    max-height: 92vh;
   }
 
   @include from('large-xs') {
-    max-width: 1000px;
+    max-width: 1100px; // ✅ Un peu plus large pour layout horizontal
     padding: 2rem;
-    max-height: 95vh; // ✅ Encore plus d'espace sur desktop
+    max-height: 95vh;
   }
 
   @include from('large-xxl') {
-    max-width: 1200px; // ✅ Plus large sur grand écran
+    max-width: 1300px;
   }
 }
 
@@ -95,9 +95,9 @@
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid rgba(css-var(primary-color), 0.2);
-  flex-shrink: 0; // ✅ Ne se compresse jamais
-  position: relative; // ✅ Contexte de positionnement
-  z-index: 1; // ✅ Sous le bouton X
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
 
   // 📱 MOBILE - Stack vertical
   @include small-screens {
@@ -149,17 +149,14 @@
 }
 
 // =============================
-// ✅ BOUTON FERMETURE - ICÔNE VISIBLE, SANS BORDURE
+// ✅ BOUTON FERMETURE - SANS BORDURE
 // =============================
 
 .gallery-close-btn {
   position: absolute;
   background: rgba(css-var(background-color), 0.9);
-
-  // ✅ SANS BORDURE + SANS OUTLINE (supprime bordure au click/focus)
   border: none !important;
   outline: none !important;
-
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -167,9 +164,9 @@
   cursor: pointer;
   color: css-var(primary-color);
   transition: all 0.3s ease;
-  z-index: 100; // ✅ Z-index très élevé pour rester au-dessus
+  z-index: 100;
 
-  // 📱 MOBILE - Taille et position
+  // 📱 MOBILE
   width: 2.5rem;
   height: 2.5rem;
   top: 0.5rem;
@@ -182,7 +179,7 @@
     right: 0.5rem;
   }
 
-  // 📟 TABLET - Taille augmentée
+  // 📟 TABLET
   @include from('medium-sm') {
     width: 3rem;
     height: 3rem;
@@ -190,7 +187,7 @@
     right: 1rem;
   }
 
-  // 🖥️ DESKTOP - Encore plus grand
+  // 🖥️ DESKTOP
   @include from('large-xs') {
     width: 3.5rem;
     height: 3.5rem;
@@ -198,17 +195,15 @@
     right: 1.5rem;
   }
 
-  // ✅ FIX CRITIQUE : RÉINITIALISER FONT-FAMILY POUR L'ICÔNE
-  // Les styles globaux appliquent font-family: Orbitron aux boutons
-  // ce qui empêche les icônes React Icons (SVG) de s'afficher
+  // ✅ FIX : Icône visible
   svg {
-    font-family: initial !important; // ✅ Désactive Orbitron pour l'icône
-    display: block; // ✅ Force l'affichage
+    font-family: initial !important;
+    display: block;
     width: 100%;
     height: 100%;
   }
 
-  // ✅ SUPPRIME BORDURE AU HOVER/FOCUS/ACTIVE
+  // ✅ SANS BORDURE au hover/focus
   &:hover,
   &:focus,
   &:active,
@@ -227,7 +222,160 @@
 }
 
 // =============================
-// ✅ IMAGE CONTAINER - HAUTEUR RÉDUITE POUR THUMBNAILS VISIBLES
+// ✅ NOUVEAU : CONTAINER AVEC LAYOUT HORIZONTAL DESKTOP
+// =============================
+
+.gallery-body {
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden;
+
+  // 📱 MOBILE + 📟 TABLET : Layout VERTICAL (image + thumbs en bas)
+  flex-direction: column;
+  gap: 1rem;
+
+  @include from('medium-sm') {
+    gap: 1.25rem;
+  }
+
+  // 🖥️ DESKTOP : Layout HORIZONTAL (thumbs à gauche + image)
+  @include from('large-xs') {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+}
+
+// =============================
+// ✅ THUMBNAILS - VERTICALES SUR DESKTOP, HORIZONTALES SUR MOBILE/TABLET
+// =============================
+
+.gallery-thumbnails {
+  display: flex;
+  overflow: auto;
+  flex-shrink: 0;
+
+  // 📱 MOBILE + 📟 TABLET : HORIZONTALES en bas
+  flex-direction: row;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  min-height: 70px; // ✅ PETITES comme tu veux
+
+  @include from('small-sm') {
+    min-height: 75px;
+  }
+
+  @include from('medium-sm') {
+    gap: 1rem;
+    min-height: 80px;
+  }
+
+  // 🖥️ DESKTOP : VERTICALES à gauche
+  @include from('large-xs') {
+    flex-direction: column; // ✅ VERTICALES
+    gap: 0.75rem;
+    padding: 0 0.5rem;
+    min-width: 90px; // ✅ Largeur fixe petite
+    max-width: 90px;
+    min-height: auto; // Pas de contrainte hauteur
+    overflow-y: auto; // Scroll vertical si besoin
+    overflow-x: hidden;
+  }
+
+  @include from('large-xxl') {
+    min-width: 100px;
+    max-width: 100px;
+  }
+
+  // Custom scrollbar
+  &::-webkit-scrollbar {
+    // Horizontal sur mobile/tablet
+    height: 6px;
+
+    @include from('medium-sm') {
+      height: 8px;
+    }
+
+    // Vertical sur desktop
+    @include from('large-xs') {
+      width: 6px;
+      height: auto;
+    }
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(css-var(text-color), 0.1);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(css-var(primary-color), 0.5);
+    border-radius: 4px;
+
+    &:hover {
+      background: rgba(css-var(primary-color), 0.7);
+    }
+  }
+}
+
+// =============================
+// ✅ THUMBNAILS INDIVIDUELLES - PETITES PARTOUT
+// =============================
+
+.gallery-thumb {
+  flex-shrink: 0;
+  border: 2px solid rgba(css-var(text-color), 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(css-var(text-color), 0.05);
+
+  // 📱 MOBILE : PETITES
+  width: 70px;
+  height: 52px;
+
+  @include from('small-sm') {
+    width: 75px;
+    height: 56px;
+  }
+
+  // 📟 TABLET : PETITES (comme mobile)
+  @include from('medium-sm') {
+    width: 80px;
+    height: 60px;
+  }
+
+  // 🖥️ DESKTOP : PETITES (carrées pour layout vertical)
+  @include from('large-xs') {
+    width: 80px; // ✅ PETITES comme tu veux
+    height: 80px; // ✅ Carrées pour layout vertical
+  }
+
+  @include from('large-xxl') {
+    width: 90px;
+    height: 90px;
+  }
+
+  &:hover {
+    border-color: rgba(css-var(primary-color), 0.5);
+    transform: scale(1.05);
+  }
+
+  &.active {
+    border-color: css-var(primary-color);
+    border-width: 3px;
+    box-shadow: 0 0 0 2px rgba(css-var(primary-color), 0.3);
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// =============================
+// ✅ IMAGE CONTAINER - PREND L'ESPACE RESTANT
 // =============================
 
 .gallery-image-container {
@@ -238,56 +386,53 @@
   background: rgba(css-var(text-color), 0.03);
   border-radius: 12px;
   overflow: hidden;
-  flex-grow: 1; // ✅ Prend l'espace restant disponible
-  flex-shrink: 1; // ✅ Peut se compresser si nécessaire
+  flex-grow: 1; // ✅ Prend tout l'espace disponible
+  flex-shrink: 1;
 
-  // 📱 MOBILE FIRST - Hauteurs adaptées
-  min-height: 200px;
-  max-height: 45vh; // ✅ RÉDUIT de 50vh → 45vh
-  margin-bottom: 1rem;
+  // 📱 MOBILE FIRST
+  min-height: 250px;
+  max-height: 50vh;
 
   @include from('small-sm') {
-    min-height: 220px;
-    max-height: 46vh; // ✅ RÉDUIT de 52vh → 46vh
+    min-height: 280px;
+    max-height: 52vh;
   }
 
   @include from('small-lg') {
-    min-height: 240px;
-    max-height: 48vh; // ✅ RÉDUIT de 55vh → 48vh
+    min-height: 300px;
+    max-height: 55vh;
   }
 
-  // 📟 TABLET - BEAUCOUP MOINS D'ESPACE (pour voir thumbnails)
+  // 📟 TABLET
   @include from('medium-sm') {
-    min-height: 280px;
-    max-height: 40vh; // ✅ RÉDUIT DE 58vh → 40vh (-18vh !)
-    margin-bottom: 1.25rem;
+    min-height: 350px;
+    max-height: 58vh;
   }
 
   @include from('medium-lg') {
-    min-height: 300px;
-    max-height: 42vh; // ✅ RÉDUIT de 60vh → 42vh (-18vh !)
+    min-height: 380px;
+    max-height: 60vh;
   }
 
   @include from('medium-xxl') {
-    min-height: 320px;
-    max-height: 44vh; // ✅ RÉDUIT de 62vh → 44vh (-18vh !)
+    min-height: 400px;
+    max-height: 62vh;
   }
 
-  // 🖥️ DESKTOP - HAUTEUR DRASTIQUEMENT RÉDUITE (pour thumbnails)
+  // 🖥️ DESKTOP : Peut prendre BEAUCOUP d'espace (thumbs à côté)
   @include from('large-xs') {
-    min-height: 350px;
-    max-height: 38vh; // ✅ RÉDUIT DE 65vh → 38vh (-27vh !)
-    margin-bottom: 1.5rem;
+    min-height: 450px;
+    max-height: 75vh; // ✅ Plus d'espace car thumbs à gauche
   }
 
   @include from('large-lg') {
-    min-height: 380px;
-    max-height: 40vh; // ✅ RÉDUIT de 68vh → 40vh (-28vh !)
+    min-height: 500px;
+    max-height: 78vh;
   }
 
   @include from('large-xxl') {
-    min-height: 400px;
-    max-height: 42vh; // ✅ RÉDUIT de 70vh → 42vh (-28vh !)
+    min-height: 550px;
+    max-height: 80vh;
   }
 }
 
@@ -295,8 +440,8 @@
 .gallery-image {
   width: 100%;
   height: 100%;
-  object-fit: contain; // ✅ CONTAIN sur tous les écrans (préserve ratio)
-  object-position: center; // ✅ Centré
+  object-fit: contain;
+  object-position: center;
 }
 
 // =============================
@@ -357,8 +502,13 @@
       left: 1rem;
     }
 
+    // 🖥️ DESKTOP : Décalage car thumbs à gauche
     @include from('large-xs') {
-      left: 1.5rem;
+      left: calc(90px + 2rem); // thumbs width + gap + marge
+    }
+
+    @include from('large-xxl') {
+      left: calc(100px + 2.5rem);
     }
   }
 
@@ -376,109 +526,7 @@
 }
 
 // =============================
-// ✅ THUMBNAILS - HAUTEUR AUGMENTÉE POUR VISIBILITÉ GARANTIE
-// =============================
-
-.gallery-thumbnails {
-  display: flex;
-  gap: 0.75rem;
-  overflow-x: auto;
-  padding: 0.5rem 0;
-  flex-shrink: 0; // ✅ NE SE COMPRESSE JAMAIS
-  min-height: 90px; // ✅ AUGMENTÉ de 80px → 90px
-
-  @include from('medium-sm') {
-    min-height: 110px; // ✅ AUGMENTÉ de 95px → 110px
-    gap: 1rem;
-  }
-
-  @include from('large-xs') {
-    min-height: 130px; // ✅ AUGMENTÉ de 110px → 130px
-    gap: 1.25rem;
-  }
-
-  // Custom scrollbar
-  &::-webkit-scrollbar {
-    height: 6px;
-
-    @include from('medium-sm') {
-      height: 8px;
-    }
-  }
-
-  &::-webkit-scrollbar-track {
-    background: rgba(css-var(text-color), 0.1);
-    border-radius: 4px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: rgba(css-var(primary-color), 0.5);
-    border-radius: 4px;
-
-    &:hover {
-      background: rgba(css-var(primary-color), 0.7);
-    }
-  }
-
-  @include until('small-sm') {
-    gap: 0.5rem;
-    min-height: 80px;
-  }
-}
-
-.gallery-thumb {
-  flex-shrink: 0;
-  border: 2px solid rgba(css-var(text-color), 0.2);
-  border-radius: 8px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  background: rgba(css-var(text-color), 0.05);
-
-  // 📱 MOBILE FIRST
-  width: 80px; // ✅ AUGMENTÉ de 70px → 80px
-  height: 60px; // ✅ AUGMENTÉ de 52px → 60px
-
-  @include from('small-sm') {
-    width: 90px; // ✅ AUGMENTÉ de 80px → 90px
-    height: 67px; // ✅ AUGMENTÉ de 60px → 67px
-  }
-
-  @include from('medium-sm') {
-    width: 110px; // ✅ AUGMENTÉ de 100px → 110px
-    height: 82px; // ✅ AUGMENTÉ de 75px → 82px
-  }
-
-  @include from('large-xs') {
-    width: 130px; // ✅ AUGMENTÉ de 120px → 130px
-    height: 97px; // ✅ AUGMENTÉ de 90px → 97px
-  }
-
-  @include from('large-xxl') {
-    width: 150px; // ✅ AUGMENTÉ de 140px → 150px
-    height: 112px; // ✅ AUGMENTÉ de 105px → 112px
-  }
-
-  &:hover {
-    border-color: rgba(css-var(primary-color), 0.5);
-    transform: scale(1.05);
-  }
-
-  &.active {
-    border-color: css-var(primary-color);
-    border-width: 3px;
-    box-shadow: 0 0 0 2px rgba(css-var(primary-color), 0.3);
-  }
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-}
-
-// =============================
-// ✅ BOUTON GALLERY DANS CARTE - TEXTE VISIBLE + ICÔNES CACHÉES
+// ✅ BOUTON GALLERY DANS CARTE
 // =============================
 
 .btn-gallery {
@@ -494,7 +542,6 @@
     box-shadow: 0 6px 20px rgba(css-var(secondary-color), 0.3);
   }
 
-  // Icônes avec transition (déjà gérées par .btn svg dans _buttons.scss)
   svg {
     transition: transform 0.3s ease;
   }
@@ -520,10 +567,6 @@
 
   .gallery-image-container {
     max-height: 65vh;
-  }
-
-  .gallery-thumbnails {
-    min-height: 70px;
   }
 }
 
