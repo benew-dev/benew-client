@@ -2,13 +2,14 @@
 @use '../../../app/styles/abstracts' as *;
 
 // ================================
-// 📄 _gallery.scss - VERSION CORRIGÉE (Bordure 1px)
+// 📄 _gallery.scss - VERSION SIMPLIFIÉE (Bordure Solide)
 // ================================
-// ✅ CORRECTIONS APPLIQUÉES :
-// 1. Bordure gradient RÉDUITE : 2px → 1px
-// 2. Espacement visuel réduit de 36% (5.6px → 3.6px)
-// 3. Thumbnails visuellement SERRÉES comme souhaité
-// 4. Border-radius ajusté : 6px → 5px (4px conteneur + 1px bordure)
+// ✅ MODIFICATIONS APPLIQUÉES :
+// 1. Bordure gradient SUPPRIMÉE
+// 2. Bordure SOLIDE 2px avec couleur primaire
+// 3. Effet de lueur subtile avec box-shadow
+// 4. Code ::before SUPPRIMÉ pour simplification
+// 5. Gap augmenté à 0.5rem (8px) pour compenser la bordure solide
 
 // =============================
 // OVERLAY MODAL
@@ -76,7 +77,7 @@
   }
 
   @include from('large-xs') {
-    max-width: 1100px; // ✅ Plus large pour layout horizontal
+    max-width: 1100px;
     padding: 2rem;
     max-height: 95vh;
   }
@@ -98,7 +99,7 @@
 }
 
 // =============================
-// ✅ HEADER CORRIGÉ - TITRE + COMPTEUR GROUPÉS
+// HEADER
 // =============================
 
 .gallery-header {
@@ -133,14 +134,12 @@
   }
 }
 
-// ✅ NOUVEAU : Conteneur pour titre + compteur (groupés ensemble)
 .gallery-header-left {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
   flex: 1;
 
-  // 📟 TABLET+ : Titre et compteur sur la même ligne
   @include from('medium-sm') {
     flex-direction: row;
     align-items: baseline;
@@ -152,7 +151,6 @@
     margin: 0;
     flex-shrink: 0;
 
-    // 📱 MOBILE FIRST
     font-size: 1.2rem;
 
     @include from('medium-sm') {
@@ -170,7 +168,6 @@
     margin: 0;
     flex-shrink: 0;
 
-    // 📱 MOBILE
     font-size: 0.85rem;
 
     @include from('medium-sm') {
@@ -184,7 +181,7 @@
 }
 
 // =============================
-// ✅ BOUTON FERMETURE - POSITION ABSOLUE SANS CONFLIT
+// BOUTON FERMETURE
 // =============================
 
 .gallery-close-btn {
@@ -201,7 +198,6 @@
   transition: all 0.3s ease;
   z-index: 100;
 
-  // 📱 MOBILE
   width: 2.5rem;
   height: 2.5rem;
   top: 0.5rem;
@@ -214,7 +210,6 @@
     right: 0.5rem;
   }
 
-  // 📟 TABLET
   @include from('medium-sm') {
     width: 3rem;
     height: 3rem;
@@ -222,7 +217,6 @@
     right: 1rem;
   }
 
-  // 🖥️ DESKTOP
   @include from('large-xs') {
     width: 3.5rem;
     height: 3.5rem;
@@ -255,7 +249,7 @@
 }
 
 // =============================
-// ✅ BODY AVEC LAYOUT ADAPTATIF
+// BODY
 // =============================
 
 .gallery-body {
@@ -263,23 +257,21 @@
   flex-grow: 1;
   overflow: hidden;
 
-  // 📱 MOBILE + 📟 TABLET : Layout VERTICAL (image EN HAUT + thumbs EN BAS)
   flex-direction: column-reverse;
-  gap: 0.8rem; // ✅ RÉDUIT : 0.8rem au lieu de 1rem
+  gap: 0.8rem;
 
   @include from('medium-sm') {
-    gap: 1rem; // ✅ RÉDUIT : 1rem au lieu de 1.25rem
+    gap: 1rem;
   }
 
-  // 🖥️ DESKTOP : Layout HORIZONTAL (thumbs à gauche + image)
   @include from('large-xs') {
     flex-direction: row;
-    gap: 0.8rem; // ✅ RÉDUIT : 0.8rem au lieu de 1.5rem (moins d'espace horizontal)
+    gap: 0.8rem;
   }
 }
 
 // =============================
-// ✅ THUMBNAILS - PRESQUE COLLÉES (BORDURE FINE)
+// THUMBNAILS CONTAINER
 // =============================
 
 .gallery-thumbnails {
@@ -287,19 +279,17 @@
   overflow: auto;
   flex-shrink: 0;
 
-  // 📱 MOBILE + 📟 TABLET : HORIZONTALES en bas
   flex-direction: row;
-  gap: 0.1rem; // ✅ MINIMAL : ≈ 1.6px (presque rien)
+  gap: 0.5rem; // ✅ AUGMENTÉ : 0.5rem (8px) pour espacement visible avec bordure solide
   padding: 0.5rem 0;
 
   @include from('medium-sm') {
-    gap: 0.1rem; // ✅ Uniforme partout
+    gap: 0.5rem;
   }
 
-  // 🖥️ DESKTOP : VERTICALES à gauche
   @include from('large-xs') {
     flex-direction: column;
-    gap: 0.1rem; // ✅ MINIMAL : presque collées verticalement
+    gap: 0.5rem;
     padding: 0.5rem;
     min-width: 90px;
     max-width: 90px;
@@ -314,14 +304,12 @@
 
   // Custom scrollbar
   &::-webkit-scrollbar {
-    // Horizontal sur mobile/tablet
     height: 6px;
 
     @include from('medium-sm') {
       height: 8px;
     }
 
-    // Vertical sur desktop
     @include from('large-xs') {
       width: 6px;
       height: auto;
@@ -344,13 +332,13 @@
 }
 
 // =============================
-// ✅ THUMBNAILS INDIVIDUELLES - BORDURE FINE + CONTENEUR EXACT
+// ✅ THUMBNAILS INDIVIDUELLES - BORDURE SIMPLE
 // =============================
 
 .gallery-thumb {
   flex-shrink: 0;
-  border: 1px solid rgba(css-var(text-color), 0.2); // ✅ 1px au lieu de 2px
-  border-radius: 4px; // ✅ 4px au lieu de 8px (plus discret)
+  border: 1px solid rgba(css-var(text-color), 0.2);
+  border-radius: 4px;
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -395,45 +383,27 @@
 
   &:hover {
     border-color: rgba(css-var(primary-color), 0.5);
-    // ✅ Pas d'agrandissement
+    transform: scale(1.02); // ✅ Léger agrandissement au hover
   }
 
-  // ✅ BORDURE GRADIENT FINE SUR ACTIVE (CORRIGÉ)
+  // ✅ BORDURE SIMPLE ET ÉLÉGANTE SUR ACTIVE (SIMPLIFIÉ)
   &.active {
-    border: none; // ✅ Retirer la bordure classique
-    position: relative;
-
-    // ✅ Pseudo-élément pour bordure gradient FINE (1px - CORRIGÉ)
-    &::before {
-      content: '';
-      position: absolute;
-      top: -0.2px; // ✅ CORRIGÉ : 1px au lieu de 2px
-      left: -0.2px;
-      right: -0.2px;
-      bottom: -0.2px;
-      border-radius: 5px; // ✅ CORRIGÉ : 5px (4px conteneur + 1px bordure)
-      background: linear-gradient(
-        135deg,
-        css-var(primary-color) 0%,
-        css-var(secondary-color) 50%,
-        css-var(accent-color) 100%
-      );
-      z-index: -1;
-    }
-
-    // ✅ OMBRE DISCRÈTE
-    box-shadow: 0 0 0 1px rgba(css-var(primary-color), 0.2);
+    border: 2px solid css-var(primary-color); // ✅ Bordure solide 2px avec couleur primaire
+    box-shadow:
+      0 0 8px rgba(css-var(primary-color), 0.4),
+      0 0 0 1px rgba(css-var(primary-color), 0.2); // ✅ Effet de lueur subtile
+    transform: scale(1.05); // ✅ Légèrement agrandi pour se démarquer
   }
 
   img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover; // ✅ CHANGÉ : cover au lieu de contain pour remplir tout l'espace
   }
 }
 
 // =============================
-// ✅ IMAGE CONTAINER - PREND L'ESPACE RESTANT
+// IMAGE CONTAINER
 // =============================
 
 .gallery-image-container {
@@ -447,7 +417,6 @@
   flex-grow: 1;
   flex-shrink: 1;
 
-  // 📱 MOBILE FIRST
   min-height: 250px;
   max-height: 50vh;
 
@@ -461,7 +430,6 @@
     max-height: 55vh;
   }
 
-  // 📟 TABLET
   @include from('medium-sm') {
     min-height: 350px;
     max-height: 60vh;
@@ -477,7 +445,6 @@
     max-height: 65vh;
   }
 
-  // 🖥️ DESKTOP : Beaucoup d'espace (thumbs à gauche)
   @include from('large-xs') {
     min-height: 450px;
     max-height: 75vh;
@@ -494,7 +461,6 @@
   }
 }
 
-// ✅ IMAGE CENTRALE - TOUJOURS EN CONTAIN
 .gallery-image {
   width: 100%;
   height: 100%;
@@ -503,7 +469,7 @@
 }
 
 // =============================
-// ✅ BOUTON GALLERY DANS CARTE
+// BOUTON GALLERY DANS CARTE
 // =============================
 
 .btn-gallery {
