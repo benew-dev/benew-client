@@ -156,8 +156,9 @@
   position: absolute;
   background: rgba(css-var(background-color), 0.9);
 
-  // ✅ SANS BORDURE (tu ne veux pas de bordure)
-  border: none;
+  // ✅ SANS BORDURE + SANS OUTLINE (supprime bordure au click/focus)
+  border: none !important;
+  outline: none !important;
 
   border-radius: 50%;
   display: flex;
@@ -207,7 +208,13 @@
     height: 100%;
   }
 
-  &:hover {
+  // ✅ SUPPRIME BORDURE AU HOVER/FOCUS/ACTIVE
+  &:hover,
+  &:focus,
+  &:active,
+  &:focus-visible {
+    outline: none !important;
+    border: none !important;
     background: css-var(primary-color);
     color: css-var(background-color);
     transform: scale(1.1);
@@ -220,7 +227,7 @@
 }
 
 // =============================
-// ✅ IMAGE CONTAINER - MEILLEURE GESTION DE L'ESPACE
+// ✅ IMAGE CONTAINER - HAUTEUR RÉDUITE POUR THUMBNAILS VISIBLES
 // =============================
 
 .gallery-image-container {
@@ -235,52 +242,52 @@
   flex-shrink: 1; // ✅ Peut se compresser si nécessaire
 
   // 📱 MOBILE FIRST - Hauteurs adaptées
-  min-height: 250px;
-  max-height: 50vh;
+  min-height: 200px;
+  max-height: 45vh; // ✅ RÉDUIT de 50vh → 45vh
   margin-bottom: 1rem;
 
   @include from('small-sm') {
-    min-height: 280px;
-    max-height: 52vh;
+    min-height: 220px;
+    max-height: 46vh; // ✅ RÉDUIT de 52vh → 46vh
   }
 
   @include from('small-lg') {
-    min-height: 300px;
-    max-height: 55vh;
+    min-height: 240px;
+    max-height: 48vh; // ✅ RÉDUIT de 55vh → 48vh
   }
 
-  // 📟 TABLET - Plus d'espace pour l'image
+  // 📟 TABLET - BEAUCOUP MOINS D'ESPACE (pour voir thumbnails)
   @include from('medium-sm') {
-    min-height: 350px;
-    max-height: 58vh;
+    min-height: 280px;
+    max-height: 40vh; // ✅ RÉDUIT DE 58vh → 40vh (-18vh !)
     margin-bottom: 1.25rem;
   }
 
   @include from('medium-lg') {
-    min-height: 380px;
-    max-height: 60vh;
+    min-height: 300px;
+    max-height: 42vh; // ✅ RÉDUIT de 60vh → 42vh (-18vh !)
   }
 
   @include from('medium-xxl') {
-    min-height: 400px;
-    max-height: 62vh;
+    min-height: 320px;
+    max-height: 44vh; // ✅ RÉDUIT de 62vh → 44vh (-18vh !)
   }
 
-  // 🖥️ DESKTOP - Maximum d'espace pour l'image
+  // 🖥️ DESKTOP - HAUTEUR DRASTIQUEMENT RÉDUITE (pour thumbnails)
   @include from('large-xs') {
-    min-height: 450px;
-    max-height: 65vh;
+    min-height: 350px;
+    max-height: 38vh; // ✅ RÉDUIT DE 65vh → 38vh (-27vh !)
     margin-bottom: 1.5rem;
   }
 
   @include from('large-lg') {
-    min-height: 500px;
-    max-height: 68vh;
+    min-height: 380px;
+    max-height: 40vh; // ✅ RÉDUIT de 68vh → 40vh (-28vh !)
   }
 
   @include from('large-xxl') {
-    min-height: 550px;
-    max-height: 70vh;
+    min-height: 400px;
+    max-height: 42vh; // ✅ RÉDUIT de 70vh → 42vh (-28vh !)
   }
 }
 
@@ -369,7 +376,7 @@
 }
 
 // =============================
-// ✅ THUMBNAILS - TOUJOURS VISIBLES
+// ✅ THUMBNAILS - HAUTEUR AUGMENTÉE POUR VISIBILITÉ GARANTIE
 // =============================
 
 .gallery-thumbnails {
@@ -378,15 +385,15 @@
   overflow-x: auto;
   padding: 0.5rem 0;
   flex-shrink: 0; // ✅ NE SE COMPRESSE JAMAIS
-  min-height: 80px; // ✅ Hauteur minimale garantie sur mobile
+  min-height: 90px; // ✅ AUGMENTÉ de 80px → 90px
 
   @include from('medium-sm') {
-    min-height: 95px; // ✅ Plus de hauteur sur tablet
+    min-height: 110px; // ✅ AUGMENTÉ de 95px → 110px
     gap: 1rem;
   }
 
   @include from('large-xs') {
-    min-height: 110px; // ✅ Encore plus sur desktop
+    min-height: 130px; // ✅ AUGMENTÉ de 110px → 130px
     gap: 1.25rem;
   }
 
@@ -415,7 +422,7 @@
 
   @include until('small-sm') {
     gap: 0.5rem;
-    min-height: 70px;
+    min-height: 80px;
   }
 }
 
@@ -429,27 +436,27 @@
   background: rgba(css-var(text-color), 0.05);
 
   // 📱 MOBILE FIRST
-  width: 70px;
-  height: 52px;
+  width: 80px; // ✅ AUGMENTÉ de 70px → 80px
+  height: 60px; // ✅ AUGMENTÉ de 52px → 60px
 
   @include from('small-sm') {
-    width: 80px;
-    height: 60px;
+    width: 90px; // ✅ AUGMENTÉ de 80px → 90px
+    height: 67px; // ✅ AUGMENTÉ de 60px → 67px
   }
 
   @include from('medium-sm') {
-    width: 100px;
-    height: 75px;
+    width: 110px; // ✅ AUGMENTÉ de 100px → 110px
+    height: 82px; // ✅ AUGMENTÉ de 75px → 82px
   }
 
   @include from('large-xs') {
-    width: 120px;
-    height: 90px;
+    width: 130px; // ✅ AUGMENTÉ de 120px → 130px
+    height: 97px; // ✅ AUGMENTÉ de 90px → 97px
   }
 
   @include from('large-xxl') {
-    width: 140px;
-    height: 105px;
+    width: 150px; // ✅ AUGMENTÉ de 140px → 150px
+    height: 112px; // ✅ AUGMENTÉ de 105px → 112px
   }
 
   &:hover {
