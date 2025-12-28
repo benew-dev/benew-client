@@ -226,15 +226,18 @@ const GalleryModal = memo(({ isOpen, onClose, images, applicationName }) => {
     };
   }, [isOpen]);
 
+  // ✅ AUTO-SCROLL : Navigation automatique toutes les 4 secondes
+  useEffect(() => {
+    if (!isOpen || !images || images.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setSelectedImage((prev) => (prev + 1) % images.length);
+    }, 4000); // 4 secondes
+
+    return () => clearInterval(interval);
+  }, [isOpen, images]);
+
   if (!isOpen || !images || images.length === 0) return null;
-
-  const handlePrevious = () => {
-    setSelectedImage((prev) => (prev - 1 + images.length) % images.length);
-  };
-
-  const handleNext = () => {
-    setSelectedImage((prev) => (prev + 1) % images.length);
-  };
 
   return (
     <div className="gallery-modal-overlay" onClick={onClose}>
@@ -301,25 +304,7 @@ const GalleryModal = memo(({ isOpen, onClose, images, applicationName }) => {
               }}
             />
 
-            {/* Navigation gauche/droite */}
-            {images.length > 1 && (
-              <>
-                <button
-                  className="gallery-nav-btn gallery-prev"
-                  onClick={handlePrevious}
-                  aria-label="Image précédente"
-                >
-                  ‹
-                </button>
-                <button
-                  className="gallery-nav-btn gallery-next"
-                  onClick={handleNext}
-                  aria-label="Image suivante"
-                >
-                  ›
-                </button>
-              </>
-            )}
+            {/* ✅ NAVIGATION SUPPRIMÉE - Uniquement via thumbnails + auto-scroll */}
           </div>
         </div>
       </div>
