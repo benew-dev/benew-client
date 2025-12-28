@@ -63,13 +63,13 @@
   }
 
   @include from('large-xs') {
-    max-width: 1100px; // ✅ Un peu plus large pour layout horizontal
-    padding: 2rem;
+    // max-width: 100%; // ✅ Un peu plus large pour layout horizontal
+    // padding: 2rem;
     max-height: 95vh;
   }
 
   @include from('large-xxl') {
-    max-width: 1300px;
+    // max-width: 1300px;
   }
 }
 
