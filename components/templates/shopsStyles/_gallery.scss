@@ -280,7 +280,7 @@
 }
 
 // =============================
-// ✅ THUMBNAILS - AGRANDIES ET PRESQUE COLLÉES
+// ✅ THUMBNAILS - PRESQUE COLLÉES (BORDURE FINE)
 // =============================
 
 .gallery-thumbnails {
@@ -290,26 +290,26 @@
 
   // 📱 MOBILE + 📟 TABLET : HORIZONTALES en bas
   flex-direction: row;
-  gap: 0.2rem; // ✅ TRÈS RÉDUIT : presque collées (0.2rem)
+  gap: 0.1rem; // ✅ MINIMAL : ≈ 1.6px (presque rien)
   padding: 0.5rem 0;
 
   @include from('medium-sm') {
-    gap: 0.2rem; // ✅ Uniforme sur tablette aussi
+    gap: 0.1rem; // ✅ Uniforme partout
   }
 
   // 🖥️ DESKTOP : VERTICALES à gauche
   @include from('large-xs') {
     flex-direction: column;
-    gap: 0.2rem; // ✅ TRÈS RÉDUIT : presque collées verticalement
+    gap: 0.1rem; // ✅ MINIMAL : presque collées verticalement
     padding: 0.5rem;
-    min-width: 90px; // ✅ AGRANDI : 90px
+    min-width: 90px;
     max-width: 90px;
     overflow-y: auto;
     overflow-x: hidden;
   }
 
   @include from('large-xxl') {
-    min-width: 100px; // ✅ AGRANDI : 100px
+    min-width: 100px;
     max-width: 100px;
   }
 
@@ -345,20 +345,20 @@
 }
 
 // =============================
-// ✅ THUMBNAILS INDIVIDUELLES - AGRANDIES AVEC BORDURE GRADIENT
+// ✅ THUMBNAILS INDIVIDUELLES - BORDURE FINE + CONTENEUR EXACT
 // =============================
 
 .gallery-thumb {
   flex-shrink: 0;
-  border: 2px solid rgba(css-var(text-color), 0.2);
-  border-radius: 8px;
+  border: 1px solid rgba(css-var(text-color), 0.2); // ✅ 1px au lieu de 2px
+  border-radius: 4px; // ✅ 4px au lieu de 8px (plus discret)
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s ease;
   background: rgba(css-var(text-color), 0.05);
-  position: relative; // ✅ Pour le pseudo-élément gradient
+  position: relative;
 
-  // 📱 MOBILE : AGRANDIES 80-85px (au lieu de 60-65px)
+  // 📱 MOBILE : 80-85px
   width: 80px;
   height: 80px;
 
@@ -372,7 +372,7 @@
     height: 85px;
   }
 
-  // 📟 TABLET : AGRANDIES 85-90px
+  // 📟 TABLET : 85-90px
   @include from('medium-sm') {
     width: 85px;
     height: 85px;
@@ -383,7 +383,7 @@
     height: 88px;
   }
 
-  // 🖥️ DESKTOP : AGRANDIES 90-100px
+  // 🖥️ DESKTOP : 90-100px
   @include from('large-xs') {
     width: 90px;
     height: 90px;
@@ -396,28 +396,23 @@
 
   &:hover {
     border-color: rgba(css-var(primary-color), 0.5);
-    // ✅ SUPPRIMÉ : transform: scale(1.05) - pas d'agrandissement
+    // ✅ Pas d'agrandissement
   }
 
-  // ✅ BORDURE GRADIENT SUR ACTIVE - SANS AGRANDISSEMENT
+  // ✅ BORDURE GRADIENT FINE SUR ACTIVE
   &.active {
-    border: none; // ✅ Retirer la bordure simple
-
-    // ✅ IMPORTANT : Pas de padding ! Sinon l'image rétrécit visuellement
-    // On utilise un pseudo-élément à la place pour le gradient
-
-    // ✅ Position relative pour le pseudo-élément
+    border: none; // ✅ Retirer la bordure classique
     position: relative;
 
-    // ✅ Pseudo-élément pour la bordure gradient
+    // ✅ Pseudo-élément pour bordure gradient FINE (2px au lieu de 3px)
     &::before {
       content: '';
       position: absolute;
-      top: -3px;
-      left: -3px;
-      right: -3px;
-      bottom: -3px;
-      border-radius: 10px;
+      top: -2px; // ✅ 2px au lieu de 3px
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      border-radius: 6px; // ✅ Légèrement arrondi (cohérent avec 4px du conteneur)
       background: linear-gradient(
         135deg,
         css-var(primary-color) 0%,
@@ -427,14 +422,14 @@
       z-index: -1;
     }
 
-    // ✅ OMBRE POUR ACCENTUER
-    box-shadow: 0 0 0 1px rgba(css-var(primary-color), 0.3);
+    // ✅ OMBRE DISCRÈTE
+    box-shadow: 0 0 0 1px rgba(css-var(primary-color), 0.2);
   }
 
   img {
     width: 100%;
     height: 100%;
-    object-fit: contain; // ✅ CONTAIN (comme tu as corrigé)
+    object-fit: contain;
   }
 }
 
