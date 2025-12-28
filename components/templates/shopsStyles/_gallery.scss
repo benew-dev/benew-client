@@ -2,8 +2,16 @@
 @use '../../../app/styles/abstracts' as *;
 
 // ================================
-// 📄 _gallery.scss - NOUVELLE STRUCTURE AVEC THUMBNAILS VERTICALES DESKTOP
+// 📄 _gallery.scss - VERSION CORRIGÉE
 // ================================
+// ✅ CORRECTIONS APPLIQUÉES :
+// 1. Header restructuré : titre + compteur groupés (plus de chevauchement avec X)
+// 2. Thumbnails PETITES partout (60-70px max, pas 80-100px)
+// 3. Layout desktop optimisé : thumbs verticales à gauche visibles, image centrale adaptée
+
+// =============================
+// OVERLAY MODAL
+// =============================
 
 .gallery-modal-overlay {
   position: fixed;
@@ -36,6 +44,10 @@
   }
 }
 
+// =============================
+// MODAL CONTENT
+// =============================
+
 .gallery-modal-content {
   background: linear-gradient(
     135deg,
@@ -63,13 +75,13 @@
   }
 
   @include from('large-xs') {
-    // max-width: 100%; // ✅ Un peu plus large pour layout horizontal
-    // padding: 2rem;
+    max-width: 1100px; // ✅ Plus large pour layout horizontal
+    padding: 2rem;
     max-height: 95vh;
   }
 
   @include from('large-xxl') {
-    // max-width: 1300px;
+    max-width: 1200px;
   }
 }
 
@@ -85,13 +97,13 @@
 }
 
 // =============================
-// HEADER GALLERY
+// ✅ HEADER CORRIGÉ - TITRE + COMPTEUR GROUPÉS
 // =============================
 
 .gallery-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: space-between; // ✅ Entre le groupe (titre+compteur) et... rien (X est absolu)
+  align-items: flex-start; // ✅ Alignement en haut
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid rgba(css-var(primary-color), 0.2);
@@ -99,27 +111,45 @@
   position: relative;
   z-index: 1;
 
-  // 📱 MOBILE - Stack vertical
+  // 📱 MOBILE
   @include small-screens {
     flex-direction: column;
-    gap: 0.75rem;
-    text-align: center;
+    gap: 0.5rem;
     margin-bottom: 1rem;
     padding-bottom: 0.75rem;
+    padding-right: 2.5rem; // ✅ Espace pour le X
   }
 
   @include from('medium-sm') {
     flex-direction: row;
     margin-bottom: 1.25rem;
+    padding-right: 3rem; // ✅ Espace pour le X
   }
 
   @include from('large-xs') {
     margin-bottom: 1.5rem;
+    padding-right: 3.5rem;
+  }
+}
+
+// ✅ NOUVEAU : Conteneur pour titre + compteur (groupés ensemble)
+.gallery-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1; // ✅ Prend l'espace disponible
+
+  // 📟 TABLET+ : Titre et compteur sur la même ligne
+  @include from('medium-sm') {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 1rem;
   }
 
   h3 {
     color: css-var(primary-color);
     margin: 0;
+    flex-shrink: 0; // ✅ Ne rétrécit pas
 
     // 📱 MOBILE FIRST
     font-size: 1.2rem;
@@ -132,24 +162,28 @@
       font-size: 1.5rem;
     }
   }
-}
 
-.gallery-counter {
-  color: rgba(css-var(text-color), 0.7);
-  font-size: 0.95rem;
-  font-weight: 500;
+  .gallery-counter {
+    color: rgba(css-var(text-color), 0.7);
+    font-weight: 500;
+    margin: 0;
+    flex-shrink: 0;
 
-  @include until('small-sm') {
+    // 📱 MOBILE
     font-size: 0.85rem;
-  }
 
-  @include from('medium-sm') {
-    font-size: 1rem;
+    @include from('medium-sm') {
+      font-size: 0.95rem;
+    }
+
+    @include from('large-xs') {
+      font-size: 1rem;
+    }
   }
 }
 
 // =============================
-// ✅ BOUTON FERMETURE - SANS BORDURE
+// ✅ BOUTON FERMETURE - POSITION ABSOLUE SANS CONFLIT
 // =============================
 
 .gallery-close-btn {
@@ -195,7 +229,6 @@
     right: 1.5rem;
   }
 
-  // ✅ FIX : Icône visible
   svg {
     font-family: initial !important;
     display: block;
@@ -203,7 +236,6 @@
     height: 100%;
   }
 
-  // ✅ SANS BORDURE au hover/focus
   &:hover,
   &:focus,
   &:active,
@@ -222,7 +254,7 @@
 }
 
 // =============================
-// ✅ NOUVEAU : CONTAINER AVEC LAYOUT HORIZONTAL DESKTOP
+// ✅ BODY AVEC LAYOUT ADAPTATIF
 // =============================
 
 .gallery-body {
@@ -246,7 +278,7 @@
 }
 
 // =============================
-// ✅ THUMBNAILS - VERTICALES SUR DESKTOP, HORIZONTALES SUR MOBILE/TABLET
+// ✅ THUMBNAILS - PETITES PARTOUT (CORRECTION MAJEURE)
 // =============================
 
 .gallery-thumbnails {
@@ -256,34 +288,27 @@
 
   // 📱 MOBILE + 📟 TABLET : HORIZONTALES en bas
   flex-direction: row;
-  gap: 0.75rem;
+  gap: 0.5rem;
   padding: 0.5rem 0;
-  min-height: 70px; // ✅ PETITES comme tu veux
-
-  @include from('small-sm') {
-    min-height: 75px;
-  }
 
   @include from('medium-sm') {
-    gap: 1rem;
-    min-height: 80px;
+    gap: 0.6rem;
   }
 
   // 🖥️ DESKTOP : VERTICALES à gauche
   @include from('large-xs') {
-    flex-direction: column; // ✅ VERTICALES
-    gap: 0.75rem;
-    padding: 0 0.5rem;
-    min-width: 90px; // ✅ Largeur fixe petite
-    max-width: 90px;
-    min-height: auto; // Pas de contrainte hauteur
-    overflow-y: auto; // Scroll vertical si besoin
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 0.5rem;
+    min-width: 70px; // ✅ Plus étroit (thumbs petites)
+    max-width: 70px;
+    overflow-y: auto;
     overflow-x: hidden;
   }
 
   @include from('large-xxl') {
-    min-width: 100px;
-    max-width: 100px;
+    min-width: 80px;
+    max-width: 80px;
   }
 
   // Custom scrollbar
@@ -318,7 +343,7 @@
 }
 
 // =============================
-// ✅ THUMBNAILS INDIVIDUELLES - PETITES PARTOUT
+// ✅ THUMBNAILS INDIVIDUELLES - PETITES UNIFORMES
 // =============================
 
 .gallery-thumb {
@@ -330,30 +355,30 @@
   transition: all 0.3s ease;
   background: rgba(css-var(text-color), 0.05);
 
-  // 📱 MOBILE : PETITES
-  width: 70px;
-  height: 52px;
+  // 📱 MOBILE : PETITES carrées
+  width: 60px;
+  height: 60px;
 
   @include from('small-sm') {
-    width: 75px;
-    height: 56px;
+    width: 65px;
+    height: 65px;
   }
 
-  // 📟 TABLET : PETITES (comme mobile)
+  // 📟 TABLET : PETITES (comme mobile, PAS 80x60 !)
   @include from('medium-sm') {
-    width: 80px;
+    width: 70px; // ✅ CORRIGÉ : 70px au lieu de 80px
+    height: 70px; // ✅ CORRIGÉ : carrées
+  }
+
+  // 🖥️ DESKTOP : PETITES carrées verticales
+  @include from('large-xs') {
+    width: 60px;
     height: 60px;
   }
 
-  // 🖥️ DESKTOP : PETITES (carrées pour layout vertical)
-  @include from('large-xs') {
-    width: 80px; // ✅ PETITES comme tu veux
-    height: 80px; // ✅ Carrées pour layout vertical
-  }
-
   @include from('large-xxl') {
-    width: 90px;
-    height: 90px;
+    width: 70px;
+    height: 70px;
   }
 
   &:hover {
@@ -386,7 +411,7 @@
   background: rgba(css-var(text-color), 0.03);
   border-radius: 12px;
   overflow: hidden;
-  flex-grow: 1; // ✅ Prend tout l'espace disponible
+  flex-grow: 1;
   flex-shrink: 1;
 
   // 📱 MOBILE FIRST
@@ -406,23 +431,23 @@
   // 📟 TABLET
   @include from('medium-sm') {
     min-height: 350px;
-    max-height: 58vh;
+    max-height: 60vh; // ✅ Plus d'espace (thumbs plus petites)
   }
 
   @include from('medium-lg') {
     min-height: 380px;
-    max-height: 60vh;
+    max-height: 62vh;
   }
 
   @include from('medium-xxl') {
     min-height: 400px;
-    max-height: 62vh;
+    max-height: 65vh;
   }
 
-  // 🖥️ DESKTOP : Peut prendre BEAUCOUP d'espace (thumbs à côté)
+  // 🖥️ DESKTOP : Beaucoup d'espace (thumbs petites à gauche)
   @include from('large-xs') {
     min-height: 450px;
-    max-height: 75vh; // ✅ Plus d'espace car thumbs à gauche
+    max-height: 75vh; // ✅ Image centrale visible complètement
   }
 
   @include from('large-lg') {
@@ -504,11 +529,11 @@
 
     // 🖥️ DESKTOP : Décalage car thumbs à gauche
     @include from('large-xs') {
-      left: calc(90px + 2rem); // thumbs width + gap + marge
+      left: calc(70px + 2rem); // ✅ thumbs width (70px) + gap + marge
     }
 
     @include from('large-xxl') {
-      left: calc(100px + 2.5rem);
+      left: calc(80px + 2.5rem);
     }
   }
 
@@ -550,7 +575,6 @@
     transform: scale(1.1);
   }
 
-  // ✅ TEXTE - TOUJOURS VISIBLE
   .btn-text {
     display: inline;
   }

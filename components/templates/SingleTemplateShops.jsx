@@ -205,7 +205,12 @@ const ApplicationImageCarousel = memo(({ images, applicationName }) => {
 
 ApplicationImageCarousel.displayName = 'ApplicationImageCarousel';
 
-// Modal Gallery pour application_other_versions
+// =============================
+// ✅ COMPOSANT GALLERYMODAL CORRIGÉ
+// =============================
+// Remplace le composant GalleryModal existant dans SingleTemplateShops.jsx
+// LIGNE ~52 à ~143 environ
+
 const GalleryModal = memo(({ isOpen, onClose, images, applicationName }) => {
   const [selectedImage, setSelectedImage] = useState(0);
 
@@ -237,6 +242,7 @@ const GalleryModal = memo(({ isOpen, onClose, images, applicationName }) => {
         className="gallery-modal-content"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* ✅ BOUTON FERMETURE - Position absolue */}
         <button
           className="gallery-close-btn"
           onClick={onClose}
@@ -245,67 +251,76 @@ const GalleryModal = memo(({ isOpen, onClose, images, applicationName }) => {
           <IoClose size={32} />
         </button>
 
+        {/* ✅ HEADER RESTRUCTURÉ - Titre + Compteur groupés */}
         <div className="gallery-header">
-          <h3>{applicationName} - Galerie</h3>
-          <p className="gallery-counter">
-            {selectedImage + 1} / {images.length}
-          </p>
+          <div className="gallery-header-left">
+            <h3>{applicationName} - Galerie</h3>
+            <p className="gallery-counter">
+              {selectedImage + 1} / {images.length}
+            </p>
+          </div>
         </div>
 
-        <div className="gallery-image-container">
-          <CldImage
-            src={images[selectedImage]}
-            alt={`${applicationName} - Version ${selectedImage + 1}`}
-            width={800}
-            height={600}
-            className="gallery-image"
-            quality="auto"
-            format="auto"
-            crop={{ type: 'fit', gravity: 'center' }}
-            onError={(e) => {
-              e.currentTarget.src = '/placeholder-application.png';
-            }}
-          />
-
-          {images.length > 1 && (
-            <>
+        {/* ✅ BODY - Layout adaptatif (vertical mobile/tablet, horizontal desktop) */}
+        <div className="gallery-body">
+          {/* ✅ THUMBNAILS - Petites uniformes */}
+          <div className="gallery-thumbnails">
+            {images.map((img, index) => (
               <button
-                className="gallery-nav-btn gallery-prev"
-                onClick={handlePrevious}
-                aria-label="Image précédente"
+                key={index}
+                className={`gallery-thumb ${index === selectedImage ? 'active' : ''}`}
+                onClick={() => setSelectedImage(index)}
+                aria-label={`Aller à l'image ${index + 1}`}
               >
-                ‹
+                <CldImage
+                  src={img}
+                  alt={`Miniature ${index + 1}`}
+                  width={100}
+                  height={75}
+                  crop={{ type: 'fill', gravity: 'center' }}
+                  quality="auto"
+                  format="auto"
+                />
               </button>
-              <button
-                className="gallery-nav-btn gallery-next"
-                onClick={handleNext}
-                aria-label="Image suivante"
-              >
-                ›
-              </button>
-            </>
-          )}
-        </div>
+            ))}
+          </div>
 
-        <div className="gallery-thumbnails">
-          {images.map((img, index) => (
-            <button
-              key={index}
-              className={`gallery-thumb ${index === selectedImage ? 'active' : ''}`}
-              onClick={() => setSelectedImage(index)}
-              aria-label={`Aller à l'image ${index + 1}`}
-            >
-              <CldImage
-                src={img}
-                alt={`Miniature ${index + 1}`}
-                width={100}
-                height={75}
-                crop={{ type: 'fill', gravity: 'center' }}
-                quality="auto"
-                format="auto"
-              />
-            </button>
-          ))}
+          {/* ✅ IMAGE CONTAINER - Prend l'espace restant */}
+          <div className="gallery-image-container">
+            <CldImage
+              src={images[selectedImage]}
+              alt={`${applicationName} - Version ${selectedImage + 1}`}
+              width={800}
+              height={600}
+              className="gallery-image"
+              quality="auto"
+              format="auto"
+              crop={{ type: 'fit', gravity: 'center' }}
+              onError={(e) => {
+                e.currentTarget.src = '/placeholder-application.png';
+              }}
+            />
+
+            {/* Navigation gauche/droite */}
+            {images.length > 1 && (
+              <>
+                <button
+                  className="gallery-nav-btn gallery-prev"
+                  onClick={handlePrevious}
+                  aria-label="Image précédente"
+                >
+                  ‹
+                </button>
+                <button
+                  className="gallery-nav-btn gallery-next"
+                  onClick={handleNext}
+                  aria-label="Image suivante"
+                >
+                  ›
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>
