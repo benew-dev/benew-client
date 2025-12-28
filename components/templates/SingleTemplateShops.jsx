@@ -206,7 +206,7 @@ const ApplicationImageCarousel = memo(({ images, applicationName }) => {
 ApplicationImageCarousel.displayName = 'ApplicationImageCarousel';
 
 // =============================
-// ✅ COMPOSANT GALLERYMODAL CORRIGÉ
+// ✅ COMPOSANT GALLERYMODAL CORRIGÉ - DIMENSIONS 120x120
 // =============================
 // Remplace le composant GalleryModal existant dans SingleTemplateShops.jsx
 // LIGNE ~52 à ~143 environ
@@ -266,7 +266,7 @@ const GalleryModal = memo(({ isOpen, onClose, images, applicationName }) => {
 
         {/* ✅ BODY - Layout adaptatif (vertical mobile/tablet, horizontal desktop) */}
         <div className="gallery-body">
-          {/* ✅ THUMBNAILS - Petites uniformes */}
+          {/* ✅ THUMBNAILS - Images CARRÉES 120x120 pour remplir tout l'espace */}
           <div className="gallery-thumbnails">
             {images.map((img, index) => (
               <button
@@ -278,8 +278,8 @@ const GalleryModal = memo(({ isOpen, onClose, images, applicationName }) => {
                 <CldImage
                   src={img}
                   alt={`Miniature ${index + 1}`}
-                  width={100}
-                  height={75}
+                  width={120}
+                  height={120}
                   crop={{ type: 'fill', gravity: 'center' }}
                   quality="auto"
                   format="auto"
