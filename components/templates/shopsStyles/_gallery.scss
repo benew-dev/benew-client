@@ -2,14 +2,13 @@
 @use '../../../app/styles/abstracts' as *;
 
 // ================================
-// 📄 _gallery.scss - VERSION FINALE CORRIGÉE
+// 📄 _gallery.scss - VERSION CORRIGÉE (Bordure 1px)
 // ================================
 // ✅ CORRECTIONS APPLIQUÉES :
-// 1. Thumbnails AGRANDIES : 80-90px (visibles)
-// 2. Espacement RÉDUIT : gap 0.3-0.4rem (serrées pour beaucoup d'images)
-// 3. Bordure GRADIENT sur thumbnail active
-// 4. object-fit: contain (déjà appliqué)
-// 5. Auto-scroll 4s (déjà dans le JSX)
+// 1. Bordure gradient RÉDUITE : 2px → 1px
+// 2. Espacement visuel réduit de 36% (5.6px → 3.6px)
+// 3. Thumbnails visuellement SERRÉES comme souhaité
+// 4. Border-radius ajusté : 6px → 5px (4px conteneur + 1px bordure)
 
 // =============================
 // OVERLAY MODAL
@@ -399,20 +398,20 @@
     // ✅ Pas d'agrandissement
   }
 
-  // ✅ BORDURE GRADIENT FINE SUR ACTIVE
+  // ✅ BORDURE GRADIENT FINE SUR ACTIVE (CORRIGÉ)
   &.active {
     border: none; // ✅ Retirer la bordure classique
     position: relative;
 
-    // ✅ Pseudo-élément pour bordure gradient FINE (2px au lieu de 3px)
+    // ✅ Pseudo-élément pour bordure gradient FINE (1px - CORRIGÉ)
     &::before {
       content: '';
       position: absolute;
-      top: -2px; // ✅ 2px au lieu de 3px
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      border-radius: 6px; // ✅ Légèrement arrondi (cohérent avec 4px du conteneur)
+      top: -1px; // ✅ CORRIGÉ : 1px au lieu de 2px
+      left: -1px;
+      right: -1px;
+      bottom: -1px;
+      border-radius: 5px; // ✅ CORRIGÉ : 5px (4px conteneur + 1px bordure)
       background: linear-gradient(
         135deg,
         css-var(primary-color) 0%,
