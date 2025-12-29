@@ -2,14 +2,16 @@
 @use '../../../app/styles/abstracts' as *;
 
 // =============================
-// 📄 _gallery_app.scss - CAROUSEL GALERIE APPLICATION
+// 📄 _gallery_app.scss - CAROUSEL OPTIMISÉ
 // =============================
-// ✅ Flèches DISCRÈTES (focus sur images)
-// ✅ Performance optimisée
-// ✅ Compatible 500 users/day
+// ✅ SANS FLÈCHES
+// ✅ Dots VISIBLES (toutes les dots)
+// ✅ Dots RESPONSIVE (plus petites sur mobile/tablette)
+// ✅ Overflow hidden pour éviter scroll horizontal
 
 .gallery-section {
   background: linear-gradient(to bottom, #0c0c1d, #151528);
+  overflow: hidden; // ✅ Évite scroll horizontal
 }
 
 // =============================
@@ -19,7 +21,7 @@
 .gallery-carousel-container {
   width: 100%;
   height: 100%;
-  overflow: hidden; // ✅ AJOUTER ICI
+  overflow: hidden; // ✅ Évite débordement
   display: flex;
   align-items: center;
   justify-content: center;
@@ -41,7 +43,7 @@
   height: 100%;
   max-width: 900px;
   max-height: 700px;
-  overflow: hidden; // ✅ AJOUTER ICI
+  overflow: hidden; // ✅ Évite débordement
 
   @include until('small-sm') {
     max-width: 100%;
@@ -113,97 +115,7 @@
 }
 
 // =============================
-// ✅ FLÈCHES DISCRÈTES
-// =============================
-
-.gallery-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-
-  // ✅ Presque invisibles par défaut
-  background: rgba(css-var(color-orange), 0.1);
-  border: 1px solid rgba(css-var(color-orange), 0.6);
-  color: rgba(css-var(color-light), 0.8);
-
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 40px;
-  height: 40px;
-
-  @include until('small-sm') {
-    width: 36px;
-    height: 36px;
-  }
-
-  @include from('large-xs') {
-    width: 44px;
-    height: 44px;
-  }
-
-  svg {
-    pointer-events: none;
-    width: 20px;
-    height: 20px;
-
-    @include until('small-sm') {
-      width: 18px;
-      height: 18px;
-    }
-  }
-
-  // ✅ Visibles au hover
-  &:hover:not(:disabled) {
-    background: rgba(css-var(color-orange), 0.35);
-    border-color: rgba(css-var(color-orange), 0.6);
-    color: rgba(css-var(color-light), 1);
-    transform: translateY(-50%) scale(1.15);
-    box-shadow: 0 6px 20px rgba(css-var(color-orange), 0.4);
-  }
-
-  &:active:not(:disabled) {
-    transform: translateY(-50%) scale(0.95);
-  }
-
-  &:disabled {
-    opacity: 0.2;
-    cursor: not-allowed;
-  }
-}
-
-.gallery-arrow-left {
-  left: 1rem;
-
-  @include until('small-sm') {
-    left: 0.5rem;
-  }
-
-  @include from('large-xs') {
-    left: 2rem;
-  }
-}
-
-.gallery-arrow-right {
-  right: 1rem;
-
-  @include until('small-sm') {
-    right: 0.5rem;
-  }
-
-  @include from('large-xs') {
-    right: 2rem;
-  }
-}
-
-// =============================
-// DOTS INDICATORS
+// ✅ DOTS INDICATORS - VISIBLES + RESPONSIVE
 // =============================
 
 .gallery-carousel-indicators {
@@ -223,14 +135,29 @@
 }
 
 .gallery-carousel-dot {
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  background: rgba(css-var(text-color), 0.4);
-  border: 1px solid rgba(css-var(text-color), 0.3);
+  // ✅ DOTS INACTIVES BIEN VISIBLES (opacity augmentée)
+  background: rgba(css-var(color-light), 0.5); // ← Plus opaque
+  border: 1px solid rgba(css-var(color-light), 0.4); // ← Bordure visible
   cursor: pointer;
   transition: all 0.3s ease;
   padding: 0;
+  border-radius: 50%;
+
+  // 🖥️ DESKTOP - Taille actuelle OK
+  width: 0.5rem; // 8px
+  height: 0.5rem; // 8px
+
+  // 📱 TABLETTE - Plus petites (25% réduction)
+  @include until('medium-lg') {
+    width: 0.375rem; // 6px
+    height: 0.375rem; // 6px
+  }
+
+  // 📱 MOBILE - Encore plus petites (40% réduction)
+  @include until('small-sm') {
+    width: 0.3rem; // 4.8px
+    height: 0.3rem; // 4.8px
+  }
 
   &:hover:not(:disabled) {
     background: rgba(css-var(color-orange), 0.7);
@@ -238,16 +165,29 @@
     border-color: css-var(color-orange);
   }
 
+  // ✅ DOT ACTIVE - Orange vif
   &.active {
     background: css-var(color-orange);
     border-color: css-var(color-orange);
-    width: 0.8rem;
     box-shadow: 0 2px 8px rgba(css-var(color-orange), 0.5);
+
+    // 🖥️ DESKTOP
+    width: 0.8rem; // 12.8px
+
+    // 📱 TABLETTE
+    @include until('medium-lg') {
+      width: 0.6rem; // 9.6px
+    }
+
+    // 📱 MOBILE
+    @include until('small-sm') {
+      width: 0.5rem; // 8px
+    }
   }
 
   &:disabled {
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: 0.3;
   }
 }
 
@@ -333,7 +273,6 @@
     }
   }
 
-  .gallery-arrow,
   .gallery-carousel-dot {
     transition: none !important;
   }

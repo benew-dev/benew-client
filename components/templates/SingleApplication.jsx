@@ -20,7 +20,7 @@ import { trackEvent } from '@/utils/analytics';
 import PageTracker from '../analytics/PageTracker';
 
 // =============================
-// ✅ CAROUSEL GALERIE OPTIMISÉ POUR 500 USERS/DAY
+// ✅ CAROUSEL GALERIE OPTIMISÉ - SANS FLÈCHES
 // =============================
 const ApplicationGalleryCarousel = memo(
   ({ images, applicationName, applicationId }) => {
@@ -94,41 +94,6 @@ const ApplicationGalleryCarousel = memo(
       [currentSlide, isTransitioning, handleSlideChange, applicationId],
     );
 
-    // ✅ Navigation flèches
-    const handleArrowNavigation = useCallback(
-      (direction) => {
-        if (isTransitioning) return;
-
-        setIsAutoScrolling(false);
-
-        let nextIndex;
-        if (direction === 'next') {
-          nextIndex = (currentSlide + 1) % imageList.length;
-        } else {
-          nextIndex = (currentSlide - 1 + imageList.length) % imageList.length;
-        }
-
-        handleSlideChange(nextIndex);
-
-        try {
-          trackEvent('gallery_arrow_click', {
-            event_category: 'gallery',
-            event_label: direction,
-            application_id: applicationId,
-          });
-        } catch (error) {
-          console.warn('[Analytics] Error:', error);
-        }
-      },
-      [
-        currentSlide,
-        imageList.length,
-        isTransitioning,
-        handleSlideChange,
-        applicationId,
-      ],
-    );
-
     // ✅ Swipe tactile
     const [touchStart, setTouchStart] = useState(null);
     const [touchEnd, setTouchEnd] = useState(null);
@@ -152,9 +117,19 @@ const ApplicationGalleryCarousel = memo(
 
       if (isLeftSwipe || isRightSwipe) {
         setIsAutoScrolling(false);
-        handleArrowNavigation(isLeftSwipe ? 'next' : 'prev');
+        const nextIndex = isLeftSwipe
+          ? (currentSlide + 1) % imageList.length
+          : (currentSlide - 1 + imageList.length) % imageList.length;
+        handleSlideChange(nextIndex);
       }
-    }, [touchStart, touchEnd, isTransitioning, handleArrowNavigation]);
+    }, [
+      touchStart,
+      touchEnd,
+      isTransitioning,
+      currentSlide,
+      imageList.length,
+      handleSlideChange,
+    ]);
 
     // ✅ Image seule si pas de carousel
     if (imageList.length === 1) {
@@ -223,48 +198,7 @@ const ApplicationGalleryCarousel = memo(
           })}
         </div>
 
-        {/* Flèches DISCRÈTES */}
-        {imageList.length > 1 && (
-          <>
-            <button
-              className="gallery-arrow gallery-arrow-left"
-              onClick={() => handleArrowNavigation('prev')}
-              aria-label="Image précédente"
-              disabled={isTransitioning}
-            >
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <polyline points="15 18 9 12 15 6" />
-              </svg>
-            </button>
-
-            <button
-              className="gallery-arrow gallery-arrow-right"
-              onClick={() => handleArrowNavigation('next')}
-              aria-label="Image suivante"
-              disabled={isTransitioning}
-            >
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <polyline points="9 18 15 12 9 6" />
-              </svg>
-            </button>
-          </>
-        )}
-
-        {/* Dots */}
+        {/* Dots - TOUJOURS VISIBLES */}
         {imageList.length > 1 && (
           <div className="gallery-carousel-indicators">
             {imageList.map((_, index) => (
@@ -596,7 +530,7 @@ const SingleApplication = ({
         />
       </section>
 
-      {/* ✅ GALERIE CAROUSEL */}
+      {/* ✅ GALERIE CAROUSEL - SANS FLÈCHES */}
       <section className="others gallery-section">
         <ApplicationGalleryCarousel
           images={allImages}
