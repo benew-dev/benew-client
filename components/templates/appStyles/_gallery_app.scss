@@ -305,7 +305,7 @@
 
 @media (pointer: coarse) {
   button.gallery-carousel-dot {
-    max-width: 44px;
-    max-height: 48px;
+    min-width: unset; // ← Annule la règle globale
+    min-height: unset;
   }
 }
