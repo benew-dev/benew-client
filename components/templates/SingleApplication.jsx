@@ -598,13 +598,13 @@ const SingleApplication = ({
       </section>
 
       {/* ✅ GALERIE CAROUSEL */}
-      <section className="others gallery-section">
+      {/* <section className="others gallery-section">
         <ApplicationGalleryCarousel
           images={allImages}
           applicationName={application.application_name}
           applicationId={context?.applicationId}
         />
-      </section>
+      </section> */}
 
       {/* Header */}
       {/* <section className="others app-header-section">
