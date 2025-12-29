@@ -1,0 +1,17 @@
+// ================================
+// 📄 index.scss - FICHIER PRINCIPAL OPTIMISÉ
+// ================================
+// ✅ Import du nouveau carousel gallery_app
+// ✅ Structure modulaire maintenable
+// ✅ Production-ready
+
+@forward 'base';
+@forward 'gallery_app'; // ✅ NOUVEAU: Carousel moderne
+@forward 'navigation';
+@forward 'header';
+@forward 'content';
+@forward 'tables';
+@forward 'sections';
+@forward 'buttons';
+@forward 'animations';
+@forward 'responsive';

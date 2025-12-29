@@ -1,0 +1,338 @@
+@use 'sass:color';
+@use '../../../app/styles/abstracts' as *;
+
+// =============================
+// 📄 _gallery_app.scss - CAROUSEL GALERIE APPLICATION
+// =============================
+// ✅ Flèches DISCRÈTES (focus sur images)
+// ✅ Performance optimisée
+// ✅ Compatible 500 users/day
+
+.gallery-section {
+  background: linear-gradient(to bottom, #0c0c1d, #151528);
+}
+
+// =============================
+// CONTENEUR CAROUSEL
+// =============================
+
+.gallery-carousel-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 2rem 1rem;
+
+  @include until('small-sm') {
+    padding: 1.5rem 0.75rem;
+  }
+
+  @include from('large-xs') {
+    padding: 3rem 2rem;
+  }
+}
+
+.gallery-carousel-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 900px;
+  max-height: 700px;
+
+  @include until('small-sm') {
+    max-width: 100%;
+    max-height: 500px;
+  }
+
+  @include from('large-xs') {
+    max-width: 1000px;
+    max-height: 800px;
+  }
+}
+
+// =============================
+// SLIDES ANIMATION
+// =============================
+
+.gallery-carousel-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.hidden-right {
+    transform: translateX(100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &.hidden-left {
+    transform: translateX(-100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &.entering {
+    transform: translateX(0);
+    opacity: 1;
+    transition:
+      transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &.exiting {
+    transform: translateX(-100%);
+    opacity: 0;
+    transition:
+      transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &.active {
+    transform: translateX(0);
+    opacity: 1;
+    transition: none;
+  }
+}
+
+.gallery-carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+// =============================
+// ✅ FLÈCHES DISCRÈTES
+// =============================
+
+.gallery-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+
+  // ✅ Presque invisibles par défaut
+  background: rgba(css-var(color-orange), 0.1);
+  border: 1px solid rgba(css-var(color-orange), 0.15);
+  color: rgba(css-var(color-light), 0.4);
+
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+
+  @include until('small-sm') {
+    width: 36px;
+    height: 36px;
+  }
+
+  @include from('large-xs') {
+    width: 44px;
+    height: 44px;
+  }
+
+  svg {
+    pointer-events: none;
+    width: 20px;
+    height: 20px;
+
+    @include until('small-sm') {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  // ✅ Visibles au hover
+  &:hover:not(:disabled) {
+    background: rgba(css-var(color-orange), 0.35);
+    border-color: rgba(css-var(color-orange), 0.6);
+    color: rgba(css-var(color-light), 1);
+    transform: translateY(-50%) scale(1.15);
+    box-shadow: 0 6px 20px rgba(css-var(color-orange), 0.4);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(-50%) scale(0.95);
+  }
+
+  &:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+  }
+}
+
+.gallery-arrow-left {
+  left: 1rem;
+
+  @include until('small-sm') {
+    left: 0.5rem;
+  }
+
+  @include from('large-xs') {
+    left: 2rem;
+  }
+}
+
+.gallery-arrow-right {
+  right: 1rem;
+
+  @include until('small-sm') {
+    right: 0.5rem;
+  }
+
+  @include from('large-xs') {
+    right: 2rem;
+  }
+}
+
+// =============================
+// DOTS INDICATORS
+// =============================
+
+.gallery-carousel-indicators {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+
+  @include until('small-sm') {
+    bottom: 1rem;
+    gap: 0.4rem;
+  }
+}
+
+.gallery-carousel-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: rgba(css-var(text-color), 0.4);
+  border: 1px solid rgba(css-var(text-color), 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+
+  &:hover:not(:disabled) {
+    background: rgba(css-var(color-orange), 0.7);
+    transform: scale(1.3);
+    border-color: css-var(color-orange);
+  }
+
+  &.active {
+    background: css-var(color-orange);
+    border-color: css-var(color-orange);
+    width: 0.8rem;
+    box-shadow: 0 2px 8px rgba(css-var(color-orange), 0.5);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+// =============================
+// COUNTER
+// =============================
+
+.gallery-carousel-counter {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 10;
+
+  background: rgba(css-var(color-dark), 0.8);
+  color: css-var(color-light);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(css-var(color-orange), 0.3);
+
+  @include until('small-sm') {
+    top: 1rem;
+    right: 1rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+}
+
+// =============================
+// IMAGE SEULE
+// =============================
+
+.gallery-single-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+
+  @include until('small-sm') {
+    padding: 1.5rem;
+  }
+}
+
+.gallery-image-solo {
+  width: 100%;
+  height: auto;
+  max-width: 900px;
+  max-height: 700px;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+
+  @include until('small-sm') {
+    max-width: 100%;
+    max-height: 500px;
+  }
+}
+
+// =============================
+// RESPONSIVE
+// =============================
+
+@include mobile-landscape {
+  .gallery-carousel-container {
+    padding: 1rem;
+  }
+
+  .gallery-carousel-track {
+    max-height: 80vh;
+  }
+}
+
+@include reduced-motion {
+  .gallery-carousel-slide {
+    &.entering,
+    &.exiting {
+      transition: opacity 0.3s ease !important;
+      transform: translateX(0) !important;
+    }
+  }
+
+  .gallery-arrow,
+  .gallery-carousel-dot {
+    transition: none !important;
+  }
+}

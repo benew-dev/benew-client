@@ -1,0 +1,147 @@
+@use 'sass:color';
+@use '../../../app/styles/abstracts' as *;
+
+// =============================
+// 📄 _navigation.scss - NAVIGATION UI
+// =============================
+// ✅ Note: Les flèches du carousel sont dans _gallery_app.scss
+// ✅ Ce fichier gère les boutons toggle mobile uniquement
+
+// =============================
+// BOUTONS TOGGLE MOBILE - DESCRIPTION/TECHNIQUE
+// =============================
+
+.mobile-toggle-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+
+  // 🖥️ DESKTOP - Masquer
+  @include from('medium-lg') {
+    display: none;
+  }
+
+  .toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: 2px solid rgba(css-var(color-light), 0.2);
+    background: rgba(css-var(color-light), 0.05);
+    color: css-var(text-color-muted);
+    border-radius: var(--badge-border-radius);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    font-size: 0.9rem;
+
+    @include until('small-sm') {
+      padding: 0.625rem 1.25rem;
+      font-size: 0.85rem;
+    }
+
+    .toggle-icon {
+      font-size: 1.1rem;
+
+      @include until('small-sm') {
+        font-size: 1rem;
+      }
+    }
+
+    .toggle-text {
+      white-space: nowrap;
+    }
+
+    &:hover {
+      background: rgba(css-var(color-light), 0.1);
+      border-color: rgba(css-var(color-light), 0.3);
+      transform: translateY(-2px);
+    }
+
+    &.active {
+      background: linear-gradient(
+        135deg,
+        rgba(css-var(color-orange), 0.15),
+        rgba(css-var(color-pink), 0.1)
+      );
+      border-color: rgba(css-var(color-orange), 0.4);
+      color: css-var(color-orange);
+      box-shadow: 0 4px 15px rgba(css-var(color-orange), 0.2);
+
+      .toggle-icon {
+        transform: scale(1.1);
+      }
+    }
+  }
+}
+
+// =============================
+// BOUTONS TOGGLE MOBILE - BESOINS/TARIFICATION
+// =============================
+
+.mobile-section-nav {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+
+  // 🖥️ DESKTOP - Masquer
+  @include from('medium-lg') {
+    display: none;
+  }
+
+  .section-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: 2px solid rgba(css-var(color-light), 0.2);
+    background: rgba(css-var(color-light), 0.05);
+    color: css-var(text-color-muted);
+    border-radius: var(--badge-border-radius);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    font-size: 0.9rem;
+    flex: 1;
+
+    @include until('small-sm') {
+      padding: 0.625rem 1.25rem;
+      font-size: 0.85rem;
+    }
+
+    .btn-icon {
+      font-size: 1.1rem;
+
+      @include until('small-sm') {
+        font-size: 1rem;
+      }
+    }
+
+    .btn-text {
+      white-space: nowrap;
+    }
+
+    &:hover {
+      background: rgba(css-var(color-light), 0.1);
+      border-color: rgba(css-var(color-light), 0.3);
+      transform: translateY(-2px);
+    }
+
+    &.active {
+      background: linear-gradient(
+        135deg,
+        rgba(css-var(color-orange), 0.15),
+        rgba(css-var(color-pink), 0.1)
+      );
+      border-color: rgba(css-var(color-orange), 0.4);
+      color: css-var(color-orange);
+      box-shadow: 0 4px 15px rgba(css-var(color-orange), 0.2);
+
+      .btn-icon {
+        transform: scale(1.1);
+      }
+    }
+  }
+}
