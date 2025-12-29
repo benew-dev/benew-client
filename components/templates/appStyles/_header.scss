@@ -7,6 +7,7 @@
 
 .app-header-section {
   background: linear-gradient(135deg, #1a0f2e 0%, #151528 50%, #0c0c1d 100%);
+  background-image: url('/stars.png');
   overflow: hidden;
 
   &::before {
