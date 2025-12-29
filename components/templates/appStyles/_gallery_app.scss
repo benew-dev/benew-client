@@ -8,9 +8,14 @@
 // ✅ Dots VISIBLES (toutes les dots)
 // ✅ Dots RESPONSIVE (progression mobile → tablette → laptop → desktop)
 // ✅ Overflow hidden pour éviter scroll horizontal
+// ✅ BACKGROUND STARS ajouté
 
 .gallery-section {
   background: linear-gradient(to bottom, #0c0c1d, #151528);
+  background-image: url('/stars.png');
+  background-repeat: repeat;
+  background-size: auto;
+  background-position: center;
   overflow: hidden; // ✅ Évite scroll horizontal
 }
 
@@ -136,8 +141,6 @@
 
 .gallery-carousel-dot {
   // ✅ DOTS INACTIVES - Couleur violette/lavande visible sur fond sombre
-  // background: rgba(css-var(color-purple), 0.4); // ← Violet à 40%
-  // border: 2px solid rgba(css-var(color-purple), 0.6); // ← Bordure violette visible
   border-color: grey;
   cursor: pointer;
   transition: all 0.3s ease;

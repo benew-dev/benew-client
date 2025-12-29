@@ -4,9 +4,14 @@
 // =============================
 // 📄 _header.scss - NETTOYÉ
 // =============================
+// ✅ BACKGROUND STARS ajouté
 
 .app-header-section {
   background: linear-gradient(135deg, #1a0f2e 0%, #151528 50%, #0c0c1d 100%);
+  background-image: url('/stars.png');
+  background-repeat: repeat;
+  background-size: auto;
+  background-position: center;
   overflow: hidden;
 
   &::before {
