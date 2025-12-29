@@ -419,19 +419,18 @@ const PricingSection = memo(({ application }) => (
           <tr className="pricing-row">
             <td className="pricing-label">Acquisition</td>
             <td className="pricing-value">
-              FDJ {formatPrice(application.application_fee)}
+              {formatPrice(application.application_fee)}
             </td>
           </tr>
           <tr className="pricing-row">
             <td className="pricing-label">Gestion</td>
             <td className="pricing-value">
-              FDJ {formatPrice(application.application_rent)}
+              {formatPrice(application.application_rent)}
             </td>
           </tr>
           <tr className="pricing-row total-row">
             <td className="pricing-label">Total</td>
             <td className="pricing-value">
-              FDJ{' '}
               {formatPrice(
                 application.application_fee + application.application_rent,
               )}
