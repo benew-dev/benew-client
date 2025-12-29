@@ -7,12 +7,10 @@
 
 .gallery-section {
   background: linear-gradient(to bottom, #0c0c1d, #151528);
-  background-image: url('/stars.png');
 }
 
 .app-details-section {
   background: linear-gradient(135deg, #0c0c1d 0%, #1a0f2e 50%, #151528 100%);
-  background-image: url('/stars.png');
   overflow: hidden;
 
   &::before {

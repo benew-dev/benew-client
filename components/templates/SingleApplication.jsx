@@ -598,16 +598,16 @@ const SingleApplication = ({
       </section>
 
       {/* ✅ GALERIE CAROUSEL */}
-      {/* <section className="others gallery-section">
+      <section className="others gallery-section">
         <ApplicationGalleryCarousel
           images={allImages}
           applicationName={application.application_name}
           applicationId={context?.applicationId}
         />
-      </section> */}
+      </section>
 
       {/* Header */}
-      <section className="others app-header-section">
+      {/* <section className="others app-header-section">
         <div className="app-header-container">
           <div className="app-header">
             <div className="title-block">
@@ -674,10 +674,10 @@ const SingleApplication = ({
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Tarification */}
-      <section className="others app-details-section">
+      {/* <section className="others app-details-section">
         <div className="app-details-container">
           <div className="mobile-section-nav">
             <button
@@ -723,7 +723,7 @@ const SingleApplication = ({
             </button>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Modal */}
       <OrderModal
