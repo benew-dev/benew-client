@@ -2,14 +2,7 @@
 @use '../../../app/styles/abstracts' as *;
 
 // =============================
-// 📄 _base.scss - STYLES DE BASE OPTIMISÉS
-// =============================
-// ✅ Variables CSS personnalisées
-// ✅ Sections communes
-// ✅ États vides et erreurs
-
-// =============================
-// VARIABLES CSS LOCALES
+// 📄 _base.scss - NETTOYÉ
 // =============================
 
 :root {
@@ -17,10 +10,6 @@
   --badge-border-radius: 12px;
   --section-border-radius: 16px;
 }
-
-// =============================
-// SECTIONS COMMUNES
-// =============================
 
 .others {
   width: 100%;
@@ -32,10 +21,6 @@
   padding: 0;
   height: 100vh;
 }
-
-// =============================
-// ÉTATS VIDES ET ERREURS
-// =============================
 
 .application-empty {
   min-height: 100vh;

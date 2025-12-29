@@ -2,7 +2,7 @@
 @use '../../../app/styles/abstracts' as *;
 
 // =============================
-// 📄 _buttons.scss - BOUTONS D'ACTION
+// 📄 _buttons.scss - NETTOYÉ
 // =============================
 
 .btn {
@@ -121,4 +121,8 @@
       display: none;
     }
   }
+}
+
+.purchase-btn {
+  // Classe utilisée, styles déjà dans .btn
 }

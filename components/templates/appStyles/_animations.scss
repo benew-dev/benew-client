@@ -2,14 +2,7 @@
 @use '../../../app/styles/abstracts' as *;
 
 // =============================
-// 📄 _animations.scss - ANIMATIONS OPTIMISÉES
-// =============================
-// ✅ Animations fluides et performantes
-// ✅ Compatible carousel moderne
-// ✅ Optimisé pour 500 users/day
-
-// =============================
-// CAROUSEL ANIMATIONS
+// 📄 _animations.scss - NETTOYÉ
 // =============================
 
 @keyframes slideIn {
@@ -54,10 +47,6 @@
   }
 }
 
-// =============================
-// COMPTEUR ANIMATIONS
-// =============================
-
 @keyframes counterPulse {
   0% {
     transform: scale(0.9);
@@ -72,10 +61,6 @@
   }
 }
 
-// =============================
-// BOUTONS ANIMATIONS
-// =============================
-
 @keyframes buttonShine {
   0% {
     left: -100%;
@@ -84,10 +69,6 @@
     left: 100%;
   }
 }
-
-// =============================
-// BADGES ANIMATIONS
-// =============================
 
 @keyframes badgeAppear {
   0% {
@@ -99,10 +80,6 @@
     transform: scale(1) translateY(0);
   }
 }
-
-// =============================
-// SECTIONS ANIMATIONS
-// =============================
 
 @keyframes sectionFadeIn {
   0% {

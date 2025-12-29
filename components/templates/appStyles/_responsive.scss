@@ -2,31 +2,16 @@
 @use '../../../app/styles/abstracts' as *;
 
 // =============================
-// 📄 _responsive.scss - ADAPTATIONS RESPONSIVE
-// =============================
-// ✅ Mobile landscape
-// ✅ Écrans très hauts
-// ✅ Tactile
-// ✅ Accessibilité
-// ✅ Haute densité
-
-// =============================
-// MODE PAYSAGE MOBILE
+// 📄 _responsive.scss - NETTOYÉ
 // =============================
 
 @include mobile-landscape {
-  .gallery-carousel-container {
-    padding: 1rem;
-  }
-
   .app-header-section .app-header-container {
     padding: 1rem 0.75rem;
-    gap: 2rem;
   }
 
   .app-details-section .app-details-container {
     padding: 1rem 0.75rem;
-    gap: 2rem;
   }
 
   .app-header {
@@ -38,13 +23,9 @@
   }
 
   .badge {
-    padding: 0.5rem 0.75rem;
+    padding: 0.75rem 0.625rem;
   }
 }
-
-// =============================
-// ÉCRANS TRÈS HAUTS
-// =============================
 
 @include tall-screen {
   .app-header-container,
@@ -61,43 +42,19 @@
   }
 }
 
-// =============================
-// ÉCRANS TACTILES
-// =============================
-
 @media (pointer: coarse) {
-  // Zones tactiles minimales 44x44px
-  .gallery-arrow {
-    min-width: 44px;
-    min-height: 44px;
-  }
-
   .btn {
     min-height: 48px;
   }
 
   .badge {
-    min-width: 44px;
-    min-height: 44px;
+    min-width: 48px;
+    min-height: 48px;
   }
 
-  .toggle-btn,
-  .section-btn {
-    min-height: 44px;
-  }
-
-  // Pas d'effet hover sur tactile
-  .gallery-arrow:hover,
   .btn:hover,
-  .badge:hover,
-  .toggle-btn:hover,
-  .section-btn:hover {
+  .badge:hover {
     transform: none;
-  }
-
-  // Feedback tactile avec :active
-  .gallery-arrow:active {
-    transform: translateY(-50%) scale(0.95);
   }
 
   .btn:active {
@@ -105,27 +62,18 @@
   }
 }
 
-// =============================
-// RÉDUCTION DES ANIMATIONS
-// =============================
-
 @include reduced-motion {
-  .gallery-carousel-slide,
-  .gallery-arrow,
   .badge,
   .btn,
-  .toggle-btn,
-  .section-btn,
   .description-section,
-  .technical-section,
   .needs-section,
   .pricing-section {
-    transition: none !important;
-    animation: none !important;
+    transition: none;
+    animation: none;
 
     &:hover,
     &:active {
-      transform: none !important;
+      transform: none;
     }
   }
 
@@ -134,32 +82,7 @@
   }
 }
 
-// =============================
-// HAUTE DENSITÉ
-// =============================
-
-@include high-density {
-  .gallery-carousel-image {
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-  }
-
-  .gallery-arrow {
-    box-shadow:
-      0 8px 25px rgba(css-var(color-orange), 0.5),
-      0 2px 8px rgba(0, 0, 0, 0.2);
-  }
-}
-
-// =============================
-// TRÈS GRANDS ÉCRANS
-// =============================
-
 @include from('large-xxxl') {
-  .gallery-carousel-container {
-    padding: 3rem 2rem;
-  }
-
   .app-header-container,
   .app-details-container {
     max-width: 1600px;
@@ -170,20 +93,7 @@
   }
 }
 
-// =============================
-// ÉCRANS TRÈS PETITS
-// =============================
-
 @media (max-width: 360px) {
-  .gallery-carousel-container {
-    padding: 1rem 0.5rem;
-  }
-
-  .gallery-arrow {
-    width: 36px;
-    height: 36px;
-  }
-
   .app-header-container,
   .app-details-container {
     padding: 0 0.75rem;
@@ -202,11 +112,5 @@
   .btn {
     padding: 1.25rem 1.5rem;
     font-size: 0.9rem;
-  }
-
-  .toggle-btn,
-  .section-btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.8rem;
   }
 }

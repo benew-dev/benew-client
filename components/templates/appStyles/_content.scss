@@ -2,7 +2,7 @@
 @use '../../../app/styles/abstracts' as *;
 
 // =============================
-// 📄 _content.scss - SECTIONS DE CONTENU
+// 📄 _content.scss - NETTOYÉ
 // =============================
 
 .main-content {
@@ -21,7 +21,6 @@
   display: grid;
   gap: 2rem;
   width: 100%;
-
   grid-template-columns: 1fr;
 
   @include until('small-sm') {
@@ -30,6 +29,10 @@
 
   @include from('medium-lg') {
     gap: 3rem;
+  }
+
+  @include from('large-xs') {
+    gap: 4rem;
   }
 }
 
@@ -47,7 +50,8 @@
 
 .description-section,
 .technical-section,
-.needs-section {
+.needs-section,
+.pricing-section {
   width: 100%;
 
   display: none;
@@ -83,6 +87,10 @@
     @include from('medium-lg') {
       text-align: left;
       font-size: 1.5rem;
+    }
+
+    @include from('large-xs') {
+      font-size: 1.6rem;
     }
 
     &::after {
