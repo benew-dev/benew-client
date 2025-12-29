@@ -11,7 +11,7 @@ import { getClient } from '@/backend/dbConnect';
 import {
   captureException,
   captureMessage,
-} from '../../../../../instrumentation';
+} from '../../../../../sentry.server.config';
 import { sanitizeAndValidateUUID } from '@/utils/validation';
 import Loading from './loading';
 
@@ -262,11 +262,15 @@ async function getApplicationData(applicationId, templateId) {
              LIMIT 6
             ) as related_applications,
             
-            -- ✅ Plateformes de paiement (JSON aggregation)
+            -- ✅ Plateformes de paiement (JSON aggregation avec toutes les colonnes)
             (SELECT COALESCE(json_agg(
               json_build_object(
                 'platform_id', p.platform_id,
-                'platform_name', p.platform_name
+                'platform_name', p.platform_name,
+                'is_cash_payment', COALESCE(p.is_cash_payment, false),
+                'account_name', p.account_name,
+                'account_number', p.account_number,
+                'description', p.description
               ) ORDER BY p.platform_name ASC
             ), '[]'::json)
              FROM admin.platforms p
