@@ -148,13 +148,13 @@
 
   // 📱 TABLETTE - Réduction progressive (mobile-first)
   @include from('small-sm') {
-    width: 0.5rem; // 8px - taille stable
-    height: 0.5rem;
+    width: 0.3rem; // 8px - taille stable
+    height: 0.3rem;
   }
 
   @include from('medium-sm') {
-    width: 0.5rem; // 8px - taille stable
-    height: 0.5rem;
+    width: 0.3rem; // 8px - taille stable
+    height: 0.3rem;
   }
 
   // 📱 MOBILE - Plus petites (40% réduction)
@@ -170,8 +170,8 @@
     box-shadow: 0 2px 8px rgba(css-var(color-orange), 0.5);
 
     // ✅ MÊME TAILLE sur tous les écrans
-    width: 0.5rem; // 8px (pareil que inactives)
-    height: 0.5rem; // 8px (pareil que inactives)
+    width: 0.3rem; // 8px (pareil que inactives)
+    height: 0.3rem; // 8px (pareil que inactives)
 
     @include until('small-sm') {
       width: 0.3rem; // 4.8px (pareil que inactives)
