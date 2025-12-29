@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { captureMessage } from '@/instrumentation';
+import * as Sentry from '@sentry/nextjs'; // ✅ CORRECTION ICI
 import { trackEvent } from '@/utils/analytics';
 import './not-found.scss';
 
@@ -21,7 +21,7 @@ export default function ApplicationDetailNotFound() {
   useEffect(() => {
     // ✅ Capture Sentry (sécurisé)
     try {
-      captureMessage('404 - Application not found', {
+      Sentry.captureMessage('404 - Application not found', {
         level: 'info',
         tags: {
           component: 'application_detail_not_found',
