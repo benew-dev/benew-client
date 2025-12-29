@@ -302,3 +302,10 @@
     transition: none !important;
   }
 }
+
+@media (pointer: coarse) {
+  button.gallery-carousel-dot {
+    max-width: 44px;
+    max-height: 48px;
+  }
+}
