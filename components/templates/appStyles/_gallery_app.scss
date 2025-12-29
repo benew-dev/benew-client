@@ -136,8 +136,7 @@
 
 .gallery-carousel-dot {
   // ✅ DOTS INACTIVES - Couleur violette/lavande visible sur fond sombre
-  background: rgba(css-var(color-purple), 0.4); // ← Violet à 40%
-  border: 2px solid rgba(css-var(color-purple), 0.6); // ← Bordure violette plus visible
+  border-color: css-var(color-orange);
   cursor: pointer;
   transition: all 0.3s ease;
   padding: 0;
@@ -162,16 +161,6 @@
   @include until('small-sm') {
     width: 0.3rem; // 4.8px
     height: 0.3rem; // 4.8px
-  }
-
-  &:hover:not(:disabled) {
-    background: rgba(
-      css-var(color-purple),
-      0.8
-    ); // ← Violet plus intense au hover
-    transform: scale(1.2);
-    border-color: css-var(color-purple);
-    box-shadow: 0 2px 8px rgba(css-var(color-purple), 0.4);
   }
 
   // ✅ DOT ACTIVE - Orange vif, MÊME TAILLE que les inactives
