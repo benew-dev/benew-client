@@ -11,7 +11,7 @@ import { getClient } from '@/backend/dbConnect';
 import {
   captureException,
   captureMessage,
-} from '../../../../../sentry.server.config';
+} from '../../../../../instrumentation';
 import { sanitizeAndValidateUUID } from '@/utils/validation';
 import Loading from './loading';
 
@@ -266,8 +266,7 @@ async function getApplicationData(applicationId, templateId) {
             (SELECT COALESCE(json_agg(
               json_build_object(
                 'platform_id', p.platform_id,
-                'platform_name', p.platform_name,
-                'platform_number', p.platform_number
+                'platform_name', p.platform_name
               ) ORDER BY p.platform_name ASC
             ), '[]'::json)
              FROM admin.platforms p
