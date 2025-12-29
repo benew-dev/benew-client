@@ -145,64 +145,64 @@
   border-radius: 50%;
 
   // 📱 MOBILE (par défaut) - Petites dots (< 768px)
-  width: 4px; // 4.8px
-  height: 4px; // 4.8px
+  width: 8px; // 4.8px
+  height: 8px; // 4.8px
 
   // 📟 TABLETTES - Progression graduelle (768px - 1199px)
   @include from('medium-sm') {
     // iPad classique 9.7" (768px)
-    width: 6px; // 6.4px
-    height: 6px; // 6.4px
+    width: 10px; // 6.4px
+    height: 10px; // 6.4px
   }
 
   @include from('medium-lg') {
     // iPad Pro 11" (834px)
-    width: 6px; // 7.2px
-    height: 6px; // 7.2px
+    width: 10px; // 6.4px
+    height: 10px; // 6.4px
   }
 
   @include from('medium-xxl') {
     // iPad Pro 12.9" + paysage (1024px)
-    width: 7px; // 8px
-    height: 7px; // 8px
+    width: 10px; // 6.4px
+    height: 10px; // 6.4px
   }
 
   // 🖥️ LAPTOPS - Taille confortable (1200px - 1919px)
   @include from('large-xs') {
     // Standard desktop (1200px)
-    width: 8px; // 8.8px
-    height: 8px; // 8.8px
+    width: 12px; // 8.8px
+    height: 12px; // 8.8px
   }
 
   @include from('large-sm') {
     // Laptops 14-15" MacBook Air, Dell XPS (1280px)
-    width: 8px; // 9.6px
-    height: 8px; // 9.6px
+    width: 12px; // 8.8px
+    height: 12px; // 8.8px
   }
 
   @include from('large-md') {
     // Laptops budget + anciens écrans (1366px)
-    width: 8px; // 10.4px
-    height: 8px; // 10.4px
+    width: 12px; // 8.8px
+    height: 12px; // 8.8px
   }
 
   @include from('large-lg') {
     // Desktop 2K entry + laptops premium (1440px)
-    width: 9px; // 11.2px
-    height: 9px; // 11.2px
+    width: 15px; // 8.8px
+    height: 15px; // 8.8px
   }
 
   // 🖥️ DESKTOP LARGE - Taille maximale (1920px+)
   @include from('large-xxl') {
     // Desktop Full HD DOMINANT (1920px)
-    width: 9px; // 12px
-    height: 9px; // 12px
+    width: 15px; // 8.8px
+    height: 15px; // 8.8px
   }
 
   @include from('large-xxxl') {
     // Desktop 2K/QHD premium (2560px)
-    width: 9px; // 12px
-    height: 9px; // 12px
+    width: 15px; // 8.8px
+    height: 15px; // 8.8px
   }
 
   // ✅ DOT ACTIVE - Orange vif, MÊME TAILLE que les inactives
