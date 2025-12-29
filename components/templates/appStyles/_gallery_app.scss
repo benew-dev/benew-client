@@ -136,82 +136,73 @@
 
 .gallery-carousel-dot {
   // ✅ DOTS INACTIVES - Couleur violette/lavande visible sur fond sombre
-  background: rgba(css-var(color-purple), 0.4); // ← Violet à 40%
-  border: 2px solid rgba(css-var(color-purple), 0.6); // ← Bordure violette visible
+  // background: rgba(css-var(color-purple), 0.4); // ← Violet à 40%
+  // border: 2px solid rgba(css-var(color-purple), 0.6); // ← Bordure violette visible
+  border-color: grey;
   cursor: pointer;
   transition: all 0.3s ease;
   padding: 0;
   border-radius: 50%;
 
   // 📱 MOBILE (par défaut) - Petites dots (< 768px)
-  width: 0.3rem; // 4.8px
-  height: 0.3rem; // 4.8px
+  width: 4px; // 4.8px
+  height: 4px; // 4.8px
 
   // 📟 TABLETTES - Progression graduelle (768px - 1199px)
   @include from('medium-sm') {
     // iPad classique 9.7" (768px)
-    width: 0.4rem; // 6.4px
-    height: 0.4rem; // 6.4px
+    width: 6px; // 6.4px
+    height: 6px; // 6.4px
   }
 
   @include from('medium-lg') {
     // iPad Pro 11" (834px)
-    width: 0.45rem; // 7.2px
-    height: 0.45rem; // 7.2px
+    width: 6px; // 7.2px
+    height: 6px; // 7.2px
   }
 
   @include from('medium-xxl') {
     // iPad Pro 12.9" + paysage (1024px)
-    width: 0.5rem; // 8px
-    height: 0.5rem; // 8px
+    width: 7px; // 8px
+    height: 7px; // 8px
   }
 
   // 🖥️ LAPTOPS - Taille confortable (1200px - 1919px)
   @include from('large-xs') {
     // Standard desktop (1200px)
-    width: 0.55rem; // 8.8px
-    height: 0.55rem; // 8.8px
+    width: 8px; // 8.8px
+    height: 8px; // 8.8px
   }
 
   @include from('large-sm') {
     // Laptops 14-15" MacBook Air, Dell XPS (1280px)
-    width: 0.6rem; // 9.6px
-    height: 0.6rem; // 9.6px
+    width: 8px; // 9.6px
+    height: 8px; // 9.6px
   }
 
   @include from('large-md') {
     // Laptops budget + anciens écrans (1366px)
-    width: 0.65rem; // 10.4px
-    height: 0.65rem; // 10.4px
+    width: 8px; // 10.4px
+    height: 8px; // 10.4px
   }
 
   @include from('large-lg') {
     // Desktop 2K entry + laptops premium (1440px)
-    width: 0.7rem; // 11.2px
-    height: 0.7rem; // 11.2px
+    width: 9px; // 11.2px
+    height: 9px; // 11.2px
   }
 
   // 🖥️ DESKTOP LARGE - Taille maximale (1920px+)
   @include from('large-xxl') {
     // Desktop Full HD DOMINANT (1920px)
-    width: 0.75rem; // 12px
-    height: 0.75rem; // 12px
+    width: 9px; // 12px
+    height: 9px; // 12px
   }
 
   @include from('large-xxxl') {
     // Desktop 2K/QHD premium (2560px)
-    width: 0.8rem; // 12.8px
-    height: 0.8rem; // 12.8px
-  }
-
-  &:hover:not(:disabled) {
-    background: rgba(
-      css-var(color-purple),
-      0.8
-    ); // ← Violet plus intense au hover
-    transform: scale(1.2);
-    border-color: css-var(color-purple);
-    box-shadow: 0 2px 8px rgba(css-var(color-purple), 0.4);
+    width: 9px; // 12px
+    height: 9px; // 12px
   }
 
   // ✅ DOT ACTIVE - Orange vif, MÊME TAILLE que les inactives
@@ -222,11 +213,6 @@
 
     // ✅ Hérite automatiquement de la taille des dots inactives
     // Pas besoin de redéfinir width/height
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.3;
   }
 }
 
