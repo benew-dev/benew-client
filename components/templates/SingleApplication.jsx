@@ -250,7 +250,7 @@ const ContentModal = memo(({ isOpen, onClose, title, children }) => {
           onClick={onClose}
           aria-label="Fermer"
         >
-          <MdClose size={28} />
+          <MdClose className="close-icon" />
         </button>
 
         <div className="content-modal-header">

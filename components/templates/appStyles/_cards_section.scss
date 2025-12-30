@@ -514,10 +514,29 @@
     right: 2rem;
   }
 
-  // ✅ S'assurer que l'icône SVG hérite de la couleur
+  // ✅ Classe pour l'icône avec tailles responsives
+  .close-icon,
   svg {
-    color: inherit;
-    fill: currentColor;
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    flex-shrink: 0;
+
+    // 📱 Mobile
+    width: 20px;
+    height: 20px;
+
+    // 📟 Tablette
+    @include from('medium-sm') {
+      width: 24px;
+      height: 24px;
+    }
+
+    // 🖥️ Desktop
+    @include from('large-xs') {
+      width: 28px;
+      height: 28px;
+    }
   }
 
   &:hover {
@@ -525,6 +544,11 @@
     border-color: css-var(color-orange);
     color: css-var(color-orange);
     transform: rotate(90deg);
+
+    .close-icon,
+    svg {
+      color: css-var(color-orange) !important;
+    }
   }
 
   &:active {
