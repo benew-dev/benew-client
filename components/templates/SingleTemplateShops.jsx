@@ -5,7 +5,8 @@ import dynamic from 'next/dynamic';
 import { useState, useEffect, useCallback, memo, useMemo } from 'react';
 import { CldImage } from 'next-cloudinary';
 import Link from 'next/link';
-import { FaDollarSign, FaImages, FaEye, FaFax } from 'react-icons/fa';
+import { FaDollarSign, FaImages, FaEye } from 'react-icons/fa';
+import { FaX } from 'react-icons/fa6';
 import './shopsStyles/index.scss';
 
 import ParallaxSkeleton from '../layouts/parallax/ParallaxSkeleton';
@@ -250,7 +251,7 @@ const GalleryModal = memo(({ isOpen, onClose, images, applicationName }) => {
           onClick={onClose}
           aria-label="Fermer la galerie"
         >
-          <FaFax />
+          <FaX />
         </button>
 
         {/* ✅ HEADER RESTRUCTURÉ - Titre + Compteur groupés */}
