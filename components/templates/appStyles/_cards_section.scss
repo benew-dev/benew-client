@@ -51,6 +51,9 @@
   height: 100%;
   padding: 2rem 1.5rem;
 
+  // ✅ Espacement égal entre header, cards et bouton
+  justify-content: space-between;
+
   @include until('small-sm') {
     padding: 1.5rem 1rem;
   }
@@ -169,31 +172,33 @@
 }
 
 // ================================
-// GRILLE 4 CARTES - CENTRE
+// GRILLE 4 CARTES - CENTRE VERTICAL + 2x2 SUR MOBILE
 // ================================
 
 .cards-grid {
   display: grid;
   gap: 1.5rem;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  max-width: 600px;
-  margin: 0 auto;
   width: 100%;
 
-  // 📱 MOBILE - 1 colonne
-  grid-template-columns: 1fr;
+  // ✅ Centrage vertical : même espace haut et bas
+  margin: auto 0;
+
+  // 📱 MOBILE - 2x2 comme tablette
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 450px;
+  margin-left: auto;
+  margin-right: auto;
 
   @include until('small-sm') {
-    gap: 1.25rem;
-    max-width: 300px;
+    gap: 1rem;
+    max-width: 380px;
   }
 
   // 📟 TABLET - 2 colonnes
   @include from('medium-sm') {
     grid-template-columns: repeat(2, 1fr);
     max-width: 550px;
+    gap: 1.5rem;
   }
 
   // 🖥️ DESKTOP - 2 colonnes plus espacées
@@ -351,7 +356,6 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: auto;
   padding-top: 2rem;
 
   @include until('small-sm') {
@@ -421,6 +425,7 @@
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
   animation: slideUp 0.4s ease;
+  position: relative; // ✅ Nécessaire pour position: absolute du bouton close
 
   @include from('medium-sm') {
     max-width: 800px;
@@ -443,19 +448,58 @@
 }
 
 // ================================
+// BOUTON CLOSE - EN HAUT À DROITE (AU-DESSUS DU HEADER)
+// ================================
+
+.content-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+
+  background: rgba(css-var(color-light), 0.05);
+  border: 1px solid rgba(css-var(color-light), 0.2);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: css-var(color-light);
+  transition: all 0.3s ease;
+
+  @include until('small-sm') {
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 36px;
+    height: 36px;
+  }
+
+  &:hover {
+    background: rgba(css-var(color-orange), 0.2);
+    border-color: css-var(color-orange);
+    color: css-var(color-orange);
+    transform: rotate(90deg);
+  }
+}
+
+// ================================
 // HEADER MODAL
 // ================================
 
 .content-modal-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 1.5rem;
+  padding-top: 3.5rem; // ✅ Espace pour le bouton close
   border-bottom: 1px solid rgba(css-var(color-light), 0.1);
   flex-shrink: 0;
 
   @include until('small-sm') {
     padding: 1.25rem 1rem;
+    padding-top: 3rem;
   }
 }
 
@@ -464,6 +508,7 @@
   font-weight: 700;
   color: css-var(color-light);
   margin: 0;
+  text-align: center;
   background: linear-gradient(
     135deg,
     css-var(color-orange),
@@ -478,27 +523,6 @@
   }
 }
 
-.content-modal-close {
-  background: rgba(css-var(color-light), 0.05);
-  border: 1px solid rgba(css-var(color-light), 0.2);
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: css-var(color-light);
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: rgba(css-var(color-orange), 0.2);
-    border-color: css-var(color-orange);
-    color: css-var(color-orange);
-    transform: rotate(90deg);
-  }
-}
-
 // ================================
 // BODY MODAL
 // ================================
@@ -507,6 +531,10 @@
   padding: 2rem;
   overflow-y: auto;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 
   @include until('small-sm') {
     padding: 1.5rem 1rem;
@@ -533,18 +561,32 @@
 }
 
 .modal-content-section {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+
   .description-content {
+    text-align: center;
+
     .description-text {
       line-height: 1.7;
       color: css-var(text-color-muted);
       font-size: 1rem;
       margin: 0;
+      text-align: justify;
 
       @include until('small-sm') {
         font-size: 0.95rem;
         line-height: 1.6;
       }
     }
+  }
+
+  // ✅ Centrer les tableaux
+  .info-table-container,
+  .needs-table-container,
+  .pricing-table-container {
+    margin: 0 auto;
   }
 }
 

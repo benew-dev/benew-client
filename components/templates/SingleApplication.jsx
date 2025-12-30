@@ -245,15 +245,16 @@ const ContentModal = memo(({ isOpen, onClose, title, children }) => {
         className="content-modal-container"
         onClick={(e) => e.stopPropagation()}
       >
+        <button
+          className="content-modal-close"
+          onClick={onClose}
+          aria-label="Fermer"
+        >
+          <MdClose size={28} />
+        </button>
+
         <div className="content-modal-header">
           <h2 className="content-modal-title">{title}</h2>
-          <button
-            className="content-modal-close"
-            onClick={onClose}
-            aria-label="Fermer"
-          >
-            <MdClose size={28} />
-          </button>
         </div>
 
         <div className="content-modal-body">{children}</div>
