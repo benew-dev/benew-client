@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 // components/templates/SingleApplication.jsx
 'use client';
 
@@ -226,81 +225,87 @@ const ApplicationGalleryCarousel = memo(
 
 ApplicationGalleryCarousel.displayName = 'ApplicationGalleryCarousel';
 
-// Composant infos techniques
-const TechnicalInfo = memo(({ application, template, onExternalLinkClick }) => (
-  <div className="technical-section">
-    <h3 className="section-title">Informations Techniques</h3>
-    <div className="info-table-container">
-      <table className="info-table">
-        <tbody>
-          <tr className="info-row">
-            <td className="info-label">Template</td>
-            <td className="info-value">
-              {template?.template_name || 'Non spécifié'}
-            </td>
-          </tr>
-          <tr className="info-row">
-            <td className="info-label">Type</td>
-            <td className="info-value">
-              {getApplicationLevelLabel(application.application_level).long}
-            </td>
-          </tr>
-          <tr className="info-row">
-            <td className="info-label">Niveau</td>
-            <td className="info-value">{application.application_level}</td>
-          </tr>
-          <tr className="info-row">
-            <td className="info-label">Catégorie</td>
-            <td className="info-value">{application.application_category}</td>
-          </tr>
-          <tr className="info-row">
-            <td className="info-label">Lien boutique</td>
-            <td className="info-value">
-              <Link
-                href={application.application_link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="info-link"
-                onClick={() =>
-                  onExternalLinkClick('store', application.application_link)
-                }
-              >
-                Voir la boutique
-              </Link>
-            </td>
-          </tr>
-          {application.application_admin_link && (
+// =============================
+// ✅ COMPOSANT INFOS TECHNIQUES - AVEC CLASSNAME
+// =============================
+const TechnicalInfo = memo(
+  ({ application, template, onExternalLinkClick, className }) => (
+    <div className={`technical-section ${className || ''}`}>
+      <h3 className="section-title">Informations Techniques</h3>
+      <div className="info-table-container">
+        <table className="info-table">
+          <tbody>
             <tr className="info-row">
-              <td className="info-label">Gestion</td>
+              <td className="info-label">Template</td>
+              <td className="info-value">
+                {template?.template_name || 'Non spécifié'}
+              </td>
+            </tr>
+            <tr className="info-row">
+              <td className="info-label">Type</td>
+              <td className="info-value">
+                {getApplicationLevelLabel(application.application_level).long}
+              </td>
+            </tr>
+            <tr className="info-row">
+              <td className="info-label">Niveau</td>
+              <td className="info-value">{application.application_level}</td>
+            </tr>
+            <tr className="info-row">
+              <td className="info-label">Catégorie</td>
+              <td className="info-value">{application.application_category}</td>
+            </tr>
+            <tr className="info-row">
+              <td className="info-label">Lien boutique</td>
               <td className="info-value">
                 <Link
-                  href={application.application_admin_link}
+                  href={application.application_link}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="info-link"
                   onClick={() =>
-                    onExternalLinkClick(
-                      'admin',
-                      application.application_admin_link,
-                    )
+                    onExternalLinkClick('store', application.application_link)
                   }
                 >
-                  Interface admin
+                  Voir la boutique
                 </Link>
               </td>
             </tr>
-          )}
-        </tbody>
-      </table>
+            {application.application_admin_link && (
+              <tr className="info-row">
+                <td className="info-label">Gestion</td>
+                <td className="info-value">
+                  <Link
+                    href={application.application_admin_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="info-link"
+                    onClick={() =>
+                      onExternalLinkClick(
+                        'admin',
+                        application.application_admin_link,
+                      )
+                    }
+                  >
+                    Interface admin
+                  </Link>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
-));
+  ),
+);
 
 TechnicalInfo.displayName = 'TechnicalInfo';
 
-// Composant besoins
-const SpecificNeeds = memo(() => (
-  <div className="needs-section">
+// =============================
+// ✅ COMPOSANT BESOINS - AVEC CLASSNAME
+// =============================
+const SpecificNeeds = memo(({ className }) => (
+  <div className={`needs-section ${className || ''}`}>
     <h3 className="section-title">Besoins spécifiques</h3>
     <div className="needs-table-container">
       <table className="needs-table">
@@ -343,9 +348,11 @@ const SpecificNeeds = memo(() => (
 
 SpecificNeeds.displayName = 'SpecificNeeds';
 
-// Composant tarification
-const PricingSection = memo(({ application }) => (
-  <div className="pricing-section">
+// =============================
+// ✅ COMPOSANT TARIFICATION - AVEC CLASSNAME
+// =============================
+const PricingSection = memo(({ application, className }) => (
+  <div className={`pricing-section ${className || ''}`}>
     <h3 className="section-title">Tarification</h3>
     <div className="pricing-table-container">
       <table className="pricing-table">
@@ -595,15 +602,13 @@ const SingleApplication = ({
                 </div>
               </div>
 
-              <div
+              {/* ✅ CLASSE ACTIVE PASSÉE DIRECTEMENT AU COMPOSANT */}
+              <TechnicalInfo
+                application={application}
+                template={template}
+                onExternalLinkClick={handleExternalLinkClick}
                 className={activeContentSection === 'technical' ? 'active' : ''}
-              >
-                <TechnicalInfo
-                  application={application}
-                  template={template}
-                  onExternalLinkClick={handleExternalLinkClick}
-                />
-              </div>
+              />
             </div>
           </div>
         </div>
@@ -630,17 +635,16 @@ const SingleApplication = ({
           </div>
 
           <div className="purchase-grid">
-            <div
-              className={`${activePricingSection === 'needs' ? 'active' : ''}`}
-            >
-              <SpecificNeeds />
-            </div>
+            {/* ✅ CLASSE ACTIVE PASSÉE DIRECTEMENT AU COMPOSANT */}
+            <SpecificNeeds
+              className={activePricingSection === 'needs' ? 'active' : ''}
+            />
 
-            <div
-              className={`${activePricingSection === 'pricing' ? 'active' : ''}`}
-            >
-              <PricingSection application={application} />
-            </div>
+            {/* ✅ CLASSE ACTIVE PASSÉE DIRECTEMENT AU COMPOSANT */}
+            <PricingSection
+              application={application}
+              className={activePricingSection === 'pricing' ? 'active' : ''}
+            />
           </div>
 
           <div className="order-button-container">
