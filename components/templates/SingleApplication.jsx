@@ -391,13 +391,7 @@ PricingSection.displayName = 'PricingSection';
 // =============================
 // ✅ COMPOSANT PRINCIPAL SÉCURISÉ
 // =============================
-const SingleApplication = ({
-  application,
-  template,
-  relatedApplications,
-  platforms,
-  context,
-}) => {
+const SingleApplication = ({ application, template, platforms, context }) => {
   // ✅ COMBINAISON SÉCURISÉE des images
   const allImages = useMemo(() => {
     const mainImages = application?.application_images || [];
