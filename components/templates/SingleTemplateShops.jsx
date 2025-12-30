@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import { useState, useEffect, useCallback, memo, useMemo } from 'react';
 import { CldImage } from 'next-cloudinary';
 import Link from 'next/link';
-import { FaDollarSign, FaImages, FaFax } from 'react-icons/fa';
+import { FaDollarSign, FaImages, FaEye, FaFax } from 'react-icons/fa';
 import './shopsStyles/index.scss';
 
 import ParallaxSkeleton from '../layouts/parallax/ParallaxSkeleton';
