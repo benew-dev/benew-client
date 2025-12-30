@@ -452,9 +452,9 @@
 // ================================
 
 .content-modal-close {
-  position: relative;
-  top: 1rem;
-  right: 1rem;
+  position: absolute;
+  top: 3rem;
+  right: 3rem;
   z-index: 10;
 
   background: rgba(css-var(color-light), 0.05);
