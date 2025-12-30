@@ -455,15 +455,14 @@
   position: absolute;
   z-index: 10;
 
-  // background: rgba(css-var(color-light), 0.05);
-  // border: 1px solid rgba(css-var(color-light), 0.2);
-  color: css-var(primary-color);
+  background: rgba(css-var(color-light), 0.05);
+  border: 1px solid rgba(css-var(color-light), 0.2);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  // color: css-var(color-light);
+  color: css-var(color-light);
   transition: all 0.3s ease;
 
   // 📱 PETITS ÉCRANS (Mobile < 768px)
@@ -513,6 +512,12 @@
   @include from('large-xxl') {
     top: 2rem;
     right: 2rem;
+  }
+
+  // ✅ S'assurer que l'icône SVG hérite de la couleur
+  svg {
+    color: inherit;
+    fill: currentColor;
   }
 
   &:hover {
