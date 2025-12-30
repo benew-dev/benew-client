@@ -1,0 +1,587 @@
+@use 'sass:color';
+@use '../../../app/styles/abstracts' as *;
+
+// ================================
+// 📄 _cards_section.scss - NOUVEAU DESIGN
+// ================================
+
+.cards-section {
+  background: linear-gradient(135deg, #0c0c1d 0%, #1a0f2e 50%, #151528 100%);
+  background-image: url('/stars.png');
+  background-repeat: repeat;
+  background-size: auto;
+  background-position: center;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      radial-gradient(
+        circle at 80% 20%,
+        rgba(css-var(color-orange), 0.06) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 20% 80%,
+        rgba(css-var(color-purple), 0.06) 0%,
+        transparent 50%
+      );
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+// ================================
+// CONTENEUR PRINCIPAL
+// ================================
+
+.cards-section-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 2rem 1.5rem;
+
+  @include until('small-sm') {
+    padding: 1.5rem 1rem;
+  }
+
+  @include from('large-xs') {
+    padding: 3rem 2rem;
+  }
+}
+
+// ================================
+// HEADER - TITRE + BADGES À DROITE
+// ================================
+
+.cards-section-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 2rem;
+
+  @include until('small-sm') {
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  @include from('medium-lg') {
+    margin-bottom: 2.5rem;
+  }
+}
+
+.title-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+
+  @include until('small-sm') {
+    align-items: center;
+  }
+
+  .app-title {
+    font-weight: 800;
+    font-size: 2rem;
+    margin: 0;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-align: right;
+    background: linear-gradient(
+      135deg,
+      css-var(color-orange),
+      css-var(color-pink)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+    @include until('small-sm') {
+      font-size: 1.75rem;
+      text-align: center;
+    }
+
+    @include from('medium-sm') {
+      font-size: 2.25rem;
+    }
+
+    @include from('large-xs') {
+      font-size: 2.5rem;
+    }
+  }
+}
+
+.app-badges {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+
+  @include until('small-sm') {
+    justify-content: center;
+    gap: 0.5rem;
+  }
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  border: 1px solid;
+  transition: all 0.3s ease;
+  padding: 0.4rem 0.7rem;
+
+  @include until('small-sm') {
+    padding: 0.35rem 0.6rem;
+  }
+
+  .badge-value {
+    font-weight: 600;
+    font-size: 0.8rem;
+
+    @include until('small-sm') {
+      font-size: 0.75rem;
+    }
+  }
+
+  &.level-badge {
+    background: rgba(css-var(color-orange), 0.1);
+    border-color: rgba(css-var(color-orange), 0.3);
+    color: css-var(color-orange);
+  }
+
+  &.category-badge {
+    background: rgba(css-var(color-purple), 0.1);
+    border-color: rgba(css-var(color-purple), 0.3);
+    color: css-var(color-purple);
+  }
+}
+
+// ================================
+// GRILLE 4 CARTES - CENTRE
+// ================================
+
+.cards-grid {
+  display: grid;
+  gap: 1.5rem;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+
+  // 📱 MOBILE - 1 colonne
+  grid-template-columns: 1fr;
+
+  @include until('small-sm') {
+    gap: 1.25rem;
+    max-width: 300px;
+  }
+
+  // 📟 TABLET - 2 colonnes
+  @include from('medium-sm') {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 550px;
+  }
+
+  // 🖥️ DESKTOP - 2 colonnes plus espacées
+  @include from('large-xs') {
+    gap: 2rem;
+    max-width: 600px;
+  }
+}
+
+// ================================
+// CARTE INDIVIDUELLE - TAILLE CARTE DE VISITE
+// ================================
+
+.info-card {
+  background: rgba(css-var(color-light), 0.03);
+  border: 2px solid rgba(css-var(color-light), 0.1);
+  border-radius: 16px;
+  backdrop-filter: blur(15px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+
+  // 📱 MOBILE - Plus petites
+  min-height: 110px;
+  padding: 1rem;
+
+  @include until('small-sm') {
+    min-height: 100px;
+    padding: 0.875rem;
+  }
+
+  // 📟 TABLET - Taille intermédiaire
+  @include from('medium-sm') {
+    min-height: 120px;
+    padding: 1.25rem;
+  }
+
+  // 🖥️ DESKTOP - Taille carte de visite 120px
+  @include from('large-xs') {
+    min-height: 120px;
+    max-height: 120px;
+    padding: 1rem;
+  }
+
+  // Effet brillance
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 70%
+    );
+    transform: scale(0);
+    transition: transform 0.6s ease;
+  }
+
+  &:hover::before {
+    transform: scale(1);
+  }
+
+  &:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  // Couleurs par type
+  &.card-orange {
+    border-color: rgba(css-var(color-orange), 0.3);
+
+    &:hover {
+      border-color: rgba(css-var(color-orange), 0.6);
+      background: rgba(css-var(color-orange), 0.05);
+      box-shadow: 0 12px 40px rgba(css-var(color-orange), 0.3);
+    }
+
+    .card-icon {
+      color: css-var(color-orange);
+    }
+  }
+
+  &.card-purple {
+    border-color: rgba(css-var(color-purple), 0.3);
+
+    &:hover {
+      border-color: rgba(css-var(color-purple), 0.6);
+      background: rgba(css-var(color-purple), 0.05);
+      box-shadow: 0 12px 40px rgba(css-var(color-purple), 0.3);
+    }
+
+    .card-icon {
+      color: css-var(color-purple);
+    }
+  }
+
+  &.card-pink {
+    border-color: rgba(css-var(color-pink), 0.3);
+
+    &:hover {
+      border-color: rgba(css-var(color-pink), 0.6);
+      background: rgba(css-var(color-pink), 0.05);
+      box-shadow: 0 12px 40px rgba(css-var(color-pink), 0.3);
+    }
+
+    .card-icon {
+      color: css-var(color-pink);
+    }
+  }
+}
+
+.card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+
+  .info-card:hover & {
+    transform: scale(1.15);
+  }
+}
+
+.card-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: css-var(color-light);
+  text-align: center;
+  margin: 0;
+  line-height: 1.2;
+
+  @include until('small-sm') {
+    font-size: 0.85rem;
+  }
+
+  @include from('large-xs') {
+    font-size: 0.95rem;
+  }
+}
+
+// ================================
+// BOUTON COMMANDER - EN BAS
+// ================================
+
+.order-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
+  padding-top: 2rem;
+
+  @include until('small-sm') {
+    padding-top: 1.5rem;
+  }
+
+  .purchase-btn {
+    width: 100%;
+    max-width: 400px;
+
+    @include from('medium-lg') {
+      max-width: 350px;
+    }
+
+    @include from('large-xs') {
+      max-width: 300px;
+    }
+  }
+}
+
+// ================================
+// MODAL CONTENU - NOUVEAU DESIGN
+// ================================
+
+.content-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: fadeIn 0.3s ease;
+
+  @include from('medium-sm') {
+    padding: 2rem;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.content-modal-container {
+  background: linear-gradient(
+    135deg,
+    rgba(css-var(background-color), 0.95),
+    rgba(css-var(background-color), 0.98)
+  );
+  border: 2px solid rgba(css-var(color-orange), 0.3);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 700px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.4s ease;
+
+  @include from('medium-sm') {
+    max-width: 800px;
+  }
+
+  @include from('large-xs') {
+    max-width: 900px;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// ================================
+// HEADER MODAL
+// ================================
+
+.content-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(css-var(color-light), 0.1);
+  flex-shrink: 0;
+
+  @include until('small-sm') {
+    padding: 1.25rem 1rem;
+  }
+}
+
+.content-modal-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: css-var(color-light);
+  margin: 0;
+  background: linear-gradient(
+    135deg,
+    css-var(color-orange),
+    css-var(color-pink)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  @include until('small-sm') {
+    font-size: 1.25rem;
+  }
+}
+
+.content-modal-close {
+  background: rgba(css-var(color-light), 0.05);
+  border: 1px solid rgba(css-var(color-light), 0.2);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: css-var(color-light);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(css-var(color-orange), 0.2);
+    border-color: css-var(color-orange);
+    color: css-var(color-orange);
+    transform: rotate(90deg);
+  }
+}
+
+// ================================
+// BODY MODAL
+// ================================
+
+.content-modal-body {
+  padding: 2rem;
+  overflow-y: auto;
+  flex: 1;
+
+  @include until('small-sm') {
+    padding: 1.5rem 1rem;
+  }
+
+  // Custom scrollbar
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(css-var(color-orange), 0.4);
+    border-radius: 3px;
+
+    &:hover {
+      background: rgba(css-var(color-orange), 0.6);
+    }
+  }
+}
+
+.modal-content-section {
+  .description-content {
+    .description-text {
+      line-height: 1.7;
+      color: css-var(text-color-muted);
+      font-size: 1rem;
+      margin: 0;
+
+      @include until('small-sm') {
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+    }
+  }
+}
+
+// ================================
+// RESPONSIVE
+// ================================
+
+@include mobile-landscape {
+  .content-modal-container {
+    max-height: 85vh;
+  }
+}
+
+@include reduced-motion {
+  .content-modal-overlay,
+  .content-modal-container {
+    animation: none;
+  }
+
+  .info-card,
+  .content-modal-close {
+    transition: none;
+
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+@media (pointer: coarse) {
+  .info-card {
+    &:hover {
+      transform: none;
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+}

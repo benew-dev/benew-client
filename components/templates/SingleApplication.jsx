@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // components/templates/SingleApplication.jsx
 'use client';
 
@@ -6,6 +7,13 @@ import './appStyles/index.scss';
 import { useEffect, useState, useCallback, memo, useMemo } from 'react';
 import { CldImage } from 'next-cloudinary';
 import Link from 'next/link';
+import {
+  MdDescription,
+  MdSettings,
+  MdChecklist,
+  MdAttachMoney,
+  MdClose,
+} from 'react-icons/md';
 
 import ParallaxSkeleton from '../layouts/parallax/ParallaxSkeleton';
 const Parallax = dynamic(() => import('components/layouts/parallax'), {
@@ -27,7 +35,6 @@ const ApplicationGalleryCarousel = memo(
     const [isAutoScrolling, setIsAutoScrolling] = useState(true);
     const [isTransitioning, setIsTransitioning] = useState(false);
 
-    // ✅ Fallback robuste avec placeholder
     const imageList = useMemo(() => {
       if (!images || images.length === 0) {
         return ['/placeholder-application.png'];
@@ -35,7 +42,6 @@ const ApplicationGalleryCarousel = memo(
       return images;
     }, [images]);
 
-    // ✅ Auto-scroll avec 5 secondes
     useEffect(() => {
       if (!isAutoScrolling || imageList.length <= 1 || isTransitioning) {
         return;
@@ -48,7 +54,6 @@ const ApplicationGalleryCarousel = memo(
       return () => clearInterval(interval);
     }, [isAutoScrolling, imageList.length, currentSlide, isTransitioning]);
 
-    // ✅ Reprendre auto-scroll après 15s inactivité
     useEffect(() => {
       if (!isAutoScrolling) {
         const timeout = setTimeout(() => {
@@ -58,14 +63,11 @@ const ApplicationGalleryCarousel = memo(
       }
     }, [isAutoScrolling]);
 
-    // ✅ Changement de slide avec animation
     const handleSlideChange = useCallback(
       (newIndex) => {
         if (isTransitioning) return;
-
         setIsTransitioning(true);
         setCurrentSlide(newIndex);
-
         setTimeout(() => {
           setIsTransitioning(false);
         }, 600);
@@ -73,7 +75,6 @@ const ApplicationGalleryCarousel = memo(
       [isTransitioning],
     );
 
-    // ✅ Navigation dots
     const goToSlide = useCallback(
       (index) => {
         if (index === currentSlide || isTransitioning) return;
@@ -93,7 +94,6 @@ const ApplicationGalleryCarousel = memo(
       [currentSlide, isTransitioning, handleSlideChange, applicationId],
     );
 
-    // ✅ Swipe tactile
     const [touchStart, setTouchStart] = useState(null);
     const [touchEnd, setTouchEnd] = useState(null);
     const minSwipeDistance = 50;
@@ -130,7 +130,6 @@ const ApplicationGalleryCarousel = memo(
       handleSlideChange,
     ]);
 
-    // ✅ Image seule si pas de carousel
     if (imageList.length === 1) {
       return (
         <div className="gallery-single-image">
@@ -159,7 +158,6 @@ const ApplicationGalleryCarousel = memo(
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
       >
-        {/* Track slides */}
         <div className="gallery-carousel-track">
           {imageList.map((imgUrl, index) => {
             let slidePosition = 'hidden-right';
@@ -197,7 +195,6 @@ const ApplicationGalleryCarousel = memo(
           })}
         </div>
 
-        {/* Dots - TOUJOURS VISIBLES */}
         {imageList.length > 1 && (
           <div className="gallery-carousel-indicators">
             {imageList.map((_, index) => (
@@ -212,7 +209,6 @@ const ApplicationGalleryCarousel = memo(
           </div>
         )}
 
-        {/* Compteur */}
         {imageList.length > 1 && (
           <div className="gallery-carousel-counter">
             {currentSlide + 1} / {imageList.length}
@@ -226,87 +222,123 @@ const ApplicationGalleryCarousel = memo(
 ApplicationGalleryCarousel.displayName = 'ApplicationGalleryCarousel';
 
 // =============================
-// ✅ COMPOSANT INFOS TECHNIQUES - AVEC CLASSNAME
+// ✅ MODAL CONTENU - NOUVEAU DESIGN
 // =============================
-const TechnicalInfo = memo(
-  ({ application, template, onExternalLinkClick, className }) => (
-    <div className={`technical-section ${className || ''}`}>
-      <h3 className="section-title">Informations Techniques</h3>
-      <div className="info-table-container">
-        <table className="info-table">
-          <tbody>
+const ContentModal = memo(({ isOpen, onClose, title, children }) => {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="content-modal-overlay" onClick={onClose}>
+      <div
+        className="content-modal-container"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="content-modal-header">
+          <h2 className="content-modal-title">{title}</h2>
+          <button
+            className="content-modal-close"
+            onClick={onClose}
+            aria-label="Fermer"
+          >
+            <MdClose size={28} />
+          </button>
+        </div>
+
+        <div className="content-modal-body">{children}</div>
+      </div>
+    </div>
+  );
+});
+
+ContentModal.displayName = 'ContentModal';
+
+// =============================
+// ✅ COMPOSANTS CONTENU
+// =============================
+const TechnicalInfo = memo(({ application, template, onExternalLinkClick }) => (
+  <div className="modal-content-section">
+    <div className="info-table-container">
+      <table className="info-table">
+        <tbody>
+          <tr className="info-row">
+            <td className="info-label">Template</td>
+            <td className="info-value">
+              {template?.template_name || 'Non spécifié'}
+            </td>
+          </tr>
+          <tr className="info-row">
+            <td className="info-label">Type</td>
+            <td className="info-value">
+              {getApplicationLevelLabel(application.application_level).long}
+            </td>
+          </tr>
+          <tr className="info-row">
+            <td className="info-label">Niveau</td>
+            <td className="info-value">{application.application_level}</td>
+          </tr>
+          <tr className="info-row">
+            <td className="info-label">Catégorie</td>
+            <td className="info-value">{application.application_category}</td>
+          </tr>
+          <tr className="info-row">
+            <td className="info-label">Lien boutique</td>
+            <td className="info-value">
+              <Link
+                href={application.application_link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="info-link"
+                onClick={() =>
+                  onExternalLinkClick('store', application.application_link)
+                }
+              >
+                Voir la boutique
+              </Link>
+            </td>
+          </tr>
+          {application.application_admin_link && (
             <tr className="info-row">
-              <td className="info-label">Template</td>
-              <td className="info-value">
-                {template?.template_name || 'Non spécifié'}
-              </td>
-            </tr>
-            <tr className="info-row">
-              <td className="info-label">Type</td>
-              <td className="info-value">
-                {getApplicationLevelLabel(application.application_level).long}
-              </td>
-            </tr>
-            <tr className="info-row">
-              <td className="info-label">Niveau</td>
-              <td className="info-value">{application.application_level}</td>
-            </tr>
-            <tr className="info-row">
-              <td className="info-label">Catégorie</td>
-              <td className="info-value">{application.application_category}</td>
-            </tr>
-            <tr className="info-row">
-              <td className="info-label">Lien boutique</td>
+              <td className="info-label">Gestion</td>
               <td className="info-value">
                 <Link
-                  href={application.application_link}
+                  href={application.application_admin_link}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="info-link"
                   onClick={() =>
-                    onExternalLinkClick('store', application.application_link)
+                    onExternalLinkClick(
+                      'admin',
+                      application.application_admin_link,
+                    )
                   }
                 >
-                  Voir la boutique
+                  Interface admin
                 </Link>
               </td>
             </tr>
-            {application.application_admin_link && (
-              <tr className="info-row">
-                <td className="info-label">Gestion</td>
-                <td className="info-value">
-                  <Link
-                    href={application.application_admin_link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="info-link"
-                    onClick={() =>
-                      onExternalLinkClick(
-                        'admin',
-                        application.application_admin_link,
-                      )
-                    }
-                  >
-                    Interface admin
-                  </Link>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+          )}
+        </tbody>
+      </table>
     </div>
-  ),
-);
+  </div>
+));
 
 TechnicalInfo.displayName = 'TechnicalInfo';
 
-// =============================
-// ✅ COMPOSANT BESOINS - AVEC CLASSNAME
-// =============================
-const SpecificNeeds = memo(({ className }) => (
-  <div className={`needs-section ${className || ''}`}>
-    <h3 className="section-title">Besoins spécifiques</h3>
+const SpecificNeeds = memo(() => (
+  <div className="modal-content-section">
     <div className="needs-table-container">
       <table className="needs-table">
         <tbody>
@@ -348,12 +380,8 @@ const SpecificNeeds = memo(({ className }) => (
 
 SpecificNeeds.displayName = 'SpecificNeeds';
 
-// =============================
-// ✅ COMPOSANT TARIFICATION - AVEC CLASSNAME
-// =============================
-const PricingSection = memo(({ application, className }) => (
-  <div className={`pricing-section ${className || ''}`}>
-    <h3 className="section-title">Tarification</h3>
+const PricingSection = memo(({ application }) => (
+  <div className="modal-content-section">
     <div className="pricing-table-container">
       <table className="pricing-table">
         <tbody>
@@ -389,26 +417,20 @@ const PricingSection = memo(({ application, className }) => (
 PricingSection.displayName = 'PricingSection';
 
 // =============================
-// ✅ COMPOSANT PRINCIPAL SÉCURISÉ
+// ✅ COMPOSANT PRINCIPAL
 // =============================
 const SingleApplication = ({ application, template, platforms, context }) => {
-  // ✅ COMBINAISON SÉCURISÉE des images
   const allImages = useMemo(() => {
     const mainImages = application?.application_images || [];
     const otherVersions = application?.application_other_versions || [];
-
     const combined = [...mainImages, ...otherVersions];
     const unique = [...new Set(combined)].filter(Boolean);
-
     return unique.length > 0 ? unique : ['/placeholder-application.png'];
   }, [application]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeContentSection, setActiveContentSection] =
-    useState('description');
-  const [activePricingSection, setActivePricingSection] = useState('needs');
+  const [activeModal, setActiveModal] = useState(null);
 
-  // Tracking page view
   useEffect(() => {
     if (context?.applicationId && application?.application_name) {
       try {
@@ -424,14 +446,13 @@ const SingleApplication = ({ application, template, platforms, context }) => {
     }
   }, []);
 
-  // Handlers
-  const handleContentToggle = useCallback(
-    (section) => {
-      setActiveContentSection(section);
+  const handleCardClick = useCallback(
+    (cardType) => {
+      setActiveModal(cardType);
       try {
-        trackEvent('content_toggle', {
+        trackEvent('card_click', {
           event_category: 'ui',
-          event_label: section,
+          event_label: cardType,
           application_id: context?.applicationId,
         });
       } catch (error) {
@@ -441,21 +462,9 @@ const SingleApplication = ({ application, template, platforms, context }) => {
     [context?.applicationId],
   );
 
-  const handlePricingSectionToggle = useCallback(
-    (section) => {
-      setActivePricingSection(section);
-      try {
-        trackEvent('pricing_toggle', {
-          event_category: 'ui',
-          event_label: section,
-          application_id: context?.applicationId,
-        });
-      } catch (error) {
-        console.warn('[Analytics] Error:', error);
-      }
-    },
-    [context?.applicationId],
-  );
+  const handleModalClose = useCallback(() => {
+    setActiveModal(null);
+  }, []);
 
   const handleExternalLinkClick = useCallback(
     (linkType, url) => {
@@ -490,11 +499,10 @@ const SingleApplication = ({ application, template, platforms, context }) => {
     setIsModalOpen(true);
   }, [platforms, context]);
 
-  const handleModalClose = useCallback(() => {
+  const handleOrderModalClose = useCallback(() => {
     setIsModalOpen(false);
   }, []);
 
-  // État vide
   if (!application || Object.keys(application).length === 0) {
     return (
       <div className="application-empty">
@@ -515,6 +523,33 @@ const SingleApplication = ({ application, template, platforms, context }) => {
 
   const hasPaymentMethods = platforms && platforms.length > 0;
 
+  const cards = [
+    {
+      id: 'description',
+      title: 'Description',
+      icon: MdDescription,
+      color: 'orange',
+    },
+    {
+      id: 'technical',
+      title: 'Informations Techniques',
+      icon: MdSettings,
+      color: 'purple',
+    },
+    {
+      id: 'needs',
+      title: 'Besoins Spécifiques',
+      icon: MdChecklist,
+      color: 'pink',
+    },
+    {
+      id: 'pricing',
+      title: 'Tarification',
+      icon: MdAttachMoney,
+      color: 'orange',
+    },
+  ];
+
   return (
     <div>
       <PageTracker
@@ -522,7 +557,6 @@ const SingleApplication = ({ application, template, platforms, context }) => {
         pageType="product_detail"
       />
 
-      {/* Parallax */}
       <section className="first">
         <Parallax
           bgColor="#0c0c1d"
@@ -531,7 +565,6 @@ const SingleApplication = ({ application, template, platforms, context }) => {
         />
       </section>
 
-      {/* ✅ GALERIE CAROUSEL - SANS FLÈCHES */}
       <section className="others gallery-section">
         <ApplicationGalleryCarousel
           images={allImages}
@@ -540,105 +573,45 @@ const SingleApplication = ({ application, template, platforms, context }) => {
         />
       </section>
 
-      {/* Header */}
-      <section className="others app-header-section">
-        <div className="app-header-container">
-          <div className="app-header">
+      <section className="others cards-section">
+        <div className="cards-section-container">
+          <div className="cards-section-header">
             <div className="title-block">
               <h1 className="app-title">{application.application_name}</h1>
-            </div>
-
-            <div className="app-badges">
-              <div className="badge level-badge">
-                <span className="badge-value">
-                  {
-                    getApplicationLevelLabel(application.application_level)
-                      .short
-                  }
-                </span>
-              </div>
-              <div className="badge category-badge">
-                <span className="badge-value">
-                  {application.application_category}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="main-content">
-            <div className="mobile-toggle-buttons">
-              <button
-                className={`toggle-btn ${activeContentSection === 'description' ? 'active' : ''}`}
-                onClick={() => handleContentToggle('description')}
-              >
-                <span className="toggle-icon">📄</span>
-                <span className="toggle-text">Description</span>
-              </button>
-              <button
-                className={`toggle-btn ${activeContentSection === 'technical' ? 'active' : ''}`}
-                onClick={() => handleContentToggle('technical')}
-              >
-                <span className="toggle-icon">⚙️</span>
-                <span className="toggle-text">Technique</span>
-              </button>
-            </div>
-
-            <div className="content-grid">
-              <div
-                className={`description-section ${activeContentSection === 'description' ? 'active' : ''}`}
-              >
-                <h2 className="section-title">Description</h2>
-                <div className="description-content">
-                  <p className="description-text">
-                    {application.application_description ||
-                      'Aucune description disponible.'}
-                  </p>
+              <div className="app-badges">
+                <div className="badge level-badge">
+                  <span className="badge-value">
+                    {
+                      getApplicationLevelLabel(application.application_level)
+                        .short
+                    }
+                  </span>
+                </div>
+                <div className="badge category-badge">
+                  <span className="badge-value">
+                    {application.application_category}
+                  </span>
                 </div>
               </div>
-
-              {/* ✅ CLASSE ACTIVE PASSÉE DIRECTEMENT AU COMPOSANT */}
-              <TechnicalInfo
-                application={application}
-                template={template}
-                onExternalLinkClick={handleExternalLinkClick}
-                className={activeContentSection === 'technical' ? 'active' : ''}
-              />
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Tarification */}
-      <section className="others app-details-section">
-        <div className="app-details-container">
-          <div className="mobile-section-nav">
-            <button
-              className={`section-btn ${activePricingSection === 'needs' ? 'active' : ''}`}
-              onClick={() => handlePricingSectionToggle('needs')}
-            >
-              <span className="btn-icon">📋</span>
-              <span className="btn-text">Besoins</span>
-            </button>
-            <button
-              className={`section-btn ${activePricingSection === 'pricing' ? 'active' : ''}`}
-              onClick={() => handlePricingSectionToggle('pricing')}
-            >
-              <span className="btn-icon">💰</span>
-              <span className="btn-text">Prix</span>
-            </button>
-          </div>
-
-          <div className="purchase-grid">
-            {/* ✅ CLASSE ACTIVE PASSÉE DIRECTEMENT AU COMPOSANT */}
-            <SpecificNeeds
-              className={activePricingSection === 'needs' ? 'active' : ''}
-            />
-
-            {/* ✅ CLASSE ACTIVE PASSÉE DIRECTEMENT AU COMPOSANT */}
-            <PricingSection
-              application={application}
-              className={activePricingSection === 'pricing' ? 'active' : ''}
-            />
+          <div className="cards-grid">
+            {cards.map((card) => {
+              const IconComponent = card.icon;
+              return (
+                <button
+                  key={card.id}
+                  className={`info-card card-${card.color}`}
+                  onClick={() => handleCardClick(card.id)}
+                >
+                  <div className="card-icon">
+                    <IconComponent size={36} />
+                  </div>
+                  <h3 className="card-title">{card.title}</h3>
+                </button>
+              );
+            })}
           </div>
 
           <div className="order-button-container">
@@ -656,10 +629,50 @@ const SingleApplication = ({ application, template, platforms, context }) => {
         </div>
       </section>
 
-      {/* Modal */}
+      <ContentModal
+        isOpen={activeModal === 'description'}
+        onClose={handleModalClose}
+        title="Description"
+      >
+        <div className="description-content">
+          <p className="description-text">
+            {application.application_description ||
+              'Aucune description disponible.'}
+          </p>
+        </div>
+      </ContentModal>
+
+      <ContentModal
+        isOpen={activeModal === 'technical'}
+        onClose={handleModalClose}
+        title="Informations Techniques"
+      >
+        <TechnicalInfo
+          application={application}
+          template={template}
+          onExternalLinkClick={handleExternalLinkClick}
+        />
+      </ContentModal>
+
+      <ContentModal
+        isOpen={activeModal === 'needs'}
+        onClose={handleModalClose}
+        title="Besoins Spécifiques"
+      >
+        <SpecificNeeds />
+      </ContentModal>
+
+      <ContentModal
+        isOpen={activeModal === 'pricing'}
+        onClose={handleModalClose}
+        title="Tarification"
+      >
+        <PricingSection application={application} />
+      </ContentModal>
+
       <OrderModal
         isOpen={isModalOpen}
-        onClose={handleModalClose}
+        onClose={handleOrderModalClose}
         platforms={platforms}
         applicationId={application.application_id}
         applicationFee={application.application_fee}

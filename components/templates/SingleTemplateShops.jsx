@@ -251,7 +251,7 @@ const GalleryModal = memo(({ isOpen, onClose, images, applicationName }) => {
           onClick={onClose}
           aria-label="Fermer la galerie"
         >
-          <IoClose size={32} />
+          <IoClose size={64} />
         </button>
 
         {/* ✅ HEADER RESTRUCTURÉ - Titre + Compteur groupés */}
