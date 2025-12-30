@@ -245,12 +245,12 @@
     border: none !important;
     background: css-var(primary-color);
     color: css-var(background-color);
-    transform: scale(1.1);
+    transform: scale(0.7);
     box-shadow: 0 4px 12px rgba(css-var(primary-color), 0.4);
   }
 
   &:active {
-    transform: scale(0.95);
+    transform: scale(0.5);
   }
 }
 
@@ -301,15 +301,15 @@
     flex-direction: column;
     gap: 0.1rem; // ✅ MINIMAL : presque collées verticalement
     padding: 0.5rem;
-    min-width: 90px;
-    max-width: 90px;
+    min-width: 100px;
+    max-width: 120px;
     overflow-y: auto;
-    overflow-x: auto;
+    overflow-x: hidden;
   }
 
   @include from('large-xxl') {
     min-width: 100px;
-    max-width: 100px;
+    max-width: 120px;
   }
 
   // Custom scrollbar
