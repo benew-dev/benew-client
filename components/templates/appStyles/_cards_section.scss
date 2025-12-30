@@ -453,21 +453,23 @@
 
 .content-modal-close {
   position: absolute;
-  top: 7rem;
-  right: 7rem;
   z-index: 10;
 
   background: rgba(css-var(color-light), 0.05);
   border: 1px solid rgba(css-var(color-light), 0.2);
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   color: css-var(color-light);
   transition: all 0.3s ease;
+
+  // 📱 PETITS ÉCRANS (Mobile < 768px)
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 36px;
+  height: 36px;
 
   @include until('small-sm') {
     top: 0.75rem;
@@ -476,11 +478,51 @@
     height: 36px;
   }
 
+  // 📟 MOYENS ÉCRANS (Tablettes 768px - 1199px)
+  @include from('medium-sm') {
+    top: 1rem;
+    right: 1rem;
+    width: 40px;
+    height: 40px;
+  }
+
+  @include from('medium-lg') {
+    top: 1rem;
+    right: 1rem;
+  }
+
+  @include from('medium-xxl') {
+    top: 1.25rem;
+    right: 1.25rem;
+  }
+
+  // 🖥️ GRANDS ÉCRANS (Desktop 1200px+)
+  @include from('large-xs') {
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 44px;
+    height: 44px;
+  }
+
+  @include from('large-lg') {
+    top: 1.75rem;
+    right: 1.75rem;
+  }
+
+  @include from('large-xxl') {
+    top: 2rem;
+    right: 2rem;
+  }
+
   &:hover {
     background: rgba(css-var(color-orange), 0.2);
     border-color: css-var(color-orange);
     color: css-var(color-orange);
     transform: rotate(90deg);
+  }
+
+  &:active {
+    transform: rotate(90deg) scale(0.95);
   }
 }
 
