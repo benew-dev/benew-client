@@ -147,65 +147,66 @@
   padding: 0;
   border-radius: 50%;
 
-  // 📱 MOBILE (par défaut) - Petites dots (< 768px)
-  width: 8px; // 4.8px
-  height: 8px; // 4.8px
+  // ✅ MOBILE (< 375px) - Très petits écrans
+  @include until('small-xs') {
+    width: 6px;
+    height: 6px;
+  }
 
-  // 📟 TABLETTES - Progression graduelle (768px - 1199px)
+  // ✅ MOBILE (375px - 767px) - Smartphones standards
+  @include from('small-xs') {
+    width: 7px;
+    height: 7px;
+  }
+
+  @include from('small-sm') {
+    width: 8px;
+    height: 8px;
+  }
+
+  // ✅ TABLET (768px - 1023px) - Tablettes portrait
   @include from('medium-sm') {
-    // iPad classique 9.7" (768px)
-    width: 10px; // 6.4px
-    height: 10px; // 6.4px
+    width: 9px;
+    height: 9px;
   }
 
   @include from('medium-lg') {
-    // iPad Pro 11" (834px)
-    width: 10px; // 6.4px
-    height: 10px; // 6.4px
+    width: 10px;
+    height: 10px;
   }
 
+  // ✅ TABLET LARGE (1024px - 1199px) - Tablettes paysage
   @include from('medium-xxl') {
-    // iPad Pro 12.9" + paysage (1024px)
-    width: 10px; // 6.4px
-    height: 10px; // 6.4px
+    width: 11px;
+    height: 11px;
   }
 
-  // 🖥️ LAPTOPS - Taille confortable (1200px - 1919px)
+  // ✅ LAPTOP (1200px - 1439px) - Laptops standards
   @include from('large-xs') {
-    // Standard desktop (1200px)
-    width: 12px; // 8.8px
-    height: 12px; // 8.8px
+    width: 12px;
+    height: 12px;
   }
 
   @include from('large-sm') {
-    // Laptops 14-15" MacBook Air, Dell XPS (1280px)
-    width: 12px; // 8.8px
-    height: 12px; // 8.8px
+    width: 13px;
+    height: 13px;
   }
 
-  @include from('large-md') {
-    // Laptops budget + anciens écrans (1366px)
-    width: 12px; // 8.8px
-    height: 12px; // 8.8px
-  }
-
+  // ✅ DESKTOP (1440px - 1919px) - Écrans desktop standards
   @include from('large-lg') {
-    // Desktop 2K entry + laptops premium (1440px)
-    width: 15px; // 8.8px
-    height: 15px; // 8.8px
+    width: 14px;
+    height: 14px;
   }
 
-  // 🖥️ DESKTOP LARGE - Taille maximale (1920px+)
+  @include from('large-xl') {
+    width: 15px;
+    height: 15px;
+  }
+
+  // ✅ LARGE DESKTOP (1920px+) - Grands écrans
   @include from('large-xxl') {
-    // Desktop Full HD DOMINANT (1920px)
-    width: 15px; // 8.8px
-    height: 15px; // 8.8px
-  }
-
-  @include from('large-xxxl') {
-    // Desktop 2K/QHD premium (2560px)
-    width: 15px; // 8.8px
-    height: 15px; // 8.8px
+    width: 16px;
+    height: 16px;
   }
 
   // ✅ DOT ACTIVE - Orange vif, MÊME TAILLE que les inactives

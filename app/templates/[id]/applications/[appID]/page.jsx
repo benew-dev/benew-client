@@ -1,6 +1,5 @@
 // app/templates/[id]/applications/[appID]/page.jsx
-// ✅ SERVER COMPONENT OPTIMISÉ POUR 500 USERS/DAY
-// ✅ Next.js 15 + PostgreSQL + Sécurité renforcée + Performance maximale
+// ✅ MODIFICATION 1: Colonnes explicites au lieu de a.*
 
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
@@ -20,12 +19,12 @@ import Loading from './loading';
 // =============================
 const CONFIG = {
   cache: {
-    revalidate: 300, // 5 minutes ISR
-    errorRevalidate: 60, // 1 minute pour erreurs
+    revalidate: 300,
+    errorRevalidate: 60,
   },
   performance: {
-    slowQueryThreshold: 1000, // Alerte si > 1s
-    queryTimeout: 5000, // Timeout 5s (réduit de 8s)
+    slowQueryThreshold: 1000,
+    queryTimeout: 5000,
   },
   retry: {
     maxAttempts: 2,
@@ -71,7 +70,6 @@ function classifyError(error) {
   const code = error.code;
   const message = error.message?.toLowerCase() || '';
 
-  // Erreurs de connexion (temporaires)
   if (
     [
       PG_ERROR_CODES.CONNECTION_FAILURE,
@@ -86,7 +84,6 @@ function classifyError(error) {
     };
   }
 
-  // Timeout
   if (code === PG_ERROR_CODES.QUERY_CANCELED || message.includes('timeout')) {
     return {
       type: ERROR_TYPES.TIMEOUT,
@@ -96,7 +93,6 @@ function classifyError(error) {
     };
   }
 
-  // Application non trouvée
   if (
     message.includes('not found') ||
     message.includes('introuvable') ||
@@ -110,7 +106,6 @@ function classifyError(error) {
     };
   }
 
-  // Erreur générique
   return {
     type: ERROR_TYPES.DATABASE_ERROR,
     shouldRetry: false,
@@ -204,7 +199,7 @@ function validateIds(appId, templateId) {
 }
 
 /**
- * ✅ FONCTION PRINCIPALE OPTIMISÉE
+ * ✅ MODIFICATION 1: COLONNES EXPLICITES
  * Récupère les données de l'application avec performance et sécurité maximales
  */
 async function getApplicationData(applicationId, templateId) {
@@ -215,10 +210,10 @@ async function getApplicationData(applicationId, templateId) {
       const client = await getClient();
 
       try {
-        // ✅ QUERY OPTIMISÉE - Une seule requête avec tous les JOIN nécessaires
+        // ✅ QUERY OPTIMISÉE - Colonnes explicites au lieu de a.*
         const queryPromise = client.query(
           `SELECT 
-            -- ✅ Application complète
+            -- ✅ Application complète (colonnes explicites)
             a.application_id,
             a.application_name,
             a.application_link,
@@ -295,7 +290,6 @@ async function getApplicationData(applicationId, templateId) {
 
         const queryDuration = performance.now() - startTime;
 
-        // ✅ Log performance si lent
         if (queryDuration > CONFIG.performance.slowQueryThreshold) {
           captureMessage('Slow application query', {
             level: 'warning',
@@ -309,14 +303,12 @@ async function getApplicationData(applicationId, templateId) {
           });
         }
 
-        // ✅ Log succès en dev
         if (process.env.NODE_ENV === 'development') {
           console.log(
             `[Application] Query: ${Math.round(queryDuration)}ms (timeout: ${CONFIG.performance.queryTimeout}ms)`,
           );
         }
 
-        // ✅ Application non trouvée
         if (result.rows.length === 0) {
           return {
             application: null,
@@ -332,13 +324,11 @@ async function getApplicationData(applicationId, templateId) {
 
         const data = result.rows[0];
 
-        // ✅ Parse JSON aggregations
         const relatedApps = Array.isArray(data.related_applications)
           ? data.related_applications
           : [];
         const platforms = Array.isArray(data.platforms) ? data.platforms : [];
 
-        // ✅ Construire l'objet application
         const application = {
           application_id: data.application_id,
           application_name: data.application_name,
@@ -360,7 +350,6 @@ async function getApplicationData(applicationId, templateId) {
           template_total_applications: data.template_total_applications,
         };
 
-        // ✅ Succès
         return {
           application,
           template,
@@ -377,7 +366,6 @@ async function getApplicationData(applicationId, templateId) {
     const errorInfo = classifyError(error);
     const queryDuration = performance.now() - startTime;
 
-    // ✅ Log erreur détaillé
     captureException(error, {
       tags: {
         component: 'single_application',
@@ -514,7 +502,6 @@ function ApplicationError({
 export default async function SingleApplicationPage({ params }) {
   const { id: templateId, appID: appId } = await params;
 
-  // ✅ Validation robuste
   const validation = validateIds(appId, templateId);
   if (!validation.isValid) {
     captureMessage('Invalid ID format', {
@@ -530,13 +517,11 @@ export default async function SingleApplicationPage({ params }) {
     notFound();
   }
 
-  // ✅ Récupérer les données
   const data = await getApplicationData(
     validation.applicationId,
     validation.templateId,
   );
 
-  // ✅ Gestion des erreurs
   if (!data.success) {
     if (data.errorType === ERROR_TYPES.NOT_FOUND) {
       notFound();
@@ -557,7 +542,6 @@ export default async function SingleApplicationPage({ params }) {
     notFound();
   }
 
-  // ✅ Rendu avec Suspense
   return (
     <Suspense fallback={<Loading />}>
       <SingleApplication
@@ -646,8 +630,6 @@ export async function generateMetadata({ params }) {
       client.release();
     }
   } catch (error) {
-    const errorInfo = classifyError(error);
-
     captureMessage('Metadata generation failed', {
       level: 'warning',
       tags: { component: 'single_application_metadata' },
@@ -669,8 +651,5 @@ export async function generateMetadata({ params }) {
   };
 }
 
-// ✅ Configuration ISR Next.js 15
 export const revalidate = 300;
-
-// ✅ Force static pour performance optimale
 export const dynamic = 'force-static';
