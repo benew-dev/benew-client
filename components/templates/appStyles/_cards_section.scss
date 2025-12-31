@@ -554,12 +554,6 @@
   &:active {
     transform: rotate(90deg) scale(0.95);
   }
-
-  // ✅ MODIFICATION 4: Focus visible pour accessibilité
-  &:focus-visible {
-    outline: 2px solid css-var(color-orange);
-    outline-offset: 2px;
-  }
 }
 
 // ================================
