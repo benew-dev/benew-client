@@ -20,7 +20,9 @@ import { trackEvent } from '@/utils/analytics';
 import PageTracker from '../analytics/PageTracker';
 
 // ✅ MODIFICATION 3: Lazy load GalleryModal
-const OrderModal = lazy(() => import('../modal/OrderModal'));
+const OrderModal = dynamic(() => import('../modal/OrderModal'), {
+  ssr: false,
+});
 
 // Composant Carousel pour les images d'application
 const ApplicationImageCarousel = memo(({ images, applicationName }) => {
