@@ -18,7 +18,7 @@ import {
 //   ssr: true,
 // });
 
-import FormContainer from './FormContainer';
+import FormContainer from './formContainer';
 import { trackEvent } from '@/utils/analytics';
 import PageTracker from '../analytics/PageTracker';
 import Parallax from '../layouts/parallax';
