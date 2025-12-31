@@ -514,6 +514,9 @@ function ApplicationError({
 export default async function SingleApplicationPage({ params }) {
   const { id: templateId, appID: appId } = await params;
 
+  console.log('Template ID', templateId);
+  console.log('App ID', appId);
+
   // ✅ Validation robuste
   const validation = validateIds(appId, templateId);
   if (!validation.isValid) {
