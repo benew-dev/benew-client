@@ -6,10 +6,7 @@ import { notFound } from 'next/navigation';
 
 import SingleTemplateShops from '@/components/templates/SingleTemplateShops';
 import { getClient } from '@/backend/dbConnect';
-import {
-  captureException,
-  captureMessage,
-} from '../../../sentry.server.config';
+import { captureException, captureMessage } from '../../sentry.server.config';
 import { sanitizeAndValidateUUID } from '@/utils/validation';
 import Loading from './loading';
 
