@@ -419,8 +419,6 @@ const SingleTemplateShops = ({
   const [galleryApp, setGalleryApp] = useState(null);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
-  console.log('Template ID', templateID);
-
   // Tracking de la vue de la page
   useEffect(() => {
     if (templateID && applications.length > 0) {

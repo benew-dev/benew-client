@@ -474,12 +474,9 @@ export default async function SingleTemplatePage({ params }) {
   return (
     <Suspense fallback={<Loading />}>
       <SingleTemplateShops
-        template={data.template}
+        templateID={templateId}
         applications={data.applications}
         platforms={data.platforms}
-        context={{
-          templateId: validation.templateId,
-        }}
       />
     </Suspense>
   );
