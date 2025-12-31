@@ -15,10 +15,12 @@ const Parallax = dynamic(() => import('components/layouts/parallax'), {
   ssr: true,
 });
 
-import OrderModal from '../modal/OrderModal';
 import { formatPrice, getApplicationLevelLabel } from '@/utils/helpers';
 import { trackEvent } from '@/utils/analytics';
 import PageTracker from '../analytics/PageTracker';
+
+// ✅ MODIFICATION 3: Lazy load GalleryModal
+const OrderModal = lazy(() => import('../modal/OrderModal'));
 
 // Composant Carousel pour les images d'application
 const ApplicationImageCarousel = memo(({ images, applicationName }) => {
