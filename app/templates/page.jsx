@@ -1,26 +1,25 @@
-// app/templates/[id]/page.jsx
-// ✅ MODIFICATION 1: Fusion Query 1 + Query 2 (pas Query 3 platforms)
+// app/templates/page.jsx
+// Server Component optimisé pour liste des templates e-commerce
+// Next.js 15 + PostgreSQL + Monitoring complet + Gestion d'erreurs avancée + Query Timeout
 
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 
-import SingleTemplateShops from '@/components/templates/SingleTemplateShops';
+import TemplatesList from '@/components/templates/TemplatesList';
 import { getClient } from '@/backend/dbConnect';
 import { captureException, captureMessage } from '../../sentry.server.config';
-import { sanitizeAndValidateUUID } from '@/utils/validation';
 import Loading from './loading';
 
-// =============================
-// CONFIGURATION
-// =============================
+// Configuration étendue avec gestion d'erreurs avancée
 const CONFIG = {
   cache: {
-    revalidate: 300,
-    errorRevalidate: 60,
+    revalidate: 300, // 5 minutes ISR pour succès
+    errorRevalidate: 60, // 1 minute pour erreurs temporaires
   },
   performance: {
-    slowQueryThreshold: 1000,
-    queryTimeout: 8000,
+    slowQueryThreshold: 1500, // Alerte pour queries lentes
+    queryTimeout: 5000, // 5 secondes timeout
   },
   retry: {
     maxAttempts: 2,
@@ -28,31 +27,34 @@ const CONFIG = {
   },
 };
 
-// =============================
-// TYPES D'ERREURS
-// =============================
+// Types d'erreurs standardisés
 const ERROR_TYPES = {
-  NOT_FOUND: 'not_found',
   DATABASE_ERROR: 'database_error',
   TIMEOUT: 'timeout',
   CONNECTION_ERROR: 'connection_error',
-  VALIDATION_ERROR: 'validation_error',
+  PERMISSION_ERROR: 'permission_error',
+  IMAGE_LOADING_ERROR: 'image_loading_error',
+  NETWORK_ERROR: 'network_error',
   UNKNOWN_ERROR: 'unknown_error',
 };
 
-// =============================
-// CODES ERREURS POSTGRESQL
-// =============================
+// Codes d'erreur PostgreSQL
 const PG_ERROR_CODES = {
   CONNECTION_FAILURE: '08001',
   CONNECTION_EXCEPTION: '08000',
   QUERY_CANCELED: '57014',
+  ADMIN_SHUTDOWN: '57P01',
+  CRASH_SHUTDOWN: '57P02',
+  CANNOT_CONNECT: '57P03',
+  DATABASE_DROPPED: '57P04',
   UNDEFINED_TABLE: '42P01',
   INSUFFICIENT_PRIVILEGE: '42501',
+  AUTHENTICATION_FAILED: '28000',
+  INVALID_PASSWORD: '28P01',
 };
 
 /**
- * Classification des erreurs
+ * Classifie les erreurs PostgreSQL et autres erreurs système
  */
 function classifyError(error) {
   if (!error) {
@@ -66,54 +68,111 @@ function classifyError(error) {
   const code = error.code;
   const message = error.message?.toLowerCase() || '';
 
+  // Erreurs de connexion (temporaires)
   if (
     [
       PG_ERROR_CODES.CONNECTION_FAILURE,
       PG_ERROR_CODES.CONNECTION_EXCEPTION,
+      PG_ERROR_CODES.CANNOT_CONNECT,
+      PG_ERROR_CODES.ADMIN_SHUTDOWN,
+      PG_ERROR_CODES.CRASH_SHUTDOWN,
     ].includes(code)
   ) {
     return {
       type: ERROR_TYPES.CONNECTION_ERROR,
       shouldRetry: true,
       httpStatus: 503,
-      userMessage: 'Service temporairement indisponible.',
+      userMessage:
+        'Service temporairement indisponible. Veuillez réessayer dans quelques instants.',
     };
   }
 
+  // Timeout de requête
   if (code === PG_ERROR_CODES.QUERY_CANCELED || message.includes('timeout')) {
     return {
       type: ERROR_TYPES.TIMEOUT,
       shouldRetry: true,
       httpStatus: 503,
-      userMessage: 'La requête a pris trop de temps.',
+      userMessage:
+        'Le chargement a pris trop de temps. Le serveur est peut-être surchargé.',
     };
   }
 
+  // Erreurs de permissions
   if (
-    message.includes('not found') ||
-    message.includes('introuvable') ||
-    message.includes('template not found')
+    [
+      PG_ERROR_CODES.INSUFFICIENT_PRIVILEGE,
+      PG_ERROR_CODES.AUTHENTICATION_FAILED,
+      PG_ERROR_CODES.INVALID_PASSWORD,
+    ].includes(code)
   ) {
     return {
-      type: ERROR_TYPES.NOT_FOUND,
+      type: ERROR_TYPES.PERMISSION_ERROR,
       shouldRetry: false,
-      httpStatus: 404,
-      userMessage: 'Template introuvable.',
+      httpStatus: 500,
+      userMessage: 'Erreur de configuration serveur.',
     };
   }
 
+  // Erreurs de configuration (table inexistante, etc.)
+  if (code === PG_ERROR_CODES.UNDEFINED_TABLE) {
+    return {
+      type: ERROR_TYPES.DATABASE_ERROR,
+      shouldRetry: false,
+      httpStatus: 500,
+      userMessage: 'Erreur de configuration serveur.',
+    };
+  }
+
+  // Erreurs réseau
+  if (
+    message.includes('network') ||
+    message.includes('fetch') ||
+    message.includes('connexion')
+  ) {
+    return {
+      type: ERROR_TYPES.NETWORK_ERROR,
+      shouldRetry: true,
+      httpStatus: 503,
+      userMessage:
+        'Problème de connexion réseau. Vérifiez votre connexion internet.',
+    };
+  }
+
+  // Erreurs d'images
+  if (message.includes('cloudinary') || message.includes('image')) {
+    return {
+      type: ERROR_TYPES.IMAGE_LOADING_ERROR,
+      shouldRetry: true,
+      httpStatus: 503,
+      userMessage: 'Problème de chargement des images des templates.',
+    };
+  }
+
+  // Timeout général (pas PostgreSQL)
+  if (message.includes('timeout') || error.name === 'TimeoutError') {
+    return {
+      type: ERROR_TYPES.TIMEOUT,
+      shouldRetry: true,
+      httpStatus: 503,
+      userMessage: 'Le chargement a pris trop de temps. Veuillez réessayer.',
+    };
+  }
+
+  // Erreur de base de données générique
   return {
     type: ERROR_TYPES.DATABASE_ERROR,
     shouldRetry: false,
     httpStatus: 500,
-    userMessage: 'Erreur lors du chargement.',
+    userMessage:
+      'Une erreur inattendue est survenue lors du chargement des templates.',
   };
 }
 
 /**
  * Promise avec timeout
  */
-function withTimeout(promise, timeoutMs, errorMessage = 'Timeout') {
+function withTimeout(promise, timeoutMs, errorMessage = 'Operation timed out') {
   return Promise.race([
     promise,
     new Promise((_, reject) => {
@@ -127,7 +186,7 @@ function withTimeout(promise, timeoutMs, errorMessage = 'Timeout') {
 }
 
 /**
- * Retry logic avec backoff exponentiel
+ * Exécute une requête avec retry logic
  */
 async function executeWithRetry(
   operation,
@@ -142,19 +201,26 @@ async function executeWithRetry(
       lastError = error;
       const errorInfo = classifyError(error);
 
+      // Ne pas retry si c'est pas une erreur temporaire
       if (!errorInfo.shouldRetry || attempt === maxAttempts) {
         throw error;
       }
 
+      // Délai exponentiel pour retry
       const delay = CONFIG.retry.baseDelay * Math.pow(2, attempt - 1);
       await new Promise((resolve) => setTimeout(resolve, delay));
 
       captureMessage(
-        `Retry template fetch (attempt ${attempt}/${maxAttempts})`,
+        `Retrying templates data fetch (attempt ${attempt}/${maxAttempts})`,
         {
           level: 'info',
-          tags: { component: 'single_template', retry: true },
-          extra: { attempt, maxAttempts, errorType: errorInfo.type },
+          tags: { component: 'templates_page', retry: true },
+          extra: {
+            attempt,
+            maxAttempts,
+            errorType: errorInfo.type,
+            delay,
+          },
         },
       );
     }
@@ -164,29 +230,9 @@ async function executeWithRetry(
 }
 
 /**
- * Validation robuste de l'ID
+ * Fonction principale avec gestion d'erreurs avancée et retry
  */
-function validateTemplateId(templateId) {
-  const cleanTemplateId = sanitizeAndValidateUUID(templateId);
-  if (!cleanTemplateId) {
-    return {
-      isValid: false,
-      error: 'Template ID invalide',
-      errorType: ERROR_TYPES.VALIDATION_ERROR,
-    };
-  }
-
-  return {
-    isValid: true,
-    templateId: cleanTemplateId,
-  };
-}
-
-/**
- * ✅ MODIFICATION 1: FUSION Query 1 + Query 2 en une seule requête
- * Récupère template + applications en un seul appel
- */
-async function getTemplateData(templateId) {
+async function getTemplates() {
   const startTime = performance.now();
 
   try {
@@ -194,122 +240,55 @@ async function getTemplateData(templateId) {
       const client = await getClient();
 
       try {
-        // ✅ QUERY FUSIONNÉE - Template + Applications en un seul LEFT JOIN
-        const queryPromise = client.query(
-          `SELECT 
-            -- Template info
-            t.template_id,
-            t.template_name,
-            t.template_images,
-            t.template_has_web,
-            t.template_has_mobile,
-            
-            -- Applications (peut être NULL si pas d'apps)
-            a.application_id,
-            a.application_name,
-            a.application_category,
-            a.application_fee,
-            a.application_rent,
-            a.application_images,
-            a.application_other_versions,
-            a.application_level,
-            a.sales_count
-            
+        // Query avec timeout intégré - ✅ CORRIGÉ: template_images (pluriel)
+        const queryPromise = client.query(`
+          SELECT 
+            template_id, 
+            template_name, 
+            template_images, 
+            template_has_web, 
+            template_has_mobile,
+            (SELECT COUNT(*) FROM catalog.applications 
+             WHERE application_template_id = t.template_id AND is_active = true) as applications_count
           FROM catalog.templates t
-          LEFT JOIN catalog.applications a 
-            ON a.application_template_id = t.template_id 
-            AND a.is_active = true
-          WHERE t.template_id = $1 
-            AND t.is_active = true
-          ORDER BY a.application_level ASC, a.created_at DESC`,
-          [templateId],
-        );
+          WHERE is_active = true 
+          ORDER BY template_added DESC
+        `);
 
-        // Query platforms séparée (comme avant)
-        const platformsQueryPromise = client.query(
-          `SELECT platform_id, platform_name, account_name, account_number, is_cash_payment, description
-           FROM admin.platforms 
-           WHERE is_active = true
-           ORDER BY CASE WHEN is_cash_payment = true THEN 0 ELSE 1 END, platform_name ASC`,
+        const result = await withTimeout(
+          queryPromise,
+          CONFIG.performance.queryTimeout,
+          'Database query timeout',
         );
-
-        const [result, platformsResult] = await Promise.all([
-          withTimeout(
-            queryPromise,
-            CONFIG.performance.queryTimeout,
-            'Database query timeout',
-          ),
-          withTimeout(
-            platformsQueryPromise,
-            CONFIG.performance.queryTimeout,
-            'Platforms query timeout',
-          ),
-        ]);
 
         const queryDuration = performance.now() - startTime;
 
+        // Log performance avec monitoring complet
         if (queryDuration > CONFIG.performance.slowQueryThreshold) {
-          captureMessage('Slow template query', {
+          captureMessage('Slow templates query detected', {
             level: 'warning',
-            tags: { component: 'single_template', performance: true },
+            tags: {
+              component: 'templates_page',
+              performance: true,
+            },
             extra: {
-              templateId,
               duration: queryDuration,
-              timeout: CONFIG.performance.queryTimeout,
+              templatesCount: result.rows.length,
+              queryTimeout: CONFIG.performance.queryTimeout,
             },
           });
         }
 
+        // Log de succès en dev
         if (process.env.NODE_ENV === 'development') {
           console.log(
-            `[Template] Query: ${Math.round(queryDuration)}ms (timeout: ${CONFIG.performance.queryTimeout}ms)`,
+            `[Templates] Query exécutée en ${Math.round(queryDuration)}ms (timeout: ${CONFIG.performance.queryTimeout}ms)`,
           );
         }
 
-        // Template non trouvé
-        if (result.rows.length === 0) {
-          return {
-            template: null,
-            applications: [],
-            platforms: [],
-            success: false,
-            errorType: ERROR_TYPES.NOT_FOUND,
-            httpStatus: 404,
-            userMessage: 'Template introuvable.',
-          };
-        }
-
-        // Extraire template (première ligne)
-        const firstRow = result.rows[0];
-        const template = {
-          template_id: firstRow.template_id,
-          template_name: firstRow.template_name,
-          template_images: firstRow.template_images,
-          template_has_web: firstRow.template_has_web,
-          template_has_mobile: firstRow.template_has_mobile,
-        };
-
-        // Extraire applications (si application_id != null)
-        const applications = result.rows
-          .filter((row) => row.application_id !== null)
-          .map((row) => ({
-            application_id: row.application_id,
-            application_name: row.application_name,
-            application_category: row.application_category,
-            application_fee: row.application_fee,
-            application_rent: row.application_rent,
-            application_images: row.application_images,
-            application_other_versions: row.application_other_versions,
-            application_level: row.application_level,
-            sales_count: row.sales_count,
-          }));
-
-        const platforms = platformsResult.rows;
-
+        // Succès
         return {
-          template,
-          applications,
-          platforms,
+          templates: result.rows,
           success: true,
           queryDuration,
         };
@@ -321,101 +300,92 @@ async function getTemplateData(templateId) {
     const errorInfo = classifyError(error);
     const queryDuration = performance.now() - startTime;
 
+    // Log détaillé pour monitoring avec tous les contextes
     captureException(error, {
       tags: {
-        component: 'single_template',
+        component: 'templates_page',
         error_type: errorInfo.type,
         should_retry: errorInfo.shouldRetry.toString(),
         http_status: errorInfo.httpStatus.toString(),
       },
       extra: {
-        templateId,
         queryDuration,
         pgErrorCode: error.code,
         errorMessage: error.message,
+        timeout: CONFIG.performance.queryTimeout,
       },
     });
 
     return {
-      template: null,
-      applications: [],
-      platforms: [],
+      templates: [],
       success: false,
       errorType: errorInfo.type,
       httpStatus: errorInfo.httpStatus,
       userMessage: errorInfo.userMessage,
       shouldRetry: errorInfo.shouldRetry,
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined,
+      error: error.message,
     };
   }
 }
 
 /**
- * Composant d'erreur réutilisable
+ * Composant d'erreur réutilisable avec design cohérent
  */
-function TemplateError({ errorType, userMessage, shouldRetry, templateId }) {
+function TemplatesError({ errorType, userMessage, shouldRetry }) {
   return (
-    <div className="template-error-page">
+    <div className="templates-error-page">
       <section className="first">
         <div className="error-content">
-          {errorType === ERROR_TYPES.NOT_FOUND ? (
-            <div className="not-found-error">
-              <div className="error-icon">🔍</div>
-              <h1 className="error-code">404</h1>
-              <h2 className="error-title">Template introuvable</h2>
-              <p className="error-message">
-                Le template demandé n&apos;existe pas ou a été supprimé.
-              </p>
-              <div className="error-actions">
-                <a href="/templates" className="cta-button primary">
-                  📋 Tous les templates
-                </a>
-                <a href="/" className="cta-button secondary">
-                  🏠 Accueil
-                </a>
-              </div>
+          <div className="server-error">
+            <div className="error-icon">
+              {errorType === ERROR_TYPES.TIMEOUT
+                ? '⏱️'
+                : errorType === ERROR_TYPES.IMAGE_LOADING_ERROR
+                  ? '🖼️'
+                  : errorType === ERROR_TYPES.NETWORK_ERROR
+                    ? '🌐'
+                    : '⚠️'}
             </div>
-          ) : (
-            <div className="server-error">
-              <div className="error-icon">
-                {errorType === ERROR_TYPES.TIMEOUT ? '⏱️' : '⚠️'}
-              </div>
-              <h1 className="error-code">
-                {errorType === ERROR_TYPES.TIMEOUT ? '503' : '500'}
-              </h1>
-              <h2 className="error-title">
-                {shouldRetry ? 'Erreur temporaire' : 'Erreur technique'}
-              </h2>
-              <p className="error-message">{userMessage}</p>
-              <div className="error-actions">
-                {shouldRetry && (
-                  <button
-                    onClick={() => window.location.reload()}
-                    className="cta-button primary"
-                  >
-                    🔄 Réessayer
-                  </button>
-                )}
-                <a href="/templates" className="cta-button secondary">
-                  📋 Templates
-                </a>
-              </div>
+            <h1 className="error-code">
+              {errorType === ERROR_TYPES.TIMEOUT ? '503' : '500'}
+            </h1>
+            <h2 className="error-title">
+              {shouldRetry
+                ? 'Service temporairement indisponible'
+                : 'Erreur technique'}
+            </h2>
+            <p className="error-message">{userMessage}</p>
+            <div className="error-actions">
+              {shouldRetry && (
+                <button
+                  onClick={() => window.location.reload()}
+                  className="cta-button primary"
+                >
+                  🔄 Réessayer
+                </button>
+              )}
+              <Link href="/" className="cta-button secondary">
+                🏠 Retour à l&apos;accueil
+              </Link>
             </div>
-          )}
+          </div>
 
           {process.env.NODE_ENV === 'development' && (
             <div className="debug-section">
               <details className="debug-details">
-                <summary>Debug</summary>
+                <summary className="debug-summary">
+                  Informations de débogage
+                </summary>
                 <div className="debug-content">
                   <p>
-                    <strong>Type:</strong> {errorType}
+                    <strong>Type d&apos;erreur:</strong> {errorType}
                   </p>
                   <p>
-                    <strong>Template ID:</strong> {templateId}
+                    <strong>Peut réessayer:</strong>{' '}
+                    {shouldRetry ? 'Oui' : 'Non'}
                   </p>
                   <p>
-                    <strong>Retry:</strong> {shouldRetry ? 'Oui' : 'Non'}
+                    <strong>Page:</strong> templates (liste)
                   </p>
                 </div>
               </details>
@@ -428,138 +398,109 @@ function TemplateError({ errorType, userMessage, shouldRetry, templateId }) {
 }
 
 /**
- * Composant principal
+ * Composant principal avec gestion d'erreurs différenciée
  */
-export default async function SingleTemplatePage({ params }) {
-  const { id: templateId } = await params;
+export default async function TemplatesPage() {
+  // Récupérer les données avec gestion d'erreurs avancée
+  const data = await getTemplates();
 
-  const validation = validateTemplateId(templateId);
-  if (!validation.isValid) {
-    captureMessage('Invalid template ID format', {
-      level: 'info',
-      tags: { component: 'single_template', validation: true },
-      extra: {
-        rawTemplateId: templateId,
-        validationError: validation.error,
-      },
-    });
-
-    notFound();
-  }
-
-  const data = await getTemplateData(validation.templateId);
-
+  // Gestion différenciée des erreurs
   if (!data.success) {
-    if (data.errorType === ERROR_TYPES.NOT_FOUND) {
+    // En production, on peut choisir de montrer une page d'erreur custom
+    // plutôt que notFound() pour certains types d'erreurs temporaires
+    if (data.shouldRetry && process.env.NODE_ENV === 'production') {
+      return (
+        <TemplatesError
+          errorType={data.errorType}
+          userMessage={data.userMessage}
+          shouldRetry={data.shouldRetry}
+        />
+      );
+    }
+
+    // Pour les erreurs non récupérables en production
+    if (process.env.NODE_ENV === 'production') {
       notFound();
     }
 
+    // En dev, affichage détaillé
     return (
-      <TemplateError
+      <TemplatesError
         errorType={data.errorType}
         userMessage={data.userMessage}
         shouldRetry={data.shouldRetry}
-        templateId={validation.templateId}
       />
     );
   }
 
-  if (!data.template) {
-    notFound();
+  // Cas spécial : pas de templates (valide pour e-commerce en démarrage)
+  if (!data.templates || data.templates.length === 0) {
+    return (
+      <div className="templates-empty-state">
+        <section className="first">
+          <div className="empty-content">
+            <div className="empty-card">
+              <div className="empty-icon">📋</div>
+              <h1 className="empty-title">Aucun template disponible</h1>
+              <p className="empty-message">
+                Nos templates sont en cours de préparation.
+              </p>
+              <p className="empty-submessage">
+                Revenez bientôt pour découvrir notre collection de templates
+                professionnels.
+              </p>
+              <div className="empty-actions">
+                <Link href="/" className="cta-button primary">
+                  🏠 Retour à l&apos;accueil
+                </Link>
+                <Link href="/contact" className="cta-button secondary">
+                  📞 Nous contacter
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    );
   }
 
+  // Rendu normal avec Suspense - Error Boundary géré par error.jsx
   return (
     <Suspense fallback={<Loading />}>
-      <SingleTemplateShops
-        template={data.template}
-        applications={data.applications}
-        platforms={data.platforms}
-        context={{
-          templateId: validation.templateId,
-        }}
-      />
+      <TemplatesList templates={data.templates} />
     </Suspense>
   );
 }
 
-/**
- * Metadata
- */
-export async function generateMetadata({ params }) {
-  const { id: templateId } = await params;
+// Metadata pour SEO e-commerce avec monitoring en cas d'erreur
+export const metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://benew-dj.com',
+  ),
+  title: 'Templates - Benew | Solutions E-commerce',
+  description:
+    'Découvrez notre collection de templates e-commerce professionnels. Solutions complètes pour votre boutique en ligne.',
+  keywords: [
+    'templates e-commerce',
+    'boutique en ligne',
+    'solutions e-commerce',
+    'templates professionnels',
+    'Benew',
+    'Djibouti',
+  ],
+  openGraph: {
+    title: 'Templates E-commerce Benew',
+    description:
+      'Collection de templates professionnels pour votre boutique en ligne.',
+    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://benew-dj.com'}/templates`,
+  },
+  alternates: {
+    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://benew-dj.com'}/templates`,
+  },
+};
 
-  const validation = validateTemplateId(templateId);
-  if (!validation.isValid) {
-    return {
-      title: 'Template non trouvé - Benew',
-      description: "Le template demandé n'existe pas.",
-      robots: { index: false, follow: false },
-    };
-  }
-
-  try {
-    const client = await getClient();
-    try {
-      const queryPromise = client.query(
-        `SELECT template_name, template_images
-        FROM catalog.templates
-        WHERE template_id = $1 AND is_active = true`,
-        [validation.templateId],
-      );
-
-      const result = await withTimeout(queryPromise, 2000, 'Metadata timeout');
-
-      if (result.rows.length > 0) {
-        const template = result.rows[0];
-
-        return {
-          title: `${template.template_name} - Templates | Benew`,
-          description: `Découvrez les applications basées sur ${template.template_name} sur Benew.`,
-          keywords: [
-            template.template_name,
-            'template',
-            'applications',
-            'e-commerce',
-            'Benew',
-            'Djibouti',
-          ],
-          openGraph: {
-            title: `${template.template_name} - Applications`,
-            description: `Explorez les applications du template ${template.template_name}.`,
-            images:
-              template.template_images?.length > 0
-                ? [template.template_images[0]]
-                : [],
-            url: `${process.env.NEXT_PUBLIC_SITE_URL}/templates/${validation.templateId}`,
-          },
-          alternates: {
-            canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/templates/${validation.templateId}`,
-          },
-        };
-      }
-    } finally {
-      client.release();
-    }
-  } catch (error) {
-    captureMessage('Metadata generation failed', {
-      level: 'warning',
-      tags: { component: 'single_template_metadata' },
-      extra: {
-        templateId: validation.templateId,
-        errorMessage: error.message,
-      },
-    });
-  }
-
-  return {
-    title: 'Template - Benew',
-    description: 'Découvrez ce template sur Benew.',
-    openGraph: {
-      title: 'Template Benew',
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/templates/${validation.templateId}`,
-    },
-  };
-}
-
+// Configuration ISR Next.js 15
 export const revalidate = 300;
+
+// Force static pour performance optimale
 export const dynamic = 'force-static';
