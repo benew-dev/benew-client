@@ -1,37 +1,107 @@
+// actions/sendContactEmail.js
+// ✅ MODIFICATIONS : Bot detection amélioré + DB storage + messages erreur spécifiques
+
 'use server';
 
 import { Resend } from 'resend';
-import { headers } from 'next/headers';
-import { captureException, captureEmailError } from '../sentry.server.config';
-import {
-  validateContactEmail,
-  prepareContactDataFromFormData,
-  formatContactValidationErrors,
-  detectBotBehavior,
-} from '@/utils/schemas/contactEmailSchema';
-import { limitBenewAPI } from '@/backend/rateLimiter';
+import { contactEmailSchema } from '@/utils/schemas/contactEmailSchema';
+import { limitBenewAPI } from '@/utils/rateLimit';
+import { getClient } from '@/backend/dbConnect';
+import { captureException, captureMessage } from '../sentry.server.config';
 
-// Initialisation Resend simple
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// Anti-doublons simple
-const recentEmails = new Map();
-const DUPLICATE_WINDOW = 5 * 60 * 1000; // 5 minutes
+// =============================
+// ✅ LISTE DISPOSABLE EMAILS
+// =============================
+const DISPOSABLE_EMAIL_DOMAINS = [
+  'tempmail',
+  'guerrillamail',
+  '10minutemail',
+  'mailinator',
+  'throwaway',
+  'trashmail',
+  'fakeinbox',
+  'sharklasers',
+  'grr.la',
+  'maildrop',
+  'yopmail',
+];
 
-function isDuplicateEmail(data) {
-  const key = `${data.email}:${data.subject}`;
+// =============================
+// ✅ BOT DETECTION AMÉLIORÉ
+// =============================
+function detectBot(data, metadata = {}) {
+  let riskScore = 0;
+  const reasons = [];
+
+  // Check 1: FillTime trop rapide (< 3 secondes)
+  if (metadata.fillTime && metadata.fillTime < 3000) {
+    riskScore += 5;
+    reasons.push(`fillTime_too_fast: ${metadata.fillTime}ms`);
+  }
+
+  // Check 2: Email suspect (test@test, admin@admin)
+  const emailLower = (data.email || '').toLowerCase();
+  if (
+    emailLower.includes('test@test') ||
+    emailLower.includes('admin@admin') ||
+    emailLower.includes('example@example')
+  ) {
+    riskScore += 3;
+    reasons.push('suspicious_email_pattern');
+  }
+
+  // Check 3: Disposable email domains
+  const emailDomain = emailLower.split('@')[1] || '';
+  if (DISPOSABLE_EMAIL_DOMAINS.some((domain) => emailDomain.includes(domain))) {
+    riskScore += 4;
+    reasons.push(`disposable_email_domain: ${emailDomain}`);
+  }
+
+  // Check 4: Honeypot rempli
+  if (metadata.honeypotFilled) {
+    riskScore += 10;
+    reasons.push('honeypot_filled');
+  }
+
+  const isSuspicious = riskScore >= 5;
+
+  if (isSuspicious && process.env.NODE_ENV === 'development') {
+    console.log('[Bot Detection]', {
+      riskScore,
+      reasons,
+      isSuspicious,
+      email: data.email,
+    });
+  }
+
+  return {
+    riskScore,
+    isSuspicious,
+    reasons,
+  };
+}
+
+// =============================
+// ✅ ANTI-DOUBLONS EN MÉMOIRE
+// =============================
+const recentEmails = new Map();
+
+function checkDuplicate(email, subject) {
+  const key = `${email}:${subject}`;
   const now = Date.now();
 
-  // Nettoyer les anciens
+  // Nettoyage des anciens (> 5 minutes)
   for (const [k, timestamp] of recentEmails.entries()) {
-    if (now - timestamp > DUPLICATE_WINDOW) {
+    if (now - timestamp > 5 * 60 * 1000) {
       recentEmails.delete(k);
     }
   }
 
   if (recentEmails.has(key)) {
-    const sentAt = recentEmails.get(key);
-    const timeLeft = DUPLICATE_WINDOW - (now - sentAt);
+    const lastSubmission = recentEmails.get(key);
+    const timeLeft = Math.ceil((5 * 60 * 1000 - (now - lastSubmission)) / 1000);
     return { isDuplicate: true, waitTime: timeLeft };
   }
 
@@ -39,193 +109,343 @@ function isDuplicateEmail(data) {
   return { isDuplicate: false };
 }
 
-// Génération du contenu email
-function generateEmailContent(data) {
-  const timestamp = new Date().toLocaleString('fr-FR', {
-    timeZone: 'Europe/Paris',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+// =============================
+// ✅ RETRY LOGIC AVEC BACKOFF
+// =============================
+async function executeWithRetry(operation, maxAttempts = 2) {
+  let lastError;
 
-  return `NOUVEAU MESSAGE DE CONTACT - BENEW
-======================================
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      return await operation();
+    } catch (error) {
+      lastError = error;
 
-📧 Reçu le : ${timestamp}
+      if (attempt < maxAttempts) {
+        const delay = Math.pow(2, attempt) * 1000;
+        await new Promise((resolve) => setTimeout(resolve, delay));
 
-👤 EXPÉDITEUR
-Nom : ${data.name}
-Email : ${data.email}
-
-📋 DÉTAILS
-Sujet : ${data.subject}
-
-💬 MESSAGE
-${data.message}
-
----
-Cet email a été envoyé automatiquement depuis le formulaire de contact du site Benew.
-Vous pouvez répondre directement à cet email pour contacter ${data.name}.
-
-🔒 ID de référence : ${Date.now().toString(36).toUpperCase()}
-`;
-}
-
-export async function sendContactEmail(formData) {
-  try {
-    // Vérifier la configuration
-    if (
-      !process.env.RESEND_API_KEY ||
-      !process.env.RESEND_FROM_EMAIL ||
-      !process.env.RESEND_TO_EMAIL
-    ) {
-      throw new Error('Configuration email manquante');
-    }
-
-    // Rate Limiting
-    const headersList = headers();
-    const rateLimitCheck = await limitBenewAPI('contact')({
-      headers: headersList,
-      url: '/contact',
-      method: 'POST',
-    });
-
-    if (rateLimitCheck) {
-      return {
-        success: false,
-        message:
-          'Trop de messages envoyés récemment. Veuillez patienter avant de renvoyer.',
-        code: 'RATE_LIMITED',
-      };
-    }
-
-    // Validation des données
-    const rawData = prepareContactDataFromFormData(formData);
-    const validationResult = await validateContactEmail(rawData);
-
-    if (!validationResult.success) {
-      return {
-        success: false,
-        message: formatContactValidationErrors(validationResult.errors),
-        code: 'VALIDATION_FAILED',
-        errors: validationResult.errors,
-      };
-    }
-
-    const validatedData = validationResult.data;
-
-    // Détection de bot simple
-    const botAnalysis = detectBotBehavior(validatedData, {
-      fillTime: formData.get('_fillTime'),
-    });
-
-    if (botAnalysis.isSuspicious) {
-      return {
-        success: false,
-        message:
-          "Votre message n'a pas pu être envoyé. Veuillez réessayer plus tard.",
-        code: 'BOT_DETECTED',
-        reference: Date.now().toString(36).toUpperCase(),
-      };
-    }
-
-    // Vérification des doublons
-    const duplicateCheck = isDuplicateEmail(validatedData);
-    if (duplicateCheck.isDuplicate) {
-      const waitMinutes = Math.ceil(duplicateCheck.waitTime / 60000);
-      return {
-        success: false,
-        message: `Message identique déjà envoyé récemment. Veuillez attendre ${waitMinutes} minute(s) avant de renvoyer.`,
-        code: 'DUPLICATE_EMAIL',
-      };
-    }
-
-    // Génération et envoi de l'email
-    const emailContent = generateEmailContent(validatedData);
-    const emailSubject = `[Contact Benew] ${validatedData.subject}`;
-
-    // Tentative d'envoi avec retry simple
-    let lastError;
-    const maxRetries = 2;
-
-    for (let attempt = 0; attempt <= maxRetries; attempt++) {
-      try {
-        const emailResult = await resend.emails.send({
-          from: process.env.RESEND_FROM_EMAIL,
-          to: [process.env.RESEND_TO_EMAIL],
-          subject: emailSubject,
-          text: emailContent,
-          replyTo: validatedData.email,
-          headers: {
-            'X-Contact-Source': 'Benew-Contact-Form',
-            'X-Contact-Version': '2.0',
-            'X-Contact-Timestamp': new Date().toISOString(),
-          },
+        captureMessage(`Retry email send (attempt ${attempt}/${maxAttempts})`, {
+          level: 'info',
+          tags: { component: 'contact_email', retry: true },
+          extra: { attempt, maxAttempts, errorMessage: error.message },
         });
-
-        return {
-          success: true,
-          message:
-            'Votre message a été envoyé avec succès. Nous vous répondrons dans les plus brefs délais.',
-          emailId: emailResult.data?.id,
-          reference: Date.now().toString(36).toUpperCase(),
-        };
-      } catch (error) {
-        lastError = error;
-
-        if (attempt < maxRetries) {
-          // Attendre avant le retry
-          await new Promise((resolve) =>
-            setTimeout(resolve, 2000 * (attempt + 1)),
-          );
-        }
       }
     }
+  }
 
-    // Échec final après tous les retries
-    captureEmailError(lastError, {
-      emailType: 'contact',
-      tags: { contact_email_retry: true, attempts: maxRetries + 1 },
+  throw lastError;
+}
+
+// =============================
+// ✅ CAPTURE ERREUR EMAIL
+// =============================
+function captureEmailError(error, context = {}) {
+  const errorType = error.name || 'UnknownError';
+  const errorMessage = error.message || 'No error message';
+
+  const tags = {
+    component: 'contact_email',
+    error_type: errorType,
+    ...context.tags,
+  };
+
+  const extra = {
+    errorMessage,
+    statusCode: error.statusCode,
+    ...context.extra,
+  };
+
+  captureException(error, { tags, extra });
+}
+
+// =============================
+// ✅ ENREGISTREMENT DB
+// =============================
+async function saveContactSubmission(data, metadata = {}) {
+  let client;
+
+  try {
+    client = await getClient();
+
+    const query = `
+      INSERT INTO admin.contact_submissions (
+        name,
+        email,
+        subject,
+        message,
+        status,
+        resend_email_id,
+        ip_address,
+        user_agent,
+        bot_detected,
+        bot_risk_score,
+        fill_time_ms,
+        created_at
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, NOW())
+      RETURNING id, created_at
+    `;
+
+    const values = [
+      data.name,
+      data.email,
+      data.subject,
+      data.message,
+      metadata.status || 'sent',
+      metadata.resendEmailId || null,
+      metadata.ipAddress || null,
+      metadata.userAgent || null,
+      metadata.botDetected || false,
+      metadata.botRiskScore || 0,
+      metadata.fillTime || null,
+    ];
+
+    const result = await client.query(query, values);
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[DB] Contact saved:', result.rows[0]);
+    }
+
+    return {
+      success: true,
+      submissionId: result.rows[0].id,
+      createdAt: result.rows[0].created_at,
+    };
+  } catch (error) {
+    captureException(error, {
+      tags: {
+        component: 'contact_db',
+        operation: 'save_submission',
+      },
+      extra: {
+        email: data.email,
+        errorMessage: error.message,
+        pgErrorCode: error.code,
+      },
+    });
+
+    return {
+      success: false,
+      error: error.message,
+    };
+  } finally {
+    if (client) {
+      client.release();
+    }
+  }
+}
+
+// =============================
+// ✅ ACTION PRINCIPALE
+// =============================
+export async function sendContactEmail(_prevState, formData) {
+  // 1. Vérification config env
+  if (
+    !process.env.RESEND_API_KEY ||
+    !process.env.RESEND_TO_EMAIL ||
+    !process.env.RESEND_FROM_EMAIL
+  ) {
+    captureMessage('Resend configuration incomplete', {
+      level: 'error',
+      tags: { component: 'contact_email', config: true },
     });
 
     return {
       success: false,
       message:
-        "Impossible d'envoyer votre message pour le moment. Veuillez réessayer plus tard.",
-      code: 'SEND_FAILED',
-      reference: Date.now().toString(36).toUpperCase(),
-      error:
-        process.env.NODE_ENV === 'production' ? undefined : lastError?.message,
+        "Le service d'envoi d'emails est temporairement indisponible. Contactez-nous par téléphone au 77.86.00.64.",
+      code: 'EMAIL_CONFIG_ERROR',
     };
-  } catch (error) {
-    // Log de l'erreur
-    captureException(error, {
-      tags: { component: 'contact_email' },
-    });
+  }
 
-    // Message d'erreur selon le type
-    let errorMessage =
-      "Une erreur est survenue lors de l'envoi de votre message.";
+  // 2. Rate limiting
+  const rateLimitResult = await limitBenewAPI('contact');
 
-    if (/resend|email|send/i.test(error.message)) {
-      errorMessage =
-        "Service d'email temporairement indisponible. Veuillez réessayer plus tard.";
-    } else if (/validation/i.test(error.message)) {
-      errorMessage =
-        'Erreur de validation des données. Veuillez vérifier votre saisie.';
-    } else if (/environment|config/i.test(error.message)) {
-      errorMessage =
-        "Erreur de configuration système. Veuillez contacter l'administrateur.";
-    }
+  if (!rateLimitResult.success) {
+    const waitMinutes = Math.ceil(rateLimitResult.reset / 60);
 
     return {
       success: false,
-      message: errorMessage,
-      code: 'SYSTEM_ERROR',
-      reference: Date.now().toString(36).toUpperCase(),
-      error: process.env.NODE_ENV === 'production' ? undefined : error.message,
+      message: `Trop de tentatives. Veuillez réessayer dans ${waitMinutes} minute${waitMinutes > 1 ? 's' : ''}.`,
+      code: 'RATE_LIMITED',
+    };
+  }
+
+  // 3. Extraction données
+  const data = {
+    name: formData.get('name') || '',
+    email: formData.get('email') || '',
+    subject: formData.get('subject') || '',
+    message: formData.get('message') || '',
+  };
+
+  const metadata = {
+    fillTime: parseInt(formData.get('_fillTime') || '0', 10),
+    honeypotFilled: !!(formData.get('website') || '').trim(),
+  };
+
+  // 4. Validation Yup
+  const validation = contactEmailSchema.safeParse(data);
+
+  if (!validation.success) {
+    return {
+      success: false,
+      message: validation.error.errors[0].message,
+      code: 'VALIDATION_ERROR',
+    };
+  }
+
+  // ✅ 5. BOT DETECTION AMÉLIORÉ
+  const botCheck = detectBot(data, metadata);
+
+  if (botCheck.isSuspicious) {
+    captureMessage('Bot detected in contact form', {
+      level: 'warning',
+      tags: {
+        component: 'contact_email',
+        bot_detection: true,
+      },
+      extra: {
+        email: data.email,
+        riskScore: botCheck.riskScore,
+        reasons: botCheck.reasons,
+      },
+    });
+
+    // Enregistrer en DB avec flag bot
+    await saveContactSubmission(data, {
+      status: 'blocked_bot',
+      botDetected: true,
+      botRiskScore: botCheck.riskScore,
+      fillTime: metadata.fillTime,
+    });
+
+    // Message neutre pour ne pas révéler la détection
+    return {
+      success: false,
+      message:
+        "Votre message n'a pas pu être envoyé. Veuillez réessayer ou nous contacter directement.",
+      code: 'SUSPICIOUS_ACTIVITY',
+    };
+  }
+
+  // 6. Anti-doublons
+  const duplicateCheck = checkDuplicate(data.email, data.subject);
+
+  if (duplicateCheck.isDuplicate) {
+    return {
+      success: false,
+      message: `Vous avez déjà envoyé un message similaire. Attendez ${duplicateCheck.waitTime} secondes avant de réessayer.`,
+      code: 'DUPLICATE_SUBMISSION',
+    };
+  }
+
+  // 7. Envoi email avec retry
+  try {
+    const emailResult = await executeWithRetry(async () => {
+      return await resend.emails.send({
+        from: process.env.RESEND_FROM_EMAIL,
+        to: process.env.RESEND_TO_EMAIL,
+        subject: `[Contact Benew] ${data.subject}`,
+        html: `
+          <h2>Nouveau message de contact</h2>
+          <p><strong>Date:</strong> ${new Date().toLocaleString('fr-FR', { timeZone: 'Africa/Djibouti' })}</p>
+          
+          <h3>Expéditeur</h3>
+          <ul>
+            <li><strong>Nom:</strong> ${data.name}</li>
+            <li><strong>Email:</strong> ${data.email}</li>
+            <li><strong>Sujet:</strong> ${data.subject}</li>
+          </ul>
+          
+          <h3>Message</h3>
+          <p>${data.message.replace(/\n/g, '<br>')}</p>
+          
+          <hr>
+          <p style="color: #666; font-size: 0.9em;">
+            ID de référence: ${Date.now().toString(36).toUpperCase()}
+          </p>
+        `,
+        headers: {
+          'X-Contact-Source': 'benew-website',
+          'X-Contact-Version': '1.0',
+          'X-Contact-Timestamp': new Date().toISOString(),
+        },
+      });
+    });
+
+    // ✅ 8. ENREGISTREMENT DB APRÈS SUCCÈS
+    const dbResult = await saveContactSubmission(data, {
+      status: 'sent',
+      resendEmailId: emailResult.id,
+      botDetected: false,
+      botRiskScore: botCheck.riskScore,
+      fillTime: metadata.fillTime,
+    });
+
+    if (!dbResult.success) {
+      captureMessage('Email sent but DB save failed', {
+        level: 'warning',
+        tags: { component: 'contact_email', db_save: true },
+        extra: {
+          email: data.email,
+          resendEmailId: emailResult.id,
+          dbError: dbResult.error,
+        },
+      });
+    }
+
+    return {
+      success: true,
+      message:
+        'Votre message a été envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.',
+      code: 'EMAIL_SENT',
+    };
+  } catch (error) {
+    // ✅ 9. MESSAGES D'ERREUR SPÉCIFIQUES
+    let userMessage =
+      "Une erreur s'est produite lors de l'envoi. Veuillez réessayer.";
+    let errorCode = 'UNKNOWN_ERROR';
+
+    if (error.statusCode === 429) {
+      userMessage =
+        "Quota d'envoi dépassé. Contactez-nous par téléphone au 77.86.00.64.";
+      errorCode = 'QUOTA_EXCEEDED';
+    } else if (error.name === 'ResendAPIError') {
+      userMessage =
+        "Service d'email temporairement indisponible. Essayez dans quelques minutes ou contactez-nous au 77.86.00.64.";
+      errorCode = 'API_ERROR';
+    } else if (error.message?.toLowerCase().includes('timeout')) {
+      userMessage = "L'envoi a pris trop de temps. Veuillez réessayer.";
+      errorCode = 'TIMEOUT_ERROR';
+    } else if (error.message?.toLowerCase().includes('network')) {
+      userMessage =
+        'Problème de connexion. Vérifiez votre connexion internet et réessayez.';
+      errorCode = 'NETWORK_ERROR';
+    }
+
+    captureEmailError(error, {
+      tags: {
+        error_code: errorCode,
+      },
+      extra: {
+        email: data.email,
+        subject: data.subject,
+      },
+    });
+
+    // Enregistrer en DB même en cas d'échec
+    await saveContactSubmission(data, {
+      status: 'failed',
+      botDetected: false,
+      botRiskScore: botCheck.riskScore,
+      fillTime: metadata.fillTime,
+    });
+
+    return {
+      success: false,
+      message: userMessage,
+      code: errorCode,
     };
   }
 }
