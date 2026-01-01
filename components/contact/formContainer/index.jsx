@@ -117,6 +117,8 @@ const FormContainer = ({ ref }) => {
       const formData = new FormData(formRef.current);
       const result = await sendContactEmail(formData);
 
+      console.log('Result: ', result);
+
       if (result.success) {
         setFormState({
           error: false,
@@ -148,8 +150,6 @@ const FormContainer = ({ ref }) => {
       }
       // eslint-disable-next-line no-unused-vars
     } catch (err) {
-      console.log('Err: ', err);
-
       setFormState({
         error: true,
         success: false,
