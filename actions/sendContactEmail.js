@@ -5,7 +5,7 @@
 
 import { Resend } from 'resend';
 import { contactEmailSchema } from '@/utils/schemas/contactEmailSchema';
-import { limitBenewAPI } from '@/backend/rateLimiter';
+import { checkServerActionRateLimit } from '@/backend/rateLimiter';
 import { getClient } from '@/backend/dbConnect';
 import { captureException, captureMessage } from '../sentry.server.config';
 
@@ -259,15 +259,30 @@ export async function sendContactEmail(_prevState, formData) {
   }
 
   // 2. Rate limiting
-  const rateLimitResult = await limitBenewAPI('contact');
+  // ✅ APRÈS (fonctionne correctement)
+  // Utiliser l'email comme identifiant pour le rate limiting
+  const identifier = formData.get('email') || 'anonymous';
+  const rateLimitResult = await checkServerActionRateLimit(
+    identifier,
+    'contact',
+  );
 
   if (!rateLimitResult.success) {
     const waitMinutes = Math.ceil(rateLimitResult.reset / 60);
+    const waitSeconds = rateLimitResult.reset;
+
+    // Message adapté selon la durée
+    let message;
+    if (waitMinutes < 1) {
+      message = `Trop de tentatives. Veuillez réessayer dans ${waitSeconds} seconde${waitSeconds > 1 ? 's' : ''}.`;
+    } else {
+      message = `Trop de tentatives. Veuillez réessayer dans ${waitMinutes} minute${waitMinutes > 1 ? 's' : ''}.`;
+    }
 
     return {
       success: false,
-      message: `Trop de tentatives. Veuillez réessayer dans ${waitMinutes} minute${waitMinutes > 1 ? 's' : ''}.`,
-      code: 'RATE_LIMITED',
+      message,
+      code: rateLimitResult.code || 'RATE_LIMITED',
     };
   }
 

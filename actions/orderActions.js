@@ -15,7 +15,7 @@ import {
   validateSanitizedDataSafety,
   hasInjectionAttempt,
 } from '@/utils/sanitizers/orderSanitizer';
-import { limitBenewAPI } from '@/backend/rateLimiter';
+import { checkServerActionRateLimit } from '@/backend/rateLimiter';
 import { headers } from 'next/headers';
 
 // =============================
@@ -45,18 +45,40 @@ export async function createOrder(
     // =============================
     // ÉTAPE 1: RATE LIMITING
     // =============================
-    const headersList = headers();
-    const rateLimitCheck = await limitBenewAPI('order')({
-      headers: headersList,
-      url: '/order/create',
-      method: 'POST',
-    });
 
-    if (rateLimitCheck) {
+    // Extraire l'email ou le téléphone comme identifiant
+    // (FormData n'est pas encore parsé, donc on le fait ici)
+    const emailIdentifier =
+      formData.get('email') || formData.get('phone') || 'anonymous';
+
+    const rateLimitResult = await checkServerActionRateLimit(
+      emailIdentifier,
+      'order',
+    );
+
+    if (!rateLimitResult.success) {
+      const waitMinutes = Math.ceil(rateLimitResult.reset / 60);
+      const waitSeconds = rateLimitResult.reset;
+
+      // Message adapté selon la durée et le code d'erreur
+      let message;
+
+      if (
+        rateLimitResult.code === 'BLOCKED' ||
+        rateLimitResult.code === 'BLOCKED_ABUSE'
+      ) {
+        message =
+          'Accès temporairement bloqué suite à un usage abusif. Réessayez plus tard.';
+      } else if (waitMinutes < 1) {
+        message = `Trop de tentatives de commande. Veuillez réessayer dans ${waitSeconds} seconde${waitSeconds > 1 ? 's' : ''}.`;
+      } else {
+        message = `Trop de tentatives de commande. Veuillez réessayer dans ${waitMinutes} minute${waitMinutes > 1 ? 's' : ''}.`;
+      }
+
       return {
         success: false,
-        message: 'Trop de tentatives. Veuillez patienter avant de réessayer.',
-        code: 'RATE_LIMITED',
+        message,
+        code: rateLimitResult.code || 'RATE_LIMITED',
       };
     }
 

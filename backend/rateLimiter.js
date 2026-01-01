@@ -402,12 +402,129 @@ setInterval(() => {
 // EXPORT PAR DÉFAUT
 // =============================================
 
+// =============================================
+// RATE LIMITING POUR SERVER ACTIONS
+// =============================================
+
+/**
+ * Rate limiting spécifique pour Server Actions Next.js
+ * Retourne un objet simple { success, reset } au lieu de NextResponse
+ *
+ * @param {string} identifier - Identifiant unique (email, IP, user ID)
+ * @param {string} limitType - Type de limite ('contact', 'order', 'api', 'public')
+ * @returns {Promise<Object>} - { success: boolean, reset: number, message?: string }
+ */
+export async function checkServerActionRateLimit(
+  identifier,
+  limitType = 'api',
+) {
+  if (!identifier) {
+    log('Rate limit check: No identifier provided', { limitType });
+    return {
+      success: true,
+      reset: 0,
+    };
+  }
+
+  const limit = CONFIG.limits[limitType] || CONFIG.limits.api;
+  const now = Date.now();
+
+  try {
+    // Vérifier la whitelist (optionnel pour Server Actions)
+    if (WHITELIST_IPS.has(identifier)) {
+      log(`Whitelisted identifier allowed: ${anonymizeIP(identifier)}`);
+      return {
+        success: true,
+        reset: 0,
+      };
+    }
+
+    // Vérifier si l'identifiant est bloqué
+    if (isIPBlocked(identifier)) {
+      const blockInfo = blockedIPs.get(identifier);
+      const remainingTime = Math.ceil((blockInfo.until - now) / 1000);
+
+      log(`Blocked identifier rejected: ${anonymizeIP(identifier)}`);
+
+      return {
+        success: false,
+        reset: remainingTime,
+        message: 'Accès temporairement bloqué',
+        code: 'BLOCKED',
+      };
+    }
+
+    // Vérifier le rate limit
+    if (!checkRateLimit(identifier, limit)) {
+      const userData = requestsCache.get(identifier);
+
+      // Calculer le temps avant reset (en secondes)
+      const oldestRequest = userData.requests[0];
+      const resetTime = Math.ceil((oldestRequest + limit.window - now) / 1000);
+
+      // Si c'est un récidiviste, le bloquer temporairement
+      if (userData && userData.requests.length > limit.requests * 2) {
+        blockIP(identifier);
+
+        return {
+          success: false,
+          reset: 900, // 15 minutes en secondes
+          message: 'Accès bloqué pour abus',
+          code: 'BLOCKED_ABUSE',
+        };
+      }
+
+      log(`Rate limit exceeded for identifier: ${anonymizeIP(identifier)}`, {
+        requests: userData.requests.length,
+        limit: limit.requests,
+        window: limit.window / 1000 + 's',
+        resetIn: resetTime + 's',
+      });
+
+      return {
+        success: false,
+        reset: resetTime,
+        message: 'Trop de requêtes',
+        code: 'RATE_LIMITED',
+      };
+    }
+
+    // Rate limit OK
+    const userData = requestsCache.get(identifier);
+    const remaining = Math.max(0, limit.requests - userData.requests.length);
+
+    log(`Request allowed: ${anonymizeIP(identifier)}`, {
+      remaining,
+      limit: limit.requests,
+    });
+
+    return {
+      success: true,
+      reset: 0,
+      remaining,
+    };
+  } catch (error) {
+    log('Rate limit error:', {
+      error: error.message,
+      identifier: anonymizeIP(identifier),
+    });
+
+    // En cas d'erreur, on laisse passer (fail open)
+    return {
+      success: true,
+      reset: 0,
+      error: error.message,
+    };
+  }
+}
+
 export default {
   createRateLimit,
   publicRateLimit,
   apiRateLimit,
   contactRateLimit,
   orderRateLimit,
+  checkServerActionRateLimit, // ← AJOUTER CETTE LIGNE
   getStats,
   addToWhitelist,
   removeFromWhitelist,
