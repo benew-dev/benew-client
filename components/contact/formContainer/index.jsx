@@ -117,8 +117,6 @@ const FormContainer = ({ ref }) => {
       const formData = new FormData(formRef.current);
       const result = await sendContactEmail(formData);
 
-      console.log('Result: ', result);
-
       if (result.success) {
         setFormState({
           error: false,
