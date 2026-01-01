@@ -238,7 +238,7 @@ async function saveContactSubmission(data, metadata = {}) {
 // =============================
 // ✅ ACTION PRINCIPALE
 // =============================
-export async function sendContactEmail(_prevState, formData) {
+export async function sendContactEmail(formData) {
   // 1. Vérification config env
   if (
     !process.env.RESEND_API_KEY ||
