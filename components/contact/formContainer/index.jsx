@@ -148,6 +148,8 @@ const FormContainer = ({ ref }) => {
       }
       // eslint-disable-next-line no-unused-vars
     } catch (err) {
+      console.log('Err: ', err);
+
       setFormState({
         error: true,
         success: false,
