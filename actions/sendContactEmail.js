@@ -4,7 +4,10 @@
 'use server';
 
 import { Resend } from 'resend';
-import { contactEmailSchema } from '@/utils/schemas/contactEmailSchema';
+import {
+  formatContactValidationErrors,
+  validateContactEmail,
+} from '@/utils/schemas/contactEmailSchema';
 import { checkServerActionRateLimit } from '@/backend/rateLimiter';
 import { getClient } from '@/backend/dbConnect';
 import { captureException, captureMessage } from '../sentry.server.config';
@@ -300,12 +303,12 @@ export async function sendContactEmail(formData) {
   };
 
   // 4. Validation Yup
-  const validation = contactEmailSchema.safeParse(data);
+  const validation = await validateContactEmail(data);
 
   if (!validation.success) {
     return {
       success: false,
-      message: validation.error.errors[0].message,
+      message: formatContactValidationErrors(validation.errors),
       code: 'VALIDATION_ERROR',
     };
   }
