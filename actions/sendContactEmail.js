@@ -5,7 +5,7 @@
 
 import { Resend } from 'resend';
 import { contactEmailSchema } from '@/utils/schemas/contactEmailSchema';
-import { limitBenewAPI } from '@/utils/rateLimit';
+import { limitBenewAPI } from '@/backend/rateLimiter';
 import { getClient } from '@/backend/dbConnect';
 import { captureException, captureMessage } from '../sentry.server.config';
 
