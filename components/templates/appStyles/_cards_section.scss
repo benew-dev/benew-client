@@ -522,24 +522,24 @@
     visibility: visible !important;
     flex-shrink: 0;
 
-    width: 100%;
-    height: 100%;
+    // width: 100%;
+    // height: 100%;
 
-    // // 📱 Mobile
-    // width: 20px;
-    // height: 20px;
+    // 📱 Mobile
+    width: 20px;
+    height: 20px;
 
-    // // 📟 Tablette
-    // @include from('medium-sm') {
-    //   width: 24px;
-    //   height: 24px;
-    // }
+    // 📟 Tablette
+    @include from('medium-sm') {
+      width: 24px;
+      height: 24px;
+    }
 
-    // // 🖥️ Desktop
-    // @include from('large-xs') {
-    //   width: 28px;
-    //   height: 28px;
-    // }
+    // 🖥️ Desktop
+    @include from('large-xs') {
+      width: 100%;
+      height: 100%;
+    }
   }
 
   &:hover,
