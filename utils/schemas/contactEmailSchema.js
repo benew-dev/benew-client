@@ -81,23 +81,3 @@ export function formatContactValidationErrors(errors) {
 
   return Object.values(errors).join(', ');
 }
-
-// Bot detection basique (optionnel)
-export function detectBotBehavior(data, metadata = {}) {
-  let riskScore = 0;
-
-  // Remplissage trop rapide (moins de 3 secondes)
-  if (metadata.fillTime && metadata.fillTime < 3000) {
-    riskScore += 5;
-  }
-
-  // Email suspect
-  if (data.email.includes('test@test') || data.email.includes('admin@admin')) {
-    riskScore += 3;
-  }
-
-  return {
-    riskScore,
-    isSuspicious: riskScore >= 5,
-  };
-}
