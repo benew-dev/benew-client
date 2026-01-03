@@ -6,21 +6,21 @@
 // ================================
 
 .formContainer {
-  // 📱 MOBILE FIRST - FormContainer en SECOND
-  order: 2;
   width: 100%;
 
-  // Hauteur automatique sur mobile/tablette
+  // 📱 MOBILE/TABLETTE - Prend TOUT l'écran (100% largeur et hauteur)
   @include until('large-xs') {
+    order: 1; // Seul élément visible, donc order n'a pas d'importance
     height: auto;
-    min-height: auto;
+    min-height: 100vh; // Prend toute la hauteur de l'écran
   }
 
-  // 🖥️ GRANDS ÉCRANS - Hauteur fixe 100%
+  // 🖥️ DESKTOP - Retour au layout original (50% à droite)
   @include from('large-xs') {
     flex: 1;
     width: 50%;
     height: 100%;
     order: 2;
+    min-height: auto;
   }
 }

@@ -1,8 +1,10 @@
 // ================================
-// 📄 index.scss (nouveau fichier principal)
+// 📄 index.scss (fichier principal)
 // ================================
 @forward 'base';
 @forward 'text-container';
 @forward 'contact-items';
 @forward 'form-container';
+@forward 'contact-info-button'; // 🆕 Nouveau
+@forward 'contact-info-modal'; // 🆕 Nouveau
 @forward 'responsive';
