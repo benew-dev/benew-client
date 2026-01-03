@@ -552,9 +552,7 @@ const SingleTemplateShops = ({
     );
   }
 
-  console.log('Template: ', template);
-
-  const templateName = applications[0]?.template_name || 'Template';
+  const templateName = template[0]?.template_name || 'Template';
   const hasPaymentMethods = platforms && platforms.length > 0;
 
   return (
@@ -565,7 +563,11 @@ const SingleTemplateShops = ({
       />
 
       <section className="first">
-        <Parallax bgColor="#0c0c1d" title={templateName} planets="/sun.png" />
+        <Parallax
+          bgColor="#0c0c1d"
+          title={templateName.toUpperCase()}
+          planets="/sun.png"
+        />
       </section>
 
       <div className="applications-list">
