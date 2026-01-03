@@ -3,7 +3,6 @@
 import { memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MdMail, MdPhone, MdWhatsapp, MdClose } from 'react-icons/md';
-import './contact-info-modal.scss';
 
 // Composant d'élément de contact mémorisé (réutilisé)
 const ContactItem = memo(({ icon: Icon, text }) => (
