@@ -552,6 +552,8 @@ const SingleTemplateShops = ({
     );
   }
 
+  console.log('Template', template);
+
   const templateName = template[0]?.template_name || 'Template';
   const hasPaymentMethods = platforms && platforms.length > 0;
 
