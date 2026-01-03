@@ -411,6 +411,7 @@ ApplicationCard.displayName = 'ApplicationCard';
 const SingleTemplateShops = ({
   templateID,
   applications = [],
+  template,
   platforms = [],
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -551,7 +552,7 @@ const SingleTemplateShops = ({
     );
   }
 
-  console.log('Applications: ', applications);
+  console.log('Template: ', template);
 
   const templateName = applications[0]?.template_name || 'Template';
   const hasPaymentMethods = platforms && platforms.length > 0;

@@ -203,9 +203,6 @@ async function getTemplateData(templateId) {
             -- Template info
             t.template_id,
             t.template_name,
-            t.template_images,
-            t.template_has_web,
-            t.template_has_mobile,
             
             -- Applications (peut être NULL si pas d'apps)
             a.application_id,
@@ -287,9 +284,6 @@ async function getTemplateData(templateId) {
         const template = {
           template_id: firstRow.template_id,
           template_name: firstRow.template_name,
-          template_images: firstRow.template_images,
-          template_has_web: firstRow.template_has_web,
-          template_has_mobile: firstRow.template_has_mobile,
         };
 
         // Extraire applications (si application_id != null)
@@ -476,6 +470,7 @@ export default async function SingleTemplatePage({ params }) {
       <SingleTemplateShops
         templateID={templateId}
         applications={data.applications}
+        template={data.template}
         platforms={data.platforms}
       />
     </Suspense>
