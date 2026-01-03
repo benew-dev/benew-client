@@ -665,11 +665,6 @@
 }
 
 @media (pointer: coarse) {
-  button.content-modal-close {
-    width: unset;
-    height: unset;
-  }
-
   .info-card {
     &:hover {
       transform: none;
