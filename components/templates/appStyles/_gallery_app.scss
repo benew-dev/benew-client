@@ -198,11 +198,6 @@
     height: 14px;
   }
 
-  @include from('large-xl') {
-    width: 15px;
-    height: 15px;
-  }
-
   // ✅ LARGE DESKTOP (1920px+) - Grands écrans
   @include from('large-xxl') {
     width: 16px;
