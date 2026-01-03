@@ -189,7 +189,8 @@
 
 .gallery-close-btn {
   position: absolute;
-  background: rgba(css-var(background-color), 0.9);
+  background: css-var(primary-color);
+  color: css-var(background-color);
   border: none !important;
   outline: none !important;
   border-radius: 50%;
@@ -197,7 +198,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: css-var(primary-color);
+  // color: css-var(primary-color);
   transition: all 0.3s ease;
   z-index: 100;
 
@@ -241,12 +242,12 @@
   &:focus,
   &:active,
   &:focus-visible {
-    outline: none !important;
-    border: none !important;
-    background: css-var(primary-color);
-    color: css-var(background-color);
+    // outline: none !important;
+    // border: none !important;
+    // background: css-var(primary-color);
+    // color: css-var(background-color);
     transform: scale(0.7);
-    box-shadow: 0 4px 12px rgba(css-var(primary-color), 0.4);
+    // box-shadow: 0 4px 12px rgba(css-var(primary-color), 0.4);
   }
 
   &:active {
