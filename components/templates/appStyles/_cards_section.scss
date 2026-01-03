@@ -541,21 +541,27 @@
     }
   }
 
-  &:hover {
-    // background: rgba(css-var(color-orange), 0.2);
-    // border-color: css-var(color-orange);
-    // color: css-var(color-orange);
-    // transform: rotate(90deg);
-    transform: scale(0.7);
+  // &:hover {
+  //   background: rgba(css-var(color-orange), 0.2);
+  //   border-color: css-var(color-orange);
+  //   color: css-var(color-orange);
+  //   transform: rotate(90deg);
+  //   transform: scale(0.7);
 
-    // .close-icon,
-    // svg {
-    //   color: css-var(color-orange) !important;
-    // }
+  //   .close-icon,
+  //   svg {
+  //     color: css-var(color-orange) !important;
+  //   }
+  // }
+
+  &:hover {
+    // transform: rotate(90deg) scale(0.95);
+    transform: scale(0.7);
   }
 
   &:active {
-    transform: rotate(90deg) scale(0.95);
+    // transform: rotate(90deg) scale(0.95);
+    transform: scale(0.7);
   }
 }
 
