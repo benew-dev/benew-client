@@ -255,7 +255,7 @@ const GalleryModal = memo(({ isOpen, onClose, images, applicationName }) => {
           onClick={onClose}
           aria-label="Fermer la galerie"
         >
-          <FaX />
+          <FaX className="close-icon" />
         </button>
 
         {/* ✅ HEADER RESTRUCTURÉ - Titre + Compteur groupés */}
