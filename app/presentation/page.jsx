@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
 import PresentationComponent from '@/components/presentation';
-import { captureException, captureMessage } from '../../instrumentation';
+import { captureException, captureMessage } from '../../sentry.server.config';
 
 // Configuration étendue avec gestion d'erreurs spécifiques présentation
 const CONFIG = {
