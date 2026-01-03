@@ -12,46 +12,61 @@
   align-items: flex-start;
   position: relative;
 
-  // 📱 MOBILE/TABLETTE - Layout simplifié avec UN SEUL BLOC (FormContainer)
+  // 📱 MOBILE FIRST - Layout vertical avec textContainer en premier
   flex-direction: column;
-  gap: 0; // Pas de gap puisqu'il n'y a qu'un seul enfant visible
-  padding: 0; // Pas de padding, le FormContainer gère son propre padding
+  gap: 1rem;
+  padding: 1rem 0.75rem;
   min-height: 100vh;
-  max-width: 100%;
+  max-width: none;
 
+  // 📱 TRÈS PETITS ÉCRANS - Optimisations supplémentaires
   @include until('small-sm') {
-    padding: 0;
+    gap: 0.75rem;
+    padding: 0.75rem 0.5rem;
   }
 
+  // 📱 PETITS ÉCRANS - Progression avec nouveaux breakpoints
   @include from('small-sm') {
-    padding: 0;
+    gap: 1.1rem;
+    padding: 0.8rem 0.6rem;
   }
 
   @include from('small-lg') {
-    padding: 0;
+    gap: 1.2rem;
+    padding: 0.9rem 0.7rem;
   }
 
   @include from('small-xl') {
-    padding: 0;
+    gap: 1.3rem;
+    padding: 1rem 0.8rem;
   }
 
+  // 📟 MOYENS ÉCRANS - Transition progressive vers layout horizontal
   @include from('medium-sm') {
-    padding: 0;
+    gap: 1.5rem;
+    padding: 1.5rem 1rem;
+    max-width: 90%;
   }
 
   @include from('medium-lg') {
-    padding: 0;
+    gap: 1.75rem;
+    padding: 1.75rem 1.25rem;
+    max-width: 85%;
   }
 
   @include from('medium-xl') {
-    padding: 0;
+    gap: 2rem;
+    padding: 2rem 1.5rem;
+    max-width: 80%;
   }
 
   @include from('medium-xxl') {
-    padding: 0;
+    gap: 2.25rem;
+    padding: 2rem 1.5rem;
+    max-width: 75%;
   }
 
-  // 🖥️ DESKTOP - Layout original (2 blocs horizontaux 50/50)
+  // 🖥️ GRANDS ÉCRANS - Retour au layout original
   @include from('large-xs') {
     flex-direction: row;
     align-items: stretch;
@@ -59,7 +74,7 @@
     padding: 2rem;
     max-width: 70rem;
     min-height: auto;
-    height: 80vh;
+    height: 80vh; // Hauteur fixe pour desktop
   }
 
   @include from('large-lg') {

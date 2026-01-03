@@ -1,6 +1,7 @@
 'use client';
 
 import './styles/index.scss';
+// import dynamic from 'next/dynamic';
 import { useRef, useState, useCallback, memo } from 'react';
 import { motion } from 'framer-motion';
 import {
@@ -8,11 +9,16 @@ import {
   MdPhone,
   MdWhatsapp,
   MdKeyboardArrowDown,
-  MdContactPage,
 } from 'react-icons/md';
 
+// import ParallaxSkeleton from '../layouts/parallax/ParallaxSkeleton';
+// Import dynamique des composants
+// const Parallax = dynamic(() => import('components/layouts/parallax'), {
+//   loading: () => <ParallaxSkeleton />,
+//   ssr: true,
+// });
+
 import FormContainer from './formContainer';
-import ContactInfoModal from './ContactInfoModal';
 import { trackEvent } from '@/utils/analytics';
 import PageTracker from '../analytics/PageTracker';
 import Parallax from '../layouts/parallax';
@@ -75,11 +81,10 @@ const variants = {
   },
 };
 
-// Composant principal
+// Composant principal simplifié
 const Contact = () => {
   const ref = useRef();
   const [isCollapsed, setIsCollapsed] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Handler pour le toggle optimisé
   const handleToggle = useCallback(() => {
@@ -91,27 +96,6 @@ const Contact = () => {
 
     setIsCollapsed((prev) => !prev);
   }, [isCollapsed]);
-
-  // 🆕 Handler pour l'ouverture de la modal
-  const handleOpenModal = useCallback(() => {
-    trackEvent('contact_info_modal_open', {
-      event_category: 'contact',
-      event_label: 'modal_opened',
-      trigger: 'button_click',
-    });
-
-    setIsModalOpen(true);
-  }, []);
-
-  // 🆕 Handler pour la fermeture de la modal
-  const handleCloseModal = useCallback(() => {
-    trackEvent('contact_info_modal_close', {
-      event_category: 'contact',
-      event_label: 'modal_closed',
-    });
-
-    setIsModalOpen(false);
-  }, []);
 
   return (
     <div>
@@ -131,19 +115,6 @@ const Contact = () => {
       </section>
 
       <section className="others">
-        {/* 🆕 BOUTON FIXE - Visible uniquement sur mobile/tablette */}
-        <button
-          className="contact-info-trigger"
-          onClick={handleOpenModal}
-          aria-label="Afficher les coordonnées"
-        >
-          <MdContactPage />
-          Coordonnées
-        </button>
-
-        {/* 🆕 MODAL COORDONNÉES - Visible uniquement sur mobile/tablette */}
-        <ContactInfoModal isOpen={isModalOpen} onClose={handleCloseModal} />
-
         <motion.div
           ref={ref}
           className="contact"
@@ -151,14 +122,12 @@ const Contact = () => {
           initial="initial"
           whileInView="animate"
         >
-          {/* TextContainer - Visible uniquement sur DESKTOP */}
           <motion.div className="textContainer" variants={variants}>
             <ContactHeader isCollapsed={isCollapsed} onToggle={handleToggle} />
 
             <ContactInfo isCollapsed={isCollapsed} variants={variants} />
           </motion.div>
 
-          {/* FormContainer - Toujours visible */}
           <FormContainer ref={ref} />
         </motion.div>
       </section>
