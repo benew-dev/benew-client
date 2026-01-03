@@ -2,7 +2,7 @@
 
 import { memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MdMail, MdPhone, MdWhatsapp, MdClose } from 'react-icons/md';
+import { MdMail, MdPhone, MdWhatsapp } from 'react-icons/md';
 
 // Composant d'élément de contact mémorisé (réutilisé)
 const ContactItem = memo(({ icon: Icon, text }) => (
@@ -87,7 +87,6 @@ const ContactInfoModal = ({ isOpen, onClose }) => {
               onClick={onClose}
               aria-label="Fermer la modal des coordonnées"
             >
-              <MdClose />
               Fermer
             </button>
           </motion.div>
