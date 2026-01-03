@@ -14,29 +14,27 @@
 
 // 📱 MOBILE/TABLETTE - Bouton actif
 .contact-info-trigger {
-  // ✅ POSITION ABSOLUTE (pas fixed) pour rester dans la section "others"
+  // Position absolute dans la section
   position: absolute;
   top: 1rem;
   right: 1rem;
   z-index: 100;
-  background: linear-gradient(
-    135deg,
-    css-var(primary-color),
-    color.adjust($primary-color, $lightness: 10%)
-  );
-  color: css-var(background-color);
-  border: none;
+
+  // ✅ NOUVEAU STYLE - Bordure uniquement, pas de background
+  background: transparent;
+  color: css-var(primary-color);
+  border: 2px solid css-var(primary-color);
   border-radius: 25px;
   padding: 0.75rem 1.5rem;
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 12px #{'rgba(#{css-var(primary-color)}, 0.3)'};
+  box-shadow: none; // Pas d'ombre par défaut
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px); // Garde le blur pour lisibilité
 
   @include until('small-sm') {
     top: 0.75rem;
@@ -44,6 +42,7 @@
     padding: 0.625rem 1.25rem;
     font-size: 0.875rem;
     border-radius: 20px;
+    border-width: 1.5px;
   }
 
   @include from('small-sm') {
@@ -97,11 +96,14 @@
   }
 
   &:hover {
+    // ✅ Hover avec background gradient + bordure
     background: linear-gradient(
       135deg,
-      color.adjust($primary-color, $lightness: 5%),
-      css-var(secondary-color)
+      css-var(primary-color),
+      color.adjust($primary-color, $lightness: 10%)
     );
+    color: css-var(background-color);
+    border-color: transparent;
     transform: translateY(-2px);
     box-shadow: 0 6px 16px #{'rgba(#{css-var(primary-color)}, 0.4)'};
 
