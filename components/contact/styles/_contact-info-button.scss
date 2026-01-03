@@ -14,7 +14,8 @@
 
 // 📱 MOBILE/TABLETTE - Bouton actif
 .contact-info-trigger {
-  position: fixed;
+  // ✅ POSITION ABSOLUTE (pas fixed) pour rester dans la section "others"
+  position: absolute;
   top: 1rem;
   right: 1rem;
   z-index: 100;
