@@ -454,16 +454,12 @@
 .content-modal-close {
   position: absolute;
   z-index: 10;
-
-  // background: rgba(css-var(color-light), 0.05);
-  // border: 1px solid rgba(css-var(color-light), 0.2);
   background: css-var(primary-color);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  // color: css-var(color-light);
   transition: all 0.3s ease;
 
   // 📱 PETITS ÉCRANS (Mobile < 768px)
@@ -541,26 +537,8 @@
     }
   }
 
-  // &:hover {
-  //   background: rgba(css-var(color-orange), 0.2);
-  //   border-color: css-var(color-orange);
-  //   color: css-var(color-orange);
-  //   transform: rotate(90deg);
-  //   transform: scale(0.7);
-
-  //   .close-icon,
-  //   svg {
-  //     color: css-var(color-orange) !important;
-  //   }
-  // }
-
-  &:hover {
-    // transform: rotate(90deg) scale(0.95);
-    transform: scale(0.7);
-  }
-
+  &:hover,
   &:active {
-    // transform: rotate(90deg) scale(0.95);
     transform: scale(0.7);
   }
 }

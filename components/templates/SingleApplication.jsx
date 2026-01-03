@@ -12,8 +12,8 @@ import {
   MdSettings,
   MdChecklist,
   MdAttachMoney,
-  MdClose,
 } from 'react-icons/md';
+import { FaX } from 'react-icons/fa6';
 
 import ParallaxSkeleton from '../layouts/parallax/ParallaxSkeleton';
 const Parallax = dynamic(() => import('components/layouts/parallax'), {
@@ -250,7 +250,7 @@ const ContentModal = memo(({ isOpen, onClose, title, children }) => {
           onClick={onClose}
           aria-label="Fermer"
         >
-          <MdClose className="close-icon" />
+          <FaX />
         </button>
 
         <div className="content-modal-header">

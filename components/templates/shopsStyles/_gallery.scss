@@ -198,7 +198,6 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  // color: css-var(primary-color);
   transition: all 0.3s ease;
   z-index: 100;
 
@@ -242,12 +241,7 @@
   &:focus,
   &:active,
   &:focus-visible {
-    // outline: none !important;
-    // border: none !important;
-    // background: css-var(primary-color);
-    // color: css-var(background-color);
     transform: scale(0.7);
-    // box-shadow: 0 4px 12px rgba(css-var(primary-color), 0.4);
   }
 
   &:active {
