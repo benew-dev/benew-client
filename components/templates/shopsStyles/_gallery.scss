@@ -269,7 +269,12 @@
   // 🖥️ DESKTOP : Layout HORIZONTAL (thumbs à gauche + image)
   @include from('large-xs') {
     flex-direction: row;
-    gap: 0.8rem; // ✅ RÉDUIT : 0.8rem au lieu de 1.5rem (moins d'espace horizontal)
+    gap: 1rem; // ✅ RÉDUIT : 0.8rem au lieu de 1.5rem (moins d'espace horizontal)
+    min-height: 0; // ✅ CRITIQUE : Permet au flex child de scroller
+  }
+
+  @include from('large-xxl') {
+    gap: 1.5rem;
   }
 }
 
@@ -284,56 +289,122 @@
 
   // 📱 MOBILE + 📟 TABLET : HORIZONTALES en bas
   flex-direction: row;
-  gap: 0.1rem; // ✅ MINIMAL : ≈ 1.6px (presque rien)
-  padding: 0.5rem 0;
+  gap: 0.5rem; // ✅ MINIMAL : ≈ 1.6px (presque rien)
+  padding: 0.75rem;
 
   @include from('medium-sm') {
-    gap: 0.1rem; // ✅ Uniforme partout
+    gap: 0.6rem; // ✅ 9.6px sur tablet
+    padding: 0.875rem;
   }
 
   // 🖥️ DESKTOP : VERTICALES à gauche
   @include from('large-xs') {
     flex-direction: column;
-    gap: 0.1rem; // ✅ MINIMAL : presque collées verticalement
-    padding: 0.5rem;
-    min-width: 100px;
-    max-width: 120px;
-    overflow-y: auto;
+    gap: 0.5rem; // ✅ MINIMAL : presque collées verticalement
+    padding: 1rem;
+    min-width: 120px; // ✅ Largeur fixe
+    max-width: 140px; // ✅ Légèrement élargi (était 120px)
+
+    // ✅ CRITIQUE : Hauteur contrôlée pour forcer le scroll
+    min-height: 300px;
+    max-height: 70vh; // ✅ Maximum 70% de la hauteur d'écran
+
+    overflow-y: scroll; // ✅ FORCE le scroll vertical (toujours visible)
     overflow-x: hidden;
+
+    // ✅ Smooth scrolling
+    scroll-behavior: smooth;
   }
 
   @include from('large-xxl') {
-    min-width: 100px;
-    max-width: 120px;
+    max-width: 150px;
+    max-height: 75vh; // ✅ Plus d'espace sur grand écran
+    padding: 1.25rem;
   }
 
-  // Custom scrollbar
-  &::-webkit-scrollbar {
-    // Horizontal sur mobile/tablet
-    height: 6px;
+  // ✅ NOUVEAU : Espace APRÈS la dernière thumbnail
+  // Évite que la dernière image soit coupée
+  &::after {
+    content: '';
+    flex-shrink: 0;
+
+    // 📱 MOBILE/TABLET : Espace horizontal à droite
+    width: 0.5rem;
+    height: 1px;
 
     @include from('medium-sm') {
-      height: 8px;
+      width: 0.75rem;
     }
 
-    // Vertical sur desktop
+    // 🖥️ DESKTOP : Espace vertical en bas
     @include from('large-xs') {
-      width: 6px;
+      width: 1px;
+      height: 0.75rem;
+    }
+
+    @include from('large-xxl') {
+      height: 1rem;
+    }
+  }
+
+  // ✅ NOUVEAU : Smooth scroll sur mobile aussi
+  @include small-screens {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch; // ✅ Momentum scrolling iOS
+  }
+
+  // Custom scrollbar (optimisé)
+  &::-webkit-scrollbar {
+    // 📱 MOBILE/TABLET : Scrollbar HORIZONTALE
+    height: 10px; // ✅ Plus visible (était 6px)
+
+    @include from('medium-sm') {
+      height: 12px; // ✅ Encore plus visible sur tablet
+    }
+
+    // 🖥️ DESKTOP : Scrollbar VERTICALE
+    @include from('large-xs') {
+      width: 10px; // ✅ Plus visible (était 6px)
       height: auto;
+    }
+
+    @include from('large-xxl') {
+      width: 12px; // ✅ Très visible sur grand écran
     }
   }
 
   &::-webkit-scrollbar-track {
-    background: rgba(css-var(text-color), 0.1);
-    border-radius: 4px;
+    background: rgba(css-var(text-color), 0.15); // ✅ Plus visible (était 0.1)
+    border-radius: 6px; // ✅ Arrondi augmenté
+
+    // ✅ NOUVEAU : Marge pour ne pas toucher les bords
+    margin: 0.5rem;
+
+    @include from('large-xs') {
+      margin: 0.75rem 0; // ✅ Marge verticale sur desktop
+    }
   }
 
   &::-webkit-scrollbar-thumb {
-    background: rgba(css-var(primary-color), 0.5);
-    border-radius: 4px;
+    background: rgba(
+      css-var(primary-color),
+      0.7
+    ); // ✅ Plus visible (était 0.5)
+    border-radius: 6px;
+
+    // ✅ NOUVEAU : Bordure pour contraste
+    border: 2px solid rgba(css-var(background-color), 0.2);
 
     &:hover {
-      background: rgba(css-var(primary-color), 0.7);
+      background: rgba(
+        css-var(primary-color),
+        0.9
+      ); // ✅ Hover très marqué (était 0.7)
+      border-color: rgba(css-var(primary-color), 0.3);
+    }
+
+    &:active {
+      background: css-var(primary-color); // ✅ Clic = couleur pleine
     }
   }
 }
@@ -345,7 +416,7 @@
 .gallery-thumb {
   flex-shrink: 0;
   border: 1px solid rgba(css-var(text-color), 0.2); // ✅ 1px au lieu de 2px
-  border-radius: 4px; // ✅ 4px au lieu de 8px (plus discret)
+  border-radius: 6px; // ✅ 4px au lieu de 8px (plus discret)
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s ease;

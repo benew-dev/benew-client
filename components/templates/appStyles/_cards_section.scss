@@ -524,22 +524,6 @@
 
     width: inherit;
     height: inherit;
-
-    // 📱 Mobile
-    // width: 20px;
-    // height: 20px;
-
-    // 📟 Tablette
-    // @include from('medium-sm') {
-    //   width: 24px;
-    //   height: 24px;
-    // }
-
-    // 🖥️ Desktop
-    // @include from('large-xs') {
-    //   width: 28px;
-    //   height: 28px;
-    // }
   }
 
   &:hover,
