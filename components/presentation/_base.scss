@@ -1,0 +1,42 @@
+@use '../../app/styles/abstracts' as *;
+
+// ================================
+// 📄 _base.scss - Structures de base
+// ================================
+
+// ✅ NOUVEAUX CONTAINERS pour backgrounds optimisés (Next.js Image)
+.planets-background-container,
+.stars-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+
+  // Planets devant stars
+  &.planets-background-container {
+    z-index: 2;
+  }
+}
+
+// Container principal avec overflow hidden
+.banner {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 3;
+  overflow: hidden;
+}
+
+// Container des cartes avec largeur contrôlée
+.cards-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 100vw;
+  position: relative;
+  overflow: hidden;
+}
