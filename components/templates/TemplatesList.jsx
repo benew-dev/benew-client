@@ -234,19 +234,40 @@ const TemplateCard = memo(({ template, onClick }) => {
         />
 
         <div className="minimalContent">
-          <div className="minimalCategory">
-            {categoryIcons}
-            <span>{categoryLabel.join(' & ')}</span>
-          </div>
-
-          {/* Link UNIQUEMENT sur le titre */}
+          {/* Link UNIQUEMENT sur le titre avec indicateur visuel */}
           <Link
             href={`/templates/${template.template_id}`}
             className="minimalTitleLink"
             onClick={() => onClick(template)}
           >
             <h3 className="minimalTitle">{template.template_name}</h3>
+
+            {/* ✅ INDICATEUR VISUEL ATTRACTIF */}
+            <div className="view-details-indicator">
+              <span className="indicator-text">Voir les détails</span>
+              <svg
+                className="indicator-arrow"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+              >
+                <path
+                  d="M1 8H15M15 8L8 1M15 8L8 15"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
           </Link>
+
+          {/* ✅ CATÉGORIE SOUS LE TITRE */}
+          <div className="minimalCategory">
+            {categoryIcons}
+            <span>{categoryLabel.join(' & ')}</span>
+          </div>
 
           {/* Affichage du nombre d'applications si > 0 */}
           {template.applications_count > 0 && (

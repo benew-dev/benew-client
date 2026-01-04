@@ -2,22 +2,27 @@
 @use '../../../app/styles/abstracts' as *;
 
 // ================================
-// 📄 _typography.scss
+// 📄 _typography.scss - AVEC INDICATEUR VISUEL
 // ================================
 
-// ✅ NOUVEAU: Link wrapper pour le titre
+// ✅ Link wrapper pour le titre + indicateur
 .minimalTitleLink {
   text-decoration: none;
   color: inherit;
   display: block;
   cursor: pointer;
+  margin-bottom: 0.75rem; // ✅ Espacement avant la catégorie
+
+  @include small-screens {
+    margin-bottom: 0.5rem;
+  }
 
   &:hover {
     text-decoration: none;
   }
 
   &:focus-visible {
-    outline: 2px solid css-var(primary-color);
+    outline: 2px solid $primary-color;
     outline-offset: 4px;
     border-radius: 4px;
   }
@@ -29,8 +34,8 @@
 
   font-size: 1.5rem;
   font-weight: 700;
-  color: css-var(text-color);
-  margin: 0;
+  color: $text-color;
+  margin: 0 0 0.5rem 0; // ✅ Petit espace avant l'indicateur
   line-height: 1.3;
   transition: all 0.3s ease;
 
@@ -41,6 +46,7 @@
   @include small-screens {
     font-size: 1.3rem;
     line-height: 1.4;
+    margin-bottom: 0.4rem;
   }
 
   @include from('small-sm') {
@@ -94,7 +100,141 @@
 
   // Effet hover uniquement via le Link parent
   .minimalTitleLink:hover & {
-    color: css-var(primary-color);
+    color: $primary-color;
     transform: translateX(4px);
+  }
+}
+
+// ================================
+// ✅ INDICATEUR VISUEL "VOIR LES DÉTAILS"
+// ================================
+
+.view-details-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  padding: 0.4rem 0.75rem;
+
+  background: linear-gradient(
+    135deg,
+    rgba($primary-color, 0.12),
+    rgba($secondary-color, 0.08)
+  );
+
+  border: 1px solid rgba($primary-color, 0.3);
+  border-radius: 20px;
+
+  transition: all 0.3s ease;
+
+  // 📱 MOBILE
+  @include small-screens {
+    padding: 0.35rem 0.65rem;
+    gap: 0.4rem;
+  }
+
+  @include from('medium-sm') {
+    padding: 0.45rem 0.8rem;
+  }
+
+  // Effet hover via parent Link
+  .minimalTitleLink:hover & {
+    background: linear-gradient(
+      135deg,
+      rgba($primary-color, 0.2),
+      rgba($secondary-color, 0.15)
+    );
+    border-color: rgba($primary-color, 0.6);
+    transform: translateX(8px);
+  }
+}
+
+.indicator-text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: $primary-color;
+
+  // ✅ Minuscules pour l'indicateur (plus discret)
+  text-transform: lowercase;
+  letter-spacing: 0.02em;
+
+  transition: color 0.3s ease;
+
+  @include small-screens {
+    font-size: 0.7rem;
+  }
+
+  @include from('medium-sm') {
+    font-size: 0.78rem;
+  }
+
+  @include from('large-xs') {
+    font-size: 0.8rem;
+  }
+
+  // Hover via parent Link
+  .minimalTitleLink:hover & {
+    color: color.adjust($primary-color, $lightness: 10%);
+  }
+}
+
+.indicator-arrow {
+  width: 14px;
+  height: 14px;
+  color: $primary-color;
+
+  transition: transform 0.3s ease;
+
+  @include small-screens {
+    width: 12px;
+    height: 12px;
+  }
+
+  @include from('medium-sm') {
+    width: 15px;
+    height: 15px;
+  }
+
+  @include from('large-xs') {
+    width: 16px;
+    height: 16px;
+  }
+
+  // ✅ ANIMATION FLÈCHE au hover
+  .minimalTitleLink:hover & {
+    transform: translateX(4px);
+    color: color.adjust($primary-color, $lightness: 10%);
+  }
+}
+
+// ================================
+// ACCESSIBILITÉ
+// ================================
+
+// Réduction des animations
+@include reduced-motion {
+  .view-details-indicator,
+  .indicator-arrow,
+  .minimalTitle {
+    transition: none !important;
+
+    .minimalTitleLink:hover & {
+      transform: none !important;
+    }
+  }
+}
+
+// Écrans tactiles
+@media (pointer: coarse) {
+  .view-details-indicator {
+    padding: 0.5rem 0.9rem; // Zone tactile plus grande
+
+    .minimalTitleLink:hover & {
+      transform: none;
+    }
+  }
+
+  .minimalTitleLink:active .view-details-indicator {
+    transform: scale(0.95);
   }
 }
