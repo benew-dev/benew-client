@@ -18,7 +18,7 @@ textarea {
     #{'rgba(#{css-var(text-color)}, 0.08)'}
   );
   // ✅ BORDURE VISIBLE - Toujours présente
-  border: 2px solid #{'rgba(#{css-var(primary-color)}, 0.4)'};
+  border: 2px solid #{'rgba(#{css-var(primary-color)}, 0.4)'} !important;
   color: css-var(text-color);
 
   // 📱 MOBILE FIRST - Champs tactiles optimaux
