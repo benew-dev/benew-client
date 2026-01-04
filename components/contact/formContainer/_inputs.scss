@@ -2,7 +2,7 @@
 @use '../../../app/styles/abstracts' as *;
 
 // ================================
-// 📄 _inputs.scss - FIX FINAL
+// 📄 _inputs.scss - FIX SIMPLE
 // ================================
 
 input,
@@ -10,21 +10,20 @@ textarea {
   border-radius: 12px;
   transition: all 0.4s ease;
   font-weight: 400;
+  backdrop-filter: blur(10px);
 
-  // ❌ SUPPRIMÉ : backdrop-filter: blur(10px);
-  // Le form parent a déjà backdrop-filter, pas besoin de le dupliquer !
-
-  box-shadow: 0 2px 8px #{'rgba(#{css-var(background-color)}, 0.2)'};
+  // ✅ UTILISER DES COULEURS SCSS COMPILÉES (pas de css-var ici)
+  box-shadow: 0 2px 8px rgba($background-color, 0.2);
   background: linear-gradient(
     135deg,
-    #{'rgba(#{css-var(text-color)}, 0.05)'},
-    #{'rgba(#{css-var(text-color)}, 0.08)'}
+    rgba($text-color, 0.05),
+    rgba($text-color, 0.08)
   );
 
-  // ✅ BORDURE SOLIDE VISIBLE
-  border: 2px solid #{'rgba(#{css-var(primary-color)}, 0.5)'};
+  // ✅ BORDURE SOLIDE - Couleur SCSS directe
+  border: 2px solid rgba($primary-color, 0.6);
 
-  color: css-var(text-color);
+  color: $text-color;
 
   // 📱 MOBILE FIRST - Champs tactiles optimaux
   padding: 1.25rem 1.125rem;
@@ -69,7 +68,6 @@ textarea {
     font-size: 1.01rem;
     min-height: 49px;
     border-radius: 13px;
-    border: 2px solid #{'rgba(#{css-var(primary-color)}, 0.5)'};
   }
 
   @include from('medium-xl') {
@@ -77,7 +75,6 @@ textarea {
     font-size: 1.02rem;
     min-height: 50px;
     border-radius: 14px;
-    border: 2px solid #{'rgba(#{css-var(primary-color)}, 0.5)'};
   }
 
   @include from('medium-xxl') {
@@ -85,7 +82,6 @@ textarea {
     font-size: 1.03rem;
     min-height: 51px;
     border-radius: 15px;
-    border: 2px solid #{'rgba(#{css-var(primary-color)}, 0.5)'};
   }
 
   // 🖥️ GRANDS ÉCRANS - Valeurs desktop réduites pour s'adapter
@@ -94,32 +90,29 @@ textarea {
     font-size: 0.95rem;
     border-radius: 10px;
     min-height: auto;
-    border: 2px solid #{'rgba(#{css-var(primary-color)}, 0.5)'};
   }
 
   @include from('large-lg') {
     padding: 1.05rem 1.35rem;
     font-size: 0.97rem;
-    border: 2px solid #{'rgba(#{css-var(primary-color)}, 0.5)'};
   }
 
   @include from('large-xxl') {
     padding: 1.1rem 1.4rem;
     font-size: 1rem;
-    border: 2px solid #{'rgba(#{css-var(primary-color)}, 0.5)'};
   }
 
   &:focus {
-    // ✅ FOCUS - Bordure encore plus visible
-    border-color: css-var(primary-color);
+    // ✅ FOCUS - Bordure couleur pleine
+    border-color: $primary-color;
     border-width: 3px;
     box-shadow:
-      0 0 0 3px #{'rgba(#{css-var(primary-color)}, 0.2)'},
-      0 4px 12px #{'rgba(#{css-var(primary-color)}, 0.15)'};
+      0 0 0 3px rgba($primary-color, 0.2),
+      0 4px 12px rgba($primary-color, 0.15);
     background: linear-gradient(
       135deg,
-      #{'rgba(#{css-var(primary-color)}, 0.08)'},
-      #{'rgba(#{css-var(secondary-color)}, 0.05)'}
+      rgba($primary-color, 0.08),
+      rgba($secondary-color, 0.05)
     );
     outline: none;
     transform: translateY(-1px);
@@ -130,13 +123,13 @@ textarea {
   }
 
   &::placeholder {
-    color: #{'rgba(#{css-var(text-color)}, 0.6)'};
+    color: rgba($text-color, 0.6);
     font-weight: 300;
   }
 
   &:hover {
     // ✅ HOVER - Bordure intensifiée
-    border-color: #{'rgba(#{css-var(primary-color)}, 0.7)'};
+    border-color: rgba($primary-color, 0.8);
     transform: translateY(-1px);
   }
 }
@@ -205,11 +198,11 @@ textarea {
   transition: all 0.3s ease;
   background: linear-gradient(
     135deg,
-    css-var(primary-color),
+    $primary-color,
     color.adjust($primary-color, $lightness: 10%)
   );
-  color: css-var(background-color);
-  box-shadow: 0 4px 8px #{'rgba(#{css-var(primary-color)}, 0.3)'};
+  color: $background-color;
+  box-shadow: 0 4px 8px rgba($primary-color, 0.3);
 
   // 📱 MOBILE FIRST - Bouton tactile optimal
   padding: 1.25rem 2rem;
@@ -292,10 +285,10 @@ textarea {
     background: linear-gradient(
       135deg,
       color.adjust($primary-color, $lightness: 5%),
-      css-var(secondary-color)
+      $secondary-color
     );
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px #{'rgba(#{css-var(primary-color)}, 0.4)'};
+    box-shadow: 0 6px 12px rgba($primary-color, 0.4);
   }
 
   &:active {
