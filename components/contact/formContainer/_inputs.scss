@@ -2,7 +2,7 @@
 @use '../../../app/styles/abstracts' as *;
 
 // ================================
-// 📄 _inputs.scss
+// 📄 _inputs.scss - FIX FINAL
 // ================================
 
 input,
@@ -10,7 +10,10 @@ textarea {
   border-radius: 12px;
   transition: all 0.4s ease;
   font-weight: 400;
-  backdrop-filter: blur(10px);
+
+  // ❌ SUPPRIMÉ : backdrop-filter: blur(10px);
+  // Le form parent a déjà backdrop-filter, pas besoin de le dupliquer !
+
   box-shadow: 0 2px 8px #{'rgba(#{css-var(background-color)}, 0.2)'};
   background: linear-gradient(
     135deg,
@@ -18,11 +21,8 @@ textarea {
     #{'rgba(#{css-var(text-color)}, 0.08)'}
   );
 
-  // ✅ SOLUTION : Utiliser OUTLINE au lieu de BORDER
-  // Outline n'est PAS affecté par backdrop-filter
-  border: none; // Pas de border du tout
-  outline: 2px solid #{'rgba(#{css-var(primary-color)}, 0.4)'};
-  outline-offset: -2px; // Tire l'outline vers l'intérieur pour simuler une bordure
+  // ✅ BORDURE SOLIDE VISIBLE
+  border: 2px solid #{'rgba(#{css-var(primary-color)}, 0.5)'};
 
   color: css-var(text-color);
 
@@ -87,7 +87,7 @@ textarea {
 
   // 🖥️ GRANDS ÉCRANS - Valeurs desktop réduites pour s'adapter
   @include from('large-xs') {
-    padding: 1rem 1.3rem; // Réduit pour s'adapter à la hauteur
+    padding: 1rem 1.3rem;
     font-size: 0.95rem;
     border-radius: 10px;
     min-height: auto;
@@ -104,9 +104,9 @@ textarea {
   }
 
   &:focus {
-    // ✅ FOCUS - Outline encore plus visible
-    outline-color: css-var(primary-color);
-    outline-width: 2px;
+    // ✅ FOCUS - Bordure encore plus visible
+    border-color: css-var(primary-color);
+    border-width: 3px;
     box-shadow:
       0 0 0 3px #{'rgba(#{css-var(primary-color)}, 0.2)'},
       0 4px 12px #{'rgba(#{css-var(primary-color)}, 0.15)'};
@@ -115,6 +115,7 @@ textarea {
       #{'rgba(#{css-var(primary-color)}, 0.08)'},
       #{'rgba(#{css-var(secondary-color)}, 0.05)'}
     );
+    outline: none;
     transform: translateY(-1px);
 
     @include from('large-xs') {
@@ -128,8 +129,8 @@ textarea {
   }
 
   &:hover {
-    // ✅ HOVER - Outline intensifié
-    outline-color: #{'rgba(#{css-var(primary-color)}, 0.6)'};
+    // ✅ HOVER - Bordure intensifiée
+    border-color: #{'rgba(#{css-var(primary-color)}, 0.7)'};
     transform: translateY(-1px);
   }
 }
@@ -178,7 +179,7 @@ textarea {
 
   // 🖥️ GRANDS ÉCRANS - Hauteur réduite pour s'adapter
   @include from('large-xs') {
-    min-height: 80px; // Réduit pour s'adapter à la hauteur contrainte
+    min-height: 80px;
   }
 
   @include from('large-lg') {
@@ -264,7 +265,7 @@ textarea {
 
   // 🖥️ GRANDS ÉCRANS - Valeurs desktop réduites
   @include from('large-xs') {
-    padding: 0.8rem 1.5rem; // Réduit pour s'adapter
+    padding: 0.8rem 1.5rem;
     border-radius: 8px;
     font-size: 0.95rem;
     width: auto;
