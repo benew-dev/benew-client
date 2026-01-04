@@ -17,8 +17,13 @@ textarea {
     #{'rgba(#{css-var(text-color)}, 0.05)'},
     #{'rgba(#{css-var(text-color)}, 0.08)'}
   );
-  // ✅ BORDURE VISIBLE - Toujours présente
-  border: 2px solid #{'rgba(#{css-var(primary-color)}, 0.4)'} !important;
+
+  // ✅ SOLUTION : Utiliser OUTLINE au lieu de BORDER
+  // Outline n'est PAS affecté par backdrop-filter
+  border: none; // Pas de border du tout
+  outline: 2px solid #{'rgba(#{css-var(primary-color)}, 0.4)'};
+  outline-offset: -2px; // Tire l'outline vers l'intérieur pour simuler une bordure
+
   color: css-var(text-color);
 
   // 📱 MOBILE FIRST - Champs tactiles optimaux
@@ -99,8 +104,9 @@ textarea {
   }
 
   &:focus {
-    // ✅ FOCUS - Bordure encore plus visible
-    border-color: css-var(primary-color);
+    // ✅ FOCUS - Outline encore plus visible
+    outline-color: css-var(primary-color);
+    outline-width: 2px;
     box-shadow:
       0 0 0 3px #{'rgba(#{css-var(primary-color)}, 0.2)'},
       0 4px 12px #{'rgba(#{css-var(primary-color)}, 0.15)'};
@@ -109,7 +115,6 @@ textarea {
       #{'rgba(#{css-var(primary-color)}, 0.08)'},
       #{'rgba(#{css-var(secondary-color)}, 0.05)'}
     );
-    outline: none;
     transform: translateY(-1px);
 
     @include from('large-xs') {
@@ -123,8 +128,8 @@ textarea {
   }
 
   &:hover {
-    // ✅ HOVER - Bordure intensifiée
-    border-color: #{'rgba(#{css-var(primary-color)}, 0.6)'};
+    // ✅ HOVER - Outline intensifié
+    outline-color: #{'rgba(#{css-var(primary-color)}, 0.6)'};
     transform: translateY(-1px);
   }
 }
