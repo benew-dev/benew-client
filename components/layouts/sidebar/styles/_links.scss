@@ -119,6 +119,63 @@
     }
 
     // =============================
+    // 🆕 ÉTAT ACTIF - Page courante
+    // =============================
+    &.active {
+      background: linear-gradient(
+        135deg,
+        css-var(primary-color),
+        color.adjust($primary-color, $lightness: 10%)
+      );
+      border: 2px solid #{'rgba(#{css-var(secondary-color)}, 0.5)'};
+      box-shadow: 0 4px 12px #{'rgba(#{css-var(primary-color)}, 0.3)'};
+
+      // Indicateur visuel à gauche
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 70%;
+        background: css-var(background-color);
+        border-radius: 0 4px 4px 0;
+
+        @include from('small-sm') {
+          width: 5px;
+        }
+
+        @include from('medium-sm') {
+          width: 5px;
+          height: 60%;
+        }
+
+        @include from('large-xs') {
+          width: 4px;
+          height: 60%;
+        }
+      }
+
+      &:hover {
+        background: linear-gradient(
+          135deg,
+          color.adjust($primary-color, $lightness: 5%),
+          css-var(secondary-color)
+        );
+        transform: translateX(8px); // Moins de mouvement que les liens inactifs
+      }
+
+      a {
+        color: css-var(background-color);
+        font-weight: 700;
+        text-shadow: 0 2px 4px #{'rgba(#{css-var(background-color)}, 0.3)'};
+      }
+    }
+
+    // =============================
     // LIENS TEXTE
     // =============================
     a {
