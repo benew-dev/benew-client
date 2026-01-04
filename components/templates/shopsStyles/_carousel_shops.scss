@@ -94,8 +94,7 @@
   height: 0.35rem !important;
   border-radius: 50%;
 
-  background: rgba(css-var(text-color), 0.4);
-  border: 1px solid rgba(css-var(text-color), 0.3);
+  background: css-var(text-color);
 
   cursor: pointer;
   transition: all 0.3s ease;
