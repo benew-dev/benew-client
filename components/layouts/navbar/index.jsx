@@ -161,29 +161,14 @@ function Navbar() {
                     onClick={closeDropdown}
                   >
                     <Image
-                      src="/snapchat.png"
-                      alt="Snapchat"
+                      src="/tik-tok.png"
+                      alt="TikTok"
                       width={20}
                       height={20}
                       className="dropdown-icon"
                       unoptimized
                     />
-                    <span>Snapchat</span>
-                  </Link>
-                  <Link
-                    href="#"
-                    className="dropdown-item"
-                    onClick={closeDropdown}
-                  >
-                    <Image
-                      src="/twitter.png"
-                      alt="Twitter"
-                      width={20}
-                      height={20}
-                      className="dropdown-icon"
-                      unoptimized
-                    />
-                    <span>Twitter</span>
+                    <span>TikTok</span>
                   </Link>
                 </div>
               </div>
