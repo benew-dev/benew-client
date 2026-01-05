@@ -437,10 +437,6 @@ const nextConfig = {
     return config;
   },
 
-  eslint: {
-    ignoreDuringBuilds: false,
-  },
-
   // 🎯 CONFIGURATION STANDALONE CONDITIONNELLE
   output: process.env.NODE_ENV === 'production' ? 'standalone' : undefined,
 
