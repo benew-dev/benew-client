@@ -164,6 +164,18 @@ const nextConfig = {
     emotion: process.env.NODE_ENV === 'production',
   },
 
+  // ✅ AJOUTER : Configuration Turbopack équivalente
+  turbopack: {
+    resolveAlias: {
+      '@': path.resolve(__dirname),
+    },
+  },
+
+  experimental: {
+    // ✅ OPTIONNEL : Cache filesystem pour builds AUSSI (beta)
+    turbopackFileSystemCacheForBuild: true,
+  },
+
   // Timeout pour la génération de pages statiques
   staticPageGenerationTimeout: 60,
 
@@ -419,22 +431,6 @@ const nextConfig = {
         permanent: true,
       },
     ];
-  },
-
-  // ===== CONFIGURATION WEBPACK SIMPLIFIÉE (DEFAULTS NEXT.JS 15) =====
-  webpack: (config, { isServer }) => {
-    // Alias pour améliorer les performances de résolution
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@': path.resolve(__dirname),
-    };
-
-    // Optimisation pour les bibliothèques externes
-    if (isServer) {
-      config.externals = [...config.externals, 'pg-native'];
-    }
-
-    return config;
   },
 
   // 🎯 CONFIGURATION STANDALONE CONDITIONNELLE
