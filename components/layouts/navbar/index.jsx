@@ -168,7 +168,7 @@ function Navbar() {
                       className="dropdown-icon"
                       unoptimized
                     />
-                    <span>TikTok</span>
+                    <span>Tik Tok</span>
                   </Link>
                 </div>
               </div>
