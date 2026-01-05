@@ -244,7 +244,7 @@ const TemplateCard = memo(({ template, onClick }) => {
 
             {/* ✅ INDICATEUR VISUEL ATTRACTIF */}
             <div className="view-details-indicator">
-              <span className="indicator-text">Voir les détails</span>
+              <span className="indicator-text">Voir +</span>
               <svg
                 className="indicator-arrow"
                 width="16"

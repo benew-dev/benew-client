@@ -68,18 +68,8 @@ function Navbar() {
             </Link>
             <Link href="#">
               <Image
-                src="/snapchat.png"
-                alt="Snapchat logo"
-                width={24}
-                height={24}
-                className="social-icon"
-                unoptimized
-              />
-            </Link>
-            <Link href="#">
-              <Image
-                src="/twitter.png"
-                alt="Twitter logo"
+                src="/tik-tok.png"
+                alt="TikTok logo"
                 width={24}
                 height={24}
                 className="social-icon"
