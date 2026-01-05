@@ -9,5 +9,6 @@
   "semi": true,
   "jsxSingleQuote": false,
   "arrowParens": "always",
-  "htmlWhitespaceSensitivity": "css"
+  "htmlWhitespaceSensitivity": "css",
+  "endOfLine": "lf"
 }
