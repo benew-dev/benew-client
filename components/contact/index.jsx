@@ -57,6 +57,12 @@ const ContactInfo = memo(({ isCollapsed, variants }) => (
         text="benew-tech@benew-dj.com"
         variants={variants}
       />
+
+      <ContactItem
+        icon={MdMail}
+        text="service-client@benew-dj.com"
+        variants={variants}
+      />
     </div>
   </div>
 ));
