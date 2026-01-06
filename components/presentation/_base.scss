@@ -4,6 +4,16 @@
 // 📄 _base.scss - Structures de base
 // ================================
 
+// =============================
+// SECTION OTHERS - Container avec position relative
+// =============================
+.others {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
 // ✅ CONTAINERS pour backgrounds optimisés (Next.js Image)
 .planets-background-container,
 .stars-container {
