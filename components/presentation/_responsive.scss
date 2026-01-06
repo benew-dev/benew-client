@@ -4,5 +4,250 @@
 // 📄 _responsive.scss
 // ================================
 
-// Fichier épuré - les règles responsive spécifiques aux cartes et slider supprimées
-// Conservé uniquement les règles générales si nécessaires à l'avenir
+// =============================
+// MODE PAYSAGE MOBILE
+// =============================
+@include mobile-landscape {
+  .presentation-content {
+    padding: 1.5rem 1rem;
+    justify-content: center;
+  }
+
+  .benew-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .sky-limit-card {
+    padding: 2rem 1.5rem;
+    max-width: 90%;
+  }
+
+  .sky-limit-text {
+    font-size: 1.5rem;
+  }
+
+  .card-hint {
+    font-size: 0.9rem;
+  }
+}
+
+// =============================
+// ÉCRANS TRÈS PETITS (< 360px)
+// =============================
+@media (max-width: 360px) {
+  .presentation-content {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .benew-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    letter-spacing: 0.15em;
+  }
+
+  .sky-limit-card {
+    padding: 2rem 1.25rem;
+    max-width: 95%;
+    gap: 1rem;
+  }
+
+  .sky-limit-text {
+    font-size: 1.5rem;
+    letter-spacing: 0.1em;
+  }
+
+  .card-hint {
+    font-size: 0.85rem;
+  }
+}
+
+// =============================
+// ÉCRANS COURTS (hauteur limitée)
+// =============================
+@include short-screen {
+  .presentation-content {
+    padding: 1.5rem 1rem;
+    justify-content: center;
+  }
+
+  .benew-title {
+    margin-bottom: 2rem;
+
+    @include until('medium-sm') {
+      font-size: 2.5rem;
+    }
+  }
+
+  .sky-limit-card {
+    padding: 2.5rem 2rem;
+
+    @include until('medium-sm') {
+      padding: 2rem 1.5rem;
+    }
+  }
+}
+
+// =============================
+// ÉCRANS HAUTS (plus d'espace vertical)
+// =============================
+@include tall-screen {
+  .presentation-content {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+
+  .benew-title {
+    margin-bottom: 6rem;
+
+    @include from('large-xs') {
+      margin-bottom: 7rem;
+    }
+  }
+
+  .sky-limit-card {
+    padding: 6rem 4rem;
+
+    @include from('large-xs') {
+      padding: 7rem 5rem;
+    }
+  }
+}
+
+// =============================
+// TRÈS GRANDS ÉCRANS
+// =============================
+@include from('large-xxxl') {
+  .presentation-content {
+    padding: 5rem 3rem;
+  }
+
+  .benew-title {
+    font-size: 6rem;
+    margin-bottom: 6rem;
+  }
+
+  .sky-limit-card {
+    padding: 6rem 5rem;
+    max-width: 800px;
+    gap: 2rem;
+  }
+
+  .sky-limit-text {
+    font-size: 4.5rem;
+  }
+
+  .card-hint {
+    font-size: 1.3rem;
+  }
+}
+
+// =============================
+// OPTIMISATIONS TABLETTES
+// =============================
+@include medium-screens {
+  .presentation-content {
+    min-height: 100vh;
+    justify-content: center;
+  }
+
+  .benew-title {
+    margin-bottom: 4rem;
+  }
+
+  .sky-limit-card {
+    max-width: 600px;
+  }
+}
+
+// =============================
+// OPTIMISATIONS DESKTOP
+// =============================
+@include large-screens {
+  .presentation-content {
+    min-height: 100vh;
+    justify-content: center;
+  }
+
+  .sky-limit-card {
+    &:hover {
+      transform: translateY(-15px) scale(1.03);
+    }
+  }
+}
+
+// =============================
+// CONTRASTE ÉLEVÉ
+// =============================
+@include high-contrast {
+  .sky-limit-card {
+    border-width: 3px;
+    border-color: rgba(css-var(primary-color), 0.5);
+
+    &:hover {
+      border-color: css-var(primary-color);
+    }
+  }
+
+  .benew-title {
+    text-shadow:
+      0 0 30px rgba(css-var(primary-color), 0.8),
+      0 2px 4px rgba(0, 0, 0, 0.8);
+  }
+
+  .sky-limit-text {
+    text-shadow:
+      0 2px 10px rgba(0, 0, 0, 0.7),
+      0 0 20px rgba(css-var(primary-color), 0.5);
+  }
+}
+
+// =============================
+// OPTIMISATIONS PERFORMANCE
+// =============================
+
+// Réduction de la qualité des effets sur petits écrans
+@media (max-width: 768px) {
+  .sky-limit-card {
+    backdrop-filter: blur(8px);
+
+    &::before {
+      display: none; // Pas d'effet de brillance sur mobile
+    }
+  }
+}
+
+// Focus visible pour la navigation au clavier
+.sky-limit-card:focus-visible {
+  outline: 3px solid css-var(primary-color);
+  outline-offset: 4px;
+}
+
+// =============================
+// PRINT STYLES
+// =============================
+@media print {
+  .presentation-content {
+    padding: 2rem;
+  }
+
+  .benew-title {
+    font-size: 3rem;
+    animation: none;
+    text-shadow: none;
+  }
+
+  .sky-limit-card {
+    border: 2px solid css-var(primary-color);
+    box-shadow: none;
+    transform: none !important;
+
+    &::before {
+      display: none;
+    }
+  }
+
+  .card-hint {
+    display: none;
+  }
+}

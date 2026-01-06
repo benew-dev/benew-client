@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import './index.scss';
 import Image from 'next/image';
-import { MdOutlineChevronLeft, MdOutlineChevronRight } from 'react-icons/md';
 
 import ParallaxSkeleton from '../layouts/parallax/ParallaxSkeleton';
 // Import dynamique des composants
@@ -56,27 +55,6 @@ const contentData = {
 const PresentationComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
-  const [currentSlide, setCurrentSlide] = useState(0);
-
-  const cards = ['presentation', 'produit', 'fondateur'];
-
-  const handleSlideNavigation = (direction) => {
-    const newSlide =
-      direction === 'next'
-        ? (currentSlide + 1) % cards.length
-        : (currentSlide - 1 + cards.length) % cards.length;
-
-    // ⭐ TRACKING SLIDER NAVIGATION
-    trackEvent('presentation_slider_nav', {
-      event_category: 'presentation',
-      event_label: direction,
-      from_slide: cards[currentSlide],
-      to_slide: cards[newSlide],
-      slider_position: newSlide,
-    });
-
-    setCurrentSlide(newSlide);
-  };
 
   const handleItemClick = (itemType) => {
     // ⭐ TRACKING MODAL OPEN
@@ -96,8 +74,12 @@ const PresentationComponent = () => {
     if (modalContent) {
       trackEvent('presentation_modal_close', {
         event_category: 'presentation',
-        event_label: cards.find((card) => contentData[card] === modalContent),
-        modal_type: cards.find((card) => contentData[card] === modalContent),
+        event_label: Object.keys(contentData).find(
+          (key) => contentData[key] === modalContent,
+        ),
+        modal_type: Object.keys(contentData).find(
+          (key) => contentData[key] === modalContent,
+        ),
       });
     }
 
@@ -146,6 +128,18 @@ const PresentationComponent = () => {
               objectPosition: 'bottom',
             }}
           />
+        </div>
+
+        {/* Contenu principal */}
+        <div className="presentation-content">
+          {/* Titre BENEW */}
+          <h1 className="benew-title">BENEW</h1>
+
+          {/* Carte centrale */}
+          <div className="sky-limit-card">
+            <h2 className="sky-limit-text">SKY IS THE LIMIT</h2>
+            <p className="card-hint">Cliquez pour entrer →</p>
+          </div>
         </div>
       </section>
 

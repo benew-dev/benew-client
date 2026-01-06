@@ -4,16 +4,346 @@
 // 📄 _base.scss - Structures de base
 // ================================
 
-// ✅ NOUVEAUX CONTAINERS pour backgrounds optimisés (Next.js Image)
+// ✅ CONTAINERS pour backgrounds optimisés (Next.js Image)
 .planets-background-container,
 .stars-container {
   position: absolute;
   width: 100%;
   height: 100%;
   z-index: 1;
+  top: 0;
+  left: 0;
 
   // Planets devant stars
   &.planets-background-container {
     z-index: 2;
+  }
+}
+
+// =============================
+// CONTENU PRINCIPAL
+// =============================
+.presentation-content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem;
+
+  @include from('small-sm') {
+    padding: 2.5rem 1.5rem;
+  }
+
+  @include from('medium-sm') {
+    padding: 3rem 2rem;
+  }
+
+  @include from('large-xs') {
+    padding: 4rem 2rem;
+  }
+}
+
+// =============================
+// TITRE BENEW
+// =============================
+.benew-title {
+  color: css-var(primary-color);
+  font-size: 2.5rem;
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 3rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-shadow: 0 0 20px rgba(css-var(primary-color), 0.5);
+  animation: glow 2s ease-in-out infinite alternate;
+
+  @include from('small-sm') {
+    font-size: 3rem;
+    margin-bottom: 3.5rem;
+  }
+
+  @include from('small-lg') {
+    font-size: 3.5rem;
+    margin-bottom: 4rem;
+  }
+
+  @include from('medium-sm') {
+    font-size: 4rem;
+    margin-bottom: 4.5rem;
+  }
+
+  @include from('large-xs') {
+    font-size: 4.5rem;
+    margin-bottom: 5rem;
+  }
+
+  @include from('large-lg') {
+    font-size: 5rem;
+  }
+}
+
+// Animation glow pour le titre
+@keyframes glow {
+  from {
+    text-shadow:
+      0 0 20px rgba(css-var(primary-color), 0.5),
+      0 0 30px rgba(css-var(primary-color), 0.3);
+  }
+  to {
+    text-shadow:
+      0 0 30px rgba(css-var(primary-color), 0.8),
+      0 0 40px rgba(css-var(primary-color), 0.5),
+      0 0 50px rgba(css-var(primary-color), 0.3);
+  }
+}
+
+// =============================
+// CARTE SKY IS THE LIMIT
+// =============================
+.sky-limit-card {
+  background: linear-gradient(
+    135deg,
+    rgba(css-var(text-color), 0.08),
+    rgba(css-var(text-color), 0.12)
+  );
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(css-var(primary-color), 0.3);
+  border-radius: 20px;
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  max-width: 90%;
+  margin: auto;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 0 40px rgba(css-var(primary-color), 0.1);
+  position: relative;
+  overflow: hidden;
+
+  @include from('small-sm') {
+    padding: 3.5rem 2.5rem;
+    max-width: 85%;
+  }
+
+  @include from('small-lg') {
+    padding: 4rem 3rem;
+    max-width: 80%;
+  }
+
+  @include from('medium-sm') {
+    padding: 4.5rem 3.5rem;
+    max-width: 650px;
+  }
+
+  @include from('large-xs') {
+    padding: 5rem 4rem;
+    max-width: 700px;
+  }
+
+  // Effet de brillance au survol
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      45deg,
+      transparent,
+      rgba(css-var(primary-color), 0.1),
+      transparent
+    );
+    transform: rotate(45deg);
+    transition: all 0.6s ease;
+    opacity: 0;
+  }
+
+  &:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: rgba(css-var(primary-color), 0.6);
+    box-shadow:
+      0 12px 48px rgba(0, 0, 0, 0.4),
+      0 0 60px rgba(css-var(primary-color), 0.3);
+
+    &::before {
+      opacity: 1;
+      animation: shine 1.5s ease-in-out;
+    }
+
+    .sky-limit-text {
+      color: css-var(secondary-color);
+      transform: scale(1.05);
+    }
+
+    .card-hint {
+      color: css-var(primary-color);
+      transform: translateX(5px);
+    }
+  }
+
+  &:active {
+    transform: translateY(-5px) scale(1);
+  }
+}
+
+// Animation de brillance
+@keyframes shine {
+  0% {
+    transform: rotate(45deg) translateX(-100%);
+  }
+  100% {
+    transform: rotate(45deg) translateX(100%);
+  }
+}
+
+// =============================
+// TEXTE "SKY IS THE LIMIT"
+// =============================
+.sky-limit-text {
+  color: css-var(text-color);
+  font-size: 2rem;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(css-var(primary-color), 0.3);
+  transition: all 0.3s ease;
+  margin: 0;
+  line-height: 1.2;
+
+  @include from('small-sm') {
+    font-size: 2.3rem;
+  }
+
+  @include from('small-lg') {
+    font-size: 2.6rem;
+  }
+
+  @include from('medium-sm') {
+    font-size: 3rem;
+  }
+
+  @include from('large-xs') {
+    font-size: 3.5rem;
+  }
+
+  @include from('large-lg') {
+    font-size: 4rem;
+  }
+}
+
+// =============================
+// INDICATION "CLIQUEZ POUR ENTRER"
+// =============================
+.card-hint {
+  color: rgba(css-var(text-color), 0.7);
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  margin: 0;
+  transition: all 0.3s ease;
+  letter-spacing: 0.05em;
+
+  @include from('small-sm') {
+    font-size: 1.05rem;
+  }
+
+  @include from('small-lg') {
+    font-size: 1.1rem;
+  }
+
+  @include from('medium-sm') {
+    font-size: 1.15rem;
+  }
+
+  @include from('large-xs') {
+    font-size: 1.2rem;
+  }
+}
+
+// =============================
+// ACCESSIBILITÉ
+// =============================
+
+// Réduction des animations
+@include reduced-motion {
+  .benew-title {
+    animation: none !important;
+  }
+
+  .sky-limit-card {
+    transition: none !important;
+
+    &::before {
+      animation: none !important;
+    }
+
+    &:hover {
+      transform: none !important;
+
+      .sky-limit-text,
+      .card-hint {
+        transform: none !important;
+      }
+    }
+  }
+}
+
+// Écrans tactiles
+@media (pointer: coarse) {
+  .sky-limit-card {
+    &:hover {
+      transform: none;
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+}
+
+// Mode sombre
+@include dark-mode {
+  .sky-limit-card {
+    background: linear-gradient(
+      135deg,
+      rgba(css-var(text-color), 0.05),
+      rgba(css-var(text-color), 0.1)
+    );
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.5),
+      0 0 40px rgba(css-var(primary-color), 0.15);
+  }
+}
+
+// Écrans haute densité
+@include high-density {
+  .benew-title {
+    text-shadow:
+      0 0 20px rgba(css-var(primary-color), 0.6),
+      0 0 30px rgba(css-var(primary-color), 0.4);
+  }
+
+  .sky-limit-card {
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.4),
+      0 0 40px rgba(css-var(primary-color), 0.2);
+
+    &:hover {
+      box-shadow:
+        0 12px 48px rgba(0, 0, 0, 0.5),
+        0 0 60px rgba(css-var(primary-color), 0.4);
+    }
   }
 }
