@@ -116,7 +116,7 @@ const PresentationComponent = () => {
           {/* Carte centrale cliquable */}
           <div className="sky-limit-card" onClick={handleCardClick}>
             <h2 className="sky-limit-text">SKY IS THE LIMIT</h2>
-            <p className="card-hint">Cliquez pour entrer →</p>
+            <p className="card-hint">Lire →</p>
           </div>
         </div>
       </section>
