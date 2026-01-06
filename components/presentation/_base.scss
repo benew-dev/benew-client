@@ -4,5 +4,16 @@
 // 📄 _base.scss - Structures de base
 // ================================
 
-// Styles de base conservés uniquement pour les sections
-// Les styles des backgrounds, cartes et slider ont été supprimés
+// ✅ NOUVEAUX CONTAINERS pour backgrounds optimisés (Next.js Image)
+.planets-background-container,
+.stars-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+
+  // Planets devant stars
+  &.planets-background-container {
+    z-index: 2;
+  }
+}

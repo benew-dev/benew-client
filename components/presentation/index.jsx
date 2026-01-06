@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import './index.scss';
+import Image from 'next/image';
 import { MdOutlineChevronLeft, MdOutlineChevronRight } from 'react-icons/md';
 
 import ParallaxSkeleton from '../layouts/parallax/ParallaxSkeleton';
@@ -59,6 +60,37 @@ const PresentationComponent = () => {
 
   const cards = ['presentation', 'produit', 'fondateur'];
 
+  const handleSlideNavigation = (direction) => {
+    const newSlide =
+      direction === 'next'
+        ? (currentSlide + 1) % cards.length
+        : (currentSlide - 1 + cards.length) % cards.length;
+
+    // ⭐ TRACKING SLIDER NAVIGATION
+    trackEvent('presentation_slider_nav', {
+      event_category: 'presentation',
+      event_label: direction,
+      from_slide: cards[currentSlide],
+      to_slide: cards[newSlide],
+      slider_position: newSlide,
+    });
+
+    setCurrentSlide(newSlide);
+  };
+
+  const handleItemClick = (itemType) => {
+    // ⭐ TRACKING MODAL OPEN
+    trackEvent('presentation_modal_open', {
+      event_category: 'presentation',
+      event_label: itemType,
+      modal_type: itemType,
+      page_section: 'cards',
+    });
+
+    setModalContent(contentData[itemType]);
+    setIsModalOpen(true);
+  };
+
   const closeModal = () => {
     // ⭐ TRACKING MODAL CLOSE
     if (modalContent) {
@@ -86,7 +118,36 @@ const PresentationComponent = () => {
         <Parallax bgColor="#0c0c1d" title="Presentation" planets="/sun.png" />
       </section>
 
-      <section className="others">{/* Contenu à ajouter ici */}</section>
+      <section className="others">
+        {/* ✅ BACKGROUNDS OPTIMISÉS avec Next.js Image - Affichage IDENTIQUE */}
+        <div className="planets-background-container">
+          <Image
+            src="/planets.png"
+            alt=""
+            fill
+            priority
+            quality={75}
+            style={{
+              objectFit: 'cover',
+              objectPosition: 'bottom',
+            }}
+          />
+        </div>
+
+        <div className="stars-container">
+          <Image
+            src="/stars.png"
+            alt=""
+            fill
+            priority
+            quality={60}
+            style={{
+              objectFit: 'cover',
+              objectPosition: 'bottom',
+            }}
+          />
+        </div>
+      </section>
 
       <PresentationModal
         isOpen={isModalOpen}
