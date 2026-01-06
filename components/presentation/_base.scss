@@ -138,18 +138,15 @@
   position: relative;
   overflow: hidden;
 
-  // ✅ AMÉLIORATION: Bordure plus visible sur mobile/tablette
+  // ✅ CORRECTION: Bordure VRAIMENT visible sur mobile/tablette
   @include mobile-and-tablets {
-    border-width: 3px; // Bordure plus épaisse
-    border-color: rgba(css-var(primary-color), 0.5); // Plus visible
+    border-width: 4px; // Très épaisse
+    border-style: solid;
+    border-color: css-var(primary-color); // Couleur pleine orange
     box-shadow:
-      0 8px 32px rgba(0, 0, 0, 0.4),
-      0 0 60px rgba(css-var(primary-color), 0.2),
-      // Ombre plus forte
-      inset 0 0 30px rgba(
-          css-var(primary-color),
-          0.05
-        ); // Ombre intérieure pour effet carte
+      0 8px 32px rgba(0, 0, 0, 0.5),
+      0 0 80px rgba(css-var(primary-color), 0.4),
+      inset 0 0 40px rgba(css-var(primary-color), 0.1);
   }
 
   @include from('small-sm') {
@@ -170,7 +167,7 @@
   @include from('large-xs') {
     padding: 5rem 4rem;
     max-width: 700px;
-    border-width: 2px; // Retour à bordure normale sur desktop
+    border-width: 2px;
     border-color: rgba(css-var(primary-color), 0.3);
   }
 
@@ -280,7 +277,6 @@
 // INDICATION "LIRE →" avec gradient
 // =============================
 .card-hint {
-  // ✅ AMÉLIORATION: Gradient sur texte + flèche pour meilleure visibilité
   background: linear-gradient(
     135deg,
     css-var(primary-color),
@@ -290,7 +286,7 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   font-size: 1rem;
-  font-weight: 600; // Plus gras pour meilleure visibilité
+  font-weight: 600;
   text-align: center;
   margin: 0;
   transition: all 0.3s ease;
@@ -315,7 +311,7 @@
 }
 
 // =============================
-// NOUVELLE SECTION - CARTES CATÉGORIES
+// NOUVELLE SECTION - CARTES CATÉGORIES (COMPACTES)
 // =============================
 .categories-content {
   position: relative;
@@ -341,10 +337,10 @@
   }
 }
 
-// Grille des cartes catégories
+// Grille des cartes catégories - COMPACTE
 .categories-grid {
   display: grid;
-  gap: 1.5rem;
+  gap: 1rem;
   width: 100%;
   max-width: 1200px;
   padding: 2rem 0;
@@ -355,30 +351,29 @@
   // Petits écrans: 2 colonnes
   @include from('small-lg') {
     grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
   }
 
-  // Tablettes: 2-3 colonnes
+  // Tablettes: 3 colonnes
   @include from('medium-sm') {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-  }
-
-  @include from('medium-xl') {
     grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
   }
 
-  // Desktop: 3-4 colonnes
+  // Desktop: 4 colonnes pour tout voir
   @include from('large-xs') {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2.5rem;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.75rem;
   }
 
+  // Très grands écrans: garde 4 colonnes
   @include from('large-lg') {
     grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
   }
 }
 
-// Carte catégorie individuelle
+// Carte catégorie individuelle - PETITE ET COMPACTE
 .category-card {
   background: linear-gradient(
     135deg,
@@ -387,26 +382,26 @@
   );
   backdrop-filter: blur(8px);
   border: 2px solid rgba(css-var(primary-color), 0.3);
-  border-radius: 16px;
-  padding: 2rem 1.5rem;
+  border-radius: 12px;
+  padding: 1rem 0.75rem; // Très compact
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.5rem; // Gap minimal
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
-  min-height: 180px;
+  min-height: 100px; // Hauteur minimale très réduite
 
   @include from('medium-sm') {
-    min-height: 200px;
-    padding: 2.5rem 2rem;
+    min-height: 110px;
+    padding: 1.25rem 1rem;
   }
 
   @include from('large-xs') {
-    min-height: 220px;
+    min-height: 120px;
   }
 
   // Variations de couleur pour chaque carte
@@ -477,10 +472,10 @@
   &::before {
     content: '';
     position: absolute;
-    top: -20px;
-    right: -20px;
-    width: 100px;
-    height: 100px;
+    top: -10px;
+    right: -10px;
+    width: 60px;
+    height: 60px;
     background: radial-gradient(
       circle,
       rgba(css-var(primary-color), 0.15),
@@ -492,65 +487,66 @@
   }
 
   &:hover {
-    transform: translateY(-8px) scale(1.03);
+    transform: translateY(-5px) scale(1.02);
     border-color: rgba(css-var(primary-color), 0.7);
     box-shadow:
-      0 12px 40px rgba(0, 0, 0, 0.3),
-      0 0 50px rgba(css-var(primary-color), 0.2);
+      0 8px 24px rgba(0, 0, 0, 0.3),
+      0 0 30px rgba(css-var(primary-color), 0.2);
 
     &::before {
       opacity: 1;
-      transform: translate(10px, 10px) scale(1.2);
+      transform: translate(5px, 5px) scale(1.1);
     }
 
     .category-icon {
-      transform: scale(1.15) rotate(5deg);
+      transform: scale(1.1) rotate(3deg);
       filter: brightness(1.2);
     }
 
     .category-title {
       color: css-var(primary-color);
-      transform: scale(1.05);
+      transform: scale(1.03);
     }
   }
 
   &:active {
-    transform: translateY(-4px) scale(1.01);
+    transform: translateY(-3px) scale(1);
   }
 }
 
-// Icône de la catégorie
+// Icône de la catégorie - PETITE
 .category-icon {
-  font-size: 2.5rem;
+  font-size: 1.75rem; // Réduit
   transition: all 0.3s ease;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 
   @include from('medium-sm') {
-    font-size: 3rem;
+    font-size: 2rem;
   }
 
   @include from('large-xs') {
-    font-size: 3.5rem;
+    font-size: 2.25rem;
   }
 }
 
-// Titre de la catégorie
+// Titre de la catégorie - COMPACT
 .category-title {
   color: css-var(text-color);
-  font-size: 1.2rem;
-  font-weight: 700;
+  font-size: 0.95rem; // Plus petit
+  font-weight: 600; // Moins gras
   text-align: center;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
   transition: all 0.3s ease;
   margin: 0;
+  line-height: 1.2;
 
   @include from('medium-sm') {
-    font-size: 1.3rem;
+    font-size: 1rem;
   }
 
   @include from('large-xs') {
-    font-size: 1.4rem;
+    font-size: 1.05rem;
   }
 }
 
@@ -614,8 +610,8 @@
 
   .category-card {
     box-shadow:
-      0 8px 24px rgba(0, 0, 0, 0.5),
-      0 0 30px rgba(css-var(primary-color), 0.1);
+      0 4px 16px rgba(0, 0, 0, 0.5),
+      0 0 20px rgba(css-var(primary-color), 0.1);
   }
 }
 
