@@ -39,6 +39,17 @@ const contentData = {
   ],
 };
 
+// Données des catégories
+const categories = [
+  { id: 'offre', title: "L'offre", icon: '🎁' },
+  { id: 'modeles', title: 'Les modèles', icon: '📐' },
+  { id: 'magasins', title: 'Les magasins', icon: '🏪' },
+  { id: 'travail', title: 'Le travail', icon: '💼' },
+  { id: 'technologies', title: 'Les technologies', icon: '⚙️' },
+  { id: 'formule', title: 'La formule', icon: '🧪' },
+  { id: 'prix', title: 'Le prix', icon: '💰' },
+];
+
 const PresentationComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -52,6 +63,19 @@ const PresentationComponent = () => {
     });
 
     setIsModalOpen(true);
+  };
+
+  const handleCategoryClick = (categoryId) => {
+    // ⭐ TRACKING CATEGORY CLICK
+    trackEvent('presentation_category_click', {
+      event_category: 'presentation',
+      event_label: categoryId,
+      category_type: categoryId,
+      page_section: 'categories',
+    });
+
+    // TODO: Implémenter la navigation ou le modal pour chaque catégorie
+    console.log(`Catégorie cliquée: ${categoryId}`);
   };
 
   const closeModal = () => {
@@ -71,13 +95,20 @@ const PresentationComponent = () => {
       <PageTracker
         pageName="presentation"
         pageType="informational"
-        sections={['hero_parallax', 'presentation_card', 'modal_interaction']}
+        sections={[
+          'hero_parallax',
+          'presentation_card',
+          'categories_grid',
+          'modal_interaction',
+        ]}
       />
 
+      {/* SECTION 1: Parallax */}
       <section className="others">
         <Parallax bgColor="#0c0c1d" title="Presentation" planets="/sun.png" />
       </section>
 
+      {/* SECTION 2: Carte SKY IS THE LIMIT */}
       <section className="others">
         {/* ✅ BACKGROUNDS OPTIMISÉS avec Next.js Image */}
         <div className="planets-background-container">
@@ -117,6 +148,54 @@ const PresentationComponent = () => {
           <div className="sky-limit-card" onClick={handleCardClick}>
             <h2 className="sky-limit-text">SKY IS THE LIMIT</h2>
             <p className="card-hint">Lire →</p>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 3: Grille des catégories */}
+      <section className="others">
+        {/* Backgrounds réutilisés */}
+        <div className="planets-background-container">
+          <Image
+            src="/planets.png"
+            alt=""
+            fill
+            priority={false}
+            quality={75}
+            style={{
+              objectFit: 'cover',
+              objectPosition: 'bottom',
+            }}
+          />
+        </div>
+
+        <div className="stars-container">
+          <Image
+            src="/stars.png"
+            alt=""
+            fill
+            priority={false}
+            quality={60}
+            style={{
+              objectFit: 'cover',
+              objectPosition: 'bottom',
+            }}
+          />
+        </div>
+
+        {/* Contenu catégories */}
+        <div className="categories-content">
+          <div className="categories-grid">
+            {categories.map((category) => (
+              <div
+                key={category.id}
+                className="category-card"
+                onClick={() => handleCategoryClick(category.id)}
+              >
+                <div className="category-icon">{category.icon}</div>
+                <h3 className="category-title">{category.title}</h3>
+              </div>
+            ))}
           </div>
         </div>
       </section>

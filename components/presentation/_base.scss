@@ -138,6 +138,20 @@
   position: relative;
   overflow: hidden;
 
+  // ✅ AMÉLIORATION: Bordure plus visible sur mobile/tablette
+  @include mobile-and-tablets {
+    border-width: 3px; // Bordure plus épaisse
+    border-color: rgba(css-var(primary-color), 0.5); // Plus visible
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.4),
+      0 0 60px rgba(css-var(primary-color), 0.2),
+      // Ombre plus forte
+      inset 0 0 30px rgba(
+          css-var(primary-color),
+          0.05
+        ); // Ombre intérieure pour effet carte
+  }
+
   @include from('small-sm') {
     padding: 3.5rem 2.5rem;
     max-width: 85%;
@@ -156,6 +170,8 @@
   @include from('large-xs') {
     padding: 5rem 4rem;
     max-width: 700px;
+    border-width: 2px; // Retour à bordure normale sur desktop
+    border-color: rgba(css-var(primary-color), 0.3);
   }
 
   // Effet de brillance au survol
@@ -195,8 +211,15 @@
     }
 
     .card-hint {
-      color: css-var(primary-color);
-      transform: translateX(5px);
+      background: linear-gradient(
+        135deg,
+        css-var(primary-color),
+        css-var(secondary-color)
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      transform: translateX(8px) scale(1.1);
     }
   }
 
@@ -254,16 +277,25 @@
 }
 
 // =============================
-// INDICATION "CLIQUEZ POUR ENTRER"
+// INDICATION "LIRE →" avec gradient
 // =============================
 .card-hint {
-  color: rgba(css-var(text-color), 0.7);
+  // ✅ AMÉLIORATION: Gradient sur texte + flèche pour meilleure visibilité
+  background: linear-gradient(
+    135deg,
+    css-var(primary-color),
+    css-var(secondary-color)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600; // Plus gras pour meilleure visibilité
   text-align: center;
   margin: 0;
   transition: all 0.3s ease;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
+  position: relative;
 
   @include from('small-sm') {
     font-size: 1.05rem;
@@ -283,6 +315,246 @@
 }
 
 // =============================
+// NOUVELLE SECTION - CARTES CATÉGORIES
+// =============================
+.categories-content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+
+  @include from('small-sm') {
+    padding: 2.5rem 1.5rem;
+  }
+
+  @include from('medium-sm') {
+    padding: 3rem 2rem;
+  }
+
+  @include from('large-xs') {
+    padding: 4rem 2rem;
+  }
+}
+
+// Grille des cartes catégories
+.categories-grid {
+  display: grid;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1200px;
+  padding: 2rem 0;
+
+  // Mobile: 1 colonne
+  grid-template-columns: 1fr;
+
+  // Petits écrans: 2 colonnes
+  @include from('small-lg') {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  // Tablettes: 2-3 colonnes
+  @include from('medium-sm') {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  @include from('medium-xl') {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  // Desktop: 3-4 colonnes
+  @include from('large-xs') {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+
+  @include from('large-lg') {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+// Carte catégorie individuelle
+.category-card {
+  background: linear-gradient(
+    135deg,
+    rgba(css-var(primary-color), 0.08),
+    rgba(css-var(secondary-color), 0.08)
+  );
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(css-var(primary-color), 0.3);
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  min-height: 180px;
+
+  @include from('medium-sm') {
+    min-height: 200px;
+    padding: 2.5rem 2rem;
+  }
+
+  @include from('large-xs') {
+    min-height: 220px;
+  }
+
+  // Variations de couleur pour chaque carte
+  &:nth-child(1) {
+    border-color: rgba(css-var(primary-color), 0.4);
+    background: linear-gradient(
+      135deg,
+      rgba(246, 160, 55, 0.1),
+      rgba(246, 160, 55, 0.05)
+    );
+  }
+
+  &:nth-child(2) {
+    border-color: rgba(css-var(secondary-color), 0.4);
+    background: linear-gradient(
+      135deg,
+      rgba(242, 102, 176, 0.1),
+      rgba(242, 102, 176, 0.05)
+    );
+  }
+
+  &:nth-child(3) {
+    border-color: rgba(css-var(accent-color), 0.4);
+    background: linear-gradient(
+      135deg,
+      rgba(158, 31, 157, 0.1),
+      rgba(158, 31, 157, 0.05)
+    );
+  }
+
+  &:nth-child(4) {
+    border-color: rgba(css-var(primary-color), 0.4);
+    background: linear-gradient(
+      135deg,
+      rgba(246, 160, 55, 0.08),
+      rgba(242, 102, 176, 0.08)
+    );
+  }
+
+  &:nth-child(5) {
+    border-color: rgba(css-var(secondary-color), 0.4);
+    background: linear-gradient(
+      135deg,
+      rgba(242, 102, 176, 0.08),
+      rgba(158, 31, 157, 0.08)
+    );
+  }
+
+  &:nth-child(6) {
+    border-color: rgba(css-var(accent-color), 0.4);
+    background: linear-gradient(
+      135deg,
+      rgba(158, 31, 157, 0.08),
+      rgba(246, 160, 55, 0.08)
+    );
+  }
+
+  &:nth-child(7) {
+    border-color: rgba(css-var(primary-color), 0.4);
+    background: linear-gradient(
+      135deg,
+      rgba(246, 160, 55, 0.1),
+      rgba(158, 31, 157, 0.05)
+    );
+  }
+
+  // Icône décorative en arrière-plan
+  &::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(
+      circle,
+      rgba(css-var(primary-color), 0.15),
+      transparent 70%
+    );
+    border-radius: 50%;
+    transition: all 0.4s ease;
+    opacity: 0;
+  }
+
+  &:hover {
+    transform: translateY(-8px) scale(1.03);
+    border-color: rgba(css-var(primary-color), 0.7);
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.3),
+      0 0 50px rgba(css-var(primary-color), 0.2);
+
+    &::before {
+      opacity: 1;
+      transform: translate(10px, 10px) scale(1.2);
+    }
+
+    .category-icon {
+      transform: scale(1.15) rotate(5deg);
+      filter: brightness(1.2);
+    }
+
+    .category-title {
+      color: css-var(primary-color);
+      transform: scale(1.05);
+    }
+  }
+
+  &:active {
+    transform: translateY(-4px) scale(1.01);
+  }
+}
+
+// Icône de la catégorie
+.category-icon {
+  font-size: 2.5rem;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+
+  @include from('medium-sm') {
+    font-size: 3rem;
+  }
+
+  @include from('large-xs') {
+    font-size: 3.5rem;
+  }
+}
+
+// Titre de la catégorie
+.category-title {
+  color: css-var(text-color);
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  margin: 0;
+
+  @include from('medium-sm') {
+    font-size: 1.3rem;
+  }
+
+  @include from('large-xs') {
+    font-size: 1.4rem;
+  }
+}
+
+// =============================
 // ACCESSIBILITÉ
 // =============================
 
@@ -292,7 +564,8 @@
     animation: none !important;
   }
 
-  .sky-limit-card {
+  .sky-limit-card,
+  .category-card {
     transition: none !important;
 
     &::before {
@@ -303,7 +576,9 @@
       transform: none !important;
 
       .sky-limit-text,
-      .card-hint {
+      .card-hint,
+      .category-icon,
+      .category-title {
         transform: none !important;
       }
     }
@@ -312,7 +587,8 @@
 
 // Écrans tactiles
 @media (pointer: coarse) {
-  .sky-limit-card {
+  .sky-limit-card,
+  .category-card {
     &:hover {
       transform: none;
     }
@@ -335,6 +611,12 @@
       0 8px 32px rgba(0, 0, 0, 0.5),
       0 0 40px rgba(css-var(primary-color), 0.15);
   }
+
+  .category-card {
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.5),
+      0 0 30px rgba(css-var(primary-color), 0.1);
+  }
 }
 
 // Écrans haute densité
@@ -345,7 +627,8 @@
       0 0 30px rgba(css-var(primary-color), 0.4);
   }
 
-  .sky-limit-card {
+  .sky-limit-card,
+  .category-card {
     box-shadow:
       0 8px 32px rgba(0, 0, 0, 0.4),
       0 0 40px rgba(css-var(primary-color), 0.2);

@@ -30,6 +30,29 @@
   .card-hint {
     font-size: 0.9rem;
   }
+
+  // Catégories en mode paysage mobile
+  .categories-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .category-card {
+    min-height: 140px;
+    padding: 1.5rem 1rem;
+  }
+
+  .category-icon {
+    font-size: 2rem;
+  }
+
+  .category-title {
+    font-size: 1rem;
+  }
 }
 
 // =============================
@@ -60,6 +83,28 @@
   .card-hint {
     font-size: 0.85rem;
   }
+
+  // Catégories sur très petits écrans
+  .categories-content {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .categories-grid {
+    gap: 1rem;
+  }
+
+  .category-card {
+    min-height: 160px;
+    padding: 1.5rem 1rem;
+  }
+
+  .category-icon {
+    font-size: 2rem;
+  }
+
+  .category-title {
+    font-size: 1.1rem;
+  }
 }
 
 // =============================
@@ -86,6 +131,20 @@
       padding: 2rem 1.5rem;
     }
   }
+
+  // Catégories sur écrans courts
+  .categories-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .categories-grid {
+    gap: 1.5rem;
+  }
+
+  .category-card {
+    min-height: 160px;
+    padding: 1.5rem 1.25rem;
+  }
 }
 
 // =============================
@@ -111,6 +170,24 @@
     @include from('large-xs') {
       padding: 7rem 5rem;
     }
+  }
+
+  // Catégories sur écrans hauts
+  .categories-content {
+    padding: 5rem 2rem;
+  }
+
+  .categories-grid {
+    gap: 3rem;
+  }
+
+  .category-card {
+    min-height: 240px;
+    padding: 3rem 2.5rem;
+  }
+
+  .category-icon {
+    font-size: 4rem;
   }
 }
 
@@ -140,6 +217,29 @@
   .card-hint {
     font-size: 1.3rem;
   }
+
+  // Catégories sur très grands écrans
+  .categories-content {
+    padding: 5rem 3rem;
+  }
+
+  .categories-grid {
+    max-width: 1400px;
+    gap: 3rem;
+  }
+
+  .category-card {
+    min-height: 260px;
+    padding: 3rem 2.5rem;
+  }
+
+  .category-icon {
+    font-size: 4rem;
+  }
+
+  .category-title {
+    font-size: 1.6rem;
+  }
 }
 
 // =============================
@@ -158,6 +258,23 @@
   .sky-limit-card {
     max-width: 600px;
   }
+
+  // Catégories sur tablettes
+  .categories-content {
+    min-height: 100vh;
+  }
+
+  .categories-grid {
+    gap: 2rem;
+  }
+
+  .category-card {
+    min-height: 200px;
+
+    &:hover {
+      transform: translateY(-6px) scale(1.02);
+    }
+  }
 }
 
 // =============================
@@ -174,13 +291,31 @@
       transform: translateY(-15px) scale(1.03);
     }
   }
+
+  // Catégories sur desktop
+  .categories-content {
+    min-height: 100vh;
+  }
+
+  .categories-grid {
+    gap: 2.5rem;
+  }
+
+  .category-card {
+    min-height: 220px;
+
+    &:hover {
+      transform: translateY(-10px) scale(1.05);
+    }
+  }
 }
 
 // =============================
 // CONTRASTE ÉLEVÉ
 // =============================
 @include high-contrast {
-  .sky-limit-card {
+  .sky-limit-card,
+  .category-card {
     border-width: 3px;
     border-color: rgba(css-var(primary-color), 0.5);
 
@@ -195,7 +330,8 @@
       0 2px 4px rgba(0, 0, 0, 0.8);
   }
 
-  .sky-limit-text {
+  .sky-limit-text,
+  .category-title {
     text-shadow:
       0 2px 10px rgba(0, 0, 0, 0.7),
       0 0 20px rgba(css-var(primary-color), 0.5);
@@ -208,7 +344,8 @@
 
 // Réduction de la qualité des effets sur petits écrans
 @media (max-width: 768px) {
-  .sky-limit-card {
+  .sky-limit-card,
+  .category-card {
     backdrop-filter: blur(8px);
 
     &::before {
@@ -218,7 +355,8 @@
 }
 
 // Focus visible pour la navigation au clavier
-.sky-limit-card:focus-visible {
+.sky-limit-card:focus-visible,
+.category-card:focus-visible {
   outline: 3px solid css-var(primary-color);
   outline-offset: 4px;
 }
@@ -227,7 +365,8 @@
 // PRINT STYLES
 // =============================
 @media print {
-  .presentation-content {
+  .presentation-content,
+  .categories-content {
     padding: 2rem;
   }
 
@@ -237,7 +376,8 @@
     text-shadow: none;
   }
 
-  .sky-limit-card {
+  .sky-limit-card,
+  .category-card {
     border: 2px solid css-var(primary-color);
     box-shadow: none;
     transform: none !important;
@@ -245,9 +385,16 @@
     &::before {
       display: none;
     }
+
+    page-break-inside: avoid;
   }
 
   .card-hint {
     display: none;
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
   }
 }
