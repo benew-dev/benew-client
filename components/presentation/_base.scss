@@ -14,6 +14,16 @@
   overflow: hidden;
 }
 
+// =============================
+// FIX MOBILE - Section catégories avec scroll libre
+// =============================
+.others.categories-section {
+  @include mobile-and-tablets {
+    overflow: visible; // Permet le scroll sur mobile/tablette
+    min-height: auto; // Hauteur automatique selon le contenu
+  }
+}
+
 // ✅ CONTAINERS pour backgrounds optimisés (Next.js Image)
 .planets-background-container,
 .stars-container {

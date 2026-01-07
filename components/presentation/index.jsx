@@ -152,8 +152,8 @@ const PresentationComponent = () => {
         </div>
       </section>
 
-      {/* SECTION 3: Grille des catégories */}
-      <section className="others">
+      {/* SECTION 3: Grille des catégories - CLASSE SUPPLÉMENTAIRE */}
+      <section className="others categories-section">
         {/* Backgrounds réutilisés */}
         <div className="planets-background-container">
           <Image
