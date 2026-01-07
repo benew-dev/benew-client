@@ -103,13 +103,13 @@ const PresentationComponent = () => {
         ]}
       />
 
-      {/* SECTION 1: Parallax */}
-      <section className="first">
+      {/* SECTION 1: Parallax - height: calc(100vh - 6.25rem) */}
+      <div className="presentation-hero">
         <Parallax bgColor="#0c0c1d" title="Presentation" planets="/sun.png" />
-      </section>
+      </div>
 
-      {/* SECTION 2: Carte SKY IS THE LIMIT */}
-      <section className="others">
+      {/* SECTION 2: Carte SKY IS THE LIMIT - height: 100vh */}
+      <div className="presentation-main">
         {/* ✅ BACKGROUNDS OPTIMISÉS avec Next.js Image */}
         <div className="planets-background-container">
           <Image
@@ -150,10 +150,10 @@ const PresentationComponent = () => {
             <p className="card-hint">Lire →</p>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* SECTION 3: Grille des catégories */}
-      <section className="others">
+      {/* SECTION 3: Grille des catégories - min-height: 100vh */}
+      <div className="presentation-categories">
         {/* Backgrounds réutilisés */}
         <div className="planets-background-container">
           <Image
@@ -198,7 +198,7 @@ const PresentationComponent = () => {
             ))}
           </div>
         </div>
-      </section>
+      </div>
 
       <PresentationModal
         isOpen={isModalOpen}
