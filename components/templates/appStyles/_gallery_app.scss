@@ -132,10 +132,29 @@
   display: flex;
   gap: 0.5rem;
   z-index: 10;
+  // Mobile très petit
+  @include until('small-xs') {
+    bottom: 1.75rem;
+  }
 
-  @include until('small-sm') {
-    bottom: 1rem;
-    gap: 0.4rem;
+  // Mobile standard
+  @include from('small-xs') {
+    bottom: 2rem;
+  }
+
+  // Tablettes portrait
+  @include from('medium-sm') {
+    bottom: 2.5rem;
+  }
+
+  // Tablettes paysage
+  @include from('medium-xxl') {
+    bottom: 2.75rem;
+  }
+
+  // Desktop
+  @include from('large-xs') {
+    bottom: 3rem;
   }
 }
 
