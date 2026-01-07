@@ -16,7 +16,7 @@
 .contact-info-trigger {
   // Position absolute dans la section
   position: absolute;
-  top: 1rem;
+  top: 1.5rem;
   right: 1rem;
   z-index: 100;
 
@@ -37,7 +37,7 @@
   backdrop-filter: blur(10px); // Garde le blur pour lisibilité
 
   @include until('small-sm') {
-    top: 0.75rem;
+    top: 1rem;
     right: 0.75rem;
     padding: 0.625rem 1.25rem;
     font-size: 0.875rem;
@@ -61,7 +61,7 @@
   }
 
   @include from('medium-sm') {
-    top: 1rem;
+    top: 1.5rem;
     right: 1rem;
     padding: 0.8rem 1.55rem;
     font-size: 0.97rem;
