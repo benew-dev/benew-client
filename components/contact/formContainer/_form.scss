@@ -69,7 +69,7 @@ form {
     padding: 0; // ✅ CRITIQUE
     margin: 0; // ✅ CRITIQUE
     gap: 1.2rem;
-    max-height: none; // ✅ CHANGÉ - Pas de limite de hauteur
+    max-height: 80%; // ✅ CHANGÉ - Pas de limite de hauteur
     width: 100%;
     // ✅ AJOUTÉ - Empêche le form de grandir inutilement
     align-self: center; // Centre dans le formContainer
