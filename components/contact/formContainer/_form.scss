@@ -2,7 +2,7 @@
 @use '../../../app/styles/abstracts' as *;
 
 // ================================
-// 📄 _form.scss
+// 📄 _form.scss - REAL FIX
 // ================================
 
 form {
@@ -15,7 +15,7 @@ form {
   border-radius: 16px;
   border: 1px solid #{'rgba(#{css-var(primary-color)}, 0.2)'};
 
-  // 📱 MOBILE FIRST - Formulaire compact et accessible
+  // 📱 MOBILE FIRST
   gap: 1.25rem;
   padding: 1.5rem 1.25rem;
 
@@ -25,7 +25,6 @@ form {
     border-radius: 12px;
   }
 
-  // 📱 PETITS ÉCRANS - Ajustements progressifs
   @include from('small-sm') {
     gap: 1.3rem;
     padding: 1.55rem 1.3rem;
@@ -41,7 +40,6 @@ form {
     padding: 1.65rem 1.4rem;
   }
 
-  // 📟 MOYENS ÉCRANS - Ajustements progressifs
   @include from('medium-sm') {
     gap: 1.5rem;
     padding: 1.75rem 1.5rem;
@@ -62,17 +60,19 @@ form {
     padding: 2rem 1.8rem;
   }
 
-  // 🖥️ GRANDS ÉCRANS - Formulaire transparent SANS marges qui déséquilibrent
+  // 🖥️ DESKTOP - FORMULAIRE TRANSPARENT SANS ESPACEMENT
   @include from('large-xs') {
     background: transparent;
     backdrop-filter: none;
     border: none;
     border-radius: 0;
-    padding: 0; // ✅ CRITIQUE: Pas de padding
-    margin: 0; // ✅ CRITIQUE: Pas de margin
+    padding: 0; // ✅ CRITIQUE
+    margin: 0; // ✅ CRITIQUE
     gap: 1.2rem;
-    max-height: 100%; // ✅ Limite la hauteur maximale
-    width: 100%; // ✅ Occupe toute la largeur du container
+    max-height: none; // ✅ CHANGÉ - Pas de limite de hauteur
+    width: 100%;
+    // ✅ AJOUTÉ - Empêche le form de grandir inutilement
+    align-self: center; // Centre dans le formContainer
   }
 
   @include from('large-lg') {
