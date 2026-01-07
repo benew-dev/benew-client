@@ -23,7 +23,7 @@
     min-height: auto;
   }
 
-  // 🖥️ DESKTOP - Hauteur fixe 100% avec contraintes
+  // 🖥️ DESKTOP - Hauteur fixe 100% avec CENTRAGE PARFAIT
   @include from('large-xs') {
     flex: 1;
     order: 2;
@@ -31,7 +31,8 @@
     display: flex;
     flex-direction: column;
     justify-content: center; // ✅ Centre le formulaire verticalement
-    align-items: center; // ✅ AJOUTÉ pour centrage horizontal aussi
+    align-items: center; // ✅ Centre le formulaire horizontalement
+    padding: 0; // ✅ IMPORTANT: Pas de padding qui déséquilibrerait le centrage
   }
 
   .phoneSvg {
@@ -109,12 +110,12 @@
       }
     }
 
-    // 🖥️ DESKTOP - Repositionnement original
+    // 🖥️ DESKTOP - SVG centré derrière le formulaire
     @include from('large-xs') {
-      top: 50%; // ✅ CHANGÉ pour rester centré
-      left: 50%; // ✅ CHANGÉ pour rester centré
-      transform: translate(-50%, -50%); // ✅ CHANGÉ pour centrage parfait
-      opacity: 0.3; // ✅ Réduit l'opacité pour moins de distraction visuelle
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0.3;
     }
   }
 }

@@ -62,17 +62,17 @@ form {
     padding: 2rem 1.8rem;
   }
 
-  // 🖥️ GRANDS ÉCRANS - Style original mais avec espacement réduit
+  // 🖥️ GRANDS ÉCRANS - Formulaire transparent SANS marges qui déséquilibrent
   @include from('large-xs') {
     background: transparent;
     backdrop-filter: none;
     border: none;
     border-radius: 0;
-    padding: 0; // ✅ Pas de padding qui créerait des déséquilibres
-    margin: 0; // ✅ AJOUTÉ pour éliminer toute marge
-    gap: 1.2rem; // Réduit pour s'adapter à la hauteur
-    max-height: 100%;
-    width: 100%; // ✅ AJOUTÉ pour occuper toute la largeur du container
+    padding: 0; // ✅ CRITIQUE: Pas de padding
+    margin: 0; // ✅ CRITIQUE: Pas de margin
+    gap: 1.2rem;
+    max-height: 100%; // ✅ Limite la hauteur maximale
+    width: 100%; // ✅ Occupe toute la largeur du container
   }
 
   @include from('large-lg') {
