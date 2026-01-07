@@ -70,7 +70,7 @@ form {
     border-radius: 0;
     padding: 0;
     gap: 1.2rem; // Réduit pour s'adapter à la hauteur
-    max-height: 100%;
+    max-height: 90%;
   }
 
   @include from('large-lg') {
