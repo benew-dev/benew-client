@@ -12,6 +12,7 @@
   width: 100%;
   min-height: 100vh;
   overflow: hidden;
+  scroll-snap-align: unset;
 }
 
 // ✅ CONTAINERS pour backgrounds optimisés (Next.js Image)
