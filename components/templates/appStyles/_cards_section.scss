@@ -211,7 +211,7 @@
 .info-card {
   background: rgba($color-light, 0.03);
   // ✅ BORDURE PAR DÉFAUT PLUS VISIBLE
-  border: 2px solid rgba($color-light, 0.2);
+  border: 0.2px solid rgba($color-light, 0.2);
   border-radius: 16px;
   backdrop-filter: blur(15px);
   cursor: pointer;
