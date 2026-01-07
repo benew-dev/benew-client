@@ -130,7 +130,7 @@
     rgba(css-var(text-color), 0.12)
   );
   backdrop-filter: blur(10px);
-  border: 0.5px solid rgba(css-var(primary-color), 0.3);
+  border: 0.2px solid rgba(css-var(primary-color), 0.3);
   border-radius: 20px;
   padding: 3rem 2rem;
   display: flex;
@@ -150,7 +150,7 @@
 
   // ✅ CORRECTION: Bordure VRAIMENT visible sur mobile/tablette
   @include mobile-and-tablets {
-    border-width: 0.5px; // Très épaisse
+    border-width: 0.2px; // Très épaisse
     border-style: solid;
     border-color: css-var(primary-color); // Couleur pleine orange
     box-shadow:
