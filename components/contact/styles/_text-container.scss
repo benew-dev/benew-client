@@ -47,10 +47,11 @@
     @include from('large-xs') {
       max-height: none;
       opacity: 1;
-      height: 100%;
+      height: auto;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      margin: auto 0; // ✅ AJOUTÉ pour centrage vertical automatique
     }
 
     .content-wrapper {
@@ -89,3 +90,28 @@
     }
   }
 }
+
+// ============================================================
+// 5. AJOUT - Classe utilitaire pour debug (à retirer après)
+// ============================================================
+
+// ✅ Décommenter temporairement pour visualiser le centrage
+/*
+@include from('large-xs') {
+  .contact {
+    outline: 2px dashed red; // Container principal
+  }
+
+  .formContainer {
+    outline: 2px dashed blue; // Container du formulaire
+  }
+
+  form {
+    outline: 2px dashed green; // Formulaire lui-même
+  }
+
+  .textContainer {
+    outline: 2px dashed orange; // Container du texte
+  }
+}
+*/

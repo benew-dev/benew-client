@@ -30,7 +30,8 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: center; // ✅ Centre le formulaire verticalement
+    align-items: center; // ✅ AJOUTÉ pour centrage horizontal aussi
   }
 
   .phoneSvg {
@@ -110,10 +111,10 @@
 
     // 🖥️ DESKTOP - Repositionnement original
     @include from('large-xs') {
-      top: auto;
-      left: auto;
-      transform: none;
-      opacity: 1;
+      top: 50%; // ✅ CHANGÉ pour rester centré
+      left: 50%; // ✅ CHANGÉ pour rester centré
+      transform: translate(-50%, -50%); // ✅ CHANGÉ pour centrage parfait
+      opacity: 0.3; // ✅ Réduit l'opacité pour moins de distraction visuelle
     }
   }
 }

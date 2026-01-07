@@ -68,9 +68,11 @@ form {
     backdrop-filter: none;
     border: none;
     border-radius: 0;
-    padding: 0;
+    padding: 0; // ✅ Pas de padding qui créerait des déséquilibres
+    margin: 0; // ✅ AJOUTÉ pour éliminer toute marge
     gap: 1.2rem; // Réduit pour s'adapter à la hauteur
     max-height: 100%;
+    width: 100%; // ✅ AJOUTÉ pour occuper toute la largeur du container
   }
 
   @include from('large-lg') {
