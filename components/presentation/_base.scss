@@ -5,13 +5,36 @@
 // ================================
 
 // =============================
-// SECTION OTHERS - Container avec position relative
+// SECTION 1 - HERO PARALLAX
+// Dimensions: width 100vw, height calc(100vh - 6.25rem)
 // =============================
-.others {
+.presentation-hero {
   position: relative;
-  width: 100%;
-  min-height: 100vh;
+  width: 100vw;
+  height: calc(100vh - 6.25rem); // Compense la navbar (6.25rem = 100px)
   overflow: hidden;
+}
+
+// =============================
+// SECTION 2 - CARTE PRINCIPALE (SKY IS THE LIMIT)
+// Dimensions: width 100vw, height 100vh
+// =============================
+.presentation-main {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+// =============================
+// SECTION 3 - CATÉGORIES
+// Dimensions: width 100vw, min-height 100vh (peut grandir)
+// =============================
+.presentation-categories {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh; // Hauteur minimale, peut dépasser pour le scroll
+  overflow: visible; // Permet le scroll si contenu dépasse
 }
 
 // ✅ CONTAINERS pour backgrounds optimisés (Next.js Image)
@@ -311,7 +334,7 @@
 }
 
 // =============================
-// NOUVELLE SECTION - CARTES CATÉGORIES (COMPACTES)
+// SECTION CATÉGORIES - CONTENU
 // =============================
 .categories-content {
   position: relative;
