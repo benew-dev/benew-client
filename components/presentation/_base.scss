@@ -150,7 +150,7 @@
 
   // ✅ CORRECTION: Bordure VRAIMENT visible sur mobile/tablette
   @include mobile-and-tablets {
-    border-width: 4px; // Très épaisse
+    border-width: 0.5px; // Très épaisse
     border-style: solid;
     border-color: css-var(primary-color); // Couleur pleine orange
     box-shadow:
