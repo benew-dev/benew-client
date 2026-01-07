@@ -104,7 +104,7 @@ const PresentationComponent = () => {
       />
 
       {/* SECTION 1: Parallax */}
-      <section className="others">
+      <section className="first">
         <Parallax bgColor="#0c0c1d" title="Presentation" planets="/sun.png" />
       </section>
 
@@ -152,8 +152,8 @@ const PresentationComponent = () => {
         </div>
       </section>
 
-      {/* SECTION 3: Grille des catégories */}
-      <section className="others">
+      {/* SECTION 3: Grille des catégories - DIV au lieu de SECTION */}
+      <div className="categories-section">
         {/* Backgrounds réutilisés */}
         <div className="planets-background-container">
           <Image
@@ -198,7 +198,7 @@ const PresentationComponent = () => {
             ))}
           </div>
         </div>
-      </section>
+      </div>
 
       <PresentationModal
         isOpen={isModalOpen}
