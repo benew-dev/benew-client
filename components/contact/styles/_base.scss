@@ -2,7 +2,7 @@
 @use '../../../app/styles/abstracts' as *;
 
 // ================================
-// 📄 _base.scss - FIXED
+// 📄 _base.scss
 // ================================
 
 .contact {
@@ -14,11 +14,11 @@
   // 📱 MOBILE/TABLETTE - CENTRAGE VERTICAL ET HORIZONTAL
   @include until('large-xs') {
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: center; // ✅ Centrage vertical
+    align-items: center; // ✅ Centrage horizontal
     min-height: 100vh;
     max-width: 100%;
-    padding: 2rem 1rem;
+    padding: 2rem 1rem; // ✅ Padding pour éviter que le contenu touche les bords
   }
 
   @include until('small-sm') {
@@ -53,16 +53,16 @@
     padding: 3rem 2rem;
   }
 
-  // 🖥️ DESKTOP - Layout horizontal avec ALIGNEMENT VERTICAL
+  // 🖥️ DESKTOP - Layout original (2 blocs horizontaux 50/50)
   @include from('large-xs') {
     flex-direction: row;
-    align-items: center; // ✅ DÉJÀ LÀ - Centre les enfants verticalement
-    justify-content: center; // ✅ AJOUTÉ - Centre horizontalement dans la section
+    align-items: stretch;
+    justify-content: flex-start; // ✅ Pas de centrage sur desktop
     gap: 3rem;
     padding: 2rem;
     max-width: 70rem;
     min-height: auto;
-    height: 100vh; // Container de 80vh de hauteur
+    height: 80vh;
   }
 
   @include from('large-lg') {

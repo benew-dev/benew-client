@@ -2,7 +2,7 @@
 @use '../../../app/styles/abstracts' as *;
 
 // ================================
-// 📄 _form.scss - REAL FIX
+// 📄 _form.scss
 // ================================
 
 form {
@@ -15,7 +15,7 @@ form {
   border-radius: 16px;
   border: 1px solid #{'rgba(#{css-var(primary-color)}, 0.2)'};
 
-  // 📱 MOBILE FIRST
+  // 📱 MOBILE FIRST - Formulaire compact et accessible
   gap: 1.25rem;
   padding: 1.5rem 1.25rem;
 
@@ -25,6 +25,7 @@ form {
     border-radius: 12px;
   }
 
+  // 📱 PETITS ÉCRANS - Ajustements progressifs
   @include from('small-sm') {
     gap: 1.3rem;
     padding: 1.55rem 1.3rem;
@@ -40,6 +41,7 @@ form {
     padding: 1.65rem 1.4rem;
   }
 
+  // 📟 MOYENS ÉCRANS - Ajustements progressifs
   @include from('medium-sm') {
     gap: 1.5rem;
     padding: 1.75rem 1.5rem;
@@ -60,19 +62,15 @@ form {
     padding: 2rem 1.8rem;
   }
 
-  // 🖥️ DESKTOP - FORMULAIRE TRANSPARENT SANS ESPACEMENT
+  // 🖥️ GRANDS ÉCRANS - Style original mais avec espacement réduit
   @include from('large-xs') {
     background: transparent;
     backdrop-filter: none;
     border: none;
     border-radius: 0;
-    padding: 0; // ✅ CRITIQUE
-    margin: 0; // ✅ CRITIQUE
-    gap: 1.2rem;
-    max-height: 80%; // ✅ CHANGÉ - Pas de limite de hauteur
-    width: 100%;
-    // ✅ AJOUTÉ - Empêche le form de grandir inutilement
-    align-self: center; // Centre dans le formContainer
+    padding: 0;
+    gap: 1.2rem; // Réduit pour s'adapter à la hauteur
+    max-height: 100%;
   }
 
   @include from('large-lg') {

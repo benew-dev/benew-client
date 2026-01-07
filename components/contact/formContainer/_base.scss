@@ -2,7 +2,7 @@
 @use '../../../app/styles/abstracts' as *;
 
 // ================================
-// 📄 _base.scss (formContainer) - REAL FIX
+// 📄 _base.scss
 // ================================
 
 .formContainer {
@@ -10,29 +10,27 @@
   position: relative;
   flex-shrink: 0;
 
-  // 📱 MOBILE FIRST
+  // 📱 MOBILE FIRST - Formulaire en SECOND maintenant
   order: 2;
 
   @include until('small-sm') {
     margin-top: 1rem;
   }
 
+  // Hauteur automatique sur mobile/tablette
   @include until('large-xs') {
     height: auto;
     min-height: auto;
   }
 
-  // 🖥️ DESKTOP - LE VRAI FIX
+  // 🖥️ DESKTOP - Hauteur fixe 100% avec contraintes
   @include from('large-xs') {
     flex: 1;
     order: 2;
-    height: 100%; // ✅ Prend 100% du parent (.contact de 80vh)
+    height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center; // ✅ Centre le form verticalement
-    align-items: center; // ✅ Centre le form horizontalement
-    padding: 0; // ✅ Pas de padding
-    margin: 0; // ✅ Pas de margin
+    justify-content: center;
   }
 
   .phoneSvg {
@@ -41,11 +39,13 @@
     z-index: -1;
     opacity: 0.6;
 
+    // 📱 MOBILE FIRST - SVG plus petit et centré
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 
     svg {
+      // 📱 MOBILE FIRST - Taille réduite
       width: 180px;
       height: 180px;
 
@@ -54,6 +54,7 @@
         height: 150px;
       }
 
+      // 📱 PETITS ÉCRANS - Augmentation progressive
       @include from('small-sm') {
         width: 185px;
         height: 185px;
@@ -69,6 +70,7 @@
         height: 195px;
       }
 
+      // 📟 MOYENS ÉCRANS - Progression
       @include from('medium-sm') {
         width: 220px;
         height: 220px;
@@ -89,6 +91,7 @@
         height: 280px;
       }
 
+      // 🖥️ GRANDS ÉCRANS - Taille desktop réduite pour s'adapter
       @include from('large-xs') {
         width: 300px;
         height: 300px;
@@ -105,11 +108,12 @@
       }
     }
 
+    // 🖥️ DESKTOP - Repositionnement original
     @include from('large-xs') {
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      opacity: 0.3;
+      top: auto;
+      left: auto;
+      transform: none;
+      opacity: 1;
     }
   }
 }
