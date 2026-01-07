@@ -152,8 +152,8 @@ const PresentationComponent = () => {
         </div>
       </section>
 
-      {/* SECTION 3: Grille des catégories - DIV au lieu de SECTION */}
-      <div className="categories-section">
+      {/* SECTION 3: Grille des catégories */}
+      <section className="others">
         {/* Backgrounds réutilisés */}
         <div className="planets-background-container">
           <Image
@@ -198,7 +198,7 @@ const PresentationComponent = () => {
             ))}
           </div>
         </div>
-      </div>
+      </section>
 
       <PresentationModal
         isOpen={isModalOpen}

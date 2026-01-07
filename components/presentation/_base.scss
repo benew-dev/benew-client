@@ -14,17 +14,6 @@
   overflow: hidden;
 }
 
-// =============================
-// NOUVELLE CLASSE POUR CATÉGORIES - Permet le scroll
-// =============================
-.categories-section {
-  position: relative;
-  width: 100%;
-  min-height: 100vh; // Hauteur minimale
-  overflow: visible; // ← PERMET LE SCROLL
-  // Pas de scroll-snap pour permettre le scroll libre
-}
-
 // ✅ CONTAINERS pour backgrounds optimisés (Next.js Image)
 .planets-background-container,
 .stars-container {
