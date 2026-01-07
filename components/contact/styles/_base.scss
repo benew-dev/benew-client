@@ -56,13 +56,13 @@
   // 🖥️ DESKTOP - Layout original (2 blocs horizontaux 50/50)
   @include from('large-xs') {
     flex-direction: row;
-    align-items: stretch;
+    align-items: center;
     justify-content: flex-start; // ✅ Pas de centrage sur desktop
     gap: 3rem;
     padding: 2rem;
     max-width: 70rem;
     min-height: auto;
-    height: 80vh;
+    height: 100%;
   }
 
   @include from('large-lg') {
