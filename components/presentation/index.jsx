@@ -41,12 +41,12 @@ const contentData = {
 
 // Données des catégories
 const categories = [
-  { id: 'offre', title: "L'offre", icon: '🎁' },
-  { id: 'modeles', title: 'Les modèles', icon: '📐' },
-  { id: 'magasins', title: 'Les magasins', icon: '🏪' },
-  { id: 'travail', title: 'Le travail', icon: '💼' },
-  { id: 'technologies', title: 'Les technologies', icon: '⚙️' },
-  { id: 'formule', title: 'La formule', icon: '🧪' },
+  { id: 'offre', title: "L'offre", icon: '🚀' },
+  { id: 'modeles', title: 'Les modèles', icon: '☀️' },
+  { id: 'magasins', title: 'Les magasins', icon: '🪐' },
+  { id: 'travail', title: 'Le travail', icon: '☄️' },
+  { id: 'technologies', title: 'Les technologies', icon: '🛸' },
+  { id: 'formule', title: 'La formule', icon: '🌌' },
   { id: 'prix', title: 'Le prix', icon: '💰' },
 ];
 
