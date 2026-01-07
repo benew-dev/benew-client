@@ -27,6 +27,9 @@
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+  scroll-snap-type: unset;
+  scroll-behavior: unset;
+  scroll-snap-align: unset;
 }
 
 // =============================
@@ -38,6 +41,9 @@
   width: 100vw;
   min-height: 100vh; // Hauteur minimale, peut dépasser pour le scroll
   overflow: visible; // Permet le scroll si contenu dépasse
+  scroll-snap-type: unset;
+  scroll-behavior: unset;
+  scroll-snap-align: unset;
 }
 
 // ✅ CONTAINERS pour backgrounds optimisés (Next.js Image)
