@@ -13,6 +13,9 @@
   width: 100vw;
   height: calc(100vh - 6.25rem); // Compense la navbar (6.25rem = 100px)
   overflow: hidden;
+  scroll-snap-type: unset;
+  scroll-behavior: unset;
+  scroll-snap-align: unset;
 }
 
 // =============================
