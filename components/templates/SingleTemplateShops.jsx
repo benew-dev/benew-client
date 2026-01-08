@@ -238,7 +238,7 @@ const ApplicationCard = memo(
 ApplicationCard.displayName = 'ApplicationCard';
 
 // =============================
-// CAROUSEL D'APPLICATIONS - FADE IN/OUT
+// ✅ CAROUSEL D'APPLICATIONS - DANS LA SECTION
 // =============================
 const ApplicationsCarousel = memo(
   ({
@@ -345,56 +345,40 @@ const ApplicationsCarousel = memo(
       handleSlideChange,
     ]);
 
-    if (applications.length === 1) {
-      return (
-        <section className="others projectSection" role="article">
-          <ApplicationCard
-            app={applications[0]}
-            templateID={templateID}
-            onOrderClick={onOrderClick}
-            onViewClick={onViewClick}
-            onGalleryClick={onGalleryClick}
-            hasPaymentMethods={hasPaymentMethods}
-          />
-        </section>
-      );
-    }
-
     return (
-      <div className="applications-carousel-wrapper">
-        <section
-          className="others projectSection applications-carousel-container"
-          onTouchStart={onTouchStart}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
-        >
-          <div className="applications-carousel-track">
-            {applications.map((app, index) => {
-              let cardVisibility = 'hidden';
+      <div
+        className="applications-carousel-container"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
+        <div className="applications-carousel-track">
+          {applications.map((app, index) => {
+            let cardVisibility = 'hidden';
 
-              if (index === currentIndex) {
-                cardVisibility = 'active';
-              }
+            if (index === currentIndex) {
+              cardVisibility = 'active';
+            }
 
-              return (
-                <div
-                  key={app.application_id}
-                  className={`applications-carousel-slide ${cardVisibility}`}
-                >
-                  <ApplicationCard
-                    app={app}
-                    templateID={templateID}
-                    onOrderClick={onOrderClick}
-                    onViewClick={onViewClick}
-                    onGalleryClick={onGalleryClick}
-                    hasPaymentMethods={hasPaymentMethods}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        </section>
+            return (
+              <div
+                key={app.application_id}
+                className={`applications-carousel-slide ${cardVisibility}`}
+              >
+                <ApplicationCard
+                  app={app}
+                  templateID={templateID}
+                  onOrderClick={onOrderClick}
+                  onViewClick={onViewClick}
+                  onGalleryClick={onGalleryClick}
+                  hasPaymentMethods={hasPaymentMethods}
+                />
+              </div>
+            );
+          })}
+        </div>
 
+        {/* ✅ DOTS À L'INTÉRIEUR DU CAROUSEL */}
         <div className="applications-carousel-indicators">
           {applications.map((app, index) => (
             <button
@@ -576,14 +560,33 @@ const SingleTemplateShops = ({
         />
       </section>
 
-      <ApplicationsCarousel
-        applications={applications}
-        templateID={templateID}
-        hasPaymentMethods={hasPaymentMethods}
-        onOrderClick={handleOrderClick}
-        onViewClick={handleApplicationView}
-        onGalleryClick={handleGalleryClick}
-      />
+      {/* ✅ UNE SEULE APPLICATION - Structure normale */}
+      {applications.length === 1 && (
+        <section className="others projectSection" role="article">
+          <ApplicationCard
+            app={applications[0]}
+            templateID={templateID}
+            onOrderClick={handleOrderClick}
+            onViewClick={handleApplicationView}
+            onGalleryClick={handleGalleryClick}
+            hasPaymentMethods={hasPaymentMethods}
+          />
+        </section>
+      )}
+
+      {/* ✅ PLUSIEURS APPLICATIONS - Carousel DANS la section */}
+      {applications.length > 1 && (
+        <section className="others projectSection">
+          <ApplicationsCarousel
+            applications={applications}
+            templateID={templateID}
+            hasPaymentMethods={hasPaymentMethods}
+            onOrderClick={handleOrderClick}
+            onViewClick={handleApplicationView}
+            onGalleryClick={handleGalleryClick}
+          />
+        </section>
+      )}
 
       {selectedApp && (
         <OrderModal

@@ -4,24 +4,22 @@
 // ================================
 // 📄 _carousel_applications.scss - CAROUSEL FADE IN/OUT
 // ================================
+// ✅ CORRECTION : Tout est DANS la section .projectSection
+// ✅ Dots positionnés EN BAS de l'écran (sous la carte)
+// ✅ Pas de wrapper externe
 
 // =============================
-// WRAPPER - Contient carousel + dots
-// =============================
-
-.applications-carousel-wrapper {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-// =============================
-// CONTAINER - Section avec 100vh
+// CONTAINER - REMPLACE LE WRAPPER
 // =============================
 
 .applications-carousel-container {
   position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   overflow: hidden; // ✅ CRITIQUE : Cache les cartes non actives
 }
 
@@ -32,10 +30,11 @@
 .applications-carousel-track {
   position: relative;
   width: 100%;
-  height: 100%;
+  flex: 1; // ✅ Prend l'espace disponible
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 // =============================
@@ -69,7 +68,7 @@
 }
 
 // =============================
-// ✅ DOTS EN BAS DE L'ÉCRAN (SOUS LA CARTE)
+// ✅ DOTS EN BAS (DANS LE CONTAINER)
 // =============================
 
 .applications-carousel-indicators {
@@ -77,6 +76,8 @@
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
+  flex-shrink: 0; // ✅ Ne se réduit pas
+  z-index: 10; // ✅ Au-dessus des cartes
 
   // 📱 MOBILE - Padding généreux
   padding: 1.5rem 1rem;
