@@ -16,7 +16,7 @@
   -webkit-backdrop-filter: blur(5px);
 
   border-radius: 20px; // Plus arrondi sur mobile
-  border: 1px solid rgba(css-var(primary-color), 0.25);
+  border: none;
   overflow: hidden;
   transition: all 0.3s ease;
   position: relative;
@@ -25,6 +25,11 @@
   width: 95%;
   max-width: 100%;
   min-height: 420px; // Hauteur minimum garantie
+
+  // ✅ BORDURE 0.2px UNIQUEMENT SUR MOBILE/TABLETTE
+  @include until('large-xs') {
+    border: 0.2px solid css-var(primary-color); // Bordure fine sur mobile/tablette
+  }
 
   // ✅ OMBRES PLUS VISIBLES ET MARQUÉES
   box-shadow:
@@ -124,7 +129,12 @@
     box-shadow:
       0 25px 80px rgba(0, 0, 0, 0.8),
       0 10px 40px rgba(css-var(primary-color), 0.4);
-    border-color: rgba(css-var(primary-color), 0.5);
+
+    // ✅ Bordure intensifiée UNIQUEMENT sur mobile/tablette au hover
+    @include until('large-xs') {
+      border-color: css-var(secondary-color); // Change vers rose au hover
+      border-width: 0.3px; // Légèrement plus épaisse au hover
+    }
   }
 
   // 📱 MOBILE - Effet tactile
