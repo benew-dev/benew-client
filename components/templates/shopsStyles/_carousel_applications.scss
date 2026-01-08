@@ -164,7 +164,7 @@
 
   // 🖥️ DESKTOP - ESPACE HAUT (sépare de la carte) + BAS MINIMAL (collé au bas)
   @include from('large-xs') {
-    padding: 2rem 1rem 1.5rem 1rem; // ✅ 2rem haut (espace carte) + 1.5rem bas (collé)
+    padding: 0.7rem 1rem 0.7rem 1rem; // ✅ 2rem haut (espace carte) + 1.5rem bas (collé)
     gap: 0.5rem;
   }
 
