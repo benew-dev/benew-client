@@ -108,15 +108,7 @@
 
   // ✅ Hover uniquement sur mobile/tablette
   @include until('large-xs') {
-    border: 2px solid transparent;
-    background-image:
-      linear-gradient(
-        135deg,
-        rgba(css-var(background-color), 0.8),
-        rgba(color.adjust($background-color, $lightness: 5%), 0.8)
-      ),
-      linear-gradient(135deg, css-var(primary-color), css-var(secondary-color));
-    background-origin: border-box;
-    background-clip: padding-box, border-box;
+    border-color: css-var(secondary-color);
+    border-width: 0.3px;
   }
 }
