@@ -4,6 +4,7 @@
 // ================================
 // 📄 _card.scss - AVEC BLUR GLASSMORPHISM ET OMBRES VISIBLES
 // ================================
+// ✅ CORRECTION : Bordure 0.2px sur TOUS les écrans (mobile, tablette, PC)
 
 .application-card {
   // ✅ EFFET GLASSMORPHISM AVEC BLUR
@@ -15,28 +16,26 @@
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
 
-  border-radius: 20px; // Plus arrondi sur mobile
-  border: none;
+  border-radius: 20px;
+
+  // ✅ BORDURE 0.2px SUR TOUS LES ÉCRANS (plus de condition)
+  border: 0.2px solid css-var(primary-color);
+
   overflow: hidden;
   transition: all 0.3s ease;
   position: relative;
 
-  // 📱 MOBILE FIRST - Carte imposante et utilisable avec nouveaux breakpoints
+  // 📱 MOBILE FIRST
   width: 95%;
   max-width: 100%;
-  min-height: 420px; // Hauteur minimum garantie
+  min-height: 420px;
 
-  // ✅ BORDURE 0.2px UNIQUEMENT SUR MOBILE/TABLETTE
-  @include until('large-xs') {
-    border: 0.2px solid css-var(primary-color); // Bordure fine sur mobile/tablette
-  }
-
-  // ✅ OMBRES PLUS VISIBLES ET MARQUÉES
+  // ✅ OMBRES VISIBLES
   box-shadow:
     0 15px 50px rgba(0, 0, 0, 0.6),
     0 5px 20px rgba(css-var(primary-color), 0.2);
 
-  // 📟 TRÈS PETITS ÉCRANS - Utilisation maximale de l'espace
+  // 📟 TRÈS PETITS ÉCRANS
   @include small-screens {
     width: 98%;
     min-height: 400px;
@@ -44,7 +43,6 @@
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
 
-    // ✅ Ombres encore plus marquées sur mobile
     box-shadow:
       0 18px 60px rgba(0, 0, 0, 0.7),
       0 6px 25px rgba(css-var(primary-color), 0.25);
@@ -65,7 +63,7 @@
     min-height: 415px;
   }
 
-  // 📟 MOYENS ÉCRANS - Ajustements progressifs
+  // 📟 MOYENS ÉCRANS
   @include between('small-xl', 'medium-sm') {
     width: 93%;
     max-width: 480px;
@@ -106,7 +104,7 @@
   @include from('large-xxl') {
     width: 80%;
     max-width: 400px;
-    min-height: auto; // Hauteur automatique sur desktop
+    min-height: auto;
     border-radius: 16px;
     background: linear-gradient(
       135deg,
@@ -116,32 +114,27 @@
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
 
-    // ✅ Ombres visibles même sur desktop
     box-shadow:
       0 12px 40px rgba(0, 0, 0, 0.5),
       0 4px 16px rgba(css-var(primary-color), 0.15);
   }
 
   &:hover {
-    transform: translateY(-10px); // Plus de mouvement sur mobile
+    transform: translateY(-10px);
 
-    // ✅ OMBRES ENCORE PLUS PRONONCÉES AU HOVER
     box-shadow:
       0 25px 80px rgba(0, 0, 0, 0.8),
       0 10px 40px rgba(css-var(primary-color), 0.4);
 
-    // ✅ Bordure intensifiée UNIQUEMENT sur mobile/tablette au hover
-    @include until('large-xs') {
-      border-color: css-var(secondary-color); // Change vers rose au hover
-      border-width: 0.3px; // Légèrement plus épaisse au hover
-    }
+    // ✅ Bordure intensifiée au hover SUR TOUS LES ÉCRANS
+    border-color: css-var(secondary-color); // Rose
+    border-width: 0.3px;
   }
 
   // 📱 MOBILE - Effet tactile
   &:active {
     transform: translateY(-5px);
 
-    // ✅ Ombres visibles même en état actif
     box-shadow:
       0 20px 70px rgba(0, 0, 0, 0.7),
       0 8px 35px rgba(css-var(primary-color), 0.35);

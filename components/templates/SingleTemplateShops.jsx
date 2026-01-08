@@ -122,7 +122,7 @@ const GalleryModal = memo(({ isOpen, onClose, images, applicationName }) => {
 GalleryModal.displayName = 'GalleryModal';
 
 // =============================
-// CARTE D'APPLICATION - UNE SEULE IMAGE
+// CARTE D'APPLICATION
 // =============================
 const ApplicationCard = memo(
   ({
@@ -238,7 +238,7 @@ const ApplicationCard = memo(
 ApplicationCard.displayName = 'ApplicationCard';
 
 // =============================
-// ✅ CAROUSEL D'APPLICATIONS - DANS LA SECTION
+// ✅ CAROUSEL AVEC ANIMATION SLIDE
 // =============================
 const ApplicationsCarousel = memo(
   ({
@@ -283,7 +283,7 @@ const ApplicationsCarousel = memo(
 
         setTimeout(() => {
           setIsTransitioning(false);
-        }, 800);
+        }, 600); // ✅ Durée de la transition slide
       },
       [isTransitioning],
     );
@@ -354,16 +354,22 @@ const ApplicationsCarousel = memo(
       >
         <div className="applications-carousel-track">
           {applications.map((app, index) => {
-            let cardVisibility = 'hidden';
+            // ✅ LOGIQUE SLIDE (comme ApplicationGalleryCarousel)
+            let slidePosition = 'hidden';
 
             if (index === currentIndex) {
-              cardVisibility = 'active';
+              slidePosition = isTransitioning ? 'entering' : 'active';
+            } else if (
+              index ===
+              (currentIndex - 1 + applications.length) % applications.length
+            ) {
+              slidePosition = isTransitioning ? 'exiting' : 'hidden';
             }
 
             return (
               <div
                 key={app.application_id}
-                className={`applications-carousel-slide ${cardVisibility}`}
+                className={`applications-carousel-slide ${slidePosition}`}
               >
                 <ApplicationCard
                   app={app}
@@ -378,7 +384,6 @@ const ApplicationsCarousel = memo(
           })}
         </div>
 
-        {/* ✅ DOTS À L'INTÉRIEUR DU CAROUSEL */}
         <div className="applications-carousel-indicators">
           {applications.map((app, index) => (
             <button
@@ -560,7 +565,6 @@ const SingleTemplateShops = ({
         />
       </section>
 
-      {/* ✅ UNE SEULE APPLICATION - Structure normale */}
       {applications.length === 1 && (
         <section className="others projectSection" role="article">
           <ApplicationCard
@@ -574,7 +578,6 @@ const SingleTemplateShops = ({
         </section>
       )}
 
-      {/* ✅ PLUSIEURS APPLICATIONS - Carousel DANS la section */}
       {applications.length > 1 && (
         <section className="others projectSection">
           <ApplicationsCarousel
