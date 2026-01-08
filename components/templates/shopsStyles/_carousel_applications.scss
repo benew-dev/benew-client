@@ -4,9 +4,7 @@
 // ================================
 // 📄 _carousel_applications.scss - CAROUSEL SLIDE OPTIMISÉ
 // ================================
-// ✅ CORRECTIONS FINALES :
-// 1. Dots ESPACÉES de la carte (padding-top suffisant)
-// 2. Dots COLLÉES au bas d'écran sur PC (padding-bottom minimal)
+// ✅ SOLUTION : Padding vertical sur le TRACK pour voir la bordure complète
 
 // =============================
 // CONTAINER
@@ -35,6 +33,47 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+
+  // ✅ SOLUTION : Padding vertical pour voir la bordure complète
+  // 📱 MOBILE/TABLET : Moins d'espace
+  padding: 1rem 0;
+
+  @include from('small-sm') {
+    padding: 1.1rem 0;
+  }
+
+  @include from('small-lg') {
+    padding: 1.15rem 0;
+  }
+
+  @include from('small-xl') {
+    padding: 1.2rem 0;
+  }
+
+  @include from('medium-sm') {
+    padding: 1.25rem 0;
+  }
+
+  @include from('medium-lg') {
+    padding: 1.3rem 0;
+  }
+
+  @include from('medium-xxl') {
+    padding: 1.4rem 0;
+  }
+
+  // 🖥️ DESKTOP : Plus d'espace pour voir la bordure haute et basse
+  @include from('large-xs') {
+    padding: 2rem 0; // ✅ 2rem haut/bas = bordure visible
+  }
+
+  @include from('large-lg') {
+    padding: 2.2rem 0; // ✅ Un peu plus d'espace
+  }
+
+  @include from('large-xxl') {
+    padding: 2.5rem 0; // ✅ Espace confortable
+  }
 }
 
 // =============================
@@ -238,6 +277,10 @@
 
 // Mode paysage mobile
 @include mobile-landscape {
+  .applications-carousel-track {
+    padding: 0.75rem 0; // ✅ Moins d'espace en mode paysage
+  }
+
   .applications-carousel-indicators {
     padding: 0.75rem 1rem 1rem 1rem;
     gap: 0.4rem;
