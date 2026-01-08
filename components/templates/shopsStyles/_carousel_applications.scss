@@ -4,9 +4,9 @@
 // ================================
 // 📄 _carousel_applications.scss - CAROUSEL FADE IN/OUT
 // ================================
-// ✅ CORRECTION : Tout est DANS la section .projectSection
-// ✅ Dots positionnés EN BAS de l'écran (sous la carte)
-// ✅ Pas de wrapper externe
+// ✅ CORRECTION : Dots PETITES comme ApplicationGalleryCarousel
+// ✅ Dots rapprochées de l'extrémité basse de l'écran
+// ✅ Padding réduit
 
 // =============================
 // CONTAINER - REMPLACE LE WRAPPER
@@ -68,86 +68,138 @@
 }
 
 // =============================
-// ✅ DOTS EN BAS (DANS LE CONTAINER)
+// ✅ DOTS PETITES ET RAPPROCHÉES DU BAS
 // =============================
 
 .applications-carousel-indicators {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.6rem;
-  flex-shrink: 0; // ✅ Ne se réduit pas
-  z-index: 10; // ✅ Au-dessus des cartes
+  gap: 0.5rem; // ✅ RÉDUIT : 0.5rem au lieu de 0.6rem
+  flex-shrink: 0;
+  z-index: 10;
 
-  // 📱 MOBILE - Padding généreux
-  padding: 1.5rem 1rem;
+  // 📱 MOBILE TRÈS PETIT - Padding minimal
+  @include until('small-xs') {
+    padding: 1rem 1rem 1.25rem 1rem; // ✅ RÉDUIT : bas 1.25rem
+  }
+
+  // 📱 MOBILE STANDARD - Padding minimal
+  @include from('small-xs') {
+    padding: 1rem 1rem 1.5rem 1rem; // ✅ RÉDUIT : bas 1.5rem
+  }
 
   @include from('small-sm') {
-    padding: 1.75rem 1rem;
+    padding: 1rem 1rem 1.5rem 1rem;
   }
 
+  // 📟 TABLET - Padding réduit
   @include from('medium-sm') {
-    padding: 2rem 1rem;
-    gap: 0.75rem;
+    padding: 1rem 1rem 1.75rem 1rem; // ✅ RÉDUIT : bas 1.75rem
+    gap: 0.5rem;
   }
 
+  @include from('medium-lg') {
+    padding: 1rem 1rem 2rem 1rem; // ✅ RÉDUIT : bas 2rem
+  }
+
+  // 🖥️ DESKTOP - Padding modéré
   @include from('large-xs') {
-    padding: none;
-    gap: 0.8rem;
+    padding: 1rem 1rem 2rem 1rem; // ✅ RÉDUIT : bas 2rem
+    gap: 0.5rem;
+  }
+
+  @include from('large-lg') {
+    padding: 1rem 1rem 2.25rem 1rem; // ✅ RÉDUIT : bas 2.25rem
+  }
+
+  @include from('large-xxl') {
+    padding: 1rem 1rem 2.5rem 1rem; // ✅ RÉDUIT : bas 2.5rem
   }
 }
 
 .applications-carousel-dot {
-  // ✅ DOTS ASSEZ GROS POUR ÊTRE VISIBLES
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-
-  background: rgba(css-var(text-color), 0.4);
-  border: 2px solid rgba(css-var(text-color), 0.3);
-
+  // ✅ DOTS PETITES COMME ApplicationGalleryCarousel
   cursor: pointer;
   transition: all 0.3s ease;
-
   padding: 0;
+  border-radius: 50%;
 
-  // Zone tactile minimale (44x44px)
-  min-width: 44px;
-  min-height: 44px;
+  // ✅ MOBILE (< 375px) - Très petits écrans
+  @include until('small-xs') {
+    width: 6px;
+    height: 6px;
+    background: grey;
+    border: none;
+    min-width: unset;
+    min-height: unset;
+  }
 
-  // Le dot visible est au centre de la zone tactile
-  position: relative;
+  // ✅ MOBILE (375px - 767px) - Smartphones standards
+  @include from('small-xs') {
+    width: 7px;
+    height: 7px;
+    background: grey;
+    border: none;
+    min-width: unset;
+    min-height: unset;
+  }
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 0.7rem;
-    height: 0.7rem;
-    border-radius: 50%;
-    background: inherit;
-    border: inherit;
+  @include from('small-sm') {
+    width: 8px;
+    height: 8px;
+  }
+
+  // ✅ TABLET (768px - 1023px) - Tablettes portrait
+  @include from('medium-sm') {
+    width: 9px;
+    height: 9px;
+  }
+
+  @include from('medium-lg') {
+    width: 10px;
+    height: 10px;
+  }
+
+  // ✅ TABLET LARGE (1024px - 1199px) - Tablettes paysage
+  @include from('medium-xxl') {
+    width: 11px;
+    height: 11px;
+  }
+
+  // ✅ LAPTOP (1200px - 1439px) - Laptops standards
+  @include from('large-xs') {
+    width: 12px;
+    height: 12px;
+  }
+
+  @include from('large-sm') {
+    width: 13px;
+    height: 13px;
+  }
+
+  // ✅ DESKTOP (1440px - 1919px) - Écrans desktop standards
+  @include from('large-lg') {
+    width: 14px;
+    height: 14px;
+  }
+
+  // ✅ LARGE DESKTOP (1920px+) - Grands écrans
+  @include from('large-xxl') {
+    width: 16px;
+    height: 16px;
+  }
+
+  // ✅ DOT ACTIVE - Orange vif, MÊME TAILLE
+  &.active {
+    background: css-var(color-orange);
+    border: none;
+    box-shadow: 0 2px 8px rgba(css-var(color-orange), 0.5);
   }
 
   &:hover:not(:disabled) {
     background: rgba(css-var(primary-color), 0.7);
-    border-color: css-var(primary-color);
     transform: scale(1.2);
-  }
-
-  &.active {
-    background: css-var(primary-color);
-    border-color: css-var(primary-color);
-    width: 1.2rem; // ✅ Dot actif plus large (ovale)
-    border-radius: 1rem;
-    box-shadow: 0 3px 10px rgba(css-var(primary-color), 0.5);
-
-    &::before {
-      width: 1.2rem;
-      border-radius: 1rem;
-    }
   }
 
   &:focus {
@@ -168,35 +220,36 @@
 // Mode paysage mobile
 @include mobile-landscape {
   .applications-carousel-indicators {
-    padding: 1rem;
-    gap: 0.5rem;
+    padding: 0.75rem 1rem 1rem 1rem; // ✅ Encore plus réduit en paysage
+    gap: 0.4rem;
   }
 
   .applications-carousel-dot {
-    width: 0.6rem;
-    height: 0.6rem;
-
-    &::before {
-      width: 0.6rem;
-      height: 0.6rem;
-    }
+    width: 6px;
+    height: 6px;
 
     &.active {
-      width: 1rem;
-
-      &::before {
-        width: 1rem;
-      }
+      width: 6px;
     }
   }
 }
 
-// Écrans tactiles
+// Écrans tactiles - Zone tactile minimale
 @media (pointer: coarse) {
   .applications-carousel-dot {
-    // Forcer la zone tactile minimale
-    min-width: 48px;
-    min-height: 48px;
+    // ✅ Zone tactile invisible autour du dot
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+    }
 
     &:hover {
       transform: none; // Pas de scale sur tactile
@@ -228,11 +281,10 @@
 // Contraste élevé
 @include high-contrast {
   .applications-carousel-dot {
-    border-width: 3px;
-    background: rgba(css-var(text-color), 0.6);
+    border: 2px solid css-var(text-color);
 
     &.active {
-      border-width: 3px;
+      border: 2px solid css-var(primary-color);
       box-shadow: 0 0 0 4px rgba(css-var(primary-color), 0.4);
     }
   }
