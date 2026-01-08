@@ -81,7 +81,8 @@
     }
 
     @include from('medium-xxl') {
-      padding: 0.87rem 1.12rem;
+      padding: none;
+      // padding: 0.87rem 1.12rem;
       font-size: 0.9rem;
     }
 
