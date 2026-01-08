@@ -24,7 +24,7 @@ const OrderModal = dynamic(() => import('../modal/OrderModal'), {
 });
 
 // =============================
-// ✅ COMPOSANT GALLERYMODAL AVEC IMAGES COMBINÉES
+// COMPOSANT GALLERYMODAL AVEC IMAGES COMBINÉES
 // =============================
 const GalleryModal = memo(({ isOpen, onClose, images, applicationName }) => {
   const [selectedImage, setSelectedImage] = useState(0);
@@ -41,7 +41,6 @@ const GalleryModal = memo(({ isOpen, onClose, images, applicationName }) => {
     };
   }, [isOpen]);
 
-  // ✅ AUTO-SCROLL : Navigation automatique toutes les 4 secondes
   useEffect(() => {
     if (!isOpen || !images || images.length <= 1) return;
 
@@ -60,7 +59,6 @@ const GalleryModal = memo(({ isOpen, onClose, images, applicationName }) => {
         className="gallery-modal-content"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* BOUTON FERMETURE */}
         <button
           className="gallery-close-btn"
           onClick={onClose}
@@ -69,7 +67,6 @@ const GalleryModal = memo(({ isOpen, onClose, images, applicationName }) => {
           <FaX className="close-icon" />
         </button>
 
-        {/* HEADER */}
         <div className="gallery-header">
           <div className="gallery-header-left">
             <h3>{applicationName} - Galerie</h3>
@@ -79,9 +76,7 @@ const GalleryModal = memo(({ isOpen, onClose, images, applicationName }) => {
           </div>
         </div>
 
-        {/* BODY */}
         <div className="gallery-body">
-          {/* THUMBNAILS */}
           <div className="gallery-thumbnails">
             {images.map((img, index) => (
               <button
@@ -103,7 +98,6 @@ const GalleryModal = memo(({ isOpen, onClose, images, applicationName }) => {
             ))}
           </div>
 
-          {/* IMAGE CONTAINER */}
           <div className="gallery-image-container">
             <CldImage
               src={images[selectedImage]}
@@ -128,7 +122,7 @@ const GalleryModal = memo(({ isOpen, onClose, images, applicationName }) => {
 GalleryModal.displayName = 'GalleryModal';
 
 // =============================
-// ✅ CARTE D'APPLICATION - UNE SEULE IMAGE (SANS CAROUSEL)
+// CARTE D'APPLICATION - UNE SEULE IMAGE
 // =============================
 const ApplicationCard = memo(
   ({
@@ -139,7 +133,6 @@ const ApplicationCard = memo(
     onGalleryClick,
     hasPaymentMethods,
   }) => {
-    // ✅ Première image du champ application_images
     const firstImage = useMemo(() => {
       if (app.application_images && app.application_images.length > 0) {
         return app.application_images[0];
@@ -147,17 +140,14 @@ const ApplicationCard = memo(
       return '/placeholder-application.png';
     }, [app.application_images]);
 
-    // ✅ Combiner application_images + application_other_versions pour la galerie
     const allImages = useMemo(() => {
       const mainImages = app.application_images || [];
       const otherVersions = app.application_other_versions || [];
       const combined = [...mainImages, ...otherVersions];
-      // Dédupliquer et filtrer les valeurs vides
       const unique = [...new Set(combined)].filter(Boolean);
       return unique.length > 0 ? unique : ['/placeholder-application.png'];
     }, [app.application_images, app.application_other_versions]);
 
-    // ✅ Afficher le bouton Galerie seulement si plus d'1 image au total
     const hasMultipleImages = allImages.length > 1;
 
     return (
@@ -166,7 +156,6 @@ const ApplicationCard = memo(
         data-app-id={app.application_id}
         data-app-name={app.application_name}
       >
-        {/* ✅ IMAGE UNIQUE - SANS CAROUSEL */}
         <div className="card-image">
           <CldImage
             src={firstImage}
@@ -219,7 +208,6 @@ const ApplicationCard = memo(
               <span className="btn-text">Commander</span>
             </button>
 
-            {/* ✅ Bouton Galerie seulement si plusieurs images */}
             {hasMultipleImages && (
               <button
                 className="btn btn-gallery"
@@ -250,7 +238,183 @@ const ApplicationCard = memo(
 ApplicationCard.displayName = 'ApplicationCard';
 
 // =============================
-// ✅ COMPOSANT PRINCIPAL
+// CAROUSEL D'APPLICATIONS - FADE IN/OUT
+// =============================
+const ApplicationsCarousel = memo(
+  ({
+    applications,
+    templateID,
+    hasPaymentMethods,
+    onOrderClick,
+    onViewClick,
+    onGalleryClick,
+  }) => {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isAutoScrolling, setIsAutoScrolling] = useState(true);
+    const [isTransitioning, setIsTransitioning] = useState(false);
+
+    useEffect(() => {
+      if (!isAutoScrolling || applications.length <= 1 || isTransitioning) {
+        return;
+      }
+
+      const interval = setInterval(() => {
+        handleSlideChange((currentIndex + 1) % applications.length);
+      }, 6000);
+
+      return () => clearInterval(interval);
+    }, [isAutoScrolling, applications.length, currentIndex, isTransitioning]);
+
+    useEffect(() => {
+      if (!isAutoScrolling) {
+        const timeout = setTimeout(() => {
+          setIsAutoScrolling(true);
+        }, 15000);
+        return () => clearTimeout(timeout);
+      }
+    }, [isAutoScrolling]);
+
+    const handleSlideChange = useCallback(
+      (newIndex) => {
+        if (isTransitioning) return;
+
+        setIsTransitioning(true);
+        setCurrentIndex(newIndex);
+
+        setTimeout(() => {
+          setIsTransitioning(false);
+        }, 800);
+      },
+      [isTransitioning],
+    );
+
+    const goToSlide = useCallback(
+      (index) => {
+        if (index === currentIndex || isTransitioning) return;
+        setIsAutoScrolling(false);
+        handleSlideChange(index);
+
+        try {
+          trackEvent('application_carousel_dot_click', {
+            event_category: 'navigation',
+            event_label: `app_${index + 1}`,
+            application_id: applications[index]?.application_id,
+          });
+        } catch (error) {
+          console.warn('[Analytics] Error:', error);
+        }
+      },
+      [currentIndex, isTransitioning, handleSlideChange, applications],
+    );
+
+    const [touchStart, setTouchStart] = useState(null);
+    const [touchEnd, setTouchEnd] = useState(null);
+    const minSwipeDistance = 50;
+
+    const onTouchStart = (e) => {
+      setTouchEnd(null);
+      setTouchStart(e.targetTouches[0].clientX);
+    };
+
+    const onTouchMove = (e) => {
+      setTouchEnd(e.targetTouches[0].clientX);
+    };
+
+    const onTouchEnd = useCallback(() => {
+      if (!touchStart || !touchEnd || isTransitioning) return;
+
+      const distance = touchStart - touchEnd;
+      const isLeftSwipe = distance > minSwipeDistance;
+      const isRightSwipe = distance < -minSwipeDistance;
+
+      if (isLeftSwipe) {
+        setIsAutoScrolling(false);
+        handleSlideChange((currentIndex + 1) % applications.length);
+      } else if (isRightSwipe) {
+        setIsAutoScrolling(false);
+        handleSlideChange(
+          (currentIndex - 1 + applications.length) % applications.length,
+        );
+      }
+    }, [
+      touchStart,
+      touchEnd,
+      currentIndex,
+      applications.length,
+      isTransitioning,
+      handleSlideChange,
+    ]);
+
+    if (applications.length === 1) {
+      return (
+        <section className="others projectSection" role="article">
+          <ApplicationCard
+            app={applications[0]}
+            templateID={templateID}
+            onOrderClick={onOrderClick}
+            onViewClick={onViewClick}
+            onGalleryClick={onGalleryClick}
+            hasPaymentMethods={hasPaymentMethods}
+          />
+        </section>
+      );
+    }
+
+    return (
+      <div className="applications-carousel-wrapper">
+        <section
+          className="others projectSection applications-carousel-container"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
+          <div className="applications-carousel-track">
+            {applications.map((app, index) => {
+              let cardVisibility = 'hidden';
+
+              if (index === currentIndex) {
+                cardVisibility = 'active';
+              }
+
+              return (
+                <div
+                  key={app.application_id}
+                  className={`applications-carousel-slide ${cardVisibility}`}
+                >
+                  <ApplicationCard
+                    app={app}
+                    templateID={templateID}
+                    onOrderClick={onOrderClick}
+                    onViewClick={onViewClick}
+                    onGalleryClick={onGalleryClick}
+                    hasPaymentMethods={hasPaymentMethods}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        <div className="applications-carousel-indicators">
+          {applications.map((app, index) => (
+            <button
+              key={app.application_id}
+              onClick={() => goToSlide(index)}
+              className={`applications-carousel-dot ${index === currentIndex ? 'active' : ''}`}
+              aria-label={`Application ${index + 1} - ${app.application_name}`}
+              disabled={isTransitioning}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  },
+);
+
+ApplicationsCarousel.displayName = 'ApplicationsCarousel';
+
+// =============================
+// COMPOSANT PRINCIPAL
 // =============================
 const SingleTemplateShops = ({
   templateID,
@@ -265,7 +429,6 @@ const SingleTemplateShops = ({
   const [galleryImages, setGalleryImages] = useState([]);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
-  // Tracking de la vue de la page
   useEffect(() => {
     if (templateID && applications.length > 0) {
       const templateName = applications[0]?.template_name || 'Template';
@@ -285,7 +448,6 @@ const SingleTemplateShops = ({
     }
   }, [templateID, applications, platforms]);
 
-  // Handler pour l'ouverture de la modal de commande
   const handleOrderClick = useCallback(
     (app) => {
       if (!platforms || platforms.length === 0) {
@@ -312,7 +474,6 @@ const SingleTemplateShops = ({
     [platforms, templateID],
   );
 
-  // ✅ Handler pour la galerie - AVEC IMAGES COMBINÉES
   const handleGalleryClick = useCallback(
     (app, combinedImages) => {
       try {
@@ -334,7 +495,6 @@ const SingleTemplateShops = ({
     [templateID],
   );
 
-  // Handler pour fermer la galerie
   const handleGalleryClose = useCallback(() => {
     setIsGalleryOpen(false);
     setTimeout(() => {
@@ -343,7 +503,6 @@ const SingleTemplateShops = ({
     }, 300);
   }, []);
 
-  // Handler pour voir les détails
   const handleApplicationView = useCallback(
     (app) => {
       if (!viewedApps.has(app.application_id)) {
@@ -364,7 +523,6 @@ const SingleTemplateShops = ({
     [templateID, viewedApps],
   );
 
-  // Handler pour fermer la modal
   const handleModalClose = useCallback(() => {
     if (selectedApp) {
       try {
@@ -382,7 +540,6 @@ const SingleTemplateShops = ({
     setSelectedApp(null);
   }, [selectedApp]);
 
-  // Gestion de l'état vide
   if (!applications || applications.length === 0) {
     return (
       <div className="template-empty">
@@ -419,26 +576,15 @@ const SingleTemplateShops = ({
         />
       </section>
 
-      <div className="applications-list">
-        {applications.map((app) => (
-          <section
-            key={app.application_id}
-            className="others projectSection"
-            role="article"
-          >
-            <ApplicationCard
-              app={app}
-              templateID={templateID}
-              onOrderClick={handleOrderClick}
-              onViewClick={handleApplicationView}
-              onGalleryClick={handleGalleryClick}
-              hasPaymentMethods={hasPaymentMethods}
-            />
-          </section>
-        ))}
-      </div>
+      <ApplicationsCarousel
+        applications={applications}
+        templateID={templateID}
+        hasPaymentMethods={hasPaymentMethods}
+        onOrderClick={handleOrderClick}
+        onViewClick={handleApplicationView}
+        onGalleryClick={handleGalleryClick}
+      />
 
-      {/* Modal de commande */}
       {selectedApp && (
         <OrderModal
           isOpen={isModalOpen}
@@ -449,7 +595,6 @@ const SingleTemplateShops = ({
         />
       )}
 
-      {/* ✅ Modal Gallery avec images combinées */}
       {galleryApp && (
         <GalleryModal
           isOpen={isGalleryOpen}

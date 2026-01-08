@@ -1,0 +1,238 @@
+@use 'sass:color';
+@use '../../../app/styles/abstracts' as *;
+
+// ================================
+// 📄 _carousel_applications.scss - CAROUSEL FADE IN/OUT
+// ================================
+
+// =============================
+// WRAPPER - Contient carousel + dots
+// =============================
+
+.applications-carousel-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+// =============================
+// CONTAINER - Section avec 100vh
+// =============================
+
+.applications-carousel-container {
+  position: relative;
+  overflow: hidden; // ✅ CRITIQUE : Cache les cartes non actives
+}
+
+// =============================
+// TRACK - Contient toutes les cartes
+// =============================
+
+.applications-carousel-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// =============================
+// ✅ ANIMATION FADE IN/OUT
+// =============================
+
+.applications-carousel-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // Carte cachée par défaut
+  &.hidden {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  // Carte active avec fade in
+  &.active {
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+    transition: opacity 0.8s ease-in-out;
+  }
+}
+
+// =============================
+// ✅ DOTS EN BAS DE L'ÉCRAN (SOUS LA CARTE)
+// =============================
+
+.applications-carousel-indicators {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+
+  // 📱 MOBILE - Padding généreux
+  padding: 1.5rem 1rem;
+
+  @include from('small-sm') {
+    padding: 1.75rem 1rem;
+  }
+
+  @include from('medium-sm') {
+    padding: 2rem 1rem;
+    gap: 0.75rem;
+  }
+
+  @include from('large-xs') {
+    padding: 2.5rem 1rem;
+    gap: 0.8rem;
+  }
+}
+
+.applications-carousel-dot {
+  // ✅ DOTS ASSEZ GROS POUR ÊTRE VISIBLES
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+
+  background: rgba(css-var(text-color), 0.4);
+  border: 2px solid rgba(css-var(text-color), 0.3);
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  padding: 0;
+
+  // Zone tactile minimale (44x44px)
+  min-width: 44px;
+  min-height: 44px;
+
+  // Le dot visible est au centre de la zone tactile
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+    background: inherit;
+    border: inherit;
+  }
+
+  &:hover:not(:disabled) {
+    background: rgba(css-var(primary-color), 0.7);
+    border-color: css-var(primary-color);
+    transform: scale(1.2);
+  }
+
+  &.active {
+    background: css-var(primary-color);
+    border-color: css-var(primary-color);
+    width: 1.2rem; // ✅ Dot actif plus large (ovale)
+    border-radius: 1rem;
+    box-shadow: 0 3px 10px rgba(css-var(primary-color), 0.5);
+
+    &::before {
+      width: 1.2rem;
+      border-radius: 1rem;
+    }
+  }
+
+  &:focus {
+    outline: 2px solid css-var(primary-color);
+    outline-offset: 4px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+// =============================
+// ADAPTATIONS RESPONSIVE
+// =============================
+
+// Mode paysage mobile
+@include mobile-landscape {
+  .applications-carousel-indicators {
+    padding: 1rem;
+    gap: 0.5rem;
+  }
+
+  .applications-carousel-dot {
+    width: 0.6rem;
+    height: 0.6rem;
+
+    &::before {
+      width: 0.6rem;
+      height: 0.6rem;
+    }
+
+    &.active {
+      width: 1rem;
+
+      &::before {
+        width: 1rem;
+      }
+    }
+  }
+}
+
+// Écrans tactiles
+@media (pointer: coarse) {
+  .applications-carousel-dot {
+    // Forcer la zone tactile minimale
+    min-width: 48px;
+    min-height: 48px;
+
+    &:hover {
+      transform: none; // Pas de scale sur tactile
+    }
+
+    &:active {
+      transform: scale(0.9);
+    }
+  }
+}
+
+// Réduction des animations
+@include reduced-motion {
+  .applications-carousel-slide {
+    &.active {
+      transition: opacity 0.3s ease !important;
+    }
+  }
+
+  .applications-carousel-dot {
+    transition: none !important;
+
+    &:hover {
+      transform: none !important;
+    }
+  }
+}
+
+// Contraste élevé
+@include high-contrast {
+  .applications-carousel-dot {
+    border-width: 3px;
+    background: rgba(css-var(text-color), 0.6);
+
+    &.active {
+      border-width: 3px;
+      box-shadow: 0 0 0 4px rgba(css-var(primary-color), 0.4);
+    }
+  }
+}
