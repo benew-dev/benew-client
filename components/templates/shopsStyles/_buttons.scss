@@ -76,20 +76,18 @@
     }
 
     @include from('medium-lg') {
-      padding: 0.875rem 1.125rem;
+      padding: 0.4rem 0.8rem;
       font-size: 0.9rem;
     }
 
     @include from('medium-xxl') {
-      padding: none;
-      // padding: 0.87rem 1.12rem;
+      padding: 0.5rem 0.9rem;
       font-size: 0.9rem;
     }
 
     // 🖥️ GRANDS ÉCRANS
     @include from('large-xxl') {
-      // padding: 0.6rem 0.9rem; // ✅ Réduit de ~20%
-      padding: none;
+      padding: 0.6rem 0.9rem; // ✅ Réduit de ~20%
       font-size: 0.875rem;
       min-height: auto;
     }
