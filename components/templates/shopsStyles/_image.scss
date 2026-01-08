@@ -2,14 +2,12 @@
 @use '../../../app/styles/abstracts' as *;
 
 // ================================
-// 📄 _image.scss - AVEC ESPACEMENT EN HAUT
+// 📄 _image.scss - IMAGE STATIQUE UNIQUE (SANS CAROUSEL)
 // ================================
 
 .card-image {
   position: relative;
   overflow: hidden;
-  // ✅ MÊME BACKGROUND QUE LA CARTE - Glassmorphism avec blur
-  // background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   z-index: 2;
@@ -25,7 +23,7 @@
     height: 220px;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    padding-top: 0.75rem; // Espacement ajusté sur mobile
+    padding-top: 0.75rem;
   }
 
   @include from('small-sm') {
@@ -76,13 +74,13 @@
   }
 
   @include from('large-xxl') {
-    height: 200px; // Valeur desktop originale
+    height: 200px;
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
-    padding-top: 1.3rem; // Plus d'espace sur grand écran
+    padding-top: 1.3rem;
   }
 
-  // Overlay subtil pour améliorer le contraste (plus léger qu'avant)
+  // Overlay subtil pour améliorer le contraste
   &::after {
     content: '';
     position: absolute;
@@ -114,7 +112,7 @@
 
   @include from('large-xxl') {
     .application-card:hover & {
-      transform: scale(1.05); // Effet plus subtil sur desktop
+      transform: scale(1.05);
     }
   }
 }
