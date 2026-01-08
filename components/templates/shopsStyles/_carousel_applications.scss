@@ -169,11 +169,11 @@
   }
 
   @include from('large-lg') {
-    padding: 2.5rem 1rem 1.75rem 1rem; // ✅ 2.5rem haut + 1.75rem bas
+    padding: 0.8rem 1rem 0.8rem 1rem; // ✅ 2.5rem haut + 1.75rem bas
   }
 
   @include from('large-xxl') {
-    padding: 3rem 1rem 2rem 1rem; // ✅ 3rem haut + 2rem bas
+    padding: 1rem 1rem 1rem 1rem; // ✅ 3rem haut + 2rem bas
   }
 }
 
