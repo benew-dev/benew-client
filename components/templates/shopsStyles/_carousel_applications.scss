@@ -92,15 +92,15 @@
   }
 
   @include from('large-xs') {
-    padding: 2.5rem 1rem;
+    padding: none;
     gap: 0.8rem;
   }
 }
 
 .applications-carousel-dot {
   // ✅ DOTS ASSEZ GROS POUR ÊTRE VISIBLES
-  width: 0.7rem;
-  height: 0.7rem;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
 
   background: rgba(css-var(text-color), 0.4);
