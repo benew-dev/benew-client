@@ -9,7 +9,7 @@
   text-align: center;
 
   p {
-    color: css-var(text-color);
+    color: $text-color;
     line-height: 1.6;
     margin-bottom: 1.5rem;
     opacity: 0.9;
@@ -36,7 +36,7 @@
 .confirmation-main-message {
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid rgba(css-var(primary-color), 0.2);
+  border-bottom: 1px solid rgba($primary-color, 0.2);
 
   @include until('small-sm') {
     margin-bottom: 1.75rem;
@@ -57,8 +57,8 @@
 // =============================
 
 .payment-platforms-section {
-  background: rgba(css-var(primary-color), 0.05);
-  border: 1px solid rgba(css-var(primary-color), 0.2);
+  background: rgba($primary-color, 0.05);
+  border: 1px solid rgba($primary-color, 0.2);
   border-radius: 12px;
   margin-bottom: 2rem;
   text-align: left;
@@ -81,7 +81,7 @@
 }
 
 .platforms-title {
-  color: css-var(primary-color);
+  color: $primary-color;
   font-weight: 700;
   text-align: center;
   margin-bottom: 0.75rem;
@@ -103,7 +103,7 @@
 }
 
 .platforms-subtitle {
-  color: rgba(css-var(text-color), 0.8);
+  color: rgba($text-color, 0.8);
   text-align: center;
   margin-bottom: 1.5rem;
   line-height: 1.5;
@@ -146,16 +146,16 @@
 // =============================
 
 .platform-card {
-  background: rgba(css-var(background-color), 0.6);
-  border: 1px solid rgba(css-var(primary-color), 0.3);
+  background: rgba($background-color, 0.6);
+  border: 1px solid rgba($primary-color, 0.3);
   border-radius: 10px;
   overflow: hidden;
   transition: all 0.3s ease;
   backdrop-filter: blur(5px);
 
   &:hover {
-    border-color: rgba(css-var(primary-color), 0.5);
-    box-shadow: 0 4px 12px rgba(css-var(primary-color), 0.2);
+    border-color: rgba($primary-color, 0.5);
+    box-shadow: 0 4px 12px rgba($primary-color, 0.2);
     transform: translateY(-2px);
   }
 }
@@ -163,10 +163,10 @@
 .platform-card-header {
   background: linear-gradient(
     135deg,
-    rgba(css-var(primary-color), 0.15),
-    rgba(css-var(secondary-color), 0.15)
+    rgba($primary-color, 0.15),
+    rgba($secondary-color, 0.15)
   );
-  border-bottom: 1px solid rgba(css-var(primary-color), 0.2);
+  border-bottom: 1px solid rgba($primary-color, 0.2);
 
   // 📱 MOBILE FIRST
   padding: 0.875rem 1rem;
@@ -181,7 +181,7 @@
 }
 
 .platform-card-name {
-  color: css-var(primary-color);
+  color: $primary-color;
   font-weight: 700;
   display: block;
 
@@ -239,7 +239,7 @@
 }
 
 .detail-label {
-  color: rgba(css-var(text-color), 0.7);
+  color: rgba($text-color, 0.7);
   font-weight: 500;
 
   // 📱 MOBILE FIRST
@@ -255,7 +255,7 @@
 }
 
 .detail-value {
-  color: css-var(text-color);
+  color: $text-color;
   font-weight: 600;
 
   // 📱 MOBILE FIRST
@@ -270,7 +270,7 @@
   }
 
   &.account-number {
-    color: css-var(secondary-color);
+    color: $secondary-color;
     font-family: 'Courier New', monospace;
     letter-spacing: 0.5px;
     font-weight: 700;
@@ -293,8 +293,8 @@
 // =============================
 
 .payment-notice {
-  background: rgba(css-var(secondary-color), 0.1);
-  border: 1px solid rgba(css-var(secondary-color), 0.3);
+  background: rgba($secondary-color, 0.1);
+  border: 1px solid rgba($secondary-color, 0.3);
   border-radius: 8px;
   text-align: center;
 
@@ -310,7 +310,7 @@
   }
 
   p {
-    color: css-var(text-color);
+    color: $text-color;
     margin: 0;
     line-height: 1.6;
 
@@ -328,7 +328,7 @@
   }
 
   strong {
-    color: css-var(secondary-color);
+    color: $secondary-color;
     font-weight: 700;
   }
 }
@@ -340,11 +340,11 @@
 .closeButton {
   background: linear-gradient(
     135deg,
-    css-var(primary-color),
+    $primary-color,
     color.adjust($primary-color, $lightness: 10%)
   );
-  color: css-var(background-color);
-  box-shadow: 0 4px 8px #{'rgba(#{css-var(primary-color)}, 0.3)'};
+  color: $background-color;
+  box-shadow: 0 4px 8px rgba($primary-color, 0.3);
   margin-top: 1.5rem;
   width: 100%;
   border-radius: 8px;
@@ -379,10 +379,10 @@
     background: linear-gradient(
       135deg,
       color.adjust($primary-color, $lightness: 5%),
-      css-var(secondary-color)
+      $secondary-color
     );
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px #{'rgba(#{css-var(primary-color)}, 0.4)'};
+    box-shadow: 0 6px 12px rgba($primary-color, 0.4);
   }
 
   &:active {
@@ -458,30 +458,30 @@
 
 @include dark-mode {
   .payment-platforms-section {
-    background: rgba(css-var(primary-color), 0.08);
+    background: rgba($primary-color, 0.08);
   }
 
   .platform-card {
-    background: rgba(css-var(background-color), 0.8);
+    background: rgba($background-color, 0.8);
   }
 
   .payment-notice {
-    background: rgba(css-var(secondary-color), 0.12);
+    background: rgba($secondary-color, 0.12);
   }
 }
 
 @include high-density {
   .platform-card {
     &:hover {
-      box-shadow: 0 4px 12px rgba(css-var(primary-color), 0.3);
+      box-shadow: 0 4px 12px rgba($primary-color, 0.3);
     }
   }
 
   .closeButton {
-    box-shadow: 0 4px 8px #{'rgba(#{css-var(primary-color)}, 0.4)'};
+    box-shadow: 0 4px 8px rgba($primary-color, 0.4);
 
     &:hover {
-      box-shadow: 0 6px 12px #{'rgba(#{css-var(primary-color)}, 0.5)'};
+      box-shadow: 0 6px 12px rgba($primary-color, 0.5);
     }
   }
 }

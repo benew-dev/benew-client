@@ -70,14 +70,14 @@
 // TITRE BENEW
 // =============================
 .benew-title {
-  color: css-var(primary-color);
+  color: $primary-color;
   font-size: 2.5rem;
   font-weight: 900;
   text-align: center;
   margin-bottom: 3rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  text-shadow: 0 0 20px rgba(css-var(primary-color), 0.5);
+  text-shadow: 0 0 20px rgba($primary-color, 0.5);
   animation: glow 2s ease-in-out infinite alternate;
 
   @include from('small-sm') {
@@ -109,14 +109,14 @@
 @keyframes glow {
   from {
     text-shadow:
-      0 0 20px rgba(css-var(primary-color), 0.5),
-      0 0 30px rgba(css-var(primary-color), 0.3);
+      0 0 20px rgba($primary-color, 0.5),
+      0 0 30px rgba($primary-color, 0.3);
   }
   to {
     text-shadow:
-      0 0 30px rgba(css-var(primary-color), 0.8),
-      0 0 40px rgba(css-var(primary-color), 0.5),
-      0 0 50px rgba(css-var(primary-color), 0.3);
+      0 0 30px rgba($primary-color, 0.8),
+      0 0 40px rgba($primary-color, 0.5),
+      0 0 50px rgba($primary-color, 0.3);
   }
 }
 
@@ -126,11 +126,11 @@
 .sky-limit-card {
   background: linear-gradient(
     135deg,
-    rgba(css-var(text-color), 0.08),
-    rgba(css-var(text-color), 0.12)
+    rgba($text-color, 0.08),
+    rgba($text-color, 0.12)
   );
   backdrop-filter: blur(10px);
-  border: 0.2px solid rgba(css-var(primary-color), 0.3);
+  border: 0.2px solid rgba($primary-color, 0.3);
   border-radius: 20px;
   padding: 3rem 2rem;
   display: flex;
@@ -144,7 +144,7 @@
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.3),
-    0 0 40px rgba(css-var(primary-color), 0.1);
+    0 0 40px rgba($primary-color, 0.1);
   position: relative;
   overflow: hidden;
 
@@ -152,11 +152,11 @@
   @include mobile-and-tablets {
     border-width: 0.2px; // Très épaisse
     border-style: solid;
-    border-color: css-var(primary-color); // Couleur pleine orange
+    border-color: $primary-color; // Couleur pleine orange
     box-shadow:
       0 8px 32px rgba(0, 0, 0, 0.5),
-      0 0 80px rgba(css-var(primary-color), 0.4),
-      inset 0 0 40px rgba(css-var(primary-color), 0.1);
+      0 0 80px rgba($primary-color, 0.4),
+      inset 0 0 40px rgba($primary-color, 0.1);
   }
 
   @include from('small-sm') {
@@ -178,7 +178,7 @@
     padding: 5rem 4rem;
     max-width: 700px;
     border-width: 2px;
-    border-color: rgba(css-var(primary-color), 0.3);
+    border-color: rgba($primary-color, 0.3);
   }
 
   // Effet de brillance au survol
@@ -192,7 +192,7 @@
     background: linear-gradient(
       45deg,
       transparent,
-      rgba(css-var(primary-color), 0.1),
+      rgba($primary-color, 0.1),
       transparent
     );
     transform: rotate(45deg);
@@ -202,10 +202,10 @@
 
   &:hover {
     transform: translateY(-10px) scale(1.02);
-    border-color: rgba(css-var(primary-color), 0.6);
+    border-color: rgba($primary-color, 0.6);
     box-shadow:
       0 12px 48px rgba(0, 0, 0, 0.4),
-      0 0 60px rgba(css-var(primary-color), 0.3);
+      0 0 60px rgba($primary-color, 0.3);
 
     &::before {
       opacity: 1;
@@ -213,16 +213,12 @@
     }
 
     .sky-limit-text {
-      color: css-var(secondary-color);
+      color: $secondary-color;
       transform: scale(1.05);
     }
 
     .card-hint {
-      background: linear-gradient(
-        135deg,
-        css-var(primary-color),
-        css-var(secondary-color)
-      );
+      background: linear-gradient(135deg, $primary-color, $secondary-color);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -249,7 +245,7 @@
 // TEXTE "SKY IS THE LIMIT"
 // =============================
 .sky-limit-text {
-  color: css-var(text-color);
+  color: $text-color;
   font-size: 2rem;
   font-weight: 800;
   text-align: center;
@@ -257,7 +253,7 @@
   text-transform: uppercase;
   text-shadow:
     0 2px 10px rgba(0, 0, 0, 0.5),
-    0 0 20px rgba(css-var(primary-color), 0.3);
+    0 0 20px rgba($primary-color, 0.3);
   transition: all 0.3s ease;
   margin: 0;
   line-height: 1.2;
@@ -287,11 +283,7 @@
 // INDICATION "LIRE →" avec gradient
 // =============================
 .card-hint {
-  background: linear-gradient(
-    135deg,
-    css-var(primary-color),
-    css-var(secondary-color)
-  );
+  background: linear-gradient(135deg, $primary-color, $secondary-color);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -387,11 +379,11 @@
 .category-card {
   background: linear-gradient(
     135deg,
-    rgba(css-var(primary-color), 0.08),
-    rgba(css-var(secondary-color), 0.08)
+    rgba($primary-color, 0.08),
+    rgba($secondary-color, 0.08)
   );
   backdrop-filter: blur(8px);
-  border: 2px solid rgba(css-var(primary-color), 0.3);
+  border: 2px solid rgba($primary-color, 0.3);
   border-radius: 12px;
   padding: 1rem 0.75rem; // Très compact
   display: flex;
@@ -416,7 +408,7 @@
 
   // Variations de couleur pour chaque carte
   &:nth-child(1) {
-    border-color: rgba(css-var(primary-color), 0.4);
+    border-color: rgba($primary-color, 0.4);
     background: linear-gradient(
       135deg,
       rgba(246, 160, 55, 0.1),
@@ -425,7 +417,7 @@
   }
 
   &:nth-child(2) {
-    border-color: rgba(css-var(secondary-color), 0.4);
+    border-color: rgba($secondary-color, 0.4);
     background: linear-gradient(
       135deg,
       rgba(242, 102, 176, 0.1),
@@ -434,7 +426,7 @@
   }
 
   &:nth-child(3) {
-    border-color: rgba(css-var(accent-color), 0.4);
+    border-color: rgba($accent-color, 0.4);
     background: linear-gradient(
       135deg,
       rgba(158, 31, 157, 0.1),
@@ -443,7 +435,7 @@
   }
 
   &:nth-child(4) {
-    border-color: rgba(css-var(primary-color), 0.4);
+    border-color: rgba($primary-color, 0.4);
     background: linear-gradient(
       135deg,
       rgba(246, 160, 55, 0.08),
@@ -452,7 +444,7 @@
   }
 
   &:nth-child(5) {
-    border-color: rgba(css-var(secondary-color), 0.4);
+    border-color: rgba($secondary-color, 0.4);
     background: linear-gradient(
       135deg,
       rgba(242, 102, 176, 0.08),
@@ -461,7 +453,7 @@
   }
 
   &:nth-child(6) {
-    border-color: rgba(css-var(accent-color), 0.4);
+    border-color: rgba($accent-color, 0.4);
     background: linear-gradient(
       135deg,
       rgba(158, 31, 157, 0.08),
@@ -470,7 +462,7 @@
   }
 
   &:nth-child(7) {
-    border-color: rgba(css-var(primary-color), 0.4);
+    border-color: rgba($primary-color, 0.4);
     background: linear-gradient(
       135deg,
       rgba(246, 160, 55, 0.1),
@@ -488,7 +480,7 @@
     height: 60px;
     background: radial-gradient(
       circle,
-      rgba(css-var(primary-color), 0.15),
+      rgba($primary-color, 0.15),
       transparent 70%
     );
     border-radius: 50%;
@@ -498,10 +490,10 @@
 
   &:hover {
     transform: translateY(-5px) scale(1.02);
-    border-color: rgba(css-var(primary-color), 0.7);
+    border-color: rgba($primary-color, 0.7);
     box-shadow:
       0 8px 24px rgba(0, 0, 0, 0.3),
-      0 0 30px rgba(css-var(primary-color), 0.2);
+      0 0 30px rgba($primary-color, 0.2);
 
     &::before {
       opacity: 1;
@@ -514,7 +506,7 @@
     }
 
     .category-title {
-      color: css-var(primary-color);
+      color: $primary-color;
       transform: scale(1.03);
     }
   }
@@ -541,7 +533,7 @@
 
 // Titre de la catégorie - COMPACT
 .category-title {
-  color: css-var(text-color);
+  color: $text-color;
   font-size: 0.95rem; // Plus petit
   font-weight: 600; // Moins gras
   text-align: center;
@@ -610,18 +602,18 @@
   .sky-limit-card {
     background: linear-gradient(
       135deg,
-      rgba(css-var(text-color), 0.05),
-      rgba(css-var(text-color), 0.1)
+      rgba($text-color, 0.05),
+      rgba($text-color, 0.1)
     );
     box-shadow:
       0 8px 32px rgba(0, 0, 0, 0.5),
-      0 0 40px rgba(css-var(primary-color), 0.15);
+      0 0 40px rgba($primary-color, 0.15);
   }
 
   .category-card {
     box-shadow:
       0 4px 16px rgba(0, 0, 0, 0.5),
-      0 0 20px rgba(css-var(primary-color), 0.1);
+      0 0 20px rgba($primary-color, 0.1);
   }
 }
 
@@ -629,20 +621,20 @@
 @include high-density {
   .benew-title {
     text-shadow:
-      0 0 20px rgba(css-var(primary-color), 0.6),
-      0 0 30px rgba(css-var(primary-color), 0.4);
+      0 0 20px rgba($primary-color, 0.6),
+      0 0 30px rgba($primary-color, 0.4);
   }
 
   .sky-limit-card,
   .category-card {
     box-shadow:
       0 8px 32px rgba(0, 0, 0, 0.4),
-      0 0 40px rgba(css-var(primary-color), 0.2);
+      0 0 40px rgba($primary-color, 0.2);
 
     &:hover {
       box-shadow:
         0 12px 48px rgba(0, 0, 0, 0.5),
-        0 0 60px rgba(css-var(primary-color), 0.4);
+        0 0 60px rgba($primary-color, 0.4);
     }
   }
 }

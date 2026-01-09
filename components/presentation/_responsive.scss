@@ -317,16 +317,16 @@
   .sky-limit-card,
   .category-card {
     border-width: 3px;
-    border-color: rgba(css-var(primary-color), 0.5);
+    border-color: rgba($primary-color, 0.5);
 
     &:hover {
-      border-color: css-var(primary-color);
+      border-color: $primary-color;
     }
   }
 
   .benew-title {
     text-shadow:
-      0 0 30px rgba(css-var(primary-color), 0.8),
+      0 0 30px rgba($primary-color, 0.8),
       0 2px 4px rgba(0, 0, 0, 0.8);
   }
 
@@ -334,7 +334,7 @@
   .category-title {
     text-shadow:
       0 2px 10px rgba(0, 0, 0, 0.7),
-      0 0 20px rgba(css-var(primary-color), 0.5);
+      0 0 20px rgba($primary-color, 0.5);
   }
 }
 
@@ -357,7 +357,7 @@
 // Focus visible pour la navigation au clavier
 .sky-limit-card:focus-visible,
 .category-card:focus-visible {
-  outline: 3px solid css-var(primary-color);
+  outline: 3px solid $primary-color;
   outline-offset: 4px;
 }
 
@@ -378,7 +378,7 @@
 
   .sky-limit-card,
   .category-card {
-    border: 2px solid css-var(primary-color);
+    border: 2px solid $primary-color;
     box-shadow: none;
     transform: none !important;
 

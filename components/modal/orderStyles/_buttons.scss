@@ -91,20 +91,20 @@ button {
 .nextButton {
   background: linear-gradient(
     135deg,
-    css-var(primary-color),
+    $primary-color,
     color.adjust($primary-color, $lightness: 10%)
   );
-  color: css-var(background-color);
-  box-shadow: 0 4px 8px #{'rgba(#{css-var(primary-color)}, 0.3)'};
+  color: $background-color;
+  box-shadow: 0 4px 8px rgba($primary-color, 0.3);
 
   &:hover:not(:disabled) {
     background: linear-gradient(
       135deg,
       color.adjust($primary-color, $lightness: 5%),
-      css-var(secondary-color)
+      $secondary-color
     );
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px #{'rgba(#{css-var(primary-color)}, 0.4)'};
+    box-shadow: 0 6px 12px rgba($primary-color, 0.4);
   }
 
   &:active {
@@ -115,11 +115,11 @@ button {
 .backButton,
 .cancelButton {
   background-color: transparent;
-  color: css-var(primary-color);
-  border: 1px solid css-var(primary-color);
+  color: $primary-color;
+  border: 1px solid $primary-color;
 
   &:hover {
-    background-color: #{'rgba(#{css-var(primary-color)}, 0.1)'};
+    background-color: rgba($primary-color, 0.1);
     border-color: color.adjust($primary-color, $lightness: 10%);
   }
 }
@@ -127,11 +127,11 @@ button {
 .closeButton {
   background: linear-gradient(
     135deg,
-    css-var(primary-color),
+    $primary-color,
     color.adjust($primary-color, $lightness: 10%)
   );
-  color: css-var(background-color);
-  box-shadow: 0 4px 8px #{'rgba(#{css-var(primary-color)}, 0.3)'};
+  color: $background-color;
+  box-shadow: 0 4px 8px rgba($primary-color, 0.3);
   margin-top: 1rem;
 
   // 📱 MOBILE - Toujours full-width
@@ -141,10 +141,10 @@ button {
     background: linear-gradient(
       135deg,
       color.adjust($primary-color, $lightness: 5%),
-      css-var(secondary-color)
+      $secondary-color
     );
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px #{'rgba(#{css-var(primary-color)}, 0.4)'};
+    box-shadow: 0 6px 12px rgba($primary-color, 0.4);
   }
 
   &:active {
