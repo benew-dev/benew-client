@@ -5,7 +5,13 @@ import dynamic from 'next/dynamic';
 import { useState, useEffect, useCallback, memo, useMemo } from 'react';
 import { CldImage } from 'next-cloudinary';
 import Link from 'next/link';
-import { FaDollarSign, FaImages, FaEye } from 'react-icons/fa';
+import {
+  FaDollarSign,
+  FaImages,
+  FaEye,
+  FaChevronLeft,
+  FaChevronRight,
+} from 'react-icons/fa';
 import { FaX } from 'react-icons/fa6';
 import './shopsStyles/index.scss';
 
@@ -238,7 +244,7 @@ const ApplicationCard = memo(
 ApplicationCard.displayName = 'ApplicationCard';
 
 // =============================
-// ✅ CAROUSEL AVEC ANIMATION SLIDE
+// ✅ CAROUSEL AVEC FLÈCHES (PC) ET DOTS (MOBILE/TABLETTE)
 // =============================
 const ApplicationsCarousel = memo(
   ({
@@ -283,7 +289,7 @@ const ApplicationsCarousel = memo(
 
         setTimeout(() => {
           setIsTransitioning(false);
-        }, 600); // ✅ Durée de la transition slide
+        }, 600);
       },
       [isTransitioning],
     );
@@ -295,7 +301,7 @@ const ApplicationsCarousel = memo(
         handleSlideChange(index);
 
         try {
-          trackEvent('application_carousel_dot_click', {
+          trackEvent('application_carousel_navigation', {
             event_category: 'navigation',
             event_label: `app_${index + 1}`,
             application_id: applications[index]?.application_id,
@@ -306,6 +312,19 @@ const ApplicationsCarousel = memo(
       },
       [currentIndex, isTransitioning, handleSlideChange, applications],
     );
+
+    // ✅ FLÈCHE GAUCHE
+    const handlePrevSlide = useCallback(() => {
+      const prevIndex =
+        (currentIndex - 1 + applications.length) % applications.length;
+      goToSlide(prevIndex);
+    }, [currentIndex, applications.length, goToSlide]);
+
+    // ✅ FLÈCHE DROITE
+    const handleNextSlide = useCallback(() => {
+      const nextIndex = (currentIndex + 1) % applications.length;
+      goToSlide(nextIndex);
+    }, [currentIndex, applications.length, goToSlide]);
 
     const [touchStart, setTouchStart] = useState(null);
     const [touchEnd, setTouchEnd] = useState(null);
@@ -352,9 +371,18 @@ const ApplicationsCarousel = memo(
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
       >
+        {/* ✅ FLÈCHE GAUCHE - PC UNIQUEMENT */}
+        <button
+          className="applications-carousel-arrow applications-carousel-arrow-left"
+          onClick={handlePrevSlide}
+          disabled={isTransitioning}
+          aria-label="Application précédente"
+        >
+          <FaChevronLeft />
+        </button>
+
         <div className="applications-carousel-track">
           {applications.map((app, index) => {
-            // ✅ LOGIQUE SLIDE (comme ApplicationGalleryCarousel)
             let slidePosition = 'hidden';
 
             if (index === currentIndex) {
@@ -384,6 +412,17 @@ const ApplicationsCarousel = memo(
           })}
         </div>
 
+        {/* ✅ FLÈCHE DROITE - PC UNIQUEMENT */}
+        <button
+          className="applications-carousel-arrow applications-carousel-arrow-right"
+          onClick={handleNextSlide}
+          disabled={isTransitioning}
+          aria-label="Application suivante"
+        >
+          <FaChevronRight />
+        </button>
+
+        {/* ✅ DOTS - MOBILE/TABLETTE UNIQUEMENT */}
         <div className="applications-carousel-indicators">
           {applications.map((app, index) => (
             <button

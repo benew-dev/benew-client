@@ -2,9 +2,8 @@
 @use '../../../app/styles/abstracts' as *;
 
 // ================================
-// 📄 _carousel_applications.scss - CAROUSEL SLIDE OPTIMISÉ
+// 📄 _carousel_applications.scss - CAROUSEL AVEC FLÈCHES (PC) ET DOTS (MOBILE/TABLETTE)
 // ================================
-// ✅ SOLUTION : Padding vertical sur le TRACK pour voir la bordure complète
 
 // =============================
 // CONTAINER
@@ -34,8 +33,7 @@
   justify-content: center;
   overflow: hidden;
 
-  // ✅ SOLUTION : Padding vertical pour voir la bordure complète
-  // 📱 MOBILE/TABLET : Moins d'espace
+  // ✅ Padding vertical pour voir la bordure complète
   padding: 1rem 0;
 
   @include from('small-sm') {
@@ -62,17 +60,17 @@
     padding: 1.4rem 0;
   }
 
-  // 🖥️ DESKTOP : Plus d'espace pour voir la bordure haute et basse
+  // 🖥️ DESKTOP
   @include from('large-xs') {
-    padding: 2rem 0; // ✅ 2rem haut/bas = bordure visible
+    padding: 2rem 0;
   }
 
   @include from('large-lg') {
-    padding: 2.2rem 0; // ✅ Un peu plus d'espace
+    padding: 2.2rem 0;
   }
 
   @include from('large-xxl') {
-    padding: 2.5rem 0; // ✅ Espace confortable
+    padding: 2.5rem 0;
   }
 }
 
@@ -127,7 +125,120 @@
 }
 
 // =============================
-// ✅ DOTS - ESPACÉES DE LA CARTE + COLLÉES AU BAS SUR PC
+// ✅ FLÈCHES - PC UNIQUEMENT
+// =============================
+
+.applications-carousel-arrow {
+  // ❌ CACHÉES SUR MOBILE/TABLETTE
+  display: none;
+
+  // ✅ VISIBLES SUR PC
+  @include from('large-xs') {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 15;
+    background: rgba(css-var(primary-color), 0.8);
+    color: css-var(background-color);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    // Taille progressive
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.2rem;
+
+    &:hover:not(:disabled) {
+      background: css-var(primary-color);
+      transform: translateY(-50%) scale(1.1);
+      box-shadow: 0 8px 25px rgba(css-var(primary-color), 0.5);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(-50%) scale(0.95);
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+
+      &:hover {
+        transform: translateY(-50%);
+      }
+    }
+
+    &:focus {
+      outline: 2px solid css-var(primary-color);
+      outline-offset: 4px;
+    }
+
+    svg {
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+  }
+
+  @include from('large-lg') {
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: 1.4rem;
+
+    svg {
+      width: 1.4rem;
+      height: 1.4rem;
+    }
+  }
+
+  @include from('large-xxl') {
+    width: 4rem;
+    height: 4rem;
+    font-size: 1.6rem;
+
+    svg {
+      width: 1.6rem;
+      height: 1.6rem;
+    }
+  }
+}
+
+// Position des flèches
+.applications-carousel-arrow-left {
+  @include from('large-xs') {
+    left: 1rem; // À gauche de la carte
+  }
+
+  @include from('large-lg') {
+    left: 1.5rem;
+  }
+
+  @include from('large-xxl') {
+    left: 2rem;
+  }
+}
+
+.applications-carousel-arrow-right {
+  @include from('large-xs') {
+    right: 1rem; // À droite de la carte
+  }
+
+  @include from('large-lg') {
+    right: 1.5rem;
+  }
+
+  @include from('large-xxl') {
+    right: 2rem;
+  }
+}
+
+// =============================
+// ✅ DOTS - MOBILE/TABLETTE UNIQUEMENT
 // =============================
 
 .applications-carousel-indicators {
@@ -138,12 +249,12 @@
   flex-shrink: 0;
   z-index: 10;
 
-  // 📱 MOBILE TRÈS PETIT - OK
+  // 📱 MOBILE TRÈS PETIT
   @include until('small-xs') {
     padding: 1rem 1rem 1.25rem 1rem;
   }
 
-  // 📱 MOBILE STANDARD - OK
+  // 📱 MOBILE STANDARD
   @include from('small-xs') {
     padding: 1rem 1rem 1.5rem 1rem;
   }
@@ -152,7 +263,7 @@
     padding: 1rem 1rem 1.5rem 1rem;
   }
 
-  // 📟 TABLET - OK
+  // 📟 TABLET
   @include from('medium-sm') {
     padding: 1rem 1rem 1.75rem 1rem;
     gap: 0.5rem;
@@ -162,18 +273,9 @@
     padding: 1rem 1rem 2rem 1rem;
   }
 
-  // 🖥️ DESKTOP - ESPACE HAUT (sépare de la carte) + BAS MINIMAL (collé au bas)
+  // 🖥️ DESKTOP - CACHÉS (remplacés par flèches)
   @include from('large-xs') {
-    padding: 0.7rem 1rem 0.7rem 1rem; // ✅ 2rem haut (espace carte) + 1.5rem bas (collé)
-    gap: 0.5rem;
-  }
-
-  @include from('large-lg') {
-    padding: 0.8rem 1rem 0.8rem 1rem; // ✅ 2.5rem haut + 1.75rem bas
-  }
-
-  @include from('large-xxl') {
-    padding: 1rem 1rem 1rem 1rem; // ✅ 3rem haut + 2rem bas
+    display: none; // ✅ Dots cachées sur PC
   }
 }
 
@@ -225,29 +327,6 @@
     height: 11px;
   }
 
-  // ✅ LAPTOP (1200px - 1439px)
-  @include from('large-xs') {
-    width: 12px;
-    height: 12px;
-  }
-
-  @include from('large-sm') {
-    width: 13px;
-    height: 13px;
-  }
-
-  // ✅ DESKTOP (1440px - 1919px)
-  @include from('large-lg') {
-    width: 14px;
-    height: 14px;
-  }
-
-  // ✅ LARGE DESKTOP (1920px+)
-  @include from('large-xxl') {
-    width: 16px;
-    height: 16px;
-  }
-
   // ✅ DOT ACTIVE - Orange
   &.active {
     background: css-var(color-orange);
@@ -278,7 +357,7 @@
 // Mode paysage mobile
 @include mobile-landscape {
   .applications-carousel-track {
-    padding: 0.75rem 0; // ✅ Moins d'espace en mode paysage
+    padding: 0.75rem 0;
   }
 
   .applications-carousel-indicators {
@@ -320,6 +399,16 @@
       transform: scale(0.9);
     }
   }
+
+  .applications-carousel-arrow {
+    &:hover {
+      transform: translateY(-50%); // Pas de scale sur tactile
+    }
+
+    &:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+  }
 }
 
 // Réduction des animations
@@ -332,7 +421,8 @@
     }
   }
 
-  .applications-carousel-dot {
+  .applications-carousel-dot,
+  .applications-carousel-arrow {
     transition: none !important;
 
     &:hover {
@@ -349,6 +439,14 @@
     &.active {
       border: 2px solid css-var(primary-color);
       box-shadow: 0 0 0 4px rgba(css-var(primary-color), 0.4);
+    }
+  }
+
+  .applications-carousel-arrow {
+    border: 2px solid css-var(primary-color);
+
+    &:hover {
+      border-color: css-var(secondary-color);
     }
   }
 }
