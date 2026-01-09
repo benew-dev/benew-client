@@ -6,9 +6,9 @@
 // ================================
 
 h2 {
-  color: css-var(primary-color);
-  border-bottom: 1px solid #{'rgba(#{css-var(primary-color)}, 0.4)'};
-  text-shadow: 0 2px 4px #{'rgba(#{css-var(background-color)}, 0.5)'};
+  color: $primary-color;
+  border-bottom: 1px solid rgba($primary-color, 0.4);
+  text-shadow: 0 2px 4px rgba($background-color, 0.5);
   text-align: center;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
@@ -51,7 +51,7 @@ h2 {
   text-align: center;
 
   p {
-    color: css-var(text-color);
+    color: $text-color;
     line-height: 1.6;
     margin-bottom: 1.5rem;
     opacity: 0.9;

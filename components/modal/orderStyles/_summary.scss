@@ -6,8 +6,8 @@
 // ================================
 
 .summary-section {
-  background: rgba(css-var(text-color), 0.03);
-  border: 1px solid rgba(css-var(primary-color), 0.2);
+  background: rgba($text-color, 0.03);
+  border: 1px solid rgba($primary-color, 0.2);
   border-radius: 8px;
   margin-bottom: 1.5rem;
 
@@ -24,17 +24,17 @@
   }
 
   &.summary-total {
-    background: rgba(css-var(primary-color), 0.08);
-    border-color: rgba(css-var(primary-color), 0.4);
+    background: rgba($primary-color, 0.08);
+    border-color: rgba($primary-color, 0.4);
   }
 }
 
 .summary-title {
-  color: css-var(primary-color);
+  color: $primary-color;
   font-weight: 600;
   margin-bottom: 1rem;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid rgba(css-var(primary-color), 0.2);
+  border-bottom: 1px solid rgba($primary-color, 0.2);
 
   // 📱 MOBILE FIRST
   font-size: 1.1rem;
@@ -73,7 +73,7 @@
 }
 
 .summary-label {
-  color: rgba(css-var(text-color), 0.7);
+  color: rgba($text-color, 0.7);
   font-weight: 500;
 
   // 📱 MOBILE FIRST
@@ -89,7 +89,7 @@
 }
 
 .summary-value {
-  color: css-var(text-color);
+  color: $text-color;
   font-weight: 600;
   text-align: right;
 
@@ -106,7 +106,7 @@
   }
 
   &.total-amount {
-    color: css-var(primary-color);
+    color: $primary-color;
     font-size: 1.3rem;
     font-weight: 700;
 
@@ -116,7 +116,7 @@
   }
 
   &.platform-name-highlight {
-    color: css-var(secondary-color);
+    color: $secondary-color;
   }
 }
 
@@ -126,8 +126,8 @@
 
 // Message CASH
 .cash-info {
-  background: rgba(css-var(secondary-color), 0.1);
-  border: 1px solid rgba(css-var(secondary-color), 0.3);
+  background: rgba($secondary-color, 0.1);
+  border: 1px solid rgba($secondary-color, 0.3);
   border-radius: 6px;
   margin-top: 1rem;
 
@@ -140,7 +140,7 @@
 }
 
 .cash-message {
-  color: css-var(secondary-color);
+  color: $secondary-color;
   font-weight: 500;
   margin: 0;
   text-align: center;
@@ -185,7 +185,7 @@
 .platform-description {
   display: block;
   font-size: 0.85rem;
-  color: rgba(css-var(text-color), 0.6);
+  color: rgba($text-color, 0.6);
   margin-top: 0.25rem;
   font-style: italic;
 
@@ -197,11 +197,11 @@
 // Mode sombre
 @include dark-mode {
   .summary-section {
-    background: rgba(css-var(text-color), 0.02);
+    background: rgba($text-color, 0.02);
   }
 
   .cash-info {
-    background: rgba(css-var(secondary-color), 0.12);
+    background: rgba($secondary-color, 0.12);
   }
 }
 

@@ -8,10 +8,10 @@
 input[type='text'],
 input[type='email'],
 input[type='tel'] {
-  background-color: #{'rgba(#{css-var(text-color)}, 0.05)'};
-  border: 1px solid #{'rgba(#{css-var(primary-color)}, 0.3)'};
+  background-color: rgba($text-color, 0.05);
+  border: 1px solid rgba($primary-color, 0.3);
   border-radius: 8px;
-  color: css-var(text-color);
+  color: $text-color;
   outline: none;
   transition: all 0.3s ease;
 
@@ -43,12 +43,12 @@ input[type='tel'] {
   }
 
   &:focus {
-    border-color: css-var(primary-color);
-    box-shadow: 0 0 0 2px #{'rgba(#{css-var(primary-color)}, 0.3)'};
+    border-color: $primary-color;
+    box-shadow: 0 0 0 2px rgba($primary-color, 0.3);
   }
 
   &::placeholder {
-    color: #{'rgba(#{css-var(text-color)}, 0.5)'};
+    color: rgba($text-color, 0.5);
   }
 }
 
@@ -85,7 +85,7 @@ input[type='tel'] {
 .radioLabel {
   display: flex;
   align-items: center;
-  color: css-var(text-color);
+  color: $text-color;
   cursor: pointer;
   border-radius: 6px;
   transition: all 0.2s ease;
@@ -107,13 +107,13 @@ input[type='tel'] {
   }
 
   &:hover {
-    background-color: #{'rgba(#{css-var(primary-color)}, 0.1)'};
-    border-color: #{'rgba(#{css-var(primary-color)}, 0.2)'};
+    background-color: rgba($primary-color, 0.1);
+    border-color: rgba($primary-color, 0.2);
   }
 
   input[type='radio'] {
     margin-right: 10px;
-    accent-color: css-var(primary-color);
+    accent-color: $primary-color;
 
     // 📱 MOBILE - Zone tactile améliorée
     @include small-screens {
