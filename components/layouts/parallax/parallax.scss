@@ -15,14 +15,14 @@
 
     background: linear-gradient(
       45deg,
-      css-var(text-color),
-      css-var(primary-color),
-      css-var(secondary-color)
+      $text-color,
+      $primary-color,
+      $secondary-color
     );
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 4px 8px rgba(css-var(background-color), 0.3);
+    text-shadow: 0 4px 8px rgba($background-color, 0.3);
     font-weight: 400;
     letter-spacing: 0.02em;
 

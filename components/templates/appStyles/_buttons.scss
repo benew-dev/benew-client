@@ -90,25 +90,25 @@
   &.btn-primary {
     background: linear-gradient(
       135deg,
-      css-var(color-orange),
+      $color-orange,
       color.adjust($color-orange, $lightness: 10%)
     );
-    color: css-var(color-dark);
-    box-shadow: 0 8px 25px rgba(css-var(color-orange), 0.3);
+    color: $color-dark;
+    box-shadow: 0 8px 25px rgba($color-orange, 0.3);
 
     &:hover {
       background: linear-gradient(
         135deg,
         color.adjust($color-orange, $lightness: 10%),
-        css-var(color-orange)
+        $color-orange
       );
-      box-shadow: 0 12px 35px rgba(css-var(color-orange), 0.4);
+      box-shadow: 0 12px 35px rgba($color-orange, 0.4);
     }
   }
 
   &.disabled {
-    background: rgba(css-var(text-color-muted), 0.3);
-    color: rgba(css-var(color-light), 0.5);
+    background: rgba($text-color-muted, 0.3);
+    color: rgba($color-light, 0.5);
     cursor: not-allowed;
     box-shadow: none;
 

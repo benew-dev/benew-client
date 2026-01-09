@@ -42,7 +42,7 @@
   }
 
   h2 {
-    color: css-var(color-orange);
+    color: $color-orange;
     font-size: 2rem;
     margin: 0 0 1rem 0;
 
@@ -52,7 +52,7 @@
   }
 
   p {
-    color: css-var(text-color-muted);
+    color: $text-color-muted;
     font-size: 1.1rem;
     margin: 0 0 2rem 0;
 
@@ -64,8 +64,8 @@
   .cta-button {
     display: inline-block;
     padding: 0.75rem 2rem;
-    background: css-var(color-orange);
-    color: css-var(color-dark);
+    background: $color-orange;
+    color: $color-dark;
     text-decoration: none;
     border-radius: var(--badge-border-radius);
     font-weight: 600;
@@ -73,7 +73,7 @@
 
     &:hover {
       transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(css-var(color-orange), 0.3);
+      box-shadow: 0 8px 25px rgba($color-orange, 0.3);
     }
   }
 }

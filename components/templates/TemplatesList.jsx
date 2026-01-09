@@ -355,7 +355,7 @@ const TemplatesList = ({ templates = [] }) => {
   return (
     <div className="templates-container">
       <PageTracker pageName="templates_list" />
-      <section className="others">
+      <section className="first">
         <Parallax bgColor="#0c0c1d" title="Modeles" planets="/sun.png" />
       </section>
 
