@@ -109,7 +109,7 @@
   .application-card {
     box-shadow:
       0 12px 40px rgba(0, 0, 0, 0.4),
-      0 4px 16px rgba(css-var(primary-color), 0.1);
+      0 4px 16px rgba($primary-color, 0.1);
   }
 
   .app-image {

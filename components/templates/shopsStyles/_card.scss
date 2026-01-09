@@ -10,7 +10,7 @@
   // ✅ EFFET GLASSMORPHISM AVEC BLUR
   background: linear-gradient(
     135deg,
-    rgba(css-var(background-color), 0.8),
+    rgba($background-color, 0.8),
     rgba(color.adjust($background-color, $lightness: 5%), 0.8)
   );
   backdrop-filter: blur(5px);
@@ -19,7 +19,7 @@
   border-radius: 20px;
 
   // ✅ BORDURE 0.2px SUR TOUS LES ÉCRANS (plus de condition)
-  border: 0.2px solid css-var(primary-color);
+  border: 0.2px solid $primary-color;
 
   overflow: hidden;
   transition: all 0.3s ease;
@@ -33,7 +33,7 @@
   // ✅ OMBRES VISIBLES
   box-shadow:
     0 15px 50px rgba(0, 0, 0, 0.6),
-    0 5px 20px rgba(css-var(primary-color), 0.2);
+    0 5px 20px rgba($primary-color, 0.2);
 
   // 📟 TRÈS PETITS ÉCRANS
   @include small-screens {
@@ -45,7 +45,7 @@
 
     box-shadow:
       0 18px 60px rgba(0, 0, 0, 0.7),
-      0 6px 25px rgba(css-var(primary-color), 0.25);
+      0 6px 25px rgba($primary-color, 0.25);
   }
 
   @include from('small-sm') {
@@ -108,7 +108,7 @@
     border-radius: 16px;
     background: linear-gradient(
       135deg,
-      rgba(css-var(background-color), 0.8),
+      rgba($background-color, 0.8),
       rgba(color.adjust($background-color, $lightness: 5%), 0.8)
     );
     backdrop-filter: blur(2px);
@@ -116,7 +116,7 @@
 
     box-shadow:
       0 12px 40px rgba(0, 0, 0, 0.5),
-      0 4px 16px rgba(css-var(primary-color), 0.15);
+      0 4px 16px rgba($primary-color, 0.15);
   }
 
   &:hover {
@@ -124,10 +124,10 @@
 
     box-shadow:
       0 25px 80px rgba(0, 0, 0, 0.8),
-      0 10px 40px rgba(css-var(primary-color), 0.4);
+      0 10px 40px rgba($primary-color, 0.4);
 
     // ✅ Bordure intensifiée au hover SUR TOUS LES ÉCRANS
-    border-color: css-var(secondary-color); // Rose
+    border-color: $secondary-color; // Rose
     border-width: 0.3px;
   }
 
@@ -137,7 +137,7 @@
 
     box-shadow:
       0 20px 70px rgba(0, 0, 0, 0.7),
-      0 8px 35px rgba(css-var(primary-color), 0.35);
+      0 8px 35px rgba($primary-color, 0.35);
   }
 
   // Effet de brillance subtil
@@ -151,7 +151,7 @@
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(css-var(primary-color), 0.3),
+      rgba($primary-color, 0.3),
       transparent
     );
     transition: left 0.5s ease;

@@ -67,7 +67,7 @@
 // =============================
 
 .app-meta {
-  color: css-var(text-color-muted);
+  color: $text-color-muted;
   margin: 0 0 1.5rem 0;
   line-height: 1.4;
   display: flex;
@@ -132,7 +132,7 @@
   }
 
   .separator {
-    color: css-var(text-color-muted);
+    color: $text-color-muted;
     opacity: 0.6;
   }
 }

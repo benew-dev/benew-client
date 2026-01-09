@@ -52,10 +52,10 @@
 .gallery-modal-content {
   background: linear-gradient(
     135deg,
-    rgba(css-var(background-color), 0.95),
-    rgba(css-var(background-color), 0.98)
+    rgba($background-color, 0.95),
+    rgba($background-color, 0.98)
   );
-  border: 1px solid rgba(css-var(primary-color), 0.3);
+  border: 1px solid rgba($primary-color, 0.3);
   border-radius: 16px;
   position: relative;
   display: flex;
@@ -107,7 +107,7 @@
   align-items: flex-start;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(css-var(primary-color), 0.2);
+  border-bottom: 1px solid rgba($primary-color, 0.2);
   flex-shrink: 0;
   position: relative;
   z-index: 1;
@@ -148,7 +148,7 @@
   }
 
   h3 {
-    color: css-var(primary-color);
+    color: $primary-color;
     margin: 0;
     flex-shrink: 0;
 
@@ -165,7 +165,7 @@
   }
 
   .gallery-counter {
-    color: rgba(css-var(text-color), 0.7);
+    color: rgba($text-color, 0.7);
     font-weight: 500;
     margin: 0;
     flex-shrink: 0;
@@ -189,8 +189,8 @@
 
 .gallery-close-btn {
   position: absolute;
-  background: css-var(primary-color);
-  color: css-var(background-color);
+  background: $primary-color;
+  color: $background-color;
   border: none !important;
   outline: none !important;
   border-radius: 50%;
@@ -374,7 +374,7 @@
   }
 
   &::-webkit-scrollbar-track {
-    background: rgba(css-var(text-color), 0.15); // ✅ Plus visible (était 0.1)
+    background: rgba($text-color, 0.15); // ✅ Plus visible (était 0.1)
     border-radius: 6px; // ✅ Arrondi augmenté
 
     // ✅ NOUVEAU : Marge pour ne pas toucher les bords
@@ -386,25 +386,19 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background: rgba(
-      css-var(primary-color),
-      0.7
-    ); // ✅ Plus visible (était 0.5)
+    background: rgba($primary-color, 0.7); // ✅ Plus visible (était 0.5)
     border-radius: 6px;
 
     // ✅ NOUVEAU : Bordure pour contraste
-    border: 2px solid rgba(css-var(background-color), 0.2);
+    border: 2px solid rgba($background-color, 0.2);
 
     &:hover {
-      background: rgba(
-        css-var(primary-color),
-        0.9
-      ); // ✅ Hover très marqué (était 0.7)
-      border-color: rgba(css-var(primary-color), 0.3);
+      background: rgba($primary-color, 0.9); // ✅ Hover très marqué (était 0.7)
+      border-color: rgba($primary-color, 0.3);
     }
 
     &:active {
-      background: css-var(primary-color); // ✅ Clic = couleur pleine
+      background: $primary-color; // ✅ Clic = couleur pleine
     }
   }
 }
@@ -415,12 +409,12 @@
 
 .gallery-thumb {
   flex-shrink: 0;
-  border: 1px solid rgba(css-var(text-color), 0.2); // ✅ 1px au lieu de 2px
+  border: 1px solid rgba($text-color, 0.2); // ✅ 1px au lieu de 2px
   border-radius: 6px; // ✅ 4px au lieu de 8px (plus discret)
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s ease;
-  background: rgba(css-var(text-color), 0.05);
+  background: rgba($text-color, 0.05);
   position: relative;
 
   // 📱 MOBILE : 80-85px
@@ -461,9 +455,9 @@
 
   // ✅ BORDURE GRADIENT FINE SUR ACTIVE (CORRIGÉ)
   &.active {
-    border: 1px solid css-var(primary-color); // ✅ 1px au lieu de 2px
+    border: 1px solid $primary-color; // ✅ 1px au lieu de 2px
     // ✅ OMBRE DISCRÈTE
-    box-shadow: 0 0 0 1px rgba(css-var(primary-color), 0.2);
+    box-shadow: 0 0 0 1px rgba($primary-color, 0.2);
   }
 
   img {
@@ -482,7 +476,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(css-var(text-color), 0.03);
+  background: rgba($text-color, 0.03);
   border-radius: 12px;
   overflow: hidden;
   flex-grow: 1;
@@ -607,8 +601,8 @@
   .gallery-modal-content {
     background: linear-gradient(
       135deg,
-      rgba(css-var(background-color), 0.98),
-      rgba(css-var(background-color), 0.99)
+      rgba($background-color, 0.98),
+      rgba($background-color, 0.99)
     );
   }
 }

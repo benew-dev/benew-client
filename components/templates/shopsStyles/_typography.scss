@@ -7,10 +7,10 @@
 
 .app-title {
   font-weight: 700;
-  color: css-var(text-color);
+  color: $text-color;
   margin: 0 0 1rem 0;
   line-height: 1.3;
-  text-shadow: 0 2px 4px rgba(css-var(background-color), 0.5);
+  text-shadow: 0 2px 4px rgba($background-color, 0.5);
   transition: all 0.3s ease;
 
   // 📱 MOBILE FIRST - Titre bien visible avec nouveaux breakpoints
@@ -74,7 +74,7 @@
 
   // Effet hover amélioré
   .application-card:hover & {
-    color: css-var(primary-color);
+    color: $primary-color;
     transform: translateX(5px);
   }
 }
