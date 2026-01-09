@@ -160,11 +160,11 @@
 
     // ✅ HOVER : Plus visible et attrayant
     &:hover:not(:disabled) {
-      background: rgba(css-var(primary-color), 0.9);
-      color: css-var(background-color);
-      border-color: css-var(primary-color);
+      background: rgba($primary-color, 0.9);
+      color: $background-color;
+      border-color: $primary-color;
       transform: translateY(-50%) scale(1.15);
-      box-shadow: 0 8px 25px rgba(css-var(primary-color), 0.5);
+      box-shadow: 0 8px 25px rgba($primary-color, 0.5);
     }
 
     &:active:not(:disabled) {
@@ -181,7 +181,7 @@
     }
 
     &:focus {
-      outline: 2px solid css-var(primary-color);
+      outline: 2px solid $primary-color;
       outline-offset: 4px;
     }
 
@@ -335,18 +335,18 @@
 
   // ✅ DOT ACTIVE - Orange
   &.active {
-    background: css-var(color-orange);
+    background: $color-orange;
     border: none;
-    box-shadow: 0 2px 8px rgba(css-var(color-orange), 0.5);
+    box-shadow: 0 2px 8px rgba($color-orange, 0.5);
   }
 
   &:hover:not(:disabled) {
-    background: rgba(css-var(primary-color), 0.7);
+    background: rgba($primary-color, 0.7);
     transform: scale(1.2);
   }
 
   &:focus {
-    outline: 2px solid css-var(primary-color);
+    outline: 2px solid $primary-color;
     outline-offset: 4px;
   }
 
@@ -440,19 +440,19 @@
 // Contraste élevé
 @include high-contrast {
   .applications-carousel-dot {
-    border: 2px solid css-var(text-color);
+    border: 2px solid $text-color;
 
     &.active {
-      border: 2px solid css-var(primary-color);
-      box-shadow: 0 0 0 4px rgba(css-var(primary-color), 0.4);
+      border: 2px solid $primary-color;
+      box-shadow: 0 0 0 4px rgba($primary-color, 0.4);
     }
   }
 
   .applications-carousel-arrow {
-    border: 2px solid css-var(primary-color);
+    border: 2px solid $primary-color;
 
     &:hover {
-      border-color: css-var(secondary-color);
+      border-color: $secondary-color;
     }
   }
 }
