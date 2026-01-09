@@ -86,12 +86,12 @@
   .minimalCardInner {
     box-shadow:
       0 4px 20px rgba(0, 0, 0, 0.12),
-      0 1px 4px rgba(css-var(primary-color), 0.1);
+      0 1px 4px rgba($primary-color, 0.1);
 
     &.hovered {
       box-shadow:
         0 12px 40px rgba(0, 0, 0, 0.18),
-        0 4px 12px rgba(css-var(primary-color), 0.15);
+        0 4px 12px rgba($primary-color, 0.15);
     }
   }
 }
@@ -156,15 +156,15 @@
 // Mode sombre - Ajustements si nécessaire
 @include dark-mode {
   .minimalCardInner {
-    background: rgba(css-var(text-color), 0.01);
-    border-color: rgba(css-var(primary-color), 0.15);
+    background: rgba($text-color, 0.01);
+    border-color: rgba($primary-color, 0.15);
   }
 
   .minimalImageContainer {
     background: linear-gradient(
       135deg,
-      rgba(css-var(primary-color), 0.02),
-      rgba(css-var(secondary-color), 0.02)
+      rgba($primary-color, 0.02),
+      rgba($secondary-color, 0.02)
     );
   }
 }

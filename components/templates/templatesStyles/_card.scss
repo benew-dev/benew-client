@@ -73,7 +73,7 @@
   width: 100%;
   background: linear-gradient(
     135deg,
-    rgba(css-var(background-color), 0.8),
+    rgba($background-color, 0.8),
     rgba(color.adjust($background-color, $lightness: 5%), 0.8)
   );
   backdrop-filter: blur(2px);
@@ -91,7 +91,7 @@
 
   // ✅ BORDURE 0.2px UNIQUEMENT SUR MOBILE/TABLETTE
   @include until('large-xs') {
-    border: 0.2px solid css-var(primary-color); // Bordure fine sur mobile/tablette
+    border: 0.2px solid $primary-color; // Bordure fine sur mobile/tablette
   }
 
   // 📱 MOBILE - Effet tactile
@@ -108,7 +108,7 @@
 
   // ✅ Hover uniquement sur mobile/tablette
   @include until('large-xs') {
-    border-color: css-var(secondary-color);
+    border-color: $secondary-color;
     border-width: 0.3px;
   }
 }

@@ -10,7 +10,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-bottom: 1px solid rgba(css-var(primary-color), 0.08);
+  border-bottom: 1px solid rgba($primary-color, 0.08);
 
   // 📱 MOBILE FIRST - Proportions optimales avec nouveaux breakpoints
   height: 280px;

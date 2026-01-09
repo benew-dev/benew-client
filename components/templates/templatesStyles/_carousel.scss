@@ -92,7 +92,7 @@
   height: 0.5rem;
   border-radius: 50%;
 
-  background: css-var(text-color);
+  background: $text-color;
 
   cursor: pointer;
   transition: all 0.3s ease;
@@ -100,21 +100,21 @@
   padding: 0;
 
   &:hover:not(:disabled) {
-    background: rgba(css-var(primary-color), 0.7);
+    background: rgba($primary-color, 0.7);
     transform: scale(1.3);
-    border-color: css-var(primary-color);
+    border-color: $primary-color;
   }
 
   &.active {
-    background: css-var(primary-color);
-    border-color: css-var(primary-color);
+    background: $primary-color;
+    border-color: $primary-color;
     width: 0.8rem;
     border-radius: 50%;
-    box-shadow: 0 2px 8px rgba(css-var(primary-color), 0.4);
+    box-shadow: 0 2px 8px rgba($primary-color, 0.4);
   }
 
   &:focus {
-    outline: 2px solid css-var(primary-color);
+    outline: 2px solid $primary-color;
     outline-offset: 3px;
   }
 
@@ -140,10 +140,10 @@
   display: inline-flex;
   align-items: center;
 
-  background: rgba(css-var(secondary-color), 0.1);
-  border: 1px solid rgba(css-var(secondary-color), 0.3);
+  background: rgba($secondary-color, 0.1);
+  border: 1px solid rgba($secondary-color, 0.3);
 
-  color: css-var(secondary-color);
+  color: $secondary-color;
 
   font-size: 0.75rem;
   font-weight: 600;
@@ -159,8 +159,8 @@
   }
 
   .minimalCard:hover & {
-    background: rgba(css-var(secondary-color), 0.2);
-    border-color: css-var(secondary-color);
+    background: rgba($secondary-color, 0.2);
+    border-color: $secondary-color;
     transform: translateY(-2px);
   }
 }
@@ -221,11 +221,11 @@
 @include high-contrast {
   .carousel-dot {
     border-width: 2px;
-    background: rgba(css-var(text-color), 0.6);
+    background: rgba($text-color, 0.6);
 
     &.active {
       border-width: 2px;
-      box-shadow: 0 0 0 3px rgba(css-var(primary-color), 0.3);
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.3);
     }
   }
 
