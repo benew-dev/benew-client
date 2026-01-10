@@ -1,6 +1,3 @@
-@use 'sass:color';
-@use '../../../app/styles/abstracts' as *;
-
 // ================================
 // 📄 _image.scss
 // ================================
@@ -12,67 +9,67 @@
   justify-content: center;
   border-bottom: 1px solid rgba($primary-color, 0.08);
 
-  // 📱 MOBILE FIRST - Proportions optimales avec nouveaux breakpoints
-  height: 280px;
-  padding: 1.5rem;
+  // 📱 MOBILE FIRST - Hauteur RÉDUITE
+  height: 260px; // ✅ Réduit de 280px
+  padding: 1.4rem; // ✅ Réduit de 1.5rem
 
   @include from('small-sm') {
-    height: 290px;
-    padding: 1.6rem;
+    height: 270px; // ✅ Réduit de 290px
+    padding: 1.5rem; // ✅ Réduit de 1.6rem
   }
 
   @include from('small-lg') {
-    height: 295px;
-    padding: 1.65rem;
+    height: 275px; // ✅ Réduit de 295px
+    padding: 1.55rem; // ✅ Réduit de 1.65rem
   }
 
   @include from('small-xl') {
-    height: 300px;
-    padding: 1.75rem;
+    height: 280px; // ✅ Réduit de 300px
+    padding: 1.6rem; // ✅ Réduit de 1.75rem
   }
 
   // 📟 MOYENS ÉCRANS - Croissance progressive
   @include between('small-xl', 'medium-sm') {
-    height: 320px;
-    padding: 2rem;
+    height: 300px; // ✅ Réduit de 320px
+    padding: 1.8rem; // ✅ Réduit de 2rem
   }
 
   @include from('medium-sm') {
-    height: 350px;
-    padding: 2.2rem;
+    height: 330px; // ✅ Réduit de 350px
+    padding: 2rem; // ✅ Réduit de 2.2rem
   }
 
   @include from('medium-lg') {
-    height: 380px; // ✅ Plus grand sur tablettes
-    padding: 2.5rem;
+    height: 360px; // ✅ Réduit de 380px
+    padding: 2.3rem; // ✅ Réduit de 2.5rem
   }
 
   @include from('medium-xxl') {
-    height: 400px;
-    padding: 2.8rem;
+    height: 380px; // ✅ Réduit de 400px
+    padding: 2.6rem; // ✅ Réduit de 2.8rem
   }
 
-  // 🖥️ GRANDS ÉCRANS - Desktop
+  // 🖥️ GRANDS ÉCRANS - Desktop RÉDUIT
   @include from('large-xs') {
-    height: 420px; // ✅ Plus grand sur laptops
-    padding: 3rem;
+    height: 380px; // ✅ Réduit de 420px
+    padding: 2.5rem; // ✅ Réduit de 3rem
   }
 
   @include from('large-lg') {
-    height: 440px;
-    padding: 3.2rem;
+    height: 400px; // ✅ Réduit de 440px
+    padding: 2.7rem; // ✅ Réduit de 3.2rem
   }
 
   @include from('large-xxl') {
-    height: 460px; // ✅ Plus grand sur desktop
-    padding: 3.5rem;
+    height: 420px; // ✅ Réduit de 460px
+    padding: 3rem; // ✅ Réduit de 3.5rem
   }
 }
 
 .minimalImage {
   width: 100%;
   height: 100%;
-  object-fit: contain; // ✅ COMME DEMANDÉ
+  object-fit: contain;
   object-position: center;
   border-radius: 8px;
   transition: transform 0.4s ease;
