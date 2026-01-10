@@ -10,10 +10,10 @@
   width: 85%; // ✅ Réduit de 90% à 85%
   max-width: 400px; // ✅ Réduit de 420px
 
-  @include from('small-sm') {
-    width: 83%; // ✅ Réduit de 88%
-    max-width: 410px; // ✅ Réduit de 430px
-  }
+  // @include from('small-sm') {
+  //   width: 83%; // ✅ Réduit de 88%
+  //   max-width: 410px; // ✅ Réduit de 430px
+  // }
 
   @include from('small-lg') {
     width: 82%; // ✅ Réduit de 87%

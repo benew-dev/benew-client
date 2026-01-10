@@ -20,9 +20,9 @@
   // 📱 MOBILE FIRST - Padding minimal avec nouveaux breakpoints
   padding: 1rem 0.75rem;
 
-  @include from('small-sm') {
-    padding: 1.2rem 0.8rem;
-  }
+  // @include from('small-sm') {
+  //   padding: 1.2rem 0.8rem;
+  // }
 
   @include from('small-lg') {
     padding: 1.4rem 0.9rem;
