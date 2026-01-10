@@ -9,60 +9,63 @@
   display: block;
   color: inherit;
 
-  // 📱 MOBILE FIRST - Largeur RÉDUITE sur petits écrans
-  width: 85%; // ✅ Réduit de 90% à 85%
-  max-width: 400px; // ✅ Réduit de 420px
+  // ✅ RETIRÉ: cursor: pointer (plus de Link global)
+  // ✅ RETIRÉ: text-decoration (plus de Link global)
+
+  // 📱 MOBILE FIRST - Dimensions optimales avec nouveaux breakpoints
+  width: 90%;
+  max-width: 420px;
 
   @include from('small-sm') {
-    width: 83%; // ✅ Réduit de 88%
-    max-width: 410px; // ✅ Réduit de 430px
+    width: 88%;
+    max-width: 430px;
   }
 
   @include from('small-lg') {
-    width: 82%; // ✅ Réduit de 87%
-    max-width: 420px; // ✅ Réduit de 440px
+    width: 87%;
+    max-width: 440px;
   }
 
   @include from('small-xl') {
-    width: 80%; // ✅ Réduit de 85%
-    max-width: 430px; // ✅ Réduit de 450px
+    width: 85%;
+    max-width: 450px;
   }
 
   // 📟 MOYENS ÉCRANS - Progression
   @include between('small-xl', 'medium-sm') {
-    width: 78%;
-    max-width: 440px;
-  }
-
-  @include from('medium-sm') {
-    width: 77%;
-    max-width: 450px;
-  }
-
-  @include from('medium-lg') {
-    width: 75%;
+    width: 83%;
     max-width: 460px;
   }
 
-  @include from('medium-xxl') {
-    width: 73%;
+  @include from('medium-sm') {
+    width: 82%;
     max-width: 470px;
   }
 
-  // 🖥️ GRANDS ÉCRANS - Desktop RÉDUIT
+  @include from('medium-lg') {
+    width: 80%;
+    max-width: 480px;
+  }
+
+  @include from('medium-xxl') {
+    width: 78%;
+    max-width: 490px;
+  }
+
+  // 🖥️ GRANDS ÉCRANS - Desktop
   @include from('large-xs') {
-    width: 65%; // ✅ Réduit de 75%
-    max-width: 480px; // ✅ Réduit de 500px
+    width: 75%;
+    max-width: 500px;
   }
 
   @include from('large-lg') {
-    width: 62%; // ✅ Réduit de 72%
-    max-width: 490px; // ✅ Réduit de 510px
+    width: 72%;
+    max-width: 510px;
   }
 
   @include from('large-xxl') {
-    width: 60%; // ✅ Réduit de 70%
-    max-width: 500px; // ✅ Réduit de 520px
+    width: 70%;
+    max-width: 520px;
   }
 }
 
@@ -83,12 +86,15 @@
     border-color 0.3s ease,
     box-shadow 0.3s ease;
 
+  // Ombre subtile
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 
+  // ✅ BORDURE 0.2px UNIQUEMENT SUR MOBILE/TABLETTE
   @include until('large-xs') {
-    border: 0.2px solid $primary-color;
+    border: 0.2px solid $primary-color; // Bordure fine sur mobile/tablette
   }
 
+  // 📱 MOBILE - Effet tactile
   @media (pointer: coarse) {
     &:active {
       transform: translateY(-4px) scale(0.98);
@@ -96,9 +102,11 @@
   }
 }
 
+// ✅ EFFET 3D AMÉLIORÉ au hover
 .minimalCard:hover .minimalCardInner {
   transform: translateY(-12px) scale(1.02);
 
+  // ✅ Hover uniquement sur mobile/tablette
   @include until('large-xs') {
     border-color: $secondary-color;
     border-width: 0.3px;

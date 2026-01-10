@@ -7,6 +7,7 @@
 
 .projectSection {
   width: 100%;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -15,10 +16,6 @@
   background-repeat: repeat;
   background-size: auto;
   background-position: center;
-
-  // ✅ PC: Réduction de la hauteur (plus de 100vh)
-  height: auto;
-  min-height: 85vh; // Au lieu de 100vh
 
   // 📱 MOBILE FIRST - Padding minimal avec nouveaux breakpoints
   padding: 1rem 0.75rem;
@@ -38,12 +35,10 @@
   // 📟 MOYENS ÉCRANS - Progression
   @include between('small-xl', 'medium-sm') {
     padding: 1.6rem 1.1rem;
-    min-height: 88vh;
   }
 
   @include from('medium-sm') {
     padding: 1.8rem 1.3rem;
-    min-height: 90vh;
   }
 
   @include from('medium-lg') {
@@ -57,6 +52,5 @@
   // 🖥️ GRANDS ÉCRANS - Desktop
   @include from('large-xs') {
     padding: 2.5rem 2rem;
-    min-height: 85vh; // ✅ Réduit de 100vh
   }
 }
