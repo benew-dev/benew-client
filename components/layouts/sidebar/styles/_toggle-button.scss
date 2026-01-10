@@ -69,7 +69,7 @@
 
     // 🖥️ GRANDS ÉCRANS - Comportement desktop amélioré
     @include large-screens {
-      background-color: rgba(css-var(primary-color), 0.1);
+      background-color: rgba($primary-color, 0.1);
       transform: scale(1.15);
     }
   }
@@ -138,13 +138,13 @@
     }
 
     path {
-      stroke: css-var(primary-color);
+      stroke: $primary-color;
       transition: all 0.3s ease;
 
       // 📱 PETITS ÉCRANS - Trait plus épais pour la visibilité
       @include small-screens {
         stroke-width: 4;
-        stroke: css-var(primary-color);
+        stroke: $primary-color;
       }
 
       // 📟 MOYENS ÉCRANS - Épaisseur intermédiaire
@@ -159,7 +159,7 @@
     }
 
     &:hover path {
-      stroke: css-var(primary-color);
+      stroke: $primary-color;
     }
   }
 }

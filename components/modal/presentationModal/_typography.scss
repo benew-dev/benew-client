@@ -6,13 +6,13 @@
 // ================================
 
 h2 {
-  color: css-var(primary-color);
+  color: $primary-color;
   font-size: 1.8rem;
   text-align: center;
-  border-bottom: 1px solid #{'rgba(#{css-var(primary-color)}, 0.4)'};
+  border-bottom: 1px solid rgba($primary-color, 0.4);
   padding-bottom: 1rem;
   margin: 0;
-  text-shadow: 0 2px 4px #{'rgba(#{css-var(background-color)}, 0.5)'};
+  text-shadow: 0 2px 4px rgba($primary-color, 0.5);
 
   // 📱 PETITS ÉCRANS - Tailles réduites
   @include until('small-sm') {
@@ -82,7 +82,7 @@ h2 {
   }
 
   p {
-    color: css-var(text-color);
+    color: $text-color;
     line-height: 1.7;
     font-size: 1rem;
     margin: 0;

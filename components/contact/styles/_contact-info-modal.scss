@@ -16,7 +16,7 @@
 .contact-info-modal-overlay {
   position: fixed;
   inset: 0;
-  background: #{'rgba(#{css-var(background-color)}, 0.85)'};
+  background: rgba($background-color, 0.85);
   backdrop-filter: blur(10px);
   z-index: 1000;
   display: flex;
@@ -35,17 +35,17 @@
 .contact-info-modal-content {
   background: linear-gradient(
     135deg,
-    #{'rgba(#{css-var(text-color)}, 0.08)'},
-    #{'rgba(#{css-var(text-color)}, 0.05)'}
+    rgba($text-color, 0.8),
+    rgba($text-color, 0.5)
   );
   backdrop-filter: blur(20px);
-  border: 2px solid #{'rgba(#{css-var(primary-color)}, 0.3)'};
+  border: 2px solid rgba($primary-color, 0.3);
   border-radius: 16px;
   padding: 2rem;
   max-width: 90%;
   width: 100%;
   max-width: 400px;
-  box-shadow: 0 8px 32px #{'rgba(#{css-var(primary-color)}, 0.2)'};
+  box-shadow: 0 8px 32px rgba($primary-color, 0.2);
 
   @include until('small-sm') {
     padding: 1.5rem;
@@ -65,7 +65,7 @@
   h2 {
     text-align: center;
     margin: 0 0 1.5rem 0;
-    color: css-var(text-color);
+    color: $text-color;
     font-size: 1.5rem;
     font-weight: 600;
 
@@ -112,9 +112,9 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: #{'rgba(#{css-var(text-color)}, 0.05)'};
+  background: rgba($text-color, 0.05);
   border-radius: 12px;
-  border: 1px solid #{'rgba(#{css-var(primary-color)}, 0.2)'};
+  border: 1px solid rgba($primary-color, 0.2);
   transition: all 0.3s ease;
 
   @include until('small-sm') {
@@ -134,8 +134,8 @@
   }
 
   &:hover {
-    background: #{'rgba(#{css-var(primary-color)}, 0.1)'};
-    border-color: #{'rgba(#{css-var(primary-color)}, 0.4)'};
+    background: rgba($primary-color, 0.1);
+    border-color: rgba($primary-color, 0.4);
     transform: translateX(5px);
   }
 
@@ -145,7 +145,7 @@
 }
 
 .modal-contact-icon {
-  color: css-var(primary-color);
+  color: $primary-color;
   font-size: 1.5rem;
   flex-shrink: 0;
   display: flex;
@@ -166,7 +166,7 @@
 }
 
 .modal-contact-item p {
-  color: css-var(text-color);
+  color: $text-color;
   margin: 0;
   font-size: 1rem;
   font-weight: 500;
@@ -191,10 +191,10 @@
   padding: 1rem;
   background: linear-gradient(
     135deg,
-    css-var(primary-color),
+    $primary-color,
     color.adjust($primary-color, $lightness: 10%)
   );
-  color: css-var(background-color);
+  color: $background-color;
   border: none;
   border-radius: 12px;
   font-size: 1rem;
@@ -205,7 +205,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  box-shadow: 0 4px 12px #{'rgba(#{css-var(primary-color)}, 0.3)'};
+  box-shadow: 0 4px 12px rgba($primary-color, 0.3);
 
   @include until('small-sm') {
     padding: 0.875rem;
@@ -231,10 +231,10 @@
     background: linear-gradient(
       135deg,
       color.adjust($primary-color, $lightness: 5%),
-      css-var(secondary-color)
+      $secondary-color
     );
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px #{'rgba(#{css-var(primary-color)}, 0.4)'};
+    box-shadow: 0 6px 16px rgba($primary-color, 0.4);
   }
 
   &:active {

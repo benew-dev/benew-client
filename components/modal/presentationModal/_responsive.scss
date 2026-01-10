@@ -130,16 +130,16 @@
 @include high-density {
   .modal {
     box-shadow:
-      0 10px 30px #{'rgba(#{css-var(background-color)}, 0.7)'},
-      0 0 20px #{'rgba(#{css-var(primary-color)}, 0.15)'},
+      0 10px 30px rgba($background-color, 0.7),
+      0 0 20px rgba($primary-color, 0.15),
       0 2px 8px rgba(0, 0, 0, 0.1);
   }
 
   .closeButton {
-    box-shadow: 0 6px 12px #{'rgba(#{css-var(primary-color)}, 0.4)'};
+    box-shadow: 0 6px 12px rgba($primary-color, 0.4);
 
     &:hover {
-      box-shadow: 0 8px 16px #{'rgba(#{css-var(primary-color)}, 0.5)'};
+      box-shadow: 0 8px 16px rgba($primary-color, 0.5);
     }
   }
 }

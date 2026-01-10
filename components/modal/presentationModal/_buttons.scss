@@ -8,10 +8,10 @@
 .closeButton {
   background: linear-gradient(
     135deg,
-    css-var(primary-color),
+    $primary-color,
     color.adjust($primary-color, $lightness: 10%)
   );
-  color: css-var(background-color);
+  color: $background-color;
   border: none;
   border-radius: 8px;
   padding: 0.8rem 2rem;
@@ -20,7 +20,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   align-self: center;
-  box-shadow: 0 4px 8px #{'rgba(#{css-var(primary-color)}, 0.3)'};
+  box-shadow: 0 4px 8px rgba($primary-color, 0.3);
 
   // 📱 PETITS ÉCRANS - Bouton plus petit
   @include until('small-sm') {
@@ -66,10 +66,10 @@
     background: linear-gradient(
       135deg,
       color.adjust($primary-color, $lightness: 5%),
-      css-var(secondary-color)
+      $secondary-color
     );
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px #{'rgba(#{css-var(primary-color)}, 0.4)'};
+    box-shadow: 0 6px 12px rgba($primary-color, 0.4);
   }
 
   &:active {

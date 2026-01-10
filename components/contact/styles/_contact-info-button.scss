@@ -22,8 +22,8 @@
 
   // ✅ NOUVEAU STYLE - Bordure uniquement, pas de background
   background: transparent;
-  color: css-var(primary-color);
-  border: 2px solid css-var(primary-color);
+  color: $primary-color;
+  border: 2px solid $primary-color;
   border-radius: 25px;
   padding: 0.75rem 1.5rem;
   font-size: 0.95rem;
@@ -99,13 +99,13 @@
     // ✅ Hover avec background gradient + bordure
     background: linear-gradient(
       135deg,
-      css-var(primary-color),
+      $primary-color,
       color.adjust($primary-color, $lightness: 10%)
     );
-    color: css-var(background-color);
+    color: $background-color;
     border-color: transparent;
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px #{'rgba(#{css-var(primary-color)}, 0.4)'};
+    box-shadow: 0 6px 16px rgba($primary-color, 0.4);
 
     svg {
       transform: scale(1.1) rotate(-5deg);

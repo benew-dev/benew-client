@@ -70,9 +70,9 @@
   }
 
   h1 {
-    color: css-var(text-color);
+    color: $text-color;
     margin: 0;
-    text-shadow: 0 2px 4px #{'rgba(#{css-var(background-color)}, 0.5)'};
+    text-shadow: 0 2px 4px rgba($background-color, 0.5);
 
     // Desktop uniquement
     @include from('large-xs') {

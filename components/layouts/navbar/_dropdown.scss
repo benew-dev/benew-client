@@ -31,11 +31,11 @@
   // CONTENU DU DROPDOWN
   // =============================
   .dropdown-content {
-    background: rgba(css-var(background-color), 0.95);
+    background: rgba($background-color, 0.95);
     backdrop-filter: blur(10px);
     border-radius: 12px;
-    border: 1px solid rgba(css-var(text-color), 0.1);
-    box-shadow: 0 8px 32px rgba(css-var(background-color), 0.8);
+    border: 1px solid rgba($text-color, 0.1);
+    box-shadow: 0 8px 32px rgba($background-color, 0.8);
     padding: 0.5rem;
     min-width: 140px;
     animation: dropdownFadeIn 0.2s ease-out;
@@ -50,13 +50,13 @@
       padding: 0.75rem;
       border-radius: 8px;
       text-decoration: none;
-      color: css-var(text-color);
+      color: $text-color;
       transition: all 0.2s ease;
       font-size: 0.9rem;
       font-weight: 500;
 
       &:hover {
-        background: rgba(css-var(primary-color), 0.1);
+        background: rgba($primary-color, 0.1);
         transform: translateX(4px);
       }
 
@@ -78,7 +78,7 @@
       // TEXTES DES ITEMS
       // =============================
       span {
-        color: css-var(text-color);
+        color: $text-color;
         font-weight: 500;
       }
     }

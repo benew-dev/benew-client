@@ -10,9 +10,9 @@
   align-items: center;
   gap: 1rem;
   padding: 0.875rem 1rem;
-  background: #{'rgba(#{css-var(text-color)}, 0.05)'};
+  background: rgba($text-color, 0.05);
   border-radius: 12px;
-  border: 1px solid #{'rgba(#{css-var(primary-color)}, 0.2)'};
+  border: 1px solid rgba($primary-color, 0.2);
   transition: all 0.3s ease;
   width: 100%;
   max-width: 320px;
@@ -76,8 +76,8 @@
   }
 
   &:hover {
-    background: #{'rgba(#{css-var(primary-color)}, 0.1)'};
-    border-color: #{'rgba(#{css-var(primary-color)}, 0.3)'};
+    background: rgba($primary-color, 0.1);
+    border-color: rgba($primary-color, 0.3);
     transform: translateY(-2px);
 
     // 🖥️ DESKTOP - Pas d'effet hover
@@ -89,7 +89,7 @@
   }
 
   .icon {
-    color: css-var(primary-color);
+    color: $primary-color;
     flex-shrink: 0;
 
     // 📱 MOBILE FIRST - Icône plus visible
@@ -137,7 +137,7 @@
 
   p {
     letter-spacing: 1px;
-    color: css-var(text-color);
+    color: $text-color;
     margin: 0;
     flex: 1;
 

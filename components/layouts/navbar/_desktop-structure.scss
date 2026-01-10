@@ -71,7 +71,7 @@
 
       &:hover {
         transform: scale(1.1) rotate(5deg);
-        background: rgba(css-var(primary-color), 0.1);
+        background: rgba($primary-color, 0.1);
       }
     }
 

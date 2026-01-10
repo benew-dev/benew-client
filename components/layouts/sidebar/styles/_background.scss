@@ -23,10 +23,10 @@
 
   background: linear-gradient(
     135deg,
-    css-var(text-color),
+    $text-color,
     color.adjust($text-color, $lightness: 5%)
   );
-  box-shadow: 2px 0 10px rgba(css-var(background-color), 0.3);
+  box-shadow: 2px 0 10px rgba($background-color, 0.3);
 
   // 📱 Progression simplifiée avec nouveaux breakpoints essentiels
   @include from('small-xs') {
