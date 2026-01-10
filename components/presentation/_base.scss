@@ -51,6 +51,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center; // ✅ Centre tout verticalement
   padding: 2rem 1rem;
 
   @include from('small-sm') {
@@ -71,33 +72,36 @@
 // =============================
 .benew-title {
   color: $primary-color;
-  font-size: 2.5rem;
   font-weight: 900;
   text-align: center;
-  margin-bottom: 3rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   text-shadow: 0 0 20px rgba($primary-color, 0.5);
   animation: glow 2s ease-in-out infinite alternate;
 
+  // ✅ MOBILE/TABLETTE: Espacement réduit pour voir titre + carte
+  font-size: 2.5rem;
+  margin-bottom: 2rem; // Réduit de 3rem à 2rem
+
   @include from('small-sm') {
     font-size: 3rem;
-    margin-bottom: 3.5rem;
+    margin-bottom: 2.5rem; // Réduit de 3.5rem à 2.5rem
   }
 
   @include from('small-lg') {
     font-size: 3.5rem;
-    margin-bottom: 4rem;
+    margin-bottom: 3rem; // Réduit de 4rem à 3rem
   }
 
   @include from('medium-sm') {
     font-size: 4rem;
-    margin-bottom: 4.5rem;
+    margin-bottom: 3rem; // Réduit de 4.5rem à 3rem
   }
 
+  // ✅ DESKTOP: Espacement normal
   @include from('large-xs') {
     font-size: 4.5rem;
-    margin-bottom: 5rem;
+    margin-bottom: 5rem; // Garde l'original
   }
 
   @include from('large-lg') {
