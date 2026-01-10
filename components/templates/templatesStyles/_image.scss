@@ -1,3 +1,6 @@
+@use 'sass:color';
+@use '../../../app/styles/abstracts' as *;
+
 // ================================
 // 📄 _image.scss
 // ================================
@@ -13,10 +16,10 @@
   height: 260px; // ✅ Réduit de 280px
   padding: 1.4rem; // ✅ Réduit de 1.5rem
 
-  // @include from('small-sm') {
-  //   height: 270px; // ✅ Réduit de 290px
-  //   padding: 1.5rem; // ✅ Réduit de 1.6rem
-  // }
+  @include from('small-sm') {
+    height: 270px; // ✅ Réduit de 290px
+    padding: 1.5rem; // ✅ Réduit de 1.6rem
+  }
 
   @include from('small-lg') {
     height: 275px; // ✅ Réduit de 295px
