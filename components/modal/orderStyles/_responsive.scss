@@ -118,7 +118,7 @@
     box-shadow: 0 4px 8px rgba($primary-color, 0.4);
 
     &:hover:not(:disabled) {
-      box-shadow: 0 6px 12px rgba(primary-color, 0.5);
+      box-shadow: 0 6px 12px rgba($primary-color, 0.5);
     }
   }
 }
