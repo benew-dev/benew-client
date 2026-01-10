@@ -22,21 +22,21 @@
   // Arrière-plan subtil
   background: linear-gradient(
     135deg,
-    css-var(background-color) 0%,
-    rgba(css-var(background-color), 0.95) 50%,
-    rgba(css-var(primary-color), 0.02) 100%
+    $background-color 0%,
+    rgba($background-color, 0.95) 50%,
+    rgba($primary-color, 0.02) 100%
   );
 }
 
 .error-container {
   width: 100%;
   max-width: 500px;
-  background: rgba(css-var(text-color), 0.03);
+  background: rgba($text-color, 0.03);
   backdrop-filter: blur(12px);
   border-radius: 16px;
   padding: 2rem 1.5rem;
   text-align: center;
-  border: 1px solid rgba(css-var(primary-color), 0.15);
+  border: 1px solid rgba($primary-color, 0.15);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 
   @include from('small-sm') {
@@ -77,7 +77,7 @@
    TYPOGRAPHIE
 ========================================== */
 .error-title {
-  color: css-var(primary-color);
+  color: $primary-color;
   font-weight: 600;
   font-size: 1.4rem;
   margin-bottom: 1rem;
@@ -93,7 +93,7 @@
 }
 
 .error-message {
-  color: css-var(text-color-muted);
+  color: $text-color-muted;
   font-size: 1rem;
   line-height: 1.6;
   margin-bottom: 2rem;
@@ -108,11 +108,11 @@
   font-size: 0.875rem;
 
   .retry-count {
-    color: rgba(css-var(text-color), 0.7);
+    color: rgba($text-color, 0.7);
   }
 
   .max-retries {
-    color: css-var(secondary-color);
+    color: $secondary-color;
     font-weight: 500;
   }
 }
@@ -164,17 +164,13 @@
 // Bouton principal (Réessayer)
 .retry-button {
   @extend %button-base;
-  background: linear-gradient(
-    135deg,
-    css-var(primary-color),
-    css-var(secondary-color)
-  );
-  color: css-var(background-color);
-  box-shadow: 0 2px 8px rgba(css-var(primary-color), 0.3);
+  background: linear-gradient(135deg, $primary-color, $secondary-color);
+  color: $background-color;
+  box-shadow: 0 2px 8px rgba($primary-color, 0.3);
 
   &:hover:not(:disabled) {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(css-var(primary-color), 0.4);
+    box-shadow: 0 4px 12px rgba($primary-color, 0.4);
   }
 
   &:active {
@@ -186,12 +182,12 @@
 .home-button {
   @extend %button-base;
   background-color: transparent;
-  color: css-var(primary-color);
-  border: 1px solid css-var(primary-color);
+  color: $primary-color;
+  border: 1px solid $primary-color;
 
   &:hover {
-    background-color: rgba(css-var(primary-color), 0.1);
-    border-color: css-var(secondary-color);
+    background-color: rgba($primary-color, 0.1);
+    border-color: $secondary-color;
   }
 }
 
@@ -201,13 +197,13 @@
 .contact-alternatives {
   margin-bottom: 2rem;
   padding: 1.5rem;
-  background: rgba(css-var(primary-color), 0.03);
+  background: rgba($primary-color, 0.03);
   border-radius: 12px;
-  border: 1px solid rgba(css-var(primary-color), 0.1);
+  border: 1px solid rgba($primary-color, 0.1);
 }
 
 .alternatives-title {
-  color: css-var(primary-color);
+  color: $primary-color;
   font-size: 1rem;
   font-weight: 600;
   margin-bottom: 1rem;
@@ -228,7 +224,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.5rem;
-  background: rgba(css-var(background-color), 0.5);
+  background: rgba($background-color, 0.5);
   border-radius: 8px;
   text-align: left;
 
@@ -238,7 +234,7 @@
   }
 
   .alternative-text {
-    color: css-var(text-color);
+    color: $text-color;
     font-size: 0.9rem;
     font-weight: 500;
 
@@ -273,21 +269,21 @@
 .debug-info {
   margin-top: 2rem;
   padding: 1rem;
-  background: rgba(css-var(primary-color), 0.05);
-  border: 1px solid rgba(css-var(primary-color), 0.2);
+  background: rgba($primary-color, 0.05);
+  border: 1px solid rgba($primary-color, 0.2);
   border-radius: 8px;
   text-align: left;
   font-size: 0.8rem;
 
   summary {
-    color: css-var(primary-color);
+    color: $primary-color;
     cursor: pointer;
     font-weight: 500;
     margin-bottom: 0.5rem;
   }
 
   .debug-content {
-    color: rgba(css-var(text-color), 0.8);
+    color: rgba($text-color, 0.8);
 
     p {
       margin: 0.25rem 0;
@@ -340,28 +336,28 @@
   .contact-error {
     background: linear-gradient(
       135deg,
-      css-var(background-color) 0%,
-      rgba(css-var(background-color), 0.98) 50%,
-      rgba(css-var(primary-color), 0.01) 100%
+      $background-color 0%,
+      rgba($background-color, 0.98) 50%,
+      rgba($primary-color, 0.01) 100%
     );
   }
 
   .error-container {
-    background: rgba(css-var(text-color), 0.02);
-    border-color: rgba(css-var(primary-color), 0.25);
+    background: rgba($text-color, 0.02);
+    border-color: rgba($primary-color, 0.25);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   }
 
   .contact-alternatives {
-    background: rgba(css-var(primary-color), 0.05);
+    background: rgba($primary-color, 0.05);
   }
 
   .alternative-item {
-    background: rgba(css-var(background-color), 0.8);
+    background: rgba($background-color, 0.8);
   }
 
   .debug-info {
-    background: rgba(css-var(primary-color), 0.08);
+    background: rgba($primary-color, 0.08);
   }
 }
 
@@ -372,10 +368,10 @@
   }
 
   .retry-button {
-    box-shadow: 0 2px 8px rgba(css-var(primary-color), 0.4);
+    box-shadow: 0 2px 8px rgba($primary-color, 0.4);
 
     &:hover:not(:disabled) {
-      box-shadow: 0 4px 12px rgba(css-var(primary-color), 0.5);
+      box-shadow: 0 4px 12px rgba($primary-color, 0.5);
     }
   }
 }

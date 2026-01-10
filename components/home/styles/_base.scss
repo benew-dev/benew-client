@@ -86,7 +86,7 @@
     background: linear-gradient(
       180deg,
       transparent 0%,
-      #{'rgba(#{css-var(primary-color)}, 0.3)'} 50%,
+      rgba($primary-color, 0.3) 50%,
       transparent 100%
     );
     opacity: 0.5;

@@ -34,8 +34,8 @@
   // Arrière-plan dégradé avec les couleurs du projet
   background: linear-gradient(
     135deg,
-    css-var(background-color) 0%,
-    rgba(css-var(background-color), 0.8) 100%
+    $background-color 0%,
+    rgba($background-color, 0.8) 100%
   );
 }
 
@@ -44,14 +44,14 @@
 ========================================== */
 .content-wrapper {
   width: 100%;
-  background: rgba(css-var(text-color), 0.05);
+  background: rgba($text-color, 0.05);
   backdrop-filter: blur(20px);
   border-radius: 24px;
   text-align: center;
-  border: 1px solid rgba(css-var(primary-color), 0.2);
+  border: 1px solid rgba($primary-color, 0.2);
   box-shadow:
     0 30px 80px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(css-var(text-color), 0.1);
+    inset 0 1px 0 rgba($text-color, 0.1);
   position: relative;
   z-index: 1;
   animation: slideIn 0.6s ease-out;
@@ -111,7 +111,7 @@
    TYPOGRAPHIE
 ========================================== */
 .error-title {
-  color: css-var(primary-color);
+  color: $primary-color;
   font-weight: bold;
   margin: 1rem 0;
   letter-spacing: -1px;
@@ -140,12 +140,12 @@
 
 .template-id-badge {
   display: inline-block;
-  background: rgba(css-var(primary-color), 0.1);
-  color: css-var(primary-color);
+  background: rgba($primary-color, 0.1);
+  color: $primary-color;
   border-radius: 20px;
   font-family: monospace;
   margin-bottom: 1.5rem;
-  border: 1px solid rgba(css-var(primary-color), 0.3);
+  border: 1px solid rgba($primary-color, 0.3);
 
   // 📱 MOBILE FIRST
   padding: 0.3rem 1rem;
@@ -158,7 +158,7 @@
 }
 
 .error-message {
-  color: css-var(text-color-muted);
+  color: $text-color-muted;
   line-height: 1.7;
   margin-bottom: 3rem;
   max-width: 600px;
@@ -256,23 +256,15 @@
 // STYLE ORDERMODAL - Bouton Principal ("Voir tous les templates")
 .retry-button {
   // ✅ CORRIGÉ : Utilise l'approche d'OrderModal
-  background: linear-gradient(
-    135deg,
-    css-var(primary-color),
-    css-var(secondary-color)
-  );
-  color: css-var(background-color);
-  box-shadow: 0 4px 8px #{'rgba(#{css-var(primary-color)}, 0.3)'};
+  background: linear-gradient(135deg, $primary-color, $secondary-color);
+  color: $background-color;
+  box-shadow: 0 4px 8px rgba($primary-color, 0.3);
 
   &:hover:not(:disabled) {
     // ✅ CORRIGÉ : Même approche que OrderModal
-    background: linear-gradient(
-      135deg,
-      css-var(secondary-color),
-      css-var(accent-color)
-    );
+    background: linear-gradient(135deg, $secondary-color, $accent-color);
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px #{'rgba(#{css-var(primary-color)}, 0.4)'};
+    box-shadow: 0 6px 12px rgba($primary-color, 0.4);
   }
 
   &:active {
@@ -283,13 +275,13 @@
 // STYLE ORDERMODAL - Bouton Secondaire ("Retour à l'accueil")
 .home-button {
   background-color: transparent;
-  color: css-var(primary-color);
-  border: 1px solid css-var(primary-color);
+  color: $primary-color;
+  border: 1px solid $primary-color;
 
   &:hover:not(:disabled) {
     // ✅ CORRIGÉ : Utilise l'interpolation de string comme OrderModal
-    background-color: #{'rgba(#{css-var(primary-color)}, 0.1)'};
-    border-color: css-var(secondary-color);
+    background-color: rgba($primary-color, 0.1);
+    border-color: $secondary-color;
   }
 }
 
@@ -331,8 +323,8 @@
 // Mode sombre
 @include dark-mode {
   .content-wrapper {
-    background: rgba(css-var(text-color), 0.03);
-    border-color: rgba(css-var(primary-color), 0.3);
+    background: rgba($text-color, 0.03);
+    border-color: rgba($primary-color, 0.3);
   }
 }
 
@@ -341,14 +333,14 @@
   .content-wrapper {
     box-shadow:
       0 30px 80px rgba(0, 0, 0, 0.6),
-      inset 0 1px 0 rgba(css-var(text-color), 0.15);
+      inset 0 1px 0 rgba($text-color, 0.15);
   }
 
   .retry-button {
-    box-shadow: 0 4px 8px #{'rgba(#{css-var(primary-color)}, 0.4)'};
+    box-shadow: 0 4px 8px rgba($primary-color, 0.4);
 
     &:hover:not(:disabled) {
-      box-shadow: 0 6px 12px #{'rgba(#{css-var(primary-color)}, 0.5)'};
+      box-shadow: 0 6px 12px rgba($primary-color, 0.5);
     }
   }
 }
