@@ -32,13 +32,8 @@
 
   // ✅ OMBRES VISIBLES
   box-shadow:
-    0 15px 50px rgba(0, 0, 0, 0.7),
-    // ✅ Ombre noire plus prononcée
-    0 8px 25px rgba(255, 69, 0, 0.4),
-    // 🔥 Rouge-orangé (OrangeRed)
-    0 4px 15px rgba(255, 140, 0, 0.3),
-    // 🔥 Orange vif (DarkOrange)
-    0 2px 8px rgba(255, 215, 0, 0.2); // 🔥 Jaune doré (Gold)
+    0 15px 50px rgba(0, 0, 0, 0.6),
+    0 5px 20px rgba($primary-color, 0.2);
 
   // 📟 TRÈS PETITS ÉCRANS
   @include small-screens {
@@ -128,15 +123,8 @@
     transform: translateY(-10px);
 
     box-shadow:
-      0 30px 90px rgba(0, 0, 0, 0.9),
-      // ✅ Ombre noire très forte
-      0 15px 50px rgba(255, 69, 0, 0.7),
-      // 🔥 Rouge-orangé intense
-      0 10px 35px rgba(255, 140, 0, 0.6),
-      // 🔥 Orange vif intense
-      0 5px 20px rgba(255, 215, 0, 0.5),
-      // 🔥 Jaune doré intense
-      0 0 40px rgba(255, 99, 71, 0.4); // 🔥 Lueur rouge-tomate (Tomato)
+      0 25px 80px rgba(0, 0, 0, 0.8),
+      0 10px 40px rgba($primary-color, 0.4);
 
     // ✅ Bordure intensifiée au hover SUR TOUS LES ÉCRANS
     border-color: $secondary-color; // Rose
@@ -148,10 +136,8 @@
     transform: translateY(-5px);
 
     box-shadow:
-      0 20px 70px rgba(0, 0, 0, 0.8),
-      0 12px 40px rgba(255, 69, 0, 0.6),
-      0 8px 25px rgba(255, 140, 0, 0.5),
-      0 4px 15px rgba(255, 215, 0, 0.4);
+      0 20px 70px rgba(0, 0, 0, 0.7),
+      0 8px 35px rgba($primary-color, 0.35);
   }
 
   // Effet de brillance subtil
