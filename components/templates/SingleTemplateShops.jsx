@@ -244,7 +244,7 @@ const ApplicationCard = memo(
 ApplicationCard.displayName = 'ApplicationCard';
 
 // =============================
-// ✅ CAROUSEL AVEC FLÈCHES (PC) ET DOTS (MOBILE/TABLETTE)
+// ✅ CAROUSEL AVEC FLÈCHES (PC) ET DOTS (MOBILE/TABLETTE) - MODIFIÉ
 // =============================
 const ApplicationsCarousel = memo(
   ({
@@ -254,13 +254,22 @@ const ApplicationsCarousel = memo(
     onOrderClick,
     onViewClick,
     onGalleryClick,
+    isModalOpen, // ✅ NOUVEAU
+    isGalleryOpen, // ✅ NOUVEAU
   }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAutoScrolling, setIsAutoScrolling] = useState(true);
     const [isTransitioning, setIsTransitioning] = useState(false);
 
+    // ✅ MODIFICATION : Arrêter l'auto-scroll si modal ou galerie ouverte
     useEffect(() => {
-      if (!isAutoScrolling || applications.length <= 1 || isTransitioning) {
+      if (
+        !isAutoScrolling ||
+        applications.length <= 1 ||
+        isTransitioning ||
+        isModalOpen || // ✅ ARRÊT si modal commande ouverte
+        isGalleryOpen // ✅ ARRÊT si galerie ouverte
+      ) {
         return;
       }
 
@@ -269,13 +278,20 @@ const ApplicationsCarousel = memo(
       }, 6000);
 
       return () => clearInterval(interval);
-    }, [isAutoScrolling, applications.length, currentIndex, isTransitioning]);
+    }, [
+      isAutoScrolling,
+      applications.length,
+      currentIndex,
+      isTransitioning,
+      isModalOpen, // ✅ AJOUT dépendance
+      isGalleryOpen, // ✅ AJOUT dépendance
+    ]);
 
     useEffect(() => {
       if (!isAutoScrolling) {
         const timeout = setTimeout(() => {
           setIsAutoScrolling(true);
-        }, 15000);
+        }, 3000);
         return () => clearTimeout(timeout);
       }
     }, [isAutoScrolling]);
@@ -313,14 +329,12 @@ const ApplicationsCarousel = memo(
       [currentIndex, isTransitioning, handleSlideChange, applications],
     );
 
-    // ✅ FLÈCHE GAUCHE
     const handlePrevSlide = useCallback(() => {
       const prevIndex =
         (currentIndex - 1 + applications.length) % applications.length;
       goToSlide(prevIndex);
     }, [currentIndex, applications.length, goToSlide]);
 
-    // ✅ FLÈCHE DROITE
     const handleNextSlide = useCallback(() => {
       const nextIndex = (currentIndex + 1) % applications.length;
       goToSlide(nextIndex);
@@ -371,7 +385,6 @@ const ApplicationsCarousel = memo(
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
       >
-        {/* ✅ FLÈCHE GAUCHE - PC UNIQUEMENT */}
         <button
           className="applications-carousel-arrow applications-carousel-arrow-left"
           onClick={handlePrevSlide}
@@ -412,7 +425,6 @@ const ApplicationsCarousel = memo(
           })}
         </div>
 
-        {/* ✅ FLÈCHE DROITE - PC UNIQUEMENT */}
         <button
           className="applications-carousel-arrow applications-carousel-arrow-right"
           onClick={handleNextSlide}
@@ -422,7 +434,6 @@ const ApplicationsCarousel = memo(
           <FaChevronRight />
         </button>
 
-        {/* ✅ DOTS - MOBILE/TABLETTE UNIQUEMENT */}
         <div className="applications-carousel-indicators">
           {applications.map((app, index) => (
             <button
@@ -626,6 +637,8 @@ const SingleTemplateShops = ({
             onOrderClick={handleOrderClick}
             onViewClick={handleApplicationView}
             onGalleryClick={handleGalleryClick}
+            isModalOpen={isModalOpen} // ✅ AJOUT
+            isGalleryOpen={isGalleryOpen} // ✅ AJOUT
           />
         </section>
       )}
