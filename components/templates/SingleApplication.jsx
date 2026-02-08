@@ -293,22 +293,24 @@ const TechnicalInfo = memo(({ application, template, onExternalLinkClick }) => (
             <td className="info-label">Catégorie</td>
             <td className="info-value">{application.application_category}</td>
           </tr>
-          <tr className="info-row">
-            <td className="info-label">Lien boutique</td>
-            <td className="info-value">
-              <Link
-                href={application.application_link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="info-link"
-                onClick={() =>
-                  onExternalLinkClick('store', application.application_link)
-                }
-              >
-                Voir la boutique
-              </Link>
-            </td>
-          </tr>
+          {application.application_link && (
+            <tr className="info-row">
+              <td className="info-label">Lien boutique</td>
+              <td className="info-value">
+                <Link
+                  href={application.application_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="info-link"
+                  onClick={() =>
+                    onExternalLinkClick('store', application.application_link)
+                  }
+                >
+                  Voir la boutique
+                </Link>
+              </td>
+            </tr>
+          )}
           {application.application_admin_link && (
             <tr className="info-row">
               <td className="info-label">Gestion</td>
@@ -359,12 +361,6 @@ const SpecificNeeds = memo(() => (
             <td className="needs-item">
               <span className="needs-icon">🔗</span>
               <span className="needs-text">Nom de domaine</span>
-            </td>
-          </tr>
-          <tr className="needs-row">
-            <td className="needs-item">
-              <span className="needs-icon">📧</span>
-              <span className="needs-text">Email professionnel</span>
             </td>
           </tr>
           <tr className="needs-row free-tools">
