@@ -231,11 +231,11 @@ const nextConfig = {
     const buildDynamicPageCSP = (includeAnalytics = false) => {
       const baseCSP = [
         "default-src 'self'",
-        `script-src 'self' ${isDev ? "'unsafe-eval'" : ''} 'unsafe-inline'${includeAnalytics ? ' https://*.googletagmanager.com https://*.google-analytics.com' : ''}`,
+        `script-src 'self' ${isDev ? "'unsafe-eval'" : ''} 'unsafe-inline'${includeAnalytics ? ' https://*.googletagmanager.com https://*.google-analytics.com' : ''} https://unpkg.com`,
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
         `img-src 'self' https://res.cloudinary.com${includeAnalytics ? ' https://www.google-analytics.com https://www.googletagmanager.com' : ''} data:`,
         "font-src 'self' https://fonts.gstatic.com",
-        `connect-src 'self'${includeAnalytics ? ' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.doubleclick.net' : ''}`,
+        `connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.doubleclick.net https://unpkg.com`,
         "worker-src 'self' blob:",
         "form-action 'self'",
         "frame-ancestors 'none'",
@@ -253,7 +253,7 @@ const nextConfig = {
           ...hstsHeader,
           {
             key: 'Content-Security-Policy',
-            value: buildDynamicPageCSP(false),
+            value: buildDynamicPageCSP(true),
           },
         ],
       },
