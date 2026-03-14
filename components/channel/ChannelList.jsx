@@ -118,19 +118,6 @@ const VideoModal = memo(({ video, onClose }) => {
             playerProps={{
               fluid: true,
               responsive: true,
-              controlBar: {
-                playToggle: true,
-                volumePanel: {
-                  inline: false,
-                },
-                currentTimeDisplay: true,
-                timeDivider: true,
-                durationDisplay: true,
-                progressControl: true,
-                remainingTimeDisplay: false,
-                playbackRateMenuButton: true,
-                fullscreenToggle: true,
-              },
             }}
           />
         </div>
