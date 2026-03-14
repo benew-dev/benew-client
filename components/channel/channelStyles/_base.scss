@@ -20,10 +20,11 @@
 .channel-grid {
   background-color: $background-color;
 
-  // Override le background étoilé hérité de .projectSection
-  // (défini dans components/templates/templatesStyles/_base.scss)
   .projectSection {
     background-image: none;
     background-color: $background-color;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
