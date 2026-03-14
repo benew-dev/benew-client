@@ -3,8 +3,8 @@
 
 import { useState, useEffect, useCallback, memo } from 'react';
 import dynamic from 'next/dynamic';
-import { CldImage } from 'next-cloudinary';
-import { CldVideoPlayer } from 'next-cloudinary';
+import { CldImage, CldVideoPlayer } from 'next-cloudinary';
+import 'next-cloudinary/dist/cld-video-player.css';
 import { incrementVideoViews } from '@/actions/channelActions';
 import { trackEvent } from '@/utils/analytics';
 import PageTracker from '../analytics/PageTracker';
@@ -103,6 +103,7 @@ const VideoModal = memo(({ video, onClose }) => {
         {/* Lecteur */}
         <div className="video-modal__player">
           <CldVideoPlayer
+            id={`player-${video.video_id}`}
             src={video.video_cloudinary_id}
             width={1280}
             height={720}
@@ -113,10 +114,6 @@ const VideoModal = memo(({ video, onClose }) => {
               accent: '#f6a037',
               base: '#0c0c1a',
               text: '#fae6d1',
-            }}
-            playerProps={{
-              fluid: true,
-              responsive: true,
             }}
           />
         </div>
