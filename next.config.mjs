@@ -232,9 +232,9 @@ const nextConfig = {
       const baseCSP = [
         "default-src 'self'",
         `script-src 'self' ${isDev ? "'unsafe-eval'" : ''} 'unsafe-inline' https://*.googletagmanager.com https://*.google-analytics.com https://unpkg.com blob:`,
-        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com blob:",
         `img-src 'self' https://res.cloudinary.com${includeAnalytics ? ' https://www.google-analytics.com https://www.googletagmanager.com' : ''} data:`,
-        "font-src 'self' https://fonts.gstatic.com",
+        "font-src 'self' https://fonts.gstatic.com data:",
         `connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.doubleclick.net https://unpkg.com https://*.cloudinary.com`,
         "worker-src 'self' blob:",
         "form-action 'self'",
