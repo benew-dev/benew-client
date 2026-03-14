@@ -529,38 +529,37 @@
 // Forcer l'affichage de la control bar du Cloudinary Video Player
 .video-modal__player {
   width: 100%;
-  aspect-ratio: 16 / 9;
   background: #000;
   flex-shrink: 0;
+  position: relative;
 
-  // Override — ne pas forcer height:100% sur le wrapper interne
-  // sinon la controlBar est écrasée
-  > div {
-    width: 100% !important;
-    height: 100% !important;
-    display: block;
-  }
-
-  // Le player Video.js lui-même
-  .cld-video-player,
+  // Wrapper ratio 16:9 pour la vidéo uniquement
+  // padding-bottom laisse de la place pour la control bar
   .video-js {
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
+    aspect-ratio: 16 / 9;
+  }
 
-    // Forcer la visibilité de la control bar
-    .vjs-control-bar {
-      display: flex !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-      z-index: 10;
-      bottom: 0;
-    }
+  video {
+    width: 100% !important;
+    height: auto !important;
+    display: block;
+    aspect-ratio: 16 / 9;
+  }
 
-    // S'assurer que la vidéo ne cache pas la barre
-    video {
-      width: 100% !important;
-      height: 100% !important;
-      object-fit: contain;
-    }
+  // La control bar doit rester dans le flux normal, pas écrasée
+  .vjs-control-bar {
+    position: relative !important;
+    width: 100% !important;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  > div,
+  .video-modal__player-instance,
+  .cld-video-player {
+    width: 100% !important;
   }
 }
