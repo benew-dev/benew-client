@@ -1,0 +1,130 @@
+// components/channel/channelStyles/_base.scss
+@use 'sass:color';
+@use '../../../app/styles/abstracts' as *;
+
+// =============================
+// CONTENEUR PRINCIPAL
+// =============================
+
+.channel-container {
+  width: 100%;
+  min-height: 100vh;
+  background-image: url('/stars.png');
+  background-repeat: repeat;
+  background-size: auto;
+}
+
+// =============================
+// HEADER DE LA PAGE
+// =============================
+
+.channel-header {
+  padding: 5rem 1.5rem 3rem;
+  text-align: center;
+  background: linear-gradient(
+    180deg,
+    rgba($background-color, 0) 0%,
+    rgba($background-color, 0.6) 100%
+  );
+
+  @include from('medium-sm') {
+    padding: 6rem 2rem 3.5rem;
+  }
+  @include from('large-xs') {
+    padding: 7rem 3rem 4rem;
+  }
+}
+
+.channel-header__inner {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.channel-header__title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: $text-color;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.1;
+
+  // Dégradé sur le texte
+  background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  @include small-screens {
+    font-size: 2rem;
+  }
+  @include from('medium-sm') {
+    font-size: 3rem;
+  }
+  @include from('large-xs') {
+    font-size: 3.5rem;
+  }
+}
+
+.channel-header__icon {
+  -webkit-text-fill-color: initial;
+  font-size: 0.85em;
+}
+
+.channel-header__subtitle {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: rgba($text-color, 0.6);
+  line-height: 1.5;
+
+  @include from('medium-sm') {
+    font-size: 1.1rem;
+  }
+  @include from('large-xs') {
+    font-size: 1.15rem;
+  }
+}
+
+// =============================
+// SECTION LECTEUR ACTIF
+// =============================
+
+.channel-player-section {
+  padding: 0 1.5rem 2rem;
+
+  @include from('medium-sm') {
+    padding: 0 2rem 2.5rem;
+  }
+  @include from('large-xs') {
+    padding: 0 3rem 3rem;
+  }
+}
+
+.channel-player-section__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// =============================
+// SECTION CONTENU (search + grille)
+// =============================
+
+.channel-content {
+  padding: 0 1.5rem 5rem;
+
+  @include from('medium-sm') {
+    padding: 0 2rem 5rem;
+  }
+  @include from('large-xs') {
+    padding: 0 3rem 6rem;
+  }
+}
+
+.channel-content__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
