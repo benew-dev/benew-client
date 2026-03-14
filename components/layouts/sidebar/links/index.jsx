@@ -41,8 +41,8 @@ function Links() {
       path: 'templates',
     },
     {
-      title: 'Blog',
-      path: 'blog',
+      title: 'Chaines',
+      path: 'channel',
     },
     {
       title: 'Présentation',
