@@ -9,30 +9,6 @@
 .channel-container {
   width: 100%;
   min-height: 100vh;
-  // Pas de background-image ici — le .first (Parallax) gère les étoiles
-  // La grille utilise $background-color uni
-}
-
-// =============================
-// WRAPPER LECTEUR ACTIF
-// Affiché entre le .first (Parallax) et la grille
-// =============================
-
-.channel-player-wrapper {
-  background-color: $background-color;
-  padding: 2rem 1.5rem;
-
-  @include from('medium-sm') {
-    padding: 2.5rem 2rem;
-  }
-  @include from('large-xs') {
-    padding: 3rem;
-  }
-}
-
-.channel-player-wrapper__inner {
-  max-width: 1000px;
-  margin: 0 auto;
 }
 
 // =============================
@@ -44,9 +20,8 @@
 .channel-grid {
   background-color: $background-color;
 
-  // Les sections .others.projectSection à l'intérieur héritent
-  // des styles de _base des templates (height: 100vh, display: flex, etc.)
-  // mais sans background-image — on override ici
+  // Override le background étoilé hérité de .projectSection
+  // (défini dans components/templates/templatesStyles/_base.scss)
   .projectSection {
     background-image: none;
     background-color: $background-color;
