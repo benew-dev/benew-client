@@ -526,40 +526,72 @@
   }
 }
 
-// Forcer l'affichage de la control bar du Cloudinary Video Player
+// Forcer l'affichage de la control bar du lecteur vidéo
+// Le .video-js en mode fluid utilise padding-top pour le ratio,
+// ce qui positionne la control bar (absolute bottom:0) en HAUT.
+// Solution : on force une hauteur réelle avec un wrapper flex.
 .video-modal__player {
   width: 100%;
   background: #000;
   flex-shrink: 0;
   position: relative;
 
-  // Wrapper ratio 16:9 pour la vidéo uniquement
-  // padding-bottom laisse de la place pour la control bar
-  .video-js {
-    width: 100% !important;
-    height: auto !important;
-    aspect-ratio: 16 / 9;
-  }
-
-  video {
-    width: 100% !important;
-    height: auto !important;
-    display: block;
-    aspect-ratio: 16 / 9;
-  }
-
-  // La control bar doit rester dans le flux normal, pas écrasée
-  .vjs-control-bar {
-    position: relative !important;
-    width: 100% !important;
-    display: flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-  }
-
+  // Le wrapper Cloudinary / cld-video-player
   > div,
   .video-modal__player-instance,
   .cld-video-player {
     width: 100% !important;
+    display: block;
+  }
+
+  // Le conteneur video-js lui-même
+  .video-js {
+    width: 100% !important;
+    // Annuler le padding-top trick du mode fluid
+    padding-top: 0 !important;
+    // Hauteur réelle = ratio 16:9
+    aspect-ratio: 16 / 9;
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  // La vidéo prend tout l'espace disponible
+  .video-js .vjs-tech {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    flex: 1 !important;
+  }
+
+  // La control bar reste dans le flux, EN BAS
+  .video-js .vjs-control-bar {
+    position: relative !important;
+    width: 100% !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 2 !important;
+  }
+
+  // Compatibilité : si le navigateur ne supporte pas aspect-ratio
+  @supports not (aspect-ratio: 16 / 9) {
+    .video-js {
+      padding-top: 56.25% !important; // fallback ratio 16:9
+      height: 0 !important;
+
+      .vjs-tech {
+        position: absolute !important;
+        top: 0;
+        left: 0;
+      }
+
+      .vjs-control-bar {
+        position: absolute !important;
+        bottom: 0 !important;
+        top: auto !important;
+      }
+    }
   }
 }
