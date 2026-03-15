@@ -3,8 +3,8 @@
 
 import { useState, useEffect, useCallback, memo } from 'react';
 import dynamic from 'next/dynamic';
-import { CldImage, CldVideoPlayer } from 'next-cloudinary';
-import 'next-cloudinary/dist/cld-video-player.css';
+import { CldImage } from 'next-cloudinary';
+import VideoJSPlayer from './VideoJSPlayer';
 import { incrementVideoViews } from '@/actions/channelActions';
 import { trackEvent } from '@/utils/analytics';
 import PageTracker from '../analytics/PageTracker';
@@ -67,13 +67,11 @@ function getCategoryConfig(category) {
 // =============================
 
 const VideoModal = memo(({ video, onClose }) => {
-  // Fermer avec Escape
   useEffect(() => {
     const handleKey = (e) => {
       if (e.key === 'Escape') onClose();
     };
     document.addEventListener('keydown', handleKey);
-    // Bloquer le scroll du body
     document.body.style.overflow = 'hidden';
     return () => {
       document.removeEventListener('keydown', handleKey);
@@ -100,23 +98,17 @@ const VideoModal = memo(({ video, onClose }) => {
           ✕
         </button>
 
-        {/* Lecteur */}
+        {/* Lecteur Video.js natif */}
+        {/* key={video.video_id} force un remontage propre à chaque vidéo */}
         <div className="video-modal__player">
-          <CldVideoPlayer
+          <VideoJSPlayer
+            key={video.video_id}
             id={`player-${video.video_id}`}
             src={video.video_cloudinary_id}
-            width={1280}
-            height={720}
+            poster={video.video_thumbnail_id}
+            autoPlay
+            controls
             className="video-modal__player-instance"
-            colors={{
-              accent: '#f6a037',
-              base: '#0c0c1a',
-              text: '#fae6d1',
-            }}
-            playerProps={{
-              fluid: true,
-              responsive: true,
-            }}
           />
         </div>
 
@@ -180,7 +172,6 @@ const VideoCard = memo(({ video, onPlay }) => {
             </div>
           )}
 
-          {/* Overlay au hover + bouton play */}
           <button
             className="video-card__play-btn"
             onClick={() => onPlay(video)}
@@ -192,7 +183,6 @@ const VideoCard = memo(({ video, onPlay }) => {
             </span>
           </button>
 
-          {/* Badge durée */}
           {duration && <span className="video-card__duration">{duration}</span>}
         </div>
 
@@ -288,7 +278,6 @@ const ChannelList = ({ videos: initialVideos = [] }) => {
         ))}
       </div>
 
-      {/* Modal lecteur */}
       {activeVideo && (
         <VideoModal video={activeVideo} onClose={handleCloseModal} />
       )}

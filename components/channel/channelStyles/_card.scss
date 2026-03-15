@@ -4,15 +4,11 @@
 
 // =============================
 // CARTE VIDÉO
-// Même logique de dimensions et centrage que .minimalCard dans templates
-// La section parente (.others.projectSection) fait height:100vh
-// avec display:flex + align-items:center + justify-content:center
 // =============================
 
 .video-card {
   display: block;
 
-  // Largeur progressive — identique à .minimalCard
   width: 85%;
   max-width: 420px;
 
@@ -48,7 +44,7 @@
 }
 
 // =============================
-// INNER — même style glassmorphism que minimalCardInner
+// INNER — glassmorphism
 // =============================
 
 .video-card__inner {
@@ -123,7 +119,6 @@
   opacity: 0.3;
 }
 
-// Bouton play — overlay au centre du thumbnail
 .video-card__play-btn {
   position: absolute;
   inset: 0;
@@ -158,7 +153,7 @@
   justify-content: center;
   font-size: 1.1rem;
   color: $background-color;
-  padding-left: 0.2rem; // Compense visuellement le triangle
+  padding-left: 0.2rem;
   opacity: 0;
   transform: scale(0.8);
   transition:
@@ -178,7 +173,6 @@
   }
 }
 
-// Badge durée
 .video-card__duration {
   position: absolute;
   bottom: 0.5rem;
@@ -310,7 +304,6 @@
     0 24px 80px rgba(0, 0, 0, 0.7);
   animation: modalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 
-  // Sur très petits écrans, prendre plus de place
   @include small-screens {
     width: 95vw;
   }
@@ -327,7 +320,6 @@
   }
 }
 
-// Bouton fermer
 .video-modal__close {
   position: absolute;
   top: 0.75rem;
@@ -355,20 +347,50 @@
   }
 }
 
-// Lecteur dans la modal — ratio 16:9
+// =============================
+// ZONE LECTEUR VIDEO.JS DANS LA MODAL
+//
+// On utilise fill:true (pas fluid:true) dans VideoJSPlayer.
+// Le conteneur définit une hauteur via aspect-ratio,
+// et le player remplit ce conteneur — control bar en bas, garantie.
+// =============================
+
 .video-modal__player {
   width: 100%;
+  // aspect-ratio donne une hauteur réelle au conteneur
+  // Video.js fill:true remplit exactement ce conteneur
+  // → la control bar reste en bas, dans le flux normal du player
   aspect-ratio: 16 / 9;
   background: #000;
   flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
 
-  > div,
-  .video-modal__player-instance,
-  .cld-video-player,
-  video {
+  // Le wrapper rendu par VideoJSPlayer
+  .vjs-player-wrapper {
+    width: 100%;
+    height: 100%;
+  }
+
+  // L'élément video-js et le player
+  video-js,
+  .video-js {
     width: 100% !important;
     height: 100% !important;
-    display: block;
+  }
+
+  // Fallback pour les navigateurs sans support aspect-ratio
+  @supports not (aspect-ratio: 16 / 9) {
+    height: 0;
+    padding-top: 56.25%;
+
+    .vjs-player-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
   }
 }
 
@@ -377,7 +399,7 @@
   padding: 1rem 1.25rem 1.25rem;
   flex-shrink: 0;
   overflow-y: auto;
-  max-height: 35vh; // Limite pour que le lecteur reste visible
+  max-height: 35vh;
 
   @include from('medium-sm') {
     padding: 1.25rem 1.5rem 1.5rem;
@@ -392,7 +414,7 @@
   margin: 0 0 0.5rem 0;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  padding-right: 2rem; // Évite chevauchement avec bouton close si infos visibles
+  padding-right: 2rem;
 
   @include from('medium-sm') {
     font-size: 1.1rem;
@@ -449,6 +471,8 @@
     aspect-ratio: auto;
     flex: 1;
     min-height: 0;
+    // En paysage mobile, le player prend toute la hauteur disponible
+    height: 100%;
   }
 
   .video-modal__info {
@@ -522,76 +546,6 @@
     transition: none;
     &:hover {
       transform: none;
-    }
-  }
-}
-
-// Forcer l'affichage de la control bar du lecteur vidéo
-// Le .video-js en mode fluid utilise padding-top pour le ratio,
-// ce qui positionne la control bar (absolute bottom:0) en HAUT.
-// Solution : on force une hauteur réelle avec un wrapper flex.
-.video-modal__player {
-  width: 100%;
-  background: #000;
-  flex-shrink: 0;
-  position: relative;
-
-  // Le wrapper Cloudinary / cld-video-player
-  > div,
-  .video-modal__player-instance,
-  .cld-video-player {
-    width: 100% !important;
-    display: block;
-  }
-
-  // Le conteneur video-js lui-même
-  .video-js {
-    width: 100% !important;
-    // Annuler le padding-top trick du mode fluid
-    padding-top: 0 !important;
-    // Hauteur réelle = ratio 16:9
-    aspect-ratio: 16 / 9;
-    position: relative !important;
-    display: flex !important;
-    flex-direction: column !important;
-  }
-
-  // La vidéo prend tout l'espace disponible
-  .video-js .vjs-tech {
-    position: relative !important;
-    width: 100% !important;
-    height: 100% !important;
-    flex: 1 !important;
-  }
-
-  // La control bar reste dans le flux, EN BAS
-  .video-js .vjs-control-bar {
-    position: relative !important;
-    width: 100% !important;
-    flex-shrink: 0 !important;
-    display: flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    z-index: 2 !important;
-  }
-
-  // Compatibilité : si le navigateur ne supporte pas aspect-ratio
-  @supports not (aspect-ratio: 16 / 9) {
-    .video-js {
-      padding-top: 56.25% !important; // fallback ratio 16:9
-      height: 0 !important;
-
-      .vjs-tech {
-        position: absolute !important;
-        top: 0;
-        left: 0;
-      }
-
-      .vjs-control-bar {
-        position: absolute !important;
-        bottom: 0 !important;
-        top: auto !important;
-      }
     }
   }
 }

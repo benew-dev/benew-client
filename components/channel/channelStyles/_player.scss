@@ -3,7 +3,7 @@
 @use '../../../app/styles/abstracts' as *;
 
 // =============================
-// LECTEUR VIDÉO ACTIF
+// LECTEUR VIDÉO ACTIF (ancienne section inline)
 // =============================
 
 .active-player {
@@ -31,7 +31,6 @@
   }
 }
 
-// Header du lecteur
 .active-player__header {
   display: flex;
   align-items: center;
@@ -80,14 +79,12 @@
   }
 }
 
-// Wrapper vidéo — ratio 16:9 forcé
 .active-player__video-wrapper {
   width: 100%;
   aspect-ratio: 16 / 9;
   background: #000;
   position: relative;
 
-  // Override styles Cloudinary Video Player
   .active-player__video,
   > div,
   video {
@@ -97,7 +94,6 @@
   }
 }
 
-// Détails sous le lecteur
 .active-player__details {
   padding: 1.25rem;
 
@@ -155,7 +151,6 @@
   margin: 0;
   max-height: 80px;
   overflow: hidden;
-  // Fade-out en bas
   mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
 
@@ -165,7 +160,94 @@
   }
 }
 
-// Accessibilité
+// =============================
+// WRAPPER VIDEO.JS NATIF
+// Pattern : fill:true + conteneur à hauteur fixe via aspect-ratio
+// On N'utilise PAS fluid:true pour éviter le bug padding-top
+// qui repositionne la control bar en haut du lecteur
+// =============================
+
+.vjs-player-wrapper {
+  width: 100%;
+  height: 100%;
+  display: block;
+
+  video-js,
+  .video-js {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+// =============================
+// THÈME VIDEO.JS — COULEURS BENEW
+// Surcharge du skin Video.js par défaut
+// =============================
+
+.video-js {
+  // Barre de progression + volume
+  .vjs-play-progress,
+  .vjs-volume-level {
+    background-color: #f6a037 !important;
+  }
+
+  // Load bar
+  .vjs-load-progress {
+    background: rgba(#f6a037, 0.3) !important;
+  }
+
+  // Hover sur les contrôles
+  .vjs-control:hover,
+  .vjs-menu-item:hover,
+  .vjs-menu-item.vjs-selected {
+    color: #f6a037 !important;
+  }
+
+  // Bouton play central
+  .vjs-big-play-button {
+    background-color: rgba(#f6a037, 0.85) !important;
+    border-color: #f6a037 !important;
+    color: #0c0c1a !important;
+    border-radius: 50% !important;
+    width: 3rem !important;
+    height: 3rem !important;
+    line-height: 3rem !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+
+    &:hover {
+      background-color: #f6a037 !important;
+    }
+
+    .vjs-icon-placeholder::before {
+      font-size: 1.5rem !important;
+      line-height: 3rem !important;
+    }
+  }
+
+  // Barre de contrôle
+  .vjs-control-bar {
+    background-color: rgba(#0c0c1a, 0.88) !important;
+    color: #fae6d1 !important;
+  }
+
+  // Slider track
+  .vjs-slider {
+    background-color: rgba(#fae6d1, 0.2) !important;
+  }
+
+  // Tooltip temps
+  .vjs-time-tooltip {
+    background-color: rgba(#0c0c1a, 0.9) !important;
+    color: #fae6d1 !important;
+  }
+}
+
+// =============================
+// ACCESSIBILITÉ
+// =============================
 @include reduced-motion {
   .active-player {
     animation: none;
@@ -176,5 +258,9 @@
     &:hover {
       transform: none;
     }
+  }
+
+  .video-js .vjs-big-play-button {
+    transition: none !important;
   }
 }
