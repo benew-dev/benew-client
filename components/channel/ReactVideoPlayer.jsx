@@ -66,14 +66,11 @@ const ReactVideoPlayer = ({
         src={videoUrl}
         playing={autoPlay}
         controls={controls}
-        // Pattern responsive officiel react-player v3
-        style={{
-          width: '100%',
-          height: 'auto',
-          aspectRatio: '16/9',
-          display: 'block',
-        }}
-        // Poster via config file
+        // width/height en % — react-player applique ces valeurs directement
+        // sur son conteneur interne. Le ratio 16/9 est géré par le CSS parent.
+        width="100%"
+        height="100%"
+        style={{ display: 'block' }}
         config={{
           file: {
             attributes: {

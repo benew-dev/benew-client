@@ -360,15 +360,32 @@
   background: #000;
   flex-shrink: 0;
 
-  // react-player gère lui-même son ratio via style inline
-  // (style={{ width:'100%', height:'auto', aspectRatio:'16/9' }})
-  // Le conteneur se contente d'être en bloc et de passer la largeur
+  // Sur grands écrans, la barre de contrôle native du navigateur
+  // s'affiche sous la vidéo — on lui laisse de la place
+  @include from('large-xs') {
+    padding-bottom: 2.75rem;
+  }
 
   // Wrapper rendu par ReactVideoPlayer
+  // C'est lui qui définit le ratio — le player interne remplit à 100%
   .react-video-wrapper {
     width: 100%;
+    aspect-ratio: 16 / 9;
     display: block;
-    line-height: 0; // évite l'espace fantôme sous la vidéo
+    line-height: 0;
+
+    // ReactPlayer rend un div avec position relative — on le force à remplir
+    > div {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    video {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+      object-fit: contain;
+    }
   }
 
   // Skeleton de chargement pendant que react-player charge

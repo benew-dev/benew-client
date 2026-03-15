@@ -30,7 +30,6 @@
     "resend": "^6.6.0",
     "sass": "^1.97.0",
     "swiper": "^12.0.3",
-    "video.js": "^8.23.7",
     "yup": "^1.7.1"
   },
   "devDependencies": {
