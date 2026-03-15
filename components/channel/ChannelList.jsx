@@ -107,8 +107,6 @@ const VideoModal = memo(({ video, onClose }) => {
             src={video.video_cloudinary_id}
             width={1280}
             height={720}
-            autoPlay
-            controls
             className="video-modal__player-instance"
             colors={{
               accent: '#f6a037',
