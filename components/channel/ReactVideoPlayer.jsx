@@ -31,7 +31,7 @@ function buildPosterUrl(thumbnailId) {
 // Importé dynamiquement (ssr:false) depuis ChannelList.jsx
 // =============================
 
-import ReactPlayer from 'react-player/file';
+import ReactPlayer from 'react-player';
 
 /**
  * @param {string}   props.src       - public_id ou URL directe
