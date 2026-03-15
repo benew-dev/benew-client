@@ -357,40 +357,26 @@
 
 .video-modal__player {
   width: 100%;
-  // aspect-ratio donne une hauteur réelle au conteneur
-  // Video.js fill:true remplit exactement ce conteneur
-  // → la control bar reste en bas, dans le flux normal du player
-  aspect-ratio: 16 / 9;
   background: #000;
   flex-shrink: 0;
-  position: relative;
-  overflow: hidden;
 
-  // Le wrapper rendu par VideoJSPlayer
-  .vjs-player-wrapper {
+  // react-player gère lui-même son ratio via style inline
+  // (style={{ width:'100%', height:'auto', aspectRatio:'16/9' }})
+  // Le conteneur se contente d'être en bloc et de passer la largeur
+
+  // Wrapper rendu par ReactVideoPlayer
+  .react-video-wrapper {
     width: 100%;
-    height: 100%;
+    display: block;
+    line-height: 0; // évite l'espace fantôme sous la vidéo
   }
 
-  // L'élément video-js et le player
-  video-js,
-  .video-js {
-    width: 100% !important;
-    height: 100% !important;
-  }
-
-  // Fallback pour les navigateurs sans support aspect-ratio
-  @supports not (aspect-ratio: 16 / 9) {
-    height: 0;
-    padding-top: 56.25%;
-
-    .vjs-player-wrapper {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
+  // Skeleton de chargement pendant que react-player charge
+  .video-modal__player-loading {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: rgba(#0c0c1a, 0.9);
+    display: block;
   }
 }
 

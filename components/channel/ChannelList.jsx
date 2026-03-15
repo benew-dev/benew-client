@@ -4,13 +4,28 @@
 import { useState, useEffect, useCallback, memo } from 'react';
 import dynamic from 'next/dynamic';
 import { CldImage } from 'next-cloudinary';
-import VideoJSPlayer from './VideoJSPlayer';
 import { incrementVideoViews } from '@/actions/channelActions';
 import { trackEvent } from '@/utils/analytics';
 import PageTracker from '../analytics/PageTracker';
 import './channelStyles/index.scss';
 
 import ParallaxSkeleton from '../layouts/parallax/ParallaxSkeleton';
+
+// =============================
+// IMPORTS DYNAMIQUES (ssr:false obligatoire)
+// =============================
+
+// react-player accède au DOM au chargement → crash SSR si import statique
+const ReactVideoPlayer = dynamic(() => import('./ReactVideoPlayer'), {
+  ssr: false,
+  loading: () => (
+    <div
+      className="video-modal__player-loading"
+      aria-label="Chargement du lecteur…"
+    />
+  ),
+});
+
 const Parallax = dynamic(() => import('components/layouts/parallax'), {
   loading: () => <ParallaxSkeleton />,
   ssr: true,
@@ -98,17 +113,15 @@ const VideoModal = memo(({ video, onClose }) => {
           ✕
         </button>
 
-        {/* Lecteur Video.js natif */}
+        {/* Lecteur react-player */}
         {/* key={video.video_id} force un remontage propre à chaque vidéo */}
         <div className="video-modal__player">
-          <VideoJSPlayer
+          <ReactVideoPlayer
             key={video.video_id}
-            id={`player-${video.video_id}`}
             src={video.video_cloudinary_id}
             poster={video.video_thumbnail_id}
             autoPlay
             controls
-            className="video-modal__player-instance"
           />
         </div>
 
@@ -150,7 +163,6 @@ const VideoCard = memo(({ video, onPlay }) => {
   return (
     <div className="video-card">
       <div className="video-card__inner">
-        {/* Thumbnail avec bouton play */}
         <div className="video-card__thumbnail">
           {video.video_thumbnail_id ? (
             <CldImage
@@ -186,7 +198,6 @@ const VideoCard = memo(({ video, onPlay }) => {
           {duration && <span className="video-card__duration">{duration}</span>}
         </div>
 
-        {/* Infos */}
         <div className="video-card__info">
           <div className="video-card__info-top">
             <span className={`video-card__category ${catConfig.color}`}>
