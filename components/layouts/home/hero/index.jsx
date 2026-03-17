@@ -71,7 +71,7 @@ function Hero() {
                 })
               }
             >
-              Découvres nos magasins
+              Nos Magasins
             </motion.a>
             <motion.a href="/presentation" className="secondaryButton">
               BENEW

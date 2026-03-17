@@ -116,7 +116,7 @@
     // 📱 MOBILE - Plus visible et lisible
     font-size: 1.1rem; // ✅ Taille réduite pour économiser l'espace
     color: $secondary-color;
-    letter-spacing: 0.08rem;
+    letter-spacing: 0.15rem;
     line-height: 1.2; // ✅ Line-height réduit
     margin: 0;
     max-width: 95%;
@@ -256,39 +256,39 @@
     }
 
     @include from('medium-lg') {
-      font-size: 6rem;
+      font-size: 6.5rem;
       line-height: 1.6;
       letter-spacing: 0.3rem;
     }
 
     @include from('medium-xxl') {
-      font-size: 6rem;
+      font-size: 6.5rem;
       line-height: 1.6;
       letter-spacing: 0.3rem;
     }
 
     // 🖥️ GRANDS ÉCRANS - Tailles desktop
     @include from('large-xs') {
-      font-size: 6rem; // Taille desktop originale
+      font-size: 6.5rem; // Taille desktop originale
       max-width: 100%;
       line-height: 1.6;
       letter-spacing: 0.3rem;
     }
 
     @include from('large-lg') {
-      font-size: 6.5rem;
-      line-height: 1.6;
-      letter-spacing: 0.3rem;
-    }
-
-    @include from('large-xxl') {
       font-size: 7rem;
       line-height: 1.6;
       letter-spacing: 0.3rem;
     }
 
-    @include from('large-xxxl') {
+    @include from('large-xxl') {
       font-size: 7.5rem;
+      line-height: 1.6;
+      letter-spacing: 0.3rem;
+    }
+
+    @include from('large-xxxl') {
+      font-size: 8rem;
       line-height: 1.6;
       letter-spacing: 0.3rem;
     }
