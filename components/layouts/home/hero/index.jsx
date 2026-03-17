@@ -55,7 +55,9 @@ function Hero() {
           <motion.h2 variants={textVariants}>
             LES MAGASINS DE L&apos;ESPOIR
           </motion.h2>
-          <motion.h1 variants={textVariants}>Commences ton histoire</motion.h1>
+          <motion.h1 variants={textVariants}>
+            COMMENCES TON HISTOIRE !
+          </motion.h1>
           <motion.div className="buttonGroup" variants={textVariants}>
             <motion.a
               href="/templates"
