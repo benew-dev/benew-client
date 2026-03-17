@@ -251,7 +251,7 @@
     // 📟 MOYENS ÉCRANS - Croissance progressive
     @include from('medium-sm') {
       font-size: 3.5rem;
-      line-height: 1.1;
+      line-height: 1.6;
       font-weight: 700;
     }
 
@@ -267,7 +267,7 @@
     @include from('large-xs') {
       font-size: 6rem; // Taille desktop originale
       max-width: 100%;
-      line-height: 1;
+      line-height: 2;
     }
 
     @include from('large-lg') {
@@ -279,7 +279,7 @@
     }
 
     @include from('large-xxxl') {
-      font-size: 4.8rem;
+      font-size: 7.5rem;
     }
   }
 
