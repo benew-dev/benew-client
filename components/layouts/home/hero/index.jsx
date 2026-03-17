@@ -53,7 +53,7 @@ function Hero() {
           animate="animate"
         >
           <motion.h2 variants={textVariants}>
-            L&apos;outil de l&apos;espoir
+            LES MAGASINS DE L&apos;ESPOIR
           </motion.h2>
           <motion.h1 variants={textVariants}>Commences ton histoire</motion.h1>
           <motion.div className="buttonGroup" variants={textVariants}>

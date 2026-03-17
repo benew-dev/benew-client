@@ -274,7 +274,7 @@ const ChannelList = ({ videos: initialVideos = [] }) => {
       <PageTracker pageName="channel_list" />
 
       <section className="first">
-        <Parallax bgColor="#0c0c1d" title="Chaine" planets="/sun.png" />
+        <Parallax bgColor="#0c0c1d" title="Chaîne Tuto" planets="/sun.png" />
       </section>
 
       <div className="channel-grid" role="list">

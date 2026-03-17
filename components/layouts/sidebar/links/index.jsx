@@ -41,7 +41,7 @@ function Links() {
       path: 'templates',
     },
     {
-      title: 'Chaines',
+      title: 'Chaîne Tuto',
       path: 'channel',
     },
     {
