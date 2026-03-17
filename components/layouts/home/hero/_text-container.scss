@@ -257,39 +257,40 @@
 
     @include from('medium-lg') {
       font-size: 6rem;
-      letter-spacing: 3rem;
+      line-height: 1.6;
+      letter-spacing: 0.3rem;
     }
 
     @include from('medium-xxl') {
       font-size: 6rem;
-      line-height: 2;
-      letter-spacing: 3rem;
+      line-height: 1.6;
+      letter-spacing: 0.3rem;
     }
 
     // 🖥️ GRANDS ÉCRANS - Tailles desktop
     @include from('large-xs') {
       font-size: 6rem; // Taille desktop originale
       max-width: 100%;
-      line-height: 2;
-      letter-spacing: 3rem;
+      line-height: 1.6;
+      letter-spacing: 0.3rem;
     }
 
     @include from('large-lg') {
       font-size: 6.5rem;
-      line-height: 2;
-      letter-spacing: 3rem;
+      line-height: 1.6;
+      letter-spacing: 0.3rem;
     }
 
     @include from('large-xxl') {
       font-size: 7rem;
-      line-height: 2;
-      letter-spacing: 3rem;
+      line-height: 1.6;
+      letter-spacing: 0.3rem;
     }
 
     @include from('large-xxxl') {
       font-size: 7.5rem;
-      line-height: 2;
-      letter-spacing: 3rem;
+      line-height: 1.6;
+      letter-spacing: 0.3rem;
     }
   }
 
