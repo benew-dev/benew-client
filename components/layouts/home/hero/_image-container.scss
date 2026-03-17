@@ -7,9 +7,9 @@
 
 // 🖼️ CONTENEUR IMAGE - Mobile-first ADAPTÉ AUX PETITS ÉCRANS
 .imageContainer {
-  // 📱 MOBILE - Image en bas avec clip diagonal
-  height: 45vh;
-  min-height: auto;
+  // 📱 MOBILE - Image présente mais optimisée
+  height: auto; // ✅ CHANGEMENT CRITIQUE : hauteur flexible
+  min-height: 35vh; // ✅ Hauteur minimale réduite
   width: 100%;
   position: absolute;
   bottom: 0;
@@ -18,27 +18,35 @@
   align-items: center;
   justify-content: center;
   z-index: 1;
-  clip-path: polygon(0 15%, 100% 0%, 100% 100%, 0% 100%);
-  background: linear-gradient(
-    135deg,
-    rgba($background-color, 0.3),
-    rgba($background-color, 0.1)
-  );
-  opacity: 1; // ← plus de transparence
 
+  // 📟 TRÈS PETITS ÉCRANS - IMAGE ENCORE PLUS RÉDUITE
   @media (max-width: 400px) and (max-height: 680px) {
-    height: 40vh;
-    clip-path: polygon(0 12%, 100% 0%, 100% 100%, 0% 100%);
+    min-height: 30vh; // ✅ Hauteur minimale réduite
+    opacity: 0.7; // Plus transparente pour ne pas gêner le texte
   }
 
+  // 📟 ÉCRANS ULTRA-COMPACTS
   @media (max-width: 360px) and (max-height: 650px) {
-    height: 35vh;
-    clip-path: polygon(0 10%, 100% 0%, 100% 100%, 0% 100%);
+    min-height: 25vh; // ✅ Hauteur minimale très réduite
+    opacity: 0.6;
   }
 
+  // 📱 PETITS ÉCRANS - Progression avec nouveaux breakpoints
   @include small-screens {
-    height: 42vh;
-    clip-path: polygon(0 15%, 100% 0%, 100% 100%, 0% 100%);
+    min-height: 32vh;
+    opacity: 0.8;
+  }
+
+  @include from('small-sm') {
+    min-height: 33vh;
+  }
+
+  @include from('small-lg') {
+    min-height: 34vh;
+  }
+
+  @include from('small-xl') {
+    min-height: 35vh;
   }
 
   // 📟 MOYENS ÉCRANS - Transition progressive
@@ -78,45 +86,39 @@
 
     // 📟 TRÈS PETITS ÉCRANS - IMAGE TRÈS COMPACTE
     @media (max-width: 400px) and (max-height: 680px) {
-      opacity: 0.85;
-      filter: none;
-      max-width: 80%;
-      max-height: 80%;
+      max-width: 70%; // ✅ Encore plus petite
+      max-height: 70%;
+      opacity: 0.25;
+      filter: blur(1.5px);
     }
 
     // 📟 ÉCRANS ULTRA-COMPACTS
     @media (max-width: 360px) and (max-height: 650px) {
-      opacity: 0.85;
-      filter: none;
-      max-width: 80%;
-      max-height: 80%;
+      max-width: 65%; // ✅ Taille minimale
+      max-height: 65%;
+      opacity: 0.25;
+      filter: blur(1.5px);
     }
 
     // 📱 PETITS ÉCRANS - Progression avec nouveaux breakpoints
     @include small-screens {
-      opacity: 0.85;
-      filter: none;
-      max-width: 80%;
-      max-height: 80%;
+      max-width: 75%;
+      max-height: 75%;
+      opacity: 0.25;
+      filter: blur(1.5px);
     }
 
     @include from('small-sm') {
-      opacity: 0.85;
-      filter: none;
-      max-width: 80%;
-      max-height: 80%;
+      max-width: 76%;
+      max-height: 76%;
     }
 
     @include from('small-lg') {
-      opacity: 0.85;
-      filter: none;
-      max-width: 80%;
-      max-height: 80%;
+      max-width: 78%;
+      max-height: 78%;
     }
 
     @include from('small-xl') {
-      opacity: 0.85;
-      filter: none;
       max-width: 80%;
       max-height: 80%;
     }
