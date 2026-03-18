@@ -23,7 +23,7 @@
   // Mobile
   @include until('medium-sm') {
     top: 2%;
-    right: 0%;
+    right: 50%;
     transform: translateX(-50%);
     width: 350px;
     height: 350px;
