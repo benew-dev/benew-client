@@ -26,11 +26,14 @@
 }
 
 // =============================
-// CONTENEUR TEXTE MOBILE - AU PREMIER PLAN
+// CONTENEUR TEXTE MOBILE - EN BAS
 // =============================
 @include until('medium-sm') {
   .text-container {
-    position: relative;
+    position: absolute;
+    bottom: 8%;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 10;
 
     display: flex;
@@ -40,29 +43,28 @@
     text-align: center;
 
     width: 100%;
-    height: 100%;
 
-    padding: 2rem 1rem;
+    padding: 0 1rem;
     margin: 0;
 
     @include small-screens {
-      padding: 1.5rem 0.8rem;
+      bottom: 7%;
     }
 
     @include from('small-sm') {
-      padding: 1.55rem 0.85rem;
+      bottom: 7%;
     }
 
     @include from('small-lg') {
-      padding: 1.6rem 0.9rem;
+      bottom: 8%;
     }
 
     @include from('small-xl') {
-      padding: 1.65rem 0.95rem;
+      bottom: 8%;
     }
 
     @include between('small-xl', 'medium-sm') {
-      padding: 1.8rem 1rem;
+      bottom: 9%;
     }
   }
 }
