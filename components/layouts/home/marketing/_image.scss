@@ -18,8 +18,8 @@
     margin: 0;
     padding: 0;
 
-    opacity: 0.9;
-    filter: none;
+    opacity: 0.4;
+    filter: blur(2px);
     transition: all 0.3s ease;
 
     // Position normale dans le flux
@@ -48,8 +48,8 @@
     width: auto;
 
     // ✅ Pas de blur, opacité normale
-    opacity: 1;
-    filter: none;
+    opacity: 0.4;
+    filter: blur(2px);
 
     @include small-screens {
       height: 50vh;
