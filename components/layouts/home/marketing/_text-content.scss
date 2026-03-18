@@ -26,15 +26,12 @@
 }
 
 // =============================
-// CONTENEUR TEXTE MOBILE - EN BAS
+// CONTENEUR TEXTE MOBILE - AU PREMIER PLAN
 // =============================
 @include until('medium-sm') {
   .text-container {
-    position: absolute;
-    bottom: 2%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
+    position: relative;
+    z-index: 10; // Au premier plan
 
     display: flex;
     flex-direction: column;
@@ -43,28 +40,29 @@
     text-align: center;
 
     width: 100%;
+    height: 100%;
 
-    padding: 0 1rem;
+    padding: 2rem 1rem;
     margin: 0;
 
     @include small-screens {
-      bottom: 1%;
+      padding: 1.5rem 0.8rem;
     }
 
     @include from('small-sm') {
-      bottom: 1%;
+      padding: 1.55rem 0.85rem;
     }
 
     @include from('small-lg') {
-      bottom: 2%;
+      padding: 1.6rem 0.9rem;
     }
 
     @include from('small-xl') {
-      bottom: 2%;
+      padding: 1.65rem 0.95rem;
     }
 
     @include between('small-xl', 'medium-sm') {
-      bottom: 2%;
+      padding: 1.8rem 1rem;
     }
   }
 }
@@ -84,6 +82,7 @@
     0 3px 6px rgba($color-dark, 0.8),
     0 0 25px rgba($color-orange, 0.5);
 
+  // Tailles responsives
   font-size: 2.2rem;
 
   @include small-screens {
@@ -91,6 +90,7 @@
     letter-spacing: 0.8px;
     margin: 0 0 0.5rem 0;
 
+    // ✅ Text-shadow renforcé pour mobile (lisibilité sur image)
     text-shadow:
       0 2px 4px rgba($color-dark, 0.9),
       0 0 15px rgba($color-orange, 0.7),
@@ -115,6 +115,7 @@
   @include between('small-xl', 'medium-sm') {
     font-size: 1.9rem;
 
+    // ✅ Text-shadow renforcé pour tablette portrait
     text-shadow:
       0 3px 6px rgba($color-dark, 0.9),
       0 0 20px rgba($color-orange, 0.6),
@@ -146,6 +147,9 @@
     margin: 0 0 1rem 0;
   }
 
+  // =============================
+  // BREAKPOINT DE TRANSITION SPÉCIAL
+  // =============================
   @include between('medium-lg', 'large-xs') {
     font-size: 2.4rem;
   }
@@ -159,6 +163,7 @@
   align-items: center;
   justify-content: center;
 
+  // Style cohérent avec les autres boutons du site
   background: linear-gradient(135deg, $color-orange, $color-pink);
   color: $color-light;
   text-decoration: none;
@@ -167,12 +172,15 @@
   text-transform: uppercase;
   letter-spacing: 0.4px;
 
+  // Dimensions
   padding: 0.8rem 2rem;
   border-radius: 50px;
   border: 2px solid rgba($color-light, 0.2);
 
+  // Espacement par rapport aux titres
   margin-top: 1.5rem;
 
+  // Ombres
   box-shadow:
     0 6px 20px rgba($color-orange, 0.3),
     0 3px 10px rgba($color-pink, 0.2),
@@ -180,8 +188,10 @@
 
   text-shadow: 0 2px 4px rgba($color-dark, 0.6);
 
+  // Transitions
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
+  // Responsive
   @include small-screens {
     font-size: 0.85rem;
     padding: 0.65rem 1.6rem;
@@ -241,6 +251,7 @@
     letter-spacing: 0.5px;
   }
 
+  // Effets hover
   &:hover {
     transform: translateY(-2px) scale(1.03);
     background: linear-gradient(

@@ -13,6 +13,14 @@
     gap: 0;
   }
 
+  .profit-image {
+    @include until('medium-sm') {
+      height: 55vh;
+      opacity: 0.2;
+      filter: blur(1.2px);
+    }
+  }
+
   .text-container {
     @include until('medium-sm') {
       padding: 1.2rem 0.6rem;
@@ -51,7 +59,7 @@
       left: auto;
       width: 40%;
       height: 80vh;
-      opacity: 1;
+      opacity: 0.8;
       filter: none;
       z-index: 5;
     }
@@ -86,6 +94,11 @@
 // =============================
 @include tall-screen {
   .profit-image {
+    @include until('medium-sm') {
+      height: 75vh;
+      opacity: 0.35;
+    }
+
     @include from('medium-sm') {
       max-height: 95vh;
     }
@@ -103,6 +116,11 @@
 // =============================
 @include short-screen {
   .profit-image {
+    @include until('medium-sm') {
+      height: 50vh;
+      opacity: 0.2;
+    }
+
     @include from('medium-sm') {
       max-height: 75vh;
     }
@@ -141,7 +159,7 @@
 
     @include until('medium-sm') {
       &:hover {
-        transform: translateX(-50%);
+        transform: translate(-50%, -50%); // Garde seulement le centrage
       }
     }
   }

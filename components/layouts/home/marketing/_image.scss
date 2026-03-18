@@ -18,8 +18,8 @@
     margin: 0;
     padding: 0;
 
-    opacity: 0.4;
-    filter: blur(2px);
+    opacity: 0.9;
+    filter: none;
     transition: all 0.3s ease;
 
     // Position normale dans le flux
@@ -33,47 +33,54 @@
 }
 
 // =============================
-// IMAGE MOBILE - EN HAUT, SANS BLUR NI OPACITY
+// IMAGE MOBILE - EN ARRIÈRE-PLAN
 // =============================
 @include until('medium-sm') {
   .profit-image {
     position: absolute;
-    top: 5%;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
 
-    z-index: 1;
+    z-index: 1; // En arrière-plan
 
-    height: 55vh;
+    height: 70vh;
     width: auto;
 
-    // ✅ Pas de blur, opacité normale
-    opacity: 0.4;
+    // ✅ EFFET BLUR ET OPACITÉ RÉDUITE
+    opacity: 0.3;
     filter: blur(2px);
 
+    transition: all 0.4s ease;
+
     @include small-screens {
-      height: 50vh;
-      top: 5%;
+      height: 60vh;
+      opacity: 0.25;
+      filter: blur(1.5px);
     }
 
     @include from('small-sm') {
-      height: 52vh;
-      top: 4%;
+      height: 62vh;
+      opacity: 0.26;
+      filter: blur(1.6px);
     }
 
     @include from('small-lg') {
-      height: 54vh;
-      top: 4%;
+      height: 64vh;
+      opacity: 0.27;
+      filter: blur(1.7px);
     }
 
     @include from('small-xl') {
-      height: 55vh;
-      top: 3%;
+      height: 66vh;
+      opacity: 0.28;
+      filter: blur(1.8px);
     }
 
     @include between('small-xl', 'medium-sm') {
-      height: 56vh;
-      top: 3%;
+      height: 68vh;
+      opacity: 0.29;
+      filter: blur(1.9px);
     }
   }
 }
@@ -81,6 +88,8 @@
 // =============================
 // BREAKPOINT DE TRANSITION SPÉCIAL
 // =============================
+
+// ✅ Gestion spéciale pour tablettes en portrait (medium-lg à large-xs)
 @include between('medium-lg', 'large-xs') {
   .profit-image {
     max-height: 85vh;
