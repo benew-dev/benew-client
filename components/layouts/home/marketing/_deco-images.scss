@@ -30,15 +30,15 @@
   @include from('medium-sm') {
     top: 2%;
     right: 5%;
-    width: 190px;
-    height: 190px;
+    width: 250px;
+    height: 250px;
   }
 
   @include from('large-xs') {
     top: 2%;
     right: 3%;
-    width: 190px;
-    height: 190px;
+    width: 350px;
+    height: 350px;
   }
 }
 
@@ -70,14 +70,14 @@
   @include from('medium-sm') {
     bottom: 2%;
     right: 3%;
-    width: 190px;
-    height: 190px;
+    width: 200px;
+    height: 200px;
   }
 
   @include from('large-xs') {
     bottom: 2%;
     right: 3%;
-    width: 190px;
-    height: 190px;
+    width: 250px;
+    height: 250px;
   }
 }
