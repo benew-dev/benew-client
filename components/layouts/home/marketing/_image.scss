@@ -41,7 +41,7 @@
 
     z-index: 1;
 
-    height: 45vh;
+    height: 55vh;
     width: auto;
 
     opacity: 1;
@@ -51,31 +51,31 @@
 
     // Petits écrans
     @include small-screens {
-      height: 40vh;
+      height: 52vh;
       top: 3%;
     }
 
     @include from('small-sm') {
-      height: 42vh;
+      height: 53vh;
       top: 3%;
     }
 
     @include from('small-lg') {
-      height: 43vh;
+      height: 54vh;
       top: 3%;
     }
 
     @include from('small-xl') {
-      height: 44vh;
+      height: 55vh;
       top: 2%;
     }
 
     @include between('small-xl', 'medium-sm') {
-      height: 45vh;
+      height: 56vh;
       top: 2%;
     }
 
-    // Tablettes
+    // Tablettes - inchangé
     @include from('medium-sm') {
       height: 62vh;
       top: 2%;
