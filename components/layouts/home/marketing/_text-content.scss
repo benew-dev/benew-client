@@ -31,7 +31,7 @@
 @include until('medium-sm') {
   .text-container {
     position: absolute;
-    bottom: 8%;
+    bottom: 2%;
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
@@ -48,23 +48,23 @@
     margin: 0;
 
     @include small-screens {
-      bottom: 7%;
+      bottom: 1%;
     }
 
     @include from('small-sm') {
-      bottom: 7%;
+      bottom: 1%;
     }
 
     @include from('small-lg') {
-      bottom: 8%;
+      bottom: 2%;
     }
 
     @include from('small-xl') {
-      bottom: 8%;
+      bottom: 2%;
     }
 
     @include between('small-xl', 'medium-sm') {
-      bottom: 9%;
+      bottom: 2%;
     }
   }
 }
