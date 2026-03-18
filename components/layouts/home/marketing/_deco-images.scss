@@ -23,7 +23,7 @@
   // Mobile
   @include until('medium-sm') {
     top: 8%;
-    left: 50%;
+    right: 0%;
     transform: translateX(-50%);
     width: 350px;
     height: 350px;
@@ -86,42 +86,42 @@
   // Mobile
   @include until('medium-sm') {
     bottom: 7%;
-    left: 2%;
+    left: 0%;
     width: 250px;
     height: 250px;
   }
 
   @include small-screens {
     bottom: 7%;
-    left: 2%;
+    left: 0%;
     width: 215px;
     height: 215px;
   }
 
   @include from('small-sm') {
     bottom: 7%;
-    left: 2%;
+    left: 0%;
     width: 215px;
     height: 215px;
   }
 
   @include from('small-lg') {
     bottom: 7%;
-    left: 2%;
+    left: 0%;
     width: 250px;
     height: 250px;
   }
 
   @include from('small-xl') {
     bottom: 7%;
-    left: 2%;
+    left: 0%;
     width: 250px;
     height: 250px;
   }
 
   @include between('small-xl', 'medium-sm') {
     bottom: 7%;
-    left: 2%;
+    left: 0%;
     width: 250px;
     height: 250px;
   }
@@ -151,42 +151,42 @@
   // Mobile
   @include until('medium-sm') {
     bottom: 7%;
-    right: 2%;
+    right: 0%;
     width: 350px;
     height: 350px;
   }
 
   @include small-screens {
     bottom: 7%;
-    right: 2%;
+    right: 0%;
     width: 300px;
     height: 300px;
   }
 
   @include from('small-sm') {
     bottom: 7%;
-    right: 2%;
+    right: 0%;
     width: 300px;
     height: 300px;
   }
 
   @include from('small-lg') {
     bottom: 3%;
-    right: 2%;
+    right: 0%;
     width: 350px;
     height: 350px;
   }
 
   @include from('small-xl') {
     bottom: 7%;
-    right: 2%;
+    right: 0%;
     width: 350px;
     height: 350px;
   }
 
   @include between('small-xl', 'medium-sm') {
     bottom: 7%;
-    right: 2%;
+    right: 0%;
     width: 350px;
     height: 350px;
   }
