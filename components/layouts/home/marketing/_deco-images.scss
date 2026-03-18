@@ -22,7 +22,7 @@
 .deco-croissance {
   // Mobile
   @include until('medium-sm') {
-    top: 8%;
+    top: 2%;
     right: 0%;
     transform: translateX(-50%);
     width: 350px;
@@ -30,7 +30,7 @@
   }
 
   @include small-screens {
-    top: 8%;
+    top: 2%;
     width: 300px;
     height: 300px;
   }
@@ -42,7 +42,7 @@
   }
 
   @include from('small-lg') {
-    top: 8%;
+    top: 2%;
     width: 350px;
     height: 350px;
   }
@@ -54,7 +54,7 @@
   }
 
   @include between('small-xl', 'medium-sm') {
-    top: 8%;
+    top: 2%;
     width: 350px;
     height: 350px;
   }
@@ -63,7 +63,7 @@
   @include from('medium-sm') {
     top: 0.01%;
     right: 5%;
-    left: auto;
+    right: auto;
     transform: none;
     width: 250px;
     height: 250px;
@@ -86,42 +86,42 @@
   // Mobile
   @include until('medium-sm') {
     bottom: 7%;
-    left: 0%;
+    right: 0%;
     width: 250px;
     height: 250px;
   }
 
   @include small-screens {
     bottom: 7%;
-    left: 0%;
+    right: 0%;
     width: 215px;
     height: 215px;
   }
 
   @include from('small-sm') {
     bottom: 7%;
-    left: 0%;
+    right: 0%;
     width: 215px;
     height: 215px;
   }
 
   @include from('small-lg') {
     bottom: 7%;
-    left: 0%;
+    right: 0%;
     width: 250px;
     height: 250px;
   }
 
   @include from('small-xl') {
     bottom: 7%;
-    left: 0%;
+    right: 0%;
     width: 250px;
     height: 250px;
   }
 
   @include between('small-xl', 'medium-sm') {
     bottom: 7%;
-    left: 0%;
+    right: 0%;
     width: 250px;
     height: 250px;
   }
@@ -129,14 +129,14 @@
   // Desktop/tablette
   @include from('medium-sm') {
     bottom: 2%;
-    left: 40%;
+    right: 40%;
     width: 190px;
     height: 190px;
   }
 
   @include from('large-xs') {
     bottom: 2%;
-    left: 42%;
+    right: 42%;
     width: 190px;
     height: 190px;
   }
@@ -150,45 +150,27 @@
 .deco-globe {
   // Mobile
   @include until('medium-sm') {
-    bottom: 7%;
-    right: 0%;
-    width: 350px;
-    height: 350px;
+    display: none;
   }
 
   @include small-screens {
-    bottom: 7%;
-    right: 0%;
-    width: 300px;
-    height: 300px;
+    display: none;
   }
 
   @include from('small-sm') {
-    bottom: 7%;
-    right: 0%;
-    width: 300px;
-    height: 300px;
+    display: none;
   }
 
   @include from('small-lg') {
-    bottom: 3%;
-    right: 0%;
-    width: 350px;
-    height: 350px;
+    display: none;
   }
 
   @include from('small-xl') {
-    bottom: 7%;
-    right: 0%;
-    width: 350px;
-    height: 350px;
+    display: none;
   }
 
   @include between('small-xl', 'medium-sm') {
-    bottom: 7%;
-    right: 0%;
-    width: 350px;
-    height: 350px;
+    display: none;
   }
 
   // Desktop/tablette
