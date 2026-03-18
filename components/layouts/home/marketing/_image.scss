@@ -41,10 +41,9 @@
 
     z-index: 1;
 
-    height: 60vh;
+    height: 45vh;
     width: auto;
 
-    // ✅ Pas de blur, opacité normale
     opacity: 1;
     filter: none;
 
@@ -52,27 +51,27 @@
 
     // Petits écrans
     @include small-screens {
-      height: 52vh;
+      height: 40vh;
       top: 3%;
     }
 
     @include from('small-sm') {
-      height: 54vh;
+      height: 42vh;
       top: 3%;
     }
 
     @include from('small-lg') {
-      height: 56vh;
+      height: 43vh;
       top: 3%;
     }
 
     @include from('small-xl') {
-      height: 57vh;
+      height: 44vh;
       top: 2%;
     }
 
     @include between('small-xl', 'medium-sm') {
-      height: 58vh;
+      height: 45vh;
       top: 2%;
     }
 
