@@ -85,45 +85,45 @@
 .deco-ile {
   // Mobile
   @include until('medium-sm') {
-    bottom: 3%;
+    bottom: 7%;
     left: 5%;
-    width: 80px;
-    height: 80px;
+    width: 150px;
+    height: 150px;
   }
 
   @include small-screens {
-    bottom: 2%;
+    bottom: 7%;
     left: 5%;
-    width: 75px;
-    height: 75px;
+    width: 115px;
+    height: 115px;
   }
 
   @include from('small-sm') {
-    bottom: 2%;
+    bottom: 7%;
     left: 5%;
-    width: 78px;
-    height: 78px;
+    width: 115px;
+    height: 115px;
   }
 
   @include from('small-lg') {
-    bottom: 3%;
+    bottom: 7%;
     left: 5%;
-    width: 80px;
-    height: 80px;
+    width: 150px;
+    height: 150px;
   }
 
   @include from('small-xl') {
-    bottom: 3%;
+    bottom: 7%;
     left: 6%;
-    width: 82px;
-    height: 82px;
+    width: 150px;
+    height: 150px;
   }
 
   @include between('small-xl', 'medium-sm') {
-    bottom: 3%;
+    bottom: 7%;
     left: 6%;
-    width: 85px;
-    height: 85px;
+    width: 150px;
+    height: 150px;
   }
 
   // Desktop/tablette
@@ -150,24 +150,24 @@
 .deco-globe {
   // Mobile
   @include until('medium-sm') {
-    bottom: 3%;
+    bottom: 7%;
     right: 5%;
-    width: 80px;
-    height: 80px;
+    width: 200px;
+    height: 200px;
   }
 
   @include small-screens {
-    bottom: 2%;
+    bottom: 7%;
     right: 5%;
-    width: 75px;
-    height: 75px;
+    width: 150px;
+    height: 150px;
   }
 
   @include from('small-sm') {
-    bottom: 2%;
+    bottom: 7%;
     right: 5%;
-    width: 78px;
-    height: 78px;
+    width: 150px;
+    height: 150px;
   }
 
   @include from('small-lg') {
@@ -178,17 +178,17 @@
   }
 
   @include from('small-xl') {
-    bottom: 3%;
+    bottom: 7%;
     right: 6%;
-    width: 82px;
-    height: 82px;
+    width: 200px;
+    height: 200px;
   }
 
   @include between('small-xl', 'medium-sm') {
-    bottom: 3%;
+    bottom: 7%;
     right: 6%;
-    width: 85px;
-    height: 85px;
+    width: 200px;
+    height: 200px;
   }
 
   // Desktop/tablette
