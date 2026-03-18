@@ -18,13 +18,42 @@ const MarketingHome = () => {
       />
 
       <div className="text-container">
+        {/* Image croissance - en haut à droite des titres */}
+        <Image
+          src="/homepage/croissance.png"
+          alt="Graphique de croissance"
+          width={80}
+          height={80}
+          className="deco-image deco-croissance"
+          unoptimized
+        />
+
         <h2 className="main-title">GÉNÈRES PLUS DE PROFIT,</h2>
         <h2 className="main-title">PAIES MOINS DE CHARGES</h2>
 
-        {/* ✅ CORRECTION : Link au lieu de button pour SEO */}
         <Link href="/blog" className="profit-blog-link">
           En savoir plus
         </Link>
+
+        {/* Image île - sous les titres, à gauche du bouton, un peu plus bas */}
+        <Image
+          src="/homepage/ile.png"
+          alt="Île tropicale"
+          width={80}
+          height={80}
+          className="deco-image deco-ile"
+          unoptimized
+        />
+
+        {/* Image globe - extrême gauche, plus bas que l'île */}
+        <Image
+          src="/homepage/globe_voyage.png"
+          alt="Globe voyage"
+          width={80}
+          height={80}
+          className="deco-image deco-globe"
+          unoptimized
+        />
       </div>
     </div>
   );
