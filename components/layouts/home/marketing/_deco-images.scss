@@ -9,27 +9,62 @@
 // BASE COMMUNE - IMAGES DÉCORATIVES
 // =============================
 .deco-image {
-  // Cachées sur mobile
-  @include until('medium-sm') {
-    display: none;
-  }
-
-  // Desktop/tablette : position absolute par rapport à .main-content
-  @include from('medium-sm') {
-    position: absolute;
-    object-fit: contain;
-    z-index: 6;
-  }
+  position: absolute;
+  object-fit: contain;
+  z-index: 6;
 }
 
 // =============================
 // BLOC 3 - CROISSANCE
-// En haut à droite des titres
+// Haut à droite des titres sur desktop
+// Au-dessus des titres sur mobile, sur la tirelire
 // =============================
 .deco-croissance {
+  // Mobile
+  @include until('medium-sm') {
+    top: 28%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 80px;
+  }
+
+  @include small-screens {
+    top: 26%;
+    width: 75px;
+    height: 75px;
+  }
+
+  @include from('small-sm') {
+    top: 27%;
+    width: 78px;
+    height: 78px;
+  }
+
+  @include from('small-lg') {
+    top: 28%;
+    width: 80px;
+    height: 80px;
+  }
+
+  @include from('small-xl') {
+    top: 29%;
+    width: 82px;
+    height: 82px;
+  }
+
+  @include between('small-xl', 'medium-sm') {
+    top: 30%;
+    width: 85px;
+    height: 85px;
+  }
+
+  // Desktop/tablette
   @include from('medium-sm') {
     top: 0.01%;
     right: 5%;
+    left: auto;
+    transform: none;
     width: 250px;
     height: 250px;
   }
@@ -44,9 +79,54 @@
 
 // =============================
 // BLOC 4 - ÎLE
-// Bas gauche, sous le bouton
+// Bas gauche sur desktop
+// En bas à gauche du bouton sur mobile
 // =============================
 .deco-ile {
+  // Mobile
+  @include until('medium-sm') {
+    bottom: 3%;
+    left: 5%;
+    width: 80px;
+    height: 80px;
+  }
+
+  @include small-screens {
+    bottom: 2%;
+    left: 5%;
+    width: 75px;
+    height: 75px;
+  }
+
+  @include from('small-sm') {
+    bottom: 2%;
+    left: 5%;
+    width: 78px;
+    height: 78px;
+  }
+
+  @include from('small-lg') {
+    bottom: 3%;
+    left: 5%;
+    width: 80px;
+    height: 80px;
+  }
+
+  @include from('small-xl') {
+    bottom: 3%;
+    left: 6%;
+    width: 82px;
+    height: 82px;
+  }
+
+  @include between('small-xl', 'medium-sm') {
+    bottom: 3%;
+    left: 6%;
+    width: 85px;
+    height: 85px;
+  }
+
+  // Desktop/tablette
   @include from('medium-sm') {
     bottom: 2%;
     left: 40%;
@@ -64,9 +144,54 @@
 
 // =============================
 // BLOC 5 - GLOBE
-// Bas droite
+// Bas droite sur desktop
+// En bas à droite du bouton sur mobile
 // =============================
 .deco-globe {
+  // Mobile
+  @include until('medium-sm') {
+    bottom: 3%;
+    right: 5%;
+    width: 80px;
+    height: 80px;
+  }
+
+  @include small-screens {
+    bottom: 2%;
+    right: 5%;
+    width: 75px;
+    height: 75px;
+  }
+
+  @include from('small-sm') {
+    bottom: 2%;
+    right: 5%;
+    width: 78px;
+    height: 78px;
+  }
+
+  @include from('small-lg') {
+    bottom: 3%;
+    right: 5%;
+    width: 80px;
+    height: 80px;
+  }
+
+  @include from('small-xl') {
+    bottom: 3%;
+    right: 6%;
+    width: 82px;
+    height: 82px;
+  }
+
+  @include between('small-xl', 'medium-sm') {
+    bottom: 3%;
+    right: 6%;
+    width: 85px;
+    height: 85px;
+  }
+
+  // Desktop/tablette
   @include from('medium-sm') {
     bottom: 2%;
     right: 3%;
