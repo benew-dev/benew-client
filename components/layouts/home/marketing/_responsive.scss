@@ -13,17 +13,10 @@
     gap: 0;
   }
 
-  .profit-image {
-    @include until('medium-sm') {
-      height: 55vh;
-      opacity: 0.2;
-      filter: blur(1.2px);
-    }
-  }
-
   .text-container {
-    @include until('medium-sm') {
-      padding: 1.2rem 0.6rem;
+    @include until('large-xs') {
+      padding: 1rem 0.8rem;
+      width: 94%;
     }
   }
 
@@ -45,30 +38,34 @@
 // =============================
 @include mobile-landscape {
   .main-content {
-    @include until('medium-sm') {
+    @include until('large-xs') {
       flex-direction: row;
       gap: 1rem;
     }
   }
 
   .profit-image {
-    @include until('medium-sm') {
+    @include until('large-xs') {
       position: relative;
       transform: none;
       top: auto;
       left: auto;
       width: 40%;
       height: 80vh;
-      opacity: 0.8;
+      opacity: 1;
       filter: none;
       z-index: 5;
     }
   }
 
   .text-container {
-    @include until('medium-sm') {
-      width: 60%;
-      height: 100%;
+    @include until('large-xs') {
+      position: relative;
+      bottom: auto;
+      left: auto;
+      transform: none;
+      width: 55%;
+      height: auto;
       align-items: flex-start;
       text-align: left;
       padding: 1rem;
@@ -94,19 +91,14 @@
 // =============================
 @include tall-screen {
   .profit-image {
-    @include until('medium-sm') {
-      height: 75vh;
-      opacity: 0.35;
-    }
-
-    @include from('medium-sm') {
+    @include from('large-xs') {
       max-height: 95vh;
     }
   }
 
   .text-container {
-    @include until('medium-sm') {
-      padding: 2.5rem 1rem;
+    @include until('large-xs') {
+      bottom: 4%;
     }
   }
 }
@@ -116,19 +108,8 @@
 // =============================
 @include short-screen {
   .profit-image {
-    @include until('medium-sm') {
-      height: 50vh;
-      opacity: 0.2;
-    }
-
-    @include from('medium-sm') {
+    @include from('large-xs') {
       max-height: 75vh;
-    }
-  }
-
-  .text-container {
-    @include until('medium-sm') {
-      padding: 1rem 0.8rem;
     }
   }
 
@@ -136,7 +117,7 @@
     font-size: 1.8rem;
     margin: 0 0 0.5rem 0;
 
-    @include from('medium-sm') {
+    @include from('large-xs') {
       font-size: 2.2rem;
     }
   }
@@ -157,9 +138,9 @@
       transform: none;
     }
 
-    @include until('medium-sm') {
+    @include until('large-xs') {
       &:hover {
-        transform: translate(-50%, -50%); // Garde seulement le centrage
+        transform: translateX(-50%);
       }
     }
   }

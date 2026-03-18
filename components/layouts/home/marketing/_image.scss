@@ -6,9 +6,9 @@
 // ================================
 
 // =============================
-// IMAGE DESKTOP/TABLETTE - À GAUCHE
+// IMAGE DESKTOP - À GAUCHE
 // =============================
-@include from('medium-sm') {
+@include from('large-xs') {
   .profit-image {
     max-height: 90vh;
     height: auto;
@@ -22,65 +22,74 @@
     filter: none;
     transition: all 0.3s ease;
 
-    // Position normale dans le flux
     position: relative;
     z-index: 5;
 
-    @include from('large-xs') {
-      border-radius: 28px;
-    }
+    border-radius: 28px;
   }
 }
 
 // =============================
-// IMAGE MOBILE - EN ARRIÈRE-PLAN
+// IMAGE MOBILE ET TABLETTE - EN HAUT, SANS BLUR NI OPACITY
 // =============================
-@include until('medium-sm') {
+@include until('large-xs') {
   .profit-image {
     position: absolute;
-    top: 50%;
+    top: 3%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
 
-    z-index: 1; // En arrière-plan
+    z-index: 1;
 
-    height: 70vh;
+    height: 60vh;
     width: auto;
 
-    // ✅ EFFET BLUR ET OPACITÉ RÉDUITE
-    opacity: 0.3;
-    filter: blur(2px);
+    // ✅ Pas de blur, opacité normale
+    opacity: 1;
+    filter: none;
 
     transition: all 0.4s ease;
 
+    // Petits écrans
     @include small-screens {
-      height: 60vh;
-      opacity: 0.25;
-      filter: blur(1.5px);
+      height: 52vh;
+      top: 3%;
     }
 
     @include from('small-sm') {
-      height: 62vh;
-      opacity: 0.26;
-      filter: blur(1.6px);
+      height: 54vh;
+      top: 3%;
     }
 
     @include from('small-lg') {
-      height: 64vh;
-      opacity: 0.27;
-      filter: blur(1.7px);
+      height: 56vh;
+      top: 3%;
     }
 
     @include from('small-xl') {
-      height: 66vh;
-      opacity: 0.28;
-      filter: blur(1.8px);
+      height: 57vh;
+      top: 2%;
     }
 
     @include between('small-xl', 'medium-sm') {
-      height: 68vh;
-      opacity: 0.29;
-      filter: blur(1.9px);
+      height: 58vh;
+      top: 2%;
+    }
+
+    // Tablettes
+    @include from('medium-sm') {
+      height: 62vh;
+      top: 2%;
+    }
+
+    @include from('medium-lg') {
+      height: 64vh;
+      top: 2%;
+    }
+
+    @include from('medium-xxl') {
+      height: 66vh;
+      top: 2%;
     }
   }
 }
@@ -88,8 +97,6 @@
 // =============================
 // BREAKPOINT DE TRANSITION SPÉCIAL
 // =============================
-
-// ✅ Gestion spéciale pour tablettes en portrait (medium-lg à large-xs)
 @include between('medium-lg', 'large-xs') {
   .profit-image {
     max-height: 85vh;
