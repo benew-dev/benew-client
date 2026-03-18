@@ -287,15 +287,15 @@
   @include from('medium-sm') {
     top: 15%;
     right: 5%;
-    width: 90px;
-    height: 90px;
+    width: 150px;
+    height: 150px;
   }
 
   @include from('large-xs') {
     top: 10%;
     right: 3%;
-    width: 90px;
-    height: 90px;
+    width: 150px;
+    height: 150px;
   }
 }
 
@@ -304,15 +304,15 @@
   @include from('medium-sm') {
     bottom: 20%;
     left: 5%;
-    width: 110px;
-    height: 110px;
+    width: 150px;
+    height: 150px;
   }
 
   @include from('large-xs') {
     bottom: 18%;
     left: 3%;
-    width: 110px;
-    height: 110px;
+    width: 150px;
+    height: 150px;
   }
 }
 
@@ -321,15 +321,15 @@
   @include from('medium-sm') {
     bottom: 12%;
     right: 8%;
-    width: 110px;
-    height: 110px;
+    width: 150px;
+    height: 150px;
   }
 
   @include from('large-xs') {
     bottom: 10%;
     right: 5%;
-    width: 110px;
-    height: 110px;
+    width: 150px;
+    height: 150px;
   }
 }
 
