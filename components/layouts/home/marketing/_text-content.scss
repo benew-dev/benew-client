@@ -287,15 +287,15 @@
   @include from('medium-sm') {
     top: 2%;
     right: 5%;
-    width: 200px;
-    height: 200px;
+    width: 250px;
+    height: 250px;
   }
 
   @include from('large-xs') {
     top: 2%;
     right: 3%;
-    width: 250px;
-    height: 250px;
+    width: 300px;
+    height: 300px;
   }
 }
 
@@ -304,15 +304,15 @@
   @include from('medium-sm') {
     bottom: 2%;
     left: 5%;
-    width: 150px;
-    height: 150px;
+    width: 250px;
+    height: 250px;
   }
 
   @include from('large-xs') {
     bottom: 2%;
     left: 3%;
-    width: 150px;
-    height: 150px;
+    width: 300px;
+    height: 300px;
   }
 }
 
