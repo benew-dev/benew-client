@@ -30,65 +30,88 @@
 }
 
 // =============================
-// IMAGE MOBILE ET TABLETTE - EN HAUT, SANS BLUR NI OPACITY
+// IMAGE TABLETTE - EN HAUT, SANS BLUR NI OPACITY
 // =============================
-@include until('large-xs') {
+@include between('medium-sm', 'large-xs') {
   .profit-image {
     position: absolute;
-    top: 3%;
+    top: 2%;
     left: 50%;
     transform: translateX(-50%);
 
     z-index: 1;
-
-    height: 55vh;
-    width: auto;
 
     opacity: 1;
     filter: none;
 
     transition: all 0.4s ease;
 
-    // Petits écrans
-    @include small-screens {
-      height: 52vh;
-      top: 3%;
-    }
-
-    @include from('small-sm') {
-      height: 53vh;
-      top: 3%;
-    }
-
-    @include from('small-lg') {
-      height: 54vh;
-      top: 3%;
-    }
-
-    @include from('small-xl') {
-      height: 55vh;
-      top: 2%;
-    }
-
-    @include between('small-xl', 'medium-sm') {
-      height: 56vh;
-      top: 2%;
-    }
-
-    // Tablettes - inchangé
-    @include from('medium-sm') {
-      height: 62vh;
-      top: 2%;
-    }
+    height: 62vh;
 
     @include from('medium-lg') {
       height: 64vh;
-      top: 2%;
     }
 
     @include from('medium-xxl') {
       height: 66vh;
-      top: 2%;
+    }
+  }
+}
+
+// =============================
+// IMAGE MOBILE - EN BAS, AVEC BLUR ET OPACITY
+// =============================
+@include until('medium-sm') {
+  .profit-image {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    z-index: 1;
+
+    height: 70vh;
+    width: auto;
+
+    // ✅ Blur et opacity remis
+    opacity: 0.3;
+    filter: blur(2px);
+
+    transition: all 0.4s ease;
+
+    @include small-screens {
+      height: 65vh;
+      bottom: 4%;
+      opacity: 0.28;
+      filter: blur(1.8px);
+    }
+
+    @include from('small-sm') {
+      height: 66vh;
+      bottom: 4%;
+      opacity: 0.29;
+      filter: blur(1.9px);
+    }
+
+    @include from('small-lg') {
+      height: 68vh;
+      bottom: 5%;
+      opacity: 0.3;
+      filter: blur(2px);
+    }
+
+    @include from('small-xl') {
+      height: 69vh;
+      bottom: 5%;
+      opacity: 0.3;
+      filter: blur(2px);
+    }
+
+    @include between('small-xl', 'medium-sm') {
+      height: 70vh;
+      bottom: 5%;
+      opacity: 0.3;
+      filter: blur(2px);
     }
   }
 }
