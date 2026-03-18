@@ -26,9 +26,49 @@
 }
 
 // =============================
-// CONTENEUR TEXTE MOBILE ET TABLETTE - EN BAS, SANS BACKGROUND, AVEC BACKDROP-FILTER
+// CONTENEUR TEXTE TABLETTE - EN BAS AVEC BACKGROUND
 // =============================
-@include until('large-xs') {
+@include between('medium-sm', 'large-xs') {
+  .text-container {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    width: 85%;
+    padding: 1.75rem 1.5rem;
+    margin: 0;
+
+    background: rgba(220, 220, 230, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    @include from('medium-lg') {
+      width: 80%;
+      padding: 1.8rem 1.6rem;
+    }
+
+    @include from('medium-xxl') {
+      width: 75%;
+      padding: 2rem 1.75rem;
+      border-radius: 24px;
+    }
+  }
+}
+
+// =============================
+// CONTENEUR TEXTE MOBILE - EN BAS, SANS BACKGROUND, AVEC BACKDROP-FILTER
+// =============================
+@include until('medium-sm') {
   .text-container {
     position: absolute;
     bottom: 3%;
@@ -46,14 +86,13 @@
     padding: 1.25rem 1rem;
     margin: 0;
 
-    // ✅ Pas de background ni border, backdrop-filter seulement
+    // ✅ Pas de background ni border, backdrop-filter conservé
     background: transparent;
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     border-radius: 0;
     border: none;
 
-    // Petits écrans
     @include small-screens {
       bottom: 2%;
       width: 94%;
@@ -78,25 +117,6 @@
     @include between('small-xl', 'medium-sm') {
       bottom: 3%;
       padding: 1.2rem 1rem;
-    }
-
-    // Tablettes - même comportement que mobile
-    @include from('medium-sm') {
-      bottom: 3%;
-      width: 90%;
-      padding: 1.25rem 1rem;
-    }
-
-    @include from('medium-lg') {
-      bottom: 3%;
-      width: 88%;
-      padding: 1.3rem 1.1rem;
-    }
-
-    @include from('medium-xxl') {
-      bottom: 3%;
-      width: 85%;
-      padding: 1.35rem 1.2rem;
     }
   }
 }
