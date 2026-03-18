@@ -285,14 +285,14 @@
 // Croissance - haut à droite, au niveau des titres
 .deco-croissance {
   @include from('medium-sm') {
-    top: 15%;
+    top: 2%;
     right: 5%;
     width: 150px;
     height: 150px;
   }
 
   @include from('large-xs') {
-    top: 10%;
+    top: 2%;
     right: 3%;
     width: 150px;
     height: 150px;
@@ -302,14 +302,14 @@
 // Île - bas gauche, sous le bouton
 .deco-ile {
   @include from('medium-sm') {
-    bottom: 20%;
+    bottom: 2%;
     left: 5%;
     width: 150px;
     height: 150px;
   }
 
   @include from('large-xs') {
-    bottom: 18%;
+    bottom: 2%;
     left: 3%;
     width: 150px;
     height: 150px;
@@ -319,15 +319,15 @@
 // Globe - bas droite, plus bas et à droite
 .deco-globe {
   @include from('medium-sm') {
-    bottom: 12%;
-    right: 8%;
+    bottom: 2%;
+    right: 3%;
     width: 150px;
     height: 150px;
   }
 
   @include from('large-xs') {
-    bottom: 10%;
-    right: 5%;
+    bottom: 2%;
+    right: 3%;
     width: 150px;
     height: 150px;
   }
