@@ -29,8 +29,8 @@ const MarketingHome = () => {
         <Image
           src="/homepage/croissance.png"
           alt="Graphique de croissance"
-          width={150}
-          height={150}
+          width={190}
+          height={190}
           className="deco-image deco-croissance"
           unoptimized
         />
@@ -39,8 +39,8 @@ const MarketingHome = () => {
         <Image
           src="/homepage/ile.png"
           alt="Île tropicale"
-          width={150}
-          height={150}
+          width={190}
+          height={190}
           className="deco-image deco-ile"
           unoptimized
         />
@@ -49,8 +49,8 @@ const MarketingHome = () => {
         <Image
           src="/homepage/globe_voyage.png"
           alt="Globe voyage"
-          width={150}
-          height={150}
+          width={190}
+          height={190}
           className="deco-image deco-globe"
           unoptimized
         />
