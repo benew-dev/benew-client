@@ -1,0 +1,83 @@
+@use 'sass:color';
+@use '../../../../app/styles/abstracts' as *;
+
+// ================================
+// 📄 _deco-images.scss
+// ================================
+
+// =============================
+// BASE COMMUNE - IMAGES DÉCORATIVES
+// =============================
+.deco-image {
+  // Cachées sur mobile
+  @include until('medium-sm') {
+    display: none;
+  }
+
+  // Desktop/tablette : position absolute par rapport à .main-content
+  @include from('medium-sm') {
+    position: absolute;
+    object-fit: contain;
+    z-index: 6;
+  }
+}
+
+// =============================
+// BLOC 3 - CROISSANCE
+// En haut à droite des titres
+// =============================
+.deco-croissance {
+  @include from('medium-sm') {
+    top: 2%;
+    right: 5%;
+    width: 190px;
+    height: 190px;
+  }
+
+  @include from('large-xs') {
+    top: 2%;
+    right: 3%;
+    width: 190px;
+    height: 190px;
+  }
+}
+
+// =============================
+// BLOC 4 - ÎLE
+// Bas gauche, sous le bouton
+// =============================
+.deco-ile {
+  @include from('medium-sm') {
+    bottom: 2%;
+    left: 40%;
+    width: 190px;
+    height: 190px;
+  }
+
+  @include from('large-xs') {
+    bottom: 2%;
+    left: 42%;
+    width: 190px;
+    height: 190px;
+  }
+}
+
+// =============================
+// BLOC 5 - GLOBE
+// Bas droite
+// =============================
+.deco-globe {
+  @include from('medium-sm') {
+    bottom: 2%;
+    right: 3%;
+    width: 190px;
+    height: 190px;
+  }
+
+  @include from('large-xs') {
+    bottom: 2%;
+    right: 3%;
+    width: 190px;
+    height: 190px;
+  }
+}

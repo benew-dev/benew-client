@@ -7,6 +7,7 @@ import Link from 'next/link';
 const MarketingHome = () => {
   return (
     <div className="main-content">
+      {/* BLOC 1 - Tirelire */}
       <Image
         src="/tirelire.png"
         alt="Tirelire symbolisant l'économie et les profits"
@@ -17,6 +18,7 @@ const MarketingHome = () => {
         unoptimized
       />
 
+      {/* BLOC 2 - Titres + Bouton */}
       <div className="text-container">
         <h2 className="main-title">GÉNÈRES PLUS DE PROFIT,</h2>
         <h2 className="main-title">PAIES MOINS DE CHARGES</h2>
@@ -24,37 +26,37 @@ const MarketingHome = () => {
         <Link href="/blog" className="profit-blog-link">
           En savoir plus
         </Link>
-
-        {/* Croissance - en haut à droite des titres */}
-        <Image
-          src="/homepage/croissance.png"
-          alt="Graphique de croissance"
-          width={190}
-          height={190}
-          className="deco-image deco-croissance"
-          unoptimized
-        />
-
-        {/* Île - en bas à gauche sous le bouton */}
-        <Image
-          src="/homepage/ile.png"
-          alt="Île tropicale"
-          width={190}
-          height={190}
-          className="deco-image deco-ile"
-          unoptimized
-        />
-
-        {/* Globe - en bas à droite */}
-        <Image
-          src="/homepage/globe_voyage.png"
-          alt="Globe voyage"
-          width={190}
-          height={190}
-          className="deco-image deco-globe"
-          unoptimized
-        />
       </div>
+
+      {/* BLOC 3 - Image croissance */}
+      <Image
+        src="/homepage/croissance.png"
+        alt="Graphique de croissance"
+        width={190}
+        height={190}
+        className="deco-image deco-croissance"
+        unoptimized
+      />
+
+      {/* BLOC 4 - Image île */}
+      <Image
+        src="/homepage/ile.png"
+        alt="Île tropicale"
+        width={190}
+        height={190}
+        className="deco-image deco-ile"
+        unoptimized
+      />
+
+      {/* BLOC 5 - Image globe */}
+      <Image
+        src="/homepage/globe_voyage.png"
+        alt="Globe voyage"
+        width={190}
+        height={190}
+        className="deco-image deco-globe"
+        unoptimized
+      />
     </div>
   );
 };
