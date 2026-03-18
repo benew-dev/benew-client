@@ -47,6 +47,7 @@
     transition: all 0.4s ease;
 
     height: 62vh;
+    width: auto;
 
     @include from('medium-lg') {
       height: 64vh;
