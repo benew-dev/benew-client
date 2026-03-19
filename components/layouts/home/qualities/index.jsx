@@ -77,7 +77,7 @@ const QualitiesHome = () => {
             playsInline
             // Contrôles natifs sur mobile/tablette, aucun sur desktop
             controls={isMobile}
-            controlsList="noplaybackrate nofullscreen nodownload"
+            controlsList="noplaybackrate nodownload"
             onEnded={handleEnded}
             onPlay={handleNativePlay}
             onPause={handleNativePause}
