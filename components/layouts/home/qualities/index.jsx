@@ -6,9 +6,7 @@ import dynamic from 'next/dynamic';
 import { MdPlayArrow, MdPause } from 'react-icons/md';
 
 // ✅ Import dynamique de ReactPlayer pour éviter le conflit SSR/hydratation
-const ReactPlayer = dynamic(() => import('react-player/file'), {
-  ssr: false,
-});
+const ReactPlayer = dynamic(() => import('react-player'), { ssr: false });
 
 const QualitiesHome = () => {
   const [playing, setPlaying] = useState(false);
