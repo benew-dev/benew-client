@@ -5,13 +5,12 @@
 @use '../../../app/styles/abstracts' as *;
 
 .services-section {
-  // Structure principale - Grid Layout pour contrôle précis
+  // Structure principale - Grid Layout adapté pour titre + vidéo
   display: grid;
-  grid-template-rows: auto 1fr auto; // titre / cartes(flex) / dots
+  grid-template-rows: auto 1fr; // titre / vidéo
   grid-template-areas:
     'title'
-    'cards'
-    'dots';
+    'cards';
 
   width: 100%;
   height: 100vh;

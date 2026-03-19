@@ -1,0 +1,301 @@
+@use 'sass:color';
+@use '../../../../app/styles/abstracts' as *;
+
+// ================================
+// 📄 _video.scss
+// ================================
+
+// =============================
+// BLOC VIDÉO
+// =============================
+.services-video-block {
+  grid-area: cards;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 0 1rem;
+  box-sizing: border-box;
+
+  @include small-screens {
+    padding: 0 0.5rem;
+  }
+
+  @include from('medium-sm') {
+    padding: 0 1.5rem;
+  }
+
+  @include from('large-xs') {
+    padding: 0 2rem;
+  }
+}
+
+// =============================
+// WRAPPER VIDÉO - CONTENEUR RELATIF
+// =============================
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+
+  // Ratio 16/9
+  aspect-ratio: 16 / 9;
+
+  border-radius: 16px;
+  overflow: hidden;
+
+  // Glassmorphism border
+  border: 1px solid rgba($color-pink, 0.25);
+  box-shadow:
+    0 20px 60px rgba($color-dark, 0.5),
+    0 0 40px rgba($color-pink, 0.1),
+    inset 0 1px 0 rgba($color-light, 0.05);
+
+  background: rgba($color-dark, 0.4);
+
+  @include small-screens {
+    border-radius: 12px;
+    max-width: 100%;
+  }
+
+  @include from('medium-sm') {
+    border-radius: 16px;
+    max-width: 720px;
+  }
+
+  @include from('medium-lg') {
+    border-radius: 18px;
+    max-width: 800px;
+  }
+
+  @include from('large-xs') {
+    border-radius: 20px;
+    max-width: 900px;
+  }
+
+  @include from('large-lg') {
+    border-radius: 22px;
+    max-width: 1000px;
+  }
+
+  @include from('large-xxl') {
+    border-radius: 24px;
+    max-width: 1100px;
+  }
+
+  // ReactPlayer prend tout l'espace du wrapper
+  > div {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+  }
+}
+
+// =============================
+// OVERLAY CLIQUABLE
+// =============================
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // Fond sombre uniquement quand en pause
+  background: transparent;
+  transition: background 0.3s ease;
+
+  &--paused {
+    background: rgba($color-dark, 0.3);
+  }
+
+  &--playing {
+    background: transparent;
+
+    // Cacher le bouton quand on joue, le montrer au hover
+    .video-play-btn {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+
+    &:hover .video-play-btn {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+// =============================
+// BOUTON PLAY / PAUSE
+// =============================
+.video-play-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba($color-dark, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  border-radius: 50%;
+  border: 2px solid rgba($color-pink, 0.5);
+  cursor: pointer;
+
+  color: $color-light;
+
+  box-shadow:
+    0 8px 25px rgba($color-dark, 0.5),
+    0 0 20px rgba($color-pink, 0.2);
+
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+
+  // Taille du bouton
+  width: 56px;
+  height: 56px;
+
+  @include small-screens {
+    width: 44px;
+    height: 44px;
+  }
+
+  @include from('small-sm') {
+    width: 46px;
+    height: 46px;
+  }
+
+  @include from('small-lg') {
+    width: 48px;
+    height: 48px;
+  }
+
+  @include from('small-xl') {
+    width: 50px;
+    height: 50px;
+  }
+
+  @include between('small-xl', 'medium-sm') {
+    width: 52px;
+    height: 52px;
+  }
+
+  @include from('medium-sm') {
+    width: 60px;
+    height: 60px;
+  }
+
+  @include from('medium-lg') {
+    width: 64px;
+    height: 64px;
+  }
+
+  @include from('medium-xxl') {
+    width: 68px;
+    height: 68px;
+  }
+
+  @include from('large-xs') {
+    width: 72px;
+    height: 72px;
+    border-width: 2px;
+  }
+
+  @include from('large-lg') {
+    width: 80px;
+    height: 80px;
+  }
+
+  &:hover {
+    background: rgba($color-pink, 0.3);
+    border-color: rgba($color-pink, 0.8);
+    box-shadow:
+      0 10px 30px rgba($color-dark, 0.6),
+      0 0 30px rgba($color-pink, 0.35);
+    transform: scale(1.08);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: rgba($color-pink, 0.9);
+    box-shadow:
+      0 10px 30px rgba($color-dark, 0.6),
+      0 0 0 3px rgba($color-pink, 0.25);
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+
+  // Icône
+  &__icon {
+    font-size: 1.75rem;
+    color: $color-light;
+    filter: drop-shadow(0 2px 4px rgba($color-dark, 0.5));
+
+    @include small-screens {
+      font-size: 1.4rem;
+    }
+
+    @include from('small-sm') {
+      font-size: 1.45rem;
+    }
+
+    @include from('small-lg') {
+      font-size: 1.5rem;
+    }
+
+    @include from('medium-sm') {
+      font-size: 1.9rem;
+    }
+
+    @include from('medium-lg') {
+      font-size: 2rem;
+    }
+
+    @include from('medium-xxl') {
+      font-size: 2.1rem;
+    }
+
+    @include from('large-xs') {
+      font-size: 2.2rem;
+    }
+
+    @include from('large-lg') {
+      font-size: 2.5rem;
+    }
+  }
+
+  // Bouton pas encore prêt - légèrement atténué
+  &:not(.video-play-btn--ready) {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  &--ready {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
