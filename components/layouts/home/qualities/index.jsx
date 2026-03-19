@@ -1,14 +1,25 @@
 'use client';
 
 import './index.scss';
-import { useState, useRef, useCallback } from 'react';
-import ReactPlayer from 'react-player';
+import { useState, useRef, useCallback, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { MdPlayArrow, MdPause } from 'react-icons/md';
+
+// ✅ Import dynamique de ReactPlayer pour éviter le conflit SSR/hydratation
+const ReactPlayer = dynamic(() => import('react-player/file'), {
+  ssr: false,
+});
 
 const QualitiesHome = () => {
   const [playing, setPlaying] = useState(false);
   const [ready, setReady] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const playerRef = useRef(null);
+
+  // ✅ S'assurer que le composant est monté côté client avant tout
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handlePlayPause = useCallback(() => {
     setPlaying((prev) => !prev);
@@ -20,6 +31,17 @@ const QualitiesHome = () => {
 
   const handleEnded = useCallback(() => {
     setPlaying(false);
+  }, []);
+
+  // ✅ Gérer l'erreur AbortError silencieusement
+  const handleError = useCallback((error) => {
+    if (
+      error?.name === 'AbortError' ||
+      error?.message?.includes('AbortError')
+    ) {
+      return; // Ignorer silencieusement
+    }
+    console.error('[VideoPlayer] Erreur:', error);
   }, []);
 
   return (
@@ -34,26 +56,31 @@ const QualitiesHome = () => {
       {/* BLOC 2 : VIDÉO */}
       <div className="services-video-block">
         <div className="video-wrapper">
-          {/* Player */}
-          <ReactPlayer
-            ref={playerRef}
-            url="/video/personnalisable.mp4"
-            playing={playing}
-            controls={false}
-            width="100%"
-            height="100%"
-            onReady={handleReady}
-            onEnded={handleEnded}
-            playsinline
-            config={{
-              file: {
-                attributes: {
-                  preload: 'metadata',
-                  playsInline: true,
+          {/* Player - rendu uniquement côté client */}
+          {mounted && (
+            <ReactPlayer
+              ref={playerRef}
+              url="/video/personnalisable.mp4"
+              playing={playing}
+              controls={false}
+              width="100%"
+              height="100%"
+              onReady={handleReady}
+              onEnded={handleEnded}
+              onError={handleError}
+              playsinline
+              muted={false}
+              config={{
+                file: {
+                  attributes: {
+                    preload: 'metadata',
+                    playsInline: true,
+                    controlsList: 'nodownload',
+                  },
                 },
-              },
-            }}
-          />
+              }}
+            />
+          )}
 
           {/* Overlay bouton play/pause */}
           <div
