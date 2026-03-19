@@ -14,7 +14,7 @@ const promoTiers = [
     label: 'mois offerts',
     description: "Sans frais d'abonnement",
     color: 'orange',
-    badge: 'Meilleure offre',
+    badge: 'Offre de lancement',
   },
   {
     id: 2,
@@ -24,7 +24,7 @@ const promoTiers = [
     label: 'mois offerts',
     description: "Sans frais d'abonnement",
     color: 'pink',
-    badge: 'Offre populaire',
+    badge: 'Offre de lancement',
   },
   {
     id: 3,
