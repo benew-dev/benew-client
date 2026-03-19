@@ -7,29 +7,49 @@ import { MdPlayArrow, MdPause } from 'react-icons/md';
 const QualitiesHome = () => {
   const [playing, setPlaying] = useState(false);
   const videoRef = useRef(null);
+  // ✅ Guard pour éviter les appels play/pause simultanés
+  const isTransitioning = useRef(false);
 
   const handlePlayPause = useCallback(async () => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video || isTransitioning.current) return;
 
-    if (playing) {
-      video.pause();
-      setPlaying(false);
-    } else {
-      try {
+    isTransitioning.current = true;
+
+    try {
+      if (playing) {
+        video.pause();
+        setPlaying(false);
+      } else {
+        // ✅ S'assurer que la vidéo est bien en pause avant de lancer play()
+        if (!video.paused) {
+          video.pause();
+        }
         await video.play();
         setPlaying(true);
-      } catch (error) {
-        // AbortError ou NotAllowedError - ignorer silencieusement
-        if (error.name !== 'AbortError') {
-          console.error('[VideoPlayer] Erreur play:', error);
-        }
       }
+    } catch (error) {
+      if (error.name === 'AbortError') {
+        // Conflit play/pause - réinitialiser l'état selon la réalité
+        setPlaying(!video.paused);
+      } else if (error.name === 'NotAllowedError') {
+        // Politique autoplay du navigateur - ignorer
+        setPlaying(false);
+      } else {
+        console.error('[VideoPlayer] Erreur:', error);
+        setPlaying(false);
+      }
+    } finally {
+      // ✅ Libérer le guard après un délai court
+      setTimeout(() => {
+        isTransitioning.current = false;
+      }, 300);
     }
   }, [playing]);
 
   const handleEnded = useCallback(() => {
     setPlaying(false);
+    isTransitioning.current = false;
   }, []);
 
   return (
@@ -44,11 +64,11 @@ const QualitiesHome = () => {
       {/* BLOC 2 : VIDÉO */}
       <div className="services-video-block">
         <div className="video-wrapper">
-          {/* Vidéo native HTML - pas de conflit SSR */}
+          {/* Vidéo native HTML */}
           <video
             ref={videoRef}
             src="/video/personnalisable.mp4"
-            preload="auto"
+            preload="none"
             playsInline
             onEnded={handleEnded}
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
