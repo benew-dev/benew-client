@@ -5,16 +5,19 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { MdPlayArrow, MdPause } from 'react-icons/md';
 
-// ✅ Import dynamique de ReactPlayer pour éviter le conflit SSR/hydratation
-const ReactPlayer = dynamic(() => import('react-player'), { ssr: false });
+// ✅ Import dynamique - ssr: false pour éviter le conflit hydratation
+const ReactPlayer = dynamic(() => import('react-player'), {
+  ssr: false,
+});
 
 const QualitiesHome = () => {
   const [playing, setPlaying] = useState(false);
-  const [ready, setReady] = useState(false);
   const [mounted, setMounted] = useState(false);
+  // ✅ pendingPlay : l'utilisateur a cliqué avant que le player soit prêt
+  const [pendingPlay, setPendingPlay] = useState(false);
   const playerRef = useRef(null);
 
-  // ✅ S'assurer que le composant est monté côté client avant tout
+  // ✅ Monter uniquement côté client
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -23,24 +26,48 @@ const QualitiesHome = () => {
     setPlaying((prev) => !prev);
   }, []);
 
+  // ✅ Quand le player est prêt, lancer la lecture si l'utilisateur avait cliqué
   const handleReady = useCallback(() => {
-    setReady(true);
-  }, []);
+    if (pendingPlay) {
+      setPlaying(true);
+      setPendingPlay(false);
+    }
+  }, [pendingPlay]);
 
   const handleEnded = useCallback(() => {
     setPlaying(false);
   }, []);
 
-  // ✅ Gérer l'erreur AbortError silencieusement
   const handleError = useCallback((error) => {
     if (
       error?.name === 'AbortError' ||
       error?.message?.includes('AbortError')
     ) {
-      return; // Ignorer silencieusement
+      return;
     }
     console.error('[VideoPlayer] Erreur:', error);
   }, []);
+
+  // ✅ Gestion du clic : si le player n'est pas encore prêt, mémoriser l'intention
+  const handleButtonClick = useCallback(
+    (e) => {
+      e.stopPropagation();
+      if (!mounted) return;
+      setPlaying((prev) => {
+        if (!prev) setPendingPlay(true);
+        return !prev;
+      });
+    },
+    [mounted],
+  );
+
+  const handleOverlayClick = useCallback(() => {
+    if (!mounted) return;
+    setPlaying((prev) => {
+      if (!prev) setPendingPlay(true);
+      return !prev;
+    });
+  }, [mounted]);
 
   return (
     <>
@@ -54,7 +81,7 @@ const QualitiesHome = () => {
       {/* BLOC 2 : VIDÉO */}
       <div className="services-video-block">
         <div className="video-wrapper">
-          {/* Player - rendu uniquement côté client */}
+          {/* Player - rendu uniquement côté client après montage */}
           {mounted && (
             <ReactPlayer
               ref={playerRef}
@@ -71,7 +98,7 @@ const QualitiesHome = () => {
               config={{
                 file: {
                   attributes: {
-                    preload: 'metadata',
+                    preload: 'auto',
                     playsInline: true,
                     controlsList: 'nodownload',
                   },
@@ -83,23 +110,21 @@ const QualitiesHome = () => {
           {/* Overlay bouton play/pause */}
           <div
             className={`video-overlay ${playing ? 'video-overlay--playing' : 'video-overlay--paused'}`}
-            onClick={handlePlayPause}
+            onClick={handleOverlayClick}
             role="button"
             tabIndex={0}
             aria-label={playing ? 'Mettre en pause' : 'Lancer la vidéo'}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                handlePlayPause();
+                handleOverlayClick();
               }
             }}
           >
+            {/* ✅ Bouton toujours actif - pas de dépendance à ready */}
             <button
-              className={`video-play-btn ${playing ? 'video-play-btn--playing' : ''} ${ready ? 'video-play-btn--ready' : ''}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                handlePlayPause();
-              }}
+              className={`video-play-btn ${playing ? 'video-play-btn--playing' : ''} video-play-btn--ready`}
+              onClick={handleButtonClick}
               aria-label={playing ? 'Pause' : 'Play'}
               type="button"
             >
