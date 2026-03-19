@@ -67,7 +67,7 @@ const QualitiesHome = () => {
           {/* Vidéo native HTML */}
           <video
             ref={videoRef}
-            src="/video/personnalisable.mp4"
+            src="/video/Personnalisable.mp4"
             preload="none"
             playsInline
             onEnded={handleEnded}
