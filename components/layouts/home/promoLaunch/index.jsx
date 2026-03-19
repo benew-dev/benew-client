@@ -9,7 +9,7 @@ const promoTiers = [
   {
     id: 1,
     icon: MdStar,
-    rank: '10 premiers',
+    rank: '10 premiers clients',
     months: 3,
     label: 'mois offerts',
     description: "Sans frais d'abonnement",
@@ -19,7 +19,7 @@ const promoTiers = [
   {
     id: 2,
     icon: MdRocketLaunch,
-    rank: '10 suivants',
+    rank: '10 clients suivants',
     months: 2,
     label: 'mois offerts',
     description: "Sans frais d'abonnement",
@@ -29,7 +29,7 @@ const promoTiers = [
   {
     id: 3,
     icon: MdStorefront,
-    rank: '10 derniers',
+    rank: '10 derniers clients',
     months: 1,
     label: 'mois offert',
     description: "Sans frais d'abonnement",
