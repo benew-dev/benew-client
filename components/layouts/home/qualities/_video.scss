@@ -32,20 +32,18 @@
 }
 
 // =============================
-// WRAPPER VIDÉO - CONTENEUR RELATIF
+// WRAPPER VIDÉO
 // =============================
 .video-wrapper {
   position: relative;
   width: 100%;
   max-width: 900px;
 
-  // Ratio 16/9
   aspect-ratio: 16 / 9;
 
   border-radius: 16px;
   overflow: hidden;
 
-  // Glassmorphism border
   border: 1px solid rgba($color-pink, 0.25);
   box-shadow:
     0 20px 60px rgba($color-dark, 0.5),
@@ -84,7 +82,7 @@
     max-width: 1100px;
   }
 
-  // ReactPlayer prend tout l'espace du wrapper
+  // ReactPlayer / div wrapper
   > div {
     position: absolute !important;
     top: 0;
@@ -98,6 +96,16 @@
     height: 100%;
     object-fit: cover;
     border-radius: inherit;
+  }
+
+  // ✅ VERSION MOBILE - laisser de la place pour les contrôles natifs en bas
+  &--mobile {
+    // Les contrôles natifs prennent ~40-50px en bas
+    // On ne touche pas à l'aspect-ratio, les contrôles se superposent sur la vidéo
+    video {
+      // Sur mobile avec controls natifs, laisser l'espace en bas
+      object-position: center top;
+    }
   }
 }
 
@@ -117,7 +125,6 @@
   align-items: center;
   justify-content: center;
 
-  // Fond sombre uniquement quand en pause
   background: transparent;
   transition: background 0.3s ease;
 
@@ -128,7 +135,6 @@
   &--playing {
     background: transparent;
 
-    // Cacher le bouton quand on joue, le montrer au hover
     .video-play-btn {
       opacity: 0;
       transform: scale(0.8);
@@ -137,6 +143,37 @@
     &:hover .video-play-btn {
       opacity: 1;
       transform: scale(1);
+    }
+  }
+
+  // ✅ VERSION MOBILE - overlay ne bloque pas les contrôles natifs en bas
+  // On réduit la hauteur de l'overlay pour laisser les contrôles accessibles
+  &--mobile {
+    height: calc(100% - 48px); // Laisser les contrôles natifs en bas
+    cursor: default;
+    pointer-events: none; // L'overlay ne bloque plus les clics sur mobile
+
+    // Le bouton personnalisé garde ses pointer-events
+    .video-play-btn {
+      pointer-events: auto;
+    }
+
+    // Sur mobile en pause, pas d'overlay sombre qui masque
+    &.video-overlay--paused {
+      background: transparent;
+    }
+
+    // Sur mobile, le bouton reste toujours visible (pas de hide au hover)
+    &.video-overlay--playing {
+      .video-play-btn {
+        opacity: 0.85;
+        transform: scale(1);
+      }
+
+      &:hover .video-play-btn {
+        opacity: 0.85;
+        transform: scale(1);
+      }
     }
   }
 
@@ -173,7 +210,6 @@
     background 0.3s ease,
     box-shadow 0.3s ease;
 
-  // Taille du bouton
   width: 56px;
   height: 56px;
 
@@ -249,7 +285,65 @@
     transform: scale(0.96);
   }
 
-  // Icône
+  // ✅ VERSION MOBILE - bouton positionné en haut à gauche de la vidéo
+  // pour ne pas interférer avec les contrôles natifs en bas
+  &--mobile {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    width: 40px;
+    height: 40px;
+
+    @include from('small-sm') {
+      top: 0.8rem;
+      left: 0.8rem;
+      width: 42px;
+      height: 42px;
+    }
+
+    @include from('small-lg') {
+      top: 0.85rem;
+      left: 0.85rem;
+      width: 44px;
+      height: 44px;
+    }
+
+    @include from('small-xl') {
+      top: 0.9rem;
+      left: 0.9rem;
+      width: 46px;
+      height: 46px;
+    }
+
+    @include between('small-xl', 'medium-sm') {
+      top: 1rem;
+      left: 1rem;
+      width: 48px;
+      height: 48px;
+    }
+
+    @include from('medium-sm') {
+      top: 1rem;
+      left: 1rem;
+      width: 50px;
+      height: 50px;
+    }
+
+    @include from('medium-lg') {
+      top: 1.1rem;
+      left: 1.1rem;
+      width: 52px;
+      height: 52px;
+    }
+
+    @include from('medium-xxl') {
+      top: 1.2rem;
+      left: 1.2rem;
+      width: 54px;
+      height: 54px;
+    }
+  }
+
   &__icon {
     font-size: 1.75rem;
     color: $color-light;
@@ -288,7 +382,6 @@
     }
   }
 
-  // Bouton pas encore prêt - légèrement atténué
   &:not(.video-play-btn--ready) {
     opacity: 0.5;
     pointer-events: none;

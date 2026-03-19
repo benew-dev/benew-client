@@ -1,14 +1,24 @@
 'use client';
 
 import './index.scss';
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { MdPlayArrow, MdPause } from 'react-icons/md';
 
 const QualitiesHome = () => {
   const [playing, setPlaying] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const videoRef = useRef(null);
-  // ✅ Guard pour éviter les appels play/pause simultanés
   const isTransitioning = useRef(false);
+
+  // Détecter mobile/tablette
+  useEffect(() => {
+    const checkDevice = () => {
+      setIsMobile(window.innerWidth < 1200);
+    };
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
+    return () => window.removeEventListener('resize', checkDevice);
+  }, []);
 
   const handlePlayPause = useCallback(async () => {
     const video = videoRef.current;
@@ -21,7 +31,6 @@ const QualitiesHome = () => {
         video.pause();
         setPlaying(false);
       } else {
-        // ✅ S'assurer que la vidéo est bien en pause avant de lancer play()
         if (!video.paused) {
           video.pause();
         }
@@ -30,17 +39,14 @@ const QualitiesHome = () => {
       }
     } catch (error) {
       if (error.name === 'AbortError') {
-        // Conflit play/pause - réinitialiser l'état selon la réalité
         setPlaying(!video.paused);
       } else if (error.name === 'NotAllowedError') {
-        // Politique autoplay du navigateur - ignorer
         setPlaying(false);
       } else {
         console.error('[VideoPlayer] Erreur:', error);
         setPlaying(false);
       }
     } finally {
-      // ✅ Libérer le guard après un délai court
       setTimeout(() => {
         isTransitioning.current = false;
       }, 300);
@@ -50,6 +56,15 @@ const QualitiesHome = () => {
   const handleEnded = useCallback(() => {
     setPlaying(false);
     isTransitioning.current = false;
+  }, []);
+
+  // Sync état React avec les contrôles natifs sur mobile
+  const handleNativePlay = useCallback(() => {
+    setPlaying(true);
+  }, []);
+
+  const handleNativePause = useCallback(() => {
+    setPlaying(false);
   }, []);
 
   return (
@@ -63,33 +78,49 @@ const QualitiesHome = () => {
 
       {/* BLOC 2 : VIDÉO */}
       <div className="services-video-block">
-        <div className="video-wrapper">
-          {/* Vidéo native HTML */}
+        <div
+          className={`video-wrapper ${isMobile ? 'video-wrapper--mobile' : ''}`}
+        >
+          {/* Vidéo native */}
           <video
             ref={videoRef}
             src="/video/Personnalisable.mp4"
             preload="none"
             playsInline
+            // ✅ Contrôles natifs uniquement sur mobile/tablette
+            controls={isMobile}
             onEnded={handleEnded}
+            onPlay={handleNativePlay}
+            onPause={handleNativePause}
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
 
-          {/* Overlay bouton play/pause */}
+          {/* Overlay bouton play/pause personnalisé - sur tous les écrans */}
           <div
-            className={`video-overlay ${playing ? 'video-overlay--playing' : 'video-overlay--paused'}`}
-            onClick={handlePlayPause}
-            role="button"
-            tabIndex={0}
-            aria-label={playing ? 'Mettre en pause' : 'Lancer la vidéo'}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                handlePlayPause();
-              }
-            }}
+            className={`video-overlay ${playing ? 'video-overlay--playing' : 'video-overlay--paused'} ${isMobile ? 'video-overlay--mobile' : ''}`}
+            onClick={!isMobile ? handlePlayPause : undefined}
+            role={!isMobile ? 'button' : undefined}
+            tabIndex={!isMobile ? 0 : undefined}
+            aria-label={
+              !isMobile
+                ? playing
+                  ? 'Mettre en pause'
+                  : 'Lancer la vidéo'
+                : undefined
+            }
+            onKeyDown={
+              !isMobile
+                ? (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handlePlayPause();
+                    }
+                  }
+                : undefined
+            }
           >
             <button
-              className="video-play-btn video-play-btn--ready"
+              className={`video-play-btn video-play-btn--ready ${playing ? 'video-play-btn--playing' : ''} ${isMobile ? 'video-play-btn--mobile' : ''}`}
               onClick={(e) => {
                 e.stopPropagation();
                 handlePlayPause();
