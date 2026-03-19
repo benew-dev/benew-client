@@ -10,7 +10,6 @@ const QualitiesHome = () => {
   const videoRef = useRef(null);
   const isTransitioning = useRef(false);
 
-  // Détecter mobile/tablette (< 1200px = large-xs)
   useEffect(() => {
     const checkDevice = () => {
       setIsMobile(window.innerWidth < 1200);
@@ -31,9 +30,7 @@ const QualitiesHome = () => {
         video.pause();
         setPlaying(false);
       } else {
-        if (!video.paused) {
-          video.pause();
-        }
+        if (!video.paused) video.pause();
         await video.play();
         setPlaying(true);
       }
@@ -58,14 +55,8 @@ const QualitiesHome = () => {
     isTransitioning.current = false;
   }, []);
 
-  // Sync état React avec les contrôles natifs
-  const handleNativePlay = useCallback(() => {
-    setPlaying(true);
-  }, []);
-
-  const handleNativePause = useCallback(() => {
-    setPlaying(false);
-  }, []);
+  const handleNativePlay = useCallback(() => setPlaying(true), []);
+  const handleNativePause = useCallback(() => setPlaying(false), []);
 
   return (
     <>
@@ -78,28 +69,23 @@ const QualitiesHome = () => {
 
       {/* BLOC 2 : VIDÉO */}
       <div className="services-video-block">
-        <div
-          className={`video-wrapper ${isMobile ? 'video-wrapper--mobile' : ''}`}
-        >
-          {/* Vidéo native */}
+        <div className="video-wrapper">
+          {/* Vidéo native — aucun contrôle sur mobile/tablette */}
           <video
             ref={videoRef}
             src="/video/Personnalisable.mp4"
             preload="none"
             playsInline
-            // ✅ Contrôles natifs sur mobile/tablette
-            // noplaybackrate et nofullscreen pour garder seulement la timeline
-            controls={isMobile}
-            controlsList="noplaybackrate nofullscreen nodownload"
+            controls={false}
             onEnded={handleEnded}
             onPlay={handleNativePlay}
             onPause={handleNativePause}
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
 
-          {/* Overlay + bouton play/pause personnalisé centré */}
+          {/* Overlay cliquable — bouton uniquement sur desktop */}
           <div
-            className={`video-overlay ${playing ? 'video-overlay--playing' : 'video-overlay--paused'} ${isMobile ? 'video-overlay--mobile' : ''}`}
+            className={`video-overlay ${playing ? 'video-overlay--playing' : 'video-overlay--paused'}`}
             onClick={handlePlayPause}
             role="button"
             tabIndex={0}
@@ -111,21 +97,24 @@ const QualitiesHome = () => {
               }
             }}
           >
-            <button
-              className={`video-play-btn video-play-btn--ready ${playing ? 'video-play-btn--playing' : ''}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                handlePlayPause();
-              }}
-              aria-label={playing ? 'Pause' : 'Play'}
-              type="button"
-            >
-              {playing ? (
-                <MdPause className="video-play-btn__icon" />
-              ) : (
-                <MdPlayArrow className="video-play-btn__icon" />
-              )}
-            </button>
+            {/* Bouton play/pause personnalisé uniquement sur desktop (≥1200px) */}
+            {!isMobile && (
+              <button
+                className={`video-play-btn video-play-btn--ready ${playing ? 'video-play-btn--playing' : ''}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlePlayPause();
+                }}
+                aria-label={playing ? 'Pause' : 'Play'}
+                type="button"
+              >
+                {playing ? (
+                  <MdPause className="video-play-btn__icon" />
+                ) : (
+                  <MdPlayArrow className="video-play-btn__icon" />
+                )}
+              </button>
+            )}
           </div>
         </div>
       </div>
