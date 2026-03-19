@@ -10,7 +10,7 @@ const QualitiesHome = () => {
   const videoRef = useRef(null);
   const isTransitioning = useRef(false);
 
-  // Détecter mobile/tablette
+  // Détecter mobile/tablette (< 1200px = large-xs)
   useEffect(() => {
     const checkDevice = () => {
       setIsMobile(window.innerWidth < 1200);
@@ -58,7 +58,7 @@ const QualitiesHome = () => {
     isTransitioning.current = false;
   }, []);
 
-  // Sync état React avec les contrôles natifs sur mobile
+  // Sync état React avec les contrôles natifs
   const handleNativePlay = useCallback(() => {
     setPlaying(true);
   }, []);
@@ -87,40 +87,32 @@ const QualitiesHome = () => {
             src="/video/Personnalisable.mp4"
             preload="none"
             playsInline
-            // ✅ Contrôles natifs uniquement sur mobile/tablette
+            // ✅ Contrôles natifs sur mobile/tablette
+            // noplaybackrate et nofullscreen pour garder seulement la timeline
             controls={isMobile}
+            controlsList="noplaybackrate nofullscreen nodownload"
             onEnded={handleEnded}
             onPlay={handleNativePlay}
             onPause={handleNativePause}
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
 
-          {/* Overlay bouton play/pause personnalisé - sur tous les écrans */}
+          {/* Overlay + bouton play/pause personnalisé centré */}
           <div
             className={`video-overlay ${playing ? 'video-overlay--playing' : 'video-overlay--paused'} ${isMobile ? 'video-overlay--mobile' : ''}`}
-            onClick={!isMobile ? handlePlayPause : undefined}
-            role={!isMobile ? 'button' : undefined}
-            tabIndex={!isMobile ? 0 : undefined}
-            aria-label={
-              !isMobile
-                ? playing
-                  ? 'Mettre en pause'
-                  : 'Lancer la vidéo'
-                : undefined
-            }
-            onKeyDown={
-              !isMobile
-                ? (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      handlePlayPause();
-                    }
-                  }
-                : undefined
-            }
+            onClick={handlePlayPause}
+            role="button"
+            tabIndex={0}
+            aria-label={playing ? 'Mettre en pause' : 'Lancer la vidéo'}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handlePlayPause();
+              }
+            }}
           >
             <button
-              className={`video-play-btn video-play-btn--ready ${playing ? 'video-play-btn--playing' : ''} ${isMobile ? 'video-play-btn--mobile' : ''}`}
+              className={`video-play-btn video-play-btn--ready ${playing ? 'video-play-btn--playing' : ''}`}
               onClick={(e) => {
                 e.stopPropagation();
                 handlePlayPause();

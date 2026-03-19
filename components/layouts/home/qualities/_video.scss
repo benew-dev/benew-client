@@ -82,7 +82,6 @@
     max-width: 1100px;
   }
 
-  // ReactPlayer / div wrapper
   > div {
     position: absolute !important;
     top: 0;
@@ -97,15 +96,45 @@
     object-fit: cover;
     border-radius: inherit;
   }
+}
 
-  // ✅ VERSION MOBILE - laisser de la place pour les contrôles natifs en bas
-  &--mobile {
-    // Les contrôles natifs prennent ~40-50px en bas
-    // On ne touche pas à l'aspect-ratio, les contrôles se superposent sur la vidéo
-    video {
-      // Sur mobile avec controls natifs, laisser l'espace en bas
-      object-position: center top;
-    }
+// =============================
+// MASQUER LE BOUTON PLAY NATIF
+// Garder seulement la timeline
+// =============================
+.video-wrapper--mobile {
+  // ✅ Masquer le bouton play/pause natif via pseudo-elements CSS
+  // Compatible Chrome, Safari, Firefox
+  video::-webkit-media-controls-play-button {
+    display: none;
+  }
+
+  video::-webkit-media-controls-panel {
+    // Retirer le padding gauche où se trouve le bouton play
+    padding-left: 0;
+  }
+
+  // Firefox
+  video::-moz-media-controls-play-button {
+    display: none;
+  }
+
+  // ✅ Masquer aussi le bouton fullscreen et le bouton volume si souhaité
+  video::-webkit-media-controls-fullscreen-button {
+    display: none;
+  }
+
+  // Garder visible seulement la barre de progression (timeline)
+  video::-webkit-media-controls-timeline {
+    display: block;
+  }
+
+  video::-webkit-media-controls-current-time-display {
+    display: block;
+  }
+
+  video::-webkit-media-controls-time-remaining-display {
+    display: block;
   }
 }
 
@@ -146,24 +175,12 @@
     }
   }
 
-  // ✅ VERSION MOBILE - overlay ne bloque pas les contrôles natifs en bas
-  // On réduit la hauteur de l'overlay pour laisser les contrôles accessibles
+  // ✅ VERSION MOBILE - overlay réduit pour laisser la timeline accessible
   &--mobile {
-    height: calc(100% - 48px); // Laisser les contrôles natifs en bas
-    cursor: default;
-    pointer-events: none; // L'overlay ne bloque plus les clics sur mobile
+    // Laisser ~48px en bas pour la barre de contrôles native
+    height: calc(100% - 48px);
 
-    // Le bouton personnalisé garde ses pointer-events
-    .video-play-btn {
-      pointer-events: auto;
-    }
-
-    // Sur mobile en pause, pas d'overlay sombre qui masque
-    &.video-overlay--paused {
-      background: transparent;
-    }
-
-    // Sur mobile, le bouton reste toujours visible (pas de hide au hover)
+    // Sur mobile, le bouton reste visible même en lecture
     &.video-overlay--playing {
       .video-play-btn {
         opacity: 0.85;
@@ -171,9 +188,14 @@
       }
 
       &:hover .video-play-btn {
-        opacity: 0.85;
+        opacity: 1;
         transform: scale(1);
       }
+    }
+
+    // Fond sombre en pause sur mobile aussi
+    &.video-overlay--paused {
+      background: rgba($color-dark, 0.2);
     }
   }
 
@@ -183,7 +205,7 @@
 }
 
 // =============================
-// BOUTON PLAY / PAUSE
+// BOUTON PLAY / PAUSE PERSONNALISÉ
 // =============================
 .video-play-btn {
   display: flex;
@@ -256,7 +278,6 @@
   @include from('large-xs') {
     width: 72px;
     height: 72px;
-    border-width: 2px;
   }
 
   @include from('large-lg') {
@@ -283,65 +304,6 @@
 
   &:active {
     transform: scale(0.96);
-  }
-
-  // ✅ VERSION MOBILE - bouton positionné en haut à gauche de la vidéo
-  // pour ne pas interférer avec les contrôles natifs en bas
-  &--mobile {
-    position: absolute;
-    top: 0.75rem;
-    left: 0.75rem;
-    width: 40px;
-    height: 40px;
-
-    @include from('small-sm') {
-      top: 0.8rem;
-      left: 0.8rem;
-      width: 42px;
-      height: 42px;
-    }
-
-    @include from('small-lg') {
-      top: 0.85rem;
-      left: 0.85rem;
-      width: 44px;
-      height: 44px;
-    }
-
-    @include from('small-xl') {
-      top: 0.9rem;
-      left: 0.9rem;
-      width: 46px;
-      height: 46px;
-    }
-
-    @include between('small-xl', 'medium-sm') {
-      top: 1rem;
-      left: 1rem;
-      width: 48px;
-      height: 48px;
-    }
-
-    @include from('medium-sm') {
-      top: 1rem;
-      left: 1rem;
-      width: 50px;
-      height: 50px;
-    }
-
-    @include from('medium-lg') {
-      top: 1.1rem;
-      left: 1.1rem;
-      width: 52px;
-      height: 52px;
-    }
-
-    @include from('medium-xxl') {
-      top: 1.2rem;
-      left: 1.2rem;
-      width: 54px;
-      height: 54px;
-    }
   }
 
   &__icon {
