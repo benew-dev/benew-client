@@ -2,6 +2,7 @@
 
 import './index.scss';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { MdStorefront, MdStar, MdRocketLaunch } from 'react-icons/md';
 
 const promoTiers = [
@@ -38,6 +39,31 @@ const promoTiers = [
 ];
 
 const PromoLaunch = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Détecter si on est sur mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Auto-play slider — seulement sur mobile
+  useEffect(() => {
+    if (!isMobile) return;
+
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % promoTiers.length);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [isMobile]);
+
   return (
     <div className="promo-container">
       {/* HEADER */}
@@ -52,12 +78,14 @@ const PromoLaunch = () => {
 
       {/* CARTES */}
       <div className="promo-cards">
-        {promoTiers.map((tier) => {
+        {promoTiers.map((tier, index) => {
           const IconComponent = tier.icon;
           return (
             <div
               key={tier.id}
-              className={`promo-card promo-card--${tier.color}`}
+              className={`promo-card promo-card--${tier.color} ${
+                isMobile && index !== activeIndex ? 'promo-card--hidden' : ''
+              }`}
             >
               {/* Badge */}
               <div className="promo-card__badge">{tier.badge}</div>
@@ -82,6 +110,22 @@ const PromoLaunch = () => {
           );
         })}
       </div>
+
+      {/* DOTS - seulement sur mobile */}
+      {isMobile && (
+        <div className="promo-dots">
+          {promoTiers.map((tier, index) => (
+            <button
+              key={index}
+              className={`promo-dot promo-dot--${tier.color} ${
+                index === activeIndex ? 'promo-dot--active' : ''
+              }`}
+              onClick={() => setActiveIndex(index)}
+              aria-label={`Aller à la carte ${index + 1}`}
+            />
+          ))}
+        </div>
+      )}
 
       {/* BOUTON */}
       <div className="promo-cta">

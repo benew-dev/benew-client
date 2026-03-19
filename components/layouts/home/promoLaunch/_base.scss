@@ -14,38 +14,39 @@
   align-items: center;
   justify-content: center;
 
-  padding: 2rem 1.5rem;
   box-sizing: border-box;
   position: relative;
   overflow: hidden;
 
   gap: 2rem;
 
-  // Petits écrans
+  // Mobile - padding ajusté pour titre et bouton
+  padding: 2.5rem 1.5rem 2.5rem;
+
   @include small-screens {
-    padding: 1.25rem 0.75rem;
-    gap: 1rem;
+    padding: 2rem 0.75rem 2rem;
+    gap: 1.25rem;
     justify-content: space-between;
   }
 
   @include from('small-sm') {
-    padding: 1.3rem 0.8rem;
-    gap: 1.1rem;
+    padding: 2.1rem 0.8rem 2.1rem;
+    gap: 1.3rem;
   }
 
   @include from('small-lg') {
-    padding: 1.4rem 0.9rem;
-    gap: 1.15rem;
+    padding: 2.2rem 0.9rem 2.2rem;
+    gap: 1.35rem;
   }
 
   @include from('small-xl') {
-    padding: 1.5rem 1rem;
-    gap: 1.2rem;
+    padding: 2.3rem 1rem 2.3rem;
+    gap: 1.4rem;
   }
 
   @include between('small-xl', 'medium-sm') {
-    padding: 1.6rem 1rem;
-    gap: 1.3rem;
+    padding: 2.4rem 1rem 2.4rem;
+    gap: 1.5rem;
   }
 
   // Tablettes
