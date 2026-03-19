@@ -70,35 +70,35 @@ const QualitiesHome = () => {
       {/* BLOC 2 : VIDÉO */}
       <div className="services-video-block">
         <div className="video-wrapper">
-          {/* Vidéo native — aucun contrôle sur mobile/tablette */}
           <video
             ref={videoRef}
             src="/video/Personnalisable.mp4"
             preload="none"
             playsInline
-            controls={false}
+            // Contrôles natifs sur mobile/tablette, aucun sur desktop
+            controls={isMobile}
+            controlsList="noplaybackrate nofullscreen nodownload"
             onEnded={handleEnded}
             onPlay={handleNativePlay}
             onPause={handleNativePause}
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
 
-          {/* Overlay cliquable — bouton uniquement sur desktop */}
-          <div
-            className={`video-overlay ${playing ? 'video-overlay--playing' : 'video-overlay--paused'}`}
-            onClick={handlePlayPause}
-            role="button"
-            tabIndex={0}
-            aria-label={playing ? 'Mettre en pause' : 'Lancer la vidéo'}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                handlePlayPause();
-              }
-            }}
-          >
-            {/* Bouton play/pause personnalisé uniquement sur desktop (≥1200px) */}
-            {!isMobile && (
+          {/* Overlay + bouton personnalisé uniquement sur desktop */}
+          {!isMobile && (
+            <div
+              className={`video-overlay ${playing ? 'video-overlay--playing' : 'video-overlay--paused'}`}
+              onClick={handlePlayPause}
+              role="button"
+              tabIndex={0}
+              aria-label={playing ? 'Mettre en pause' : 'Lancer la vidéo'}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handlePlayPause();
+                }
+              }}
+            >
               <button
                 className={`video-play-btn video-play-btn--ready ${playing ? 'video-play-btn--playing' : ''}`}
                 onClick={(e) => {
@@ -114,8 +114,8 @@ const QualitiesHome = () => {
                   <MdPlayArrow className="video-play-btn__icon" />
                 )}
               </button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </>
