@@ -1,0 +1,128 @@
+@use 'sass:color';
+@use '../../../../app/styles/abstracts' as *;
+
+// ================================
+// 📄 _cta.scss
+// ================================
+
+.promo-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.promo-cta__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(135deg, $color-orange, $color-pink);
+  color: $color-light;
+  text-decoration: none;
+  font-family: font-family('ui');
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  border-radius: 50px;
+  border: 2px solid rgba($color-light, 0.2);
+
+  box-shadow:
+    0 8px 25px rgba($color-orange, 0.35),
+    0 4px 15px rgba($color-pink, 0.25),
+    0 0 40px rgba($color-orange, 0.1);
+
+  text-shadow: 0 2px 4px rgba($color-dark, 0.5);
+
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  // Tailles responsives
+  font-size: 0.75rem;
+  padding: 0.7rem 1.75rem;
+
+  @include small-screens {
+    font-size: 0.7rem;
+    padding: 0.65rem 1.5rem;
+    letter-spacing: 0.8px;
+  }
+
+  @include from('small-sm') {
+    font-size: 0.72rem;
+    padding: 0.67rem 1.6rem;
+  }
+
+  @include from('small-lg') {
+    font-size: 0.74rem;
+    padding: 0.68rem 1.65rem;
+  }
+
+  @include from('small-xl') {
+    font-size: 0.75rem;
+    padding: 0.7rem 1.7rem;
+  }
+
+  @include between('small-xl', 'medium-sm') {
+    font-size: 0.78rem;
+    padding: 0.72rem 1.75rem;
+  }
+
+  @include from('medium-sm') {
+    font-size: 0.85rem;
+    padding: 0.85rem 2rem;
+    letter-spacing: 1px;
+  }
+
+  @include from('medium-lg') {
+    font-size: 0.9rem;
+    padding: 0.9rem 2.2rem;
+  }
+
+  @include from('medium-xxl') {
+    font-size: 0.95rem;
+    padding: 0.95rem 2.4rem;
+  }
+
+  @include from('large-xs') {
+    font-size: 1rem;
+    padding: 1rem 2.5rem;
+    letter-spacing: 1.2px;
+  }
+
+  @include from('large-lg') {
+    font-size: 1.05rem;
+    padding: 1.05rem 2.75rem;
+  }
+
+  @include from('large-xxl') {
+    font-size: 1.1rem;
+    padding: 1.1rem 3rem;
+    letter-spacing: 1.5px;
+  }
+
+  &:hover {
+    transform: translateY(-3px) scale(1.04);
+    background: linear-gradient(
+      135deg,
+      color.adjust($color-orange, $lightness: 8%),
+      color.adjust($color-pink, $lightness: 8%)
+    );
+    box-shadow:
+      0 12px 35px rgba($color-orange, 0.45),
+      0 6px 20px rgba($color-pink, 0.35),
+      0 0 50px rgba($color-orange, 0.2);
+    border-color: rgba($color-light, 0.35);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: rgba($color-light, 0.5);
+    box-shadow:
+      0 12px 35px rgba($color-orange, 0.45),
+      0 6px 20px rgba($color-pink, 0.35),
+      0 0 0 4px rgba($color-light, 0.2);
+  }
+
+  &:active {
+    transform: translateY(-1px) scale(1.01);
+  }
+}

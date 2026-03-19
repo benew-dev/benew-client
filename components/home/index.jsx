@@ -36,8 +36,8 @@ const QualitiesHome = dynamic(
   },
 );
 
-const AppExamples = dynamic(
-  () => import('components/layouts/home/appExamples'),
+const PromoLaunch = dynamic(
+  () => import('components/layouts/home/promoLaunch'),
   {
     loading: () => <AppExamplesSkeleton />,
     ssr: true,
@@ -83,7 +83,7 @@ const HomeComponent = () => {
         className="others portfolio-showcase-section"
         data-section="portfolio_showcase"
       >
-        <AppExamples />
+        <PromoLaunch />
       </section>
 
       <section className="others contact-section" data-section="contact">
