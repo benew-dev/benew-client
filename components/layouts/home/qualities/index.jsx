@@ -1,45 +1,55 @@
 'use client';
 
 import './index.scss';
-import { useState, useRef, useCallback, useEffect } from 'react';
-import dynamic from 'next/dynamic';
+import { useState, useRef, useCallback } from 'react';
 import { MdPlayArrow, MdPause } from 'react-icons/md';
-
-// ✅ Import dynamique de ReactPlayer pour éviter le conflit SSR/hydratation
-const ReactPlayer = dynamic(() => import('react-player'), { ssr: false });
 
 const QualitiesHome = () => {
   const [playing, setPlaying] = useState(false);
-  const [ready, setReady] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const playerRef = useRef(null);
+  const videoRef = useRef(null);
+  // ✅ Guard pour éviter les appels play/pause simultanés
+  const isTransitioning = useRef(false);
 
-  // ✅ S'assurer que le composant est monté côté client avant tout
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const handlePlayPause = useCallback(async () => {
+    const video = videoRef.current;
+    if (!video || isTransitioning.current) return;
 
-  const handlePlayPause = useCallback(() => {
-    setPlaying((prev) => !prev);
-  }, []);
+    isTransitioning.current = true;
 
-  const handleReady = useCallback(() => {
-    setReady(true);
-  }, []);
+    try {
+      if (playing) {
+        video.pause();
+        setPlaying(false);
+      } else {
+        // ✅ S'assurer que la vidéo est bien en pause avant de lancer play()
+        if (!video.paused) {
+          video.pause();
+        }
+        await video.play();
+        setPlaying(true);
+      }
+    } catch (error) {
+      if (error.name === 'AbortError') {
+        // Conflit play/pause - réinitialiser l'état selon la réalité
+        setPlaying(!video.paused);
+      } else if (error.name === 'NotAllowedError') {
+        // Politique autoplay du navigateur - ignorer
+        setPlaying(false);
+      } else {
+        console.error('[VideoPlayer] Erreur:', error);
+        setPlaying(false);
+      }
+    } finally {
+      // ✅ Libérer le guard après un délai court
+      setTimeout(() => {
+        isTransitioning.current = false;
+      }, 300);
+    }
+  }, [playing]);
 
   const handleEnded = useCallback(() => {
     setPlaying(false);
-  }, []);
-
-  // ✅ Gérer l'erreur AbortError silencieusement
-  const handleError = useCallback((error) => {
-    if (
-      error?.name === 'AbortError' ||
-      error?.message?.includes('AbortError')
-    ) {
-      return; // Ignorer silencieusement
-    }
-    console.error('[VideoPlayer] Erreur:', error);
+    isTransitioning.current = false;
   }, []);
 
   return (
@@ -54,31 +64,15 @@ const QualitiesHome = () => {
       {/* BLOC 2 : VIDÉO */}
       <div className="services-video-block">
         <div className="video-wrapper">
-          {/* Player - rendu uniquement côté client */}
-          {mounted && (
-            <ReactPlayer
-              ref={playerRef}
-              url="/video/Personnalisable.mp4"
-              playing={playing}
-              controls={false}
-              width="100%"
-              height="100%"
-              onReady={handleReady}
-              onEnded={handleEnded}
-              onError={handleError}
-              playsinline
-              muted={false}
-              config={{
-                file: {
-                  attributes: {
-                    preload: 'metadata',
-                    playsInline: true,
-                    controlsList: 'nodownload',
-                  },
-                },
-              }}
-            />
-          )}
+          {/* Vidéo native HTML */}
+          <video
+            ref={videoRef}
+            src="/video/Personnalisable.mp4"
+            preload="none"
+            playsInline
+            onEnded={handleEnded}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
 
           {/* Overlay bouton play/pause */}
           <div
@@ -95,7 +89,7 @@ const QualitiesHome = () => {
             }}
           >
             <button
-              className={`video-play-btn ${playing ? 'video-play-btn--playing' : ''} ${ready ? 'video-play-btn--ready' : ''}`}
+              className="video-play-btn video-play-btn--ready"
               onClick={(e) => {
                 e.stopPropagation();
                 handlePlayPause();
