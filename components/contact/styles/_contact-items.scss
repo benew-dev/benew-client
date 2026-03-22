@@ -8,63 +8,21 @@
 .item {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 0.875rem 1rem;
+  justify-content: center;
+  text-align: center;
+  // clamp : 0.75rem/0.875rem (360px) → 1.15rem/0.95rem (768px)
+  gap: clamp(0.75rem, 0.98vw + 0.4rem, 1.15rem);
+  padding: clamp(0.75rem, 0.37vw + 0.62rem, 0.95rem)
+    clamp(0.875rem, 0.61vw + 0.66rem, 1.15rem);
   background: rgba($text-color, 0.05);
   border-radius: 12px;
   border: 1px solid rgba($primary-color, 0.2);
   transition: all 0.3s ease;
   width: 100%;
-  max-width: 320px;
+  max-width: clamp(300px, 24.39vw + 212.2px, 400px);
 
-  // 📱 MOBILE FIRST
-  justify-content: center;
-  text-align: center;
-
-  @include until('small-sm') {
-    gap: 0.75rem;
-    padding: 0.75rem 0.875rem;
-    max-width: 300px;
-  }
-
-  // 📱 PETITS ÉCRANS - Progression
-  @include from('small-sm') {
-    max-width: 330px;
-    gap: 1.05rem;
-    padding: 0.9rem 1.05rem;
-  }
-
-  @include from('small-lg') {
-    max-width: 340px;
-    gap: 1.1rem;
-    padding: 0.9rem 1.1rem;
-  }
-
-  @include from('small-xl') {
-    max-width: 350px;
-    gap: 1.15rem;
-    padding: 0.95rem 1.15rem;
-  }
-
-  // 📟 MOYENS ÉCRANS - Progression
-  @include from('medium-sm') {
-    max-width: 370px;
-  }
-
-  @include from('medium-lg') {
-    max-width: 380px;
-  }
-
-  @include from('medium-xl') {
-    max-width: 390px;
-  }
-
-  @include from('medium-xxl') {
-    max-width: 400px;
-  }
-
-  // 🖥️ GRANDS ÉCRANS - Retour au style original
-  @include from('large-xs') {
+  // Desktop : style plat sans fond
+  @include desktop-up {
     justify-content: flex-start;
     text-align: left;
     background: transparent;
@@ -80,8 +38,7 @@
     border-color: rgba($primary-color, 0.3);
     transform: translateY(-2px);
 
-    // 🖥️ DESKTOP - Pas d'effet hover
-    @include from('large-xs') {
+    @include desktop-up {
       background: transparent;
       border: none;
       transform: none;
@@ -91,46 +48,10 @@
   .icon {
     color: $primary-color;
     flex-shrink: 0;
+    // clamp : 1.3rem (360px) → 1.85rem (768px)
+    font-size: clamp(1.3rem, 1.34vw + 0.82rem, 1.85rem);
 
-    // 📱 MOBILE FIRST - Icône plus visible
-    font-size: 1.5rem;
-
-    @include until('small-sm') {
-      font-size: 1.3rem;
-    }
-
-    // 📱 PETITS ÉCRANS - Progression
-    @include from('small-sm') {
-      font-size: 1.55rem;
-    }
-
-    @include from('small-lg') {
-      font-size: 1.6rem;
-    }
-
-    @include from('small-xl') {
-      font-size: 1.65rem;
-    }
-
-    // 📟 MOYENS ÉCRANS
-    @include from('medium-sm') {
-      font-size: 1.7rem;
-    }
-
-    @include from('medium-lg') {
-      font-size: 1.75rem;
-    }
-
-    @include from('medium-xl') {
-      font-size: 1.8rem;
-    }
-
-    @include from('medium-xxl') {
-      font-size: 1.85rem;
-    }
-
-    // 🖥️ GRANDS ÉCRANS
-    @include from('large-xs') {
+    @include desktop-up {
       font-size: 1.25rem;
     }
   }
@@ -140,55 +61,16 @@
     color: $text-color;
     margin: 0;
     flex: 1;
-
-    // 📱 MOBILE FIRST - Texte lisible
-    font-size: 0.95rem;
+    // clamp : 0.85rem (360px) → 1.1rem (768px)
+    font-size: clamp(0.85rem, 0.61vw + 0.63rem, 1.1rem);
+    // font-weight sans unité — clamp(vw) incompatible, 2 paliers
     font-weight: 500;
 
-    @include until('small-sm') {
-      font-size: 0.85rem;
-      font-weight: 400;
-    }
-
-    // 📱 PETITS ÉCRANS - Progression
-    @include from('small-sm') {
-      font-size: 0.97rem;
-      font-weight: 510;
-    }
-
-    @include from('small-lg') {
-      font-size: 0.99rem;
-      font-weight: 520;
-    }
-
-    @include from('small-xl') {
-      font-size: 1.01rem;
-      font-weight: 530;
-    }
-
-    // 📟 MOYENS ÉCRANS - Progression
-    @include from('medium-sm') {
-      font-size: 1.05rem;
+    @include tablet-up {
       font-weight: 450;
     }
 
-    @include from('medium-lg') {
-      font-size: 1.07rem;
-      font-weight: 460;
-    }
-
-    @include from('medium-xl') {
-      font-size: 1.09rem;
-      font-weight: 470;
-    }
-
-    @include from('medium-xxl') {
-      font-size: 1.1rem;
-      font-weight: 480;
-    }
-
-    // 🖥️ GRANDS ÉCRANS
-    @include from('large-xs') {
+    @include desktop-up {
       font-size: 1rem;
       font-weight: 400;
       letter-spacing: 2px;

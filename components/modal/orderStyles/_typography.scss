@@ -5,6 +5,7 @@
 // 📄 _typography.scss
 // ================================
 
+// clamp : 1.25rem (360px) → 1.5rem (1280px)
 h2 {
   color: $primary-color;
   border-bottom: 1px solid rgba($primary-color, 0.4);
@@ -13,38 +14,7 @@ h2 {
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
 
-  // 📱 MOBILE FIRST - Titre adapté
-  font-size: 1.25rem;
-
-  @include from('small-sm') {
-    font-size: 1.3rem;
-  }
-
-  @include from('small-lg') {
-    font-size: 1.35rem;
-  }
-
-  @include from('small-xl') {
-    font-size: 1.4rem;
-  }
-
-  // 📟 MOYENS ÉCRANS - Progression
-  @include from('medium-sm') {
-    font-size: 1.45rem;
-  }
-
-  @include from('medium-lg') {
-    font-size: 1.48rem;
-  }
-
-  @include from('medium-xxl') {
-    font-size: 1.5rem;
-  }
-
-  // 🖥️ DESKTOP - Taille desktop
-  @include from('large-xs') {
-    font-size: 1.5rem;
-  }
+  font-size: clamp(1.25rem, 0.27vw + 1.15rem, 1.5rem);
 }
 
 .confirmationStep {
@@ -53,22 +23,9 @@ h2 {
   p {
     color: $text-color;
     line-height: 1.6;
-    margin-bottom: 1.5rem;
+    margin-bottom: clamp(1.25rem, 0.27vw + 1.15rem, 1.5rem);
     opacity: 0.9;
-
-    // 📱 MOBILE FIRST - Texte adapté
-    font-size: 1rem;
-
-    @include until('small-sm') {
-      font-size: 0.95rem;
-      line-height: 1.5;
-      margin-bottom: 1.25rem;
-    }
-
-    // 🖥️ DESKTOP - Taille originale
-    @include from('large-xs') {
-      font-size: 1rem;
-    }
+    font-size: clamp(0.95rem, 0.05vw + 0.93rem, 1rem);
   }
 }
 
@@ -80,18 +37,7 @@ h2 {
   backdrop-filter: blur(10px);
   margin-bottom: 1rem;
 
-  // 📱 MOBILE FIRST - Plus d'espace
-  padding: 1rem;
-  font-size: 0.95rem;
-
-  @include until('small-sm') {
-    padding: 0.875rem;
-    font-size: 0.9rem;
-  }
-
-  // 🖥️ DESKTOP - Valeur originale
-  @include from('large-xs') {
-    padding: 0.8rem;
-    font-size: 0.9rem;
-  }
+  // clamp : 0.875rem (360px) → 1rem (768px)
+  padding: clamp(0.875rem, 0.3vw + 0.77rem, 1rem);
+  font-size: clamp(0.9rem, 0.12vw + 0.86rem, 0.95rem);
 }

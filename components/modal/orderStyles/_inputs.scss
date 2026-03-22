@@ -5,6 +5,7 @@
 // 📄 _inputs.scss
 // ================================
 
+// clamp : 0.875rem/0.95rem (360px) → 1rem/1rem (768px → 1280px)
 input[type='text'],
 input[type='email'],
 input[type='tel'] {
@@ -15,29 +16,12 @@ input[type='tel'] {
   outline: none;
   transition: all 0.3s ease;
 
-  // 📱 MOBILE FIRST - Plus d'espace tactile
-  padding: 1rem 1.25rem;
-  font-size: 1rem;
-  min-height: 48px; // Zone tactile recommandée
+  padding: clamp(0.875rem, 0.3vw + 0.77rem, 1rem)
+    clamp(1rem, 0.27vw + 0.9rem, 1.25rem);
+  font-size: clamp(0.95rem, 0.12vw + 0.91rem, 1rem);
+  min-height: clamp(44px, 0.98vw + 40.5px, 48px);
 
-  @include until('small-sm') {
-    padding: 0.875rem 1rem;
-    font-size: 0.95rem;
-    min-height: 44px;
-  }
-
-  // 📟 MOYENS ÉCRANS - Ajustements
-  @include from('medium-sm') {
-    padding: 0.9rem 1.1rem;
-    font-size: 1rem;
-  }
-
-  @include from('medium-lg') {
-    padding: 0.85rem 1.05rem;
-  }
-
-  // 🖥️ DESKTOP - Valeurs originales
-  @include from('large-xs') {
+  @include desktop-up {
     padding: 0.8rem 1rem;
     min-height: auto;
   }
@@ -52,34 +36,11 @@ input[type='tel'] {
   }
 }
 
-// =============================
-// RADIO BUTTONS - MOBILE-FIRST
-// =============================
-
 .checkboxGroup {
   display: flex;
   flex-direction: column;
   margin-bottom: 1rem;
-
-  // 📱 MOBILE - Gap plus compact
-  gap: 0.6rem;
-
-  @include from('small-sm') {
-    gap: 0.65rem;
-  }
-
-  @include from('small-lg') {
-    gap: 0.7rem;
-  }
-
-  @include from('small-xl') {
-    gap: 0.75rem;
-  }
-
-  // 🖥️ DESKTOP - Gap original
-  @include from('large-xs') {
-    gap: 0.8rem;
-  }
+  gap: clamp(0.6rem, 0.16vw + 0.54rem, 0.8rem);
 }
 
 .radioLabel {
@@ -91,17 +52,11 @@ input[type='tel'] {
   transition: all 0.2s ease;
   border: 1px solid transparent;
 
-  // 📱 MOBILE FIRST - Plus d'espace tactile
-  padding: 1rem 0.75rem;
-  min-height: 48px;
+  padding: clamp(0.875rem, 0.3vw + 0.77rem, 1rem)
+    clamp(0.625rem, 0.14vw + 0.57rem, 0.75rem);
+  min-height: clamp(44px, 0.98vw + 40.5px, 48px);
 
-  @include until('small-sm') {
-    padding: 0.875rem 0.625rem;
-    min-height: 44px;
-  }
-
-  // 🖥️ DESKTOP - Padding original
-  @include from('large-xs') {
+  @include desktop-up {
     padding: 0.6rem;
     min-height: auto;
   }
@@ -115,8 +70,7 @@ input[type='tel'] {
     margin-right: 10px;
     accent-color: $primary-color;
 
-    // 📱 MOBILE - Zone tactile améliorée
-    @include small-screens {
+    @include mobile-only {
       transform: scale(1.2);
       margin-right: 12px;
     }

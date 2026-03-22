@@ -5,6 +5,7 @@
 // 📄 _messages.scss
 // ================================
 
+// clamp : 0.85rem/0.75rem (360px) → 0.97rem/1.05rem (1280px)
 .error-message,
 .success-message {
   margin-top: 0.75rem;
@@ -12,54 +13,11 @@
   border-radius: 8px;
   transition: all 0.3s ease;
 
-  // 📱 MOBILE FIRST - Messages plus visibles
-  padding: 0.875rem 1rem;
-  font-size: 0.9rem;
+  padding: clamp(0.75rem, 0.33vw + 0.63rem, 1.05rem)
+    clamp(0.875rem, 0.52vw + 0.69rem, 1.35rem);
+  font-size: clamp(0.85rem, 0.13vw + 0.8rem, 0.97rem);
 
-  @include until('small-sm') {
-    padding: 0.75rem 0.875rem;
-    font-size: 0.85rem;
-  }
-
-  // 📱 PETITS ÉCRANS - Progression
-  @include from('small-sm') {
-    padding: 0.9rem 1.05rem;
-    font-size: 0.91rem;
-  }
-
-  @include from('small-lg') {
-    padding: 0.925rem 1.1rem;
-    font-size: 0.92rem;
-  }
-
-  @include from('small-xl') {
-    padding: 0.95rem 1.15rem;
-    font-size: 0.93rem;
-  }
-
-  // 📟 MOYENS ÉCRANS - Progression
-  @include from('medium-sm') {
-    padding: 0.975rem 1.2rem;
-    font-size: 0.94rem;
-  }
-
-  @include from('medium-lg') {
-    padding: 1rem 1.25rem;
-    font-size: 0.95rem;
-  }
-
-  @include from('medium-xl') {
-    padding: 1.025rem 1.3rem;
-    font-size: 0.96rem;
-  }
-
-  @include from('medium-xxl') {
-    padding: 1.05rem 1.35rem;
-    font-size: 0.97rem;
-  }
-
-  // 🖥️ GRANDS ÉCRANS - Réduit
-  @include from('large-xs') {
+  @include desktop-up {
     margin-top: 0.5rem;
     padding: 0.4rem 0.8rem;
     font-size: 0.8rem;

@@ -8,36 +8,10 @@
 .buttonContainer {
   display: flex;
   margin-top: 1rem;
-
-  // 📱 MOBILE FIRST - Layout vertical avec boutons full-width
   flex-direction: column-reverse;
-  gap: 0.75rem;
+  gap: clamp(0.75rem, 0.16vw + 0.69rem, 0.9rem);
 
-  @include from('small-sm') {
-    gap: 0.8rem;
-  }
-
-  @include from('small-lg') {
-    gap: 0.85rem;
-  }
-
-  @include from('small-xl') {
-    gap: 0.9rem;
-  }
-
-  // 📟 MOYENS ÉCRANS - Transition vers horizontal
-  @include from('medium-sm') {
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-
-  @include from('medium-lg') {
-    gap: 1.05rem;
-  }
-
-  // 🖥️ DESKTOP - Layout original
-  @include from('large-xs') {
+  @include tablet-up {
     flex-direction: row;
     justify-content: space-between;
     gap: 1rem;
@@ -51,31 +25,20 @@ button {
   cursor: pointer;
   border: none;
 
-  // 📱 MOBILE FIRST - Boutons tactiles optimaux
-  padding: 1rem 1.5rem;
-  font-size: 1rem;
-  min-height: 48px;
+  // Mobile : full-width, zone tactile optimale
+  // clamp : 0.875rem/0.95rem (360px) → 1rem/1rem (768px)
+  padding: clamp(0.875rem, 0.3vw + 0.77rem, 1rem)
+    clamp(1.25rem, 0.61vw + 1.03rem, 1.5rem);
+  font-size: clamp(0.95rem, 0.12vw + 0.91rem, 1rem);
+  min-height: clamp(44px, 0.98vw + 40.5px, 48px);
   width: 100%;
 
-  @include until('small-sm') {
-    padding: 0.875rem 1.25rem;
-    font-size: 0.95rem;
-    min-height: 44px;
-  }
-
-  // 📟 MOYENS ÉCRANS - Transition
-  @include from('medium-sm') {
+  @include tablet-up {
     width: auto;
     flex: 1;
-    padding: 0.9rem 1.4rem;
   }
 
-  @include from('medium-lg') {
-    padding: 0.85rem 1.35rem;
-  }
-
-  // 🖥️ DESKTOP - Valeurs originales
-  @include from('large-xs') {
+  @include desktop-up {
     padding: 0.8rem 1.5rem;
     font-size: 1rem;
     min-height: auto;
@@ -133,8 +96,6 @@ button {
   color: $background-color;
   box-shadow: 0 4px 8px rgba($primary-color, 0.3);
   margin-top: 1rem;
-
-  // 📱 MOBILE - Toujours full-width
   width: 100%;
 
   &:hover {

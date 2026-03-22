@@ -4,43 +4,15 @@
 
 // =============================
 // CARTE VIDÉO
+// width : décroissant de 85% (mobile) à 65% (desktop)
 // =============================
 
 .video-card {
   display: block;
 
-  width: 85%;
-  max-width: 420px;
-
-  @include from('small-sm') {
-    width: 83%;
-    max-width: 440px;
-  }
-
-  @include from('small-xl') {
-    width: 80%;
-    max-width: 460px;
-  }
-
-  @include from('medium-sm') {
-    width: 77%;
-    max-width: 480px;
-  }
-
-  @include from('medium-lg') {
-    width: 75%;
-    max-width: 500px;
-  }
-
-  @include from('large-xs') {
-    width: 65%;
-    max-width: 520px;
-  }
-
-  @include from('large-xxl') {
-    width: 60%;
-    max-width: 540px;
-  }
+  // clamp décroissant : 85% (360px) → 65% (1280px)
+  width: clamp(65%, -2.17vw + 92.8%, 85%);
+  max-width: clamp(420px, 13.04vw + 373px, 540px);
 }
 
 // =============================
@@ -143,15 +115,16 @@
   }
 }
 
+// clamp : 3.5rem (360px) → 4rem (768px)
 .video-card__play-icon {
-  width: 3.5rem;
-  height: 3.5rem;
+  width: clamp(3.5rem, 0.61vw + 3.28rem, 4rem);
+  height: clamp(3.5rem, 0.61vw + 3.28rem, 4rem);
   background: rgba($primary-color, 0.9);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  font-size: clamp(1.1rem, 0.18vw + 1.04rem, 1.25rem);
   color: $background-color;
   padding-left: 0.2rem;
   opacity: 0;
@@ -164,12 +137,6 @@
   .video-card:hover .video-card__play-btn & {
     opacity: 1;
     transform: scale(1);
-  }
-
-  @include from('medium-sm') {
-    width: 4rem;
-    height: 4rem;
-    font-size: 1.25rem;
   }
 }
 
@@ -191,12 +158,10 @@
 // INFOS SOUS LE THUMBNAIL
 // =============================
 
+// clamp : 1.25rem (360px) → 1.6rem (768px)
 .video-card__info {
-  padding: 1.25rem 1.5rem;
-
-  @include from('medium-sm') {
-    padding: 1.4rem 1.6rem;
-  }
+  padding: clamp(1.25rem, 0.37vw + 1.12rem, 1.4rem)
+    clamp(1.5rem, 0.12vw + 1.46rem, 1.6rem);
 }
 
 .video-card__info-top {
@@ -206,30 +171,23 @@
   margin-bottom: 0.6rem;
 }
 
+// clamp : 1rem (360px) → 1.1rem (1280px)
 .video-card__title {
-  font-size: 1rem;
+  font-size: clamp(1rem, 0.11vw + 0.96rem, 1.1rem);
   font-weight: 700;
   color: $text-color;
   line-height: 1.35;
   margin: 0 0 0.4rem 0;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-
   transition: color 0.2s ease;
+
   .video-card:hover & {
     color: $primary-color;
-  }
-
-  @include from('medium-sm') {
-    font-size: 1.05rem;
-  }
-  @include from('large-xs') {
-    font-size: 1.1rem;
   }
 }
 
@@ -304,7 +262,7 @@
     0 24px 80px rgba(0, 0, 0, 0.7);
   animation: modalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 
-  @include small-screens {
+  @include mobile-only {
     width: 95vw;
   }
 }
@@ -347,34 +305,21 @@
   }
 }
 
-// =============================
-// ZONE LECTEUR VIDEO.JS DANS LA MODAL
-//
-// On utilise fill:true (pas fluid:true) dans VideoJSPlayer.
-// Le conteneur définit une hauteur via aspect-ratio,
-// et le player remplit ce conteneur — control bar en bas, garantie.
-// =============================
-
 .video-modal__player {
   width: 100%;
   background: #000;
   flex-shrink: 0;
 
-  // Sur grands écrans, la barre de contrôle native du navigateur
-  // s'affiche sous la vidéo — on lui laisse de la place
-  @include from('large-xs') {
+  @include desktop-up {
     padding-bottom: 2.75rem;
   }
 
-  // Wrapper rendu par ReactVideoPlayer
-  // C'est lui qui définit le ratio — le player interne remplit à 100%
   .react-video-wrapper {
     width: 100%;
     aspect-ratio: 16 / 9;
     display: block;
     line-height: 0;
 
-    // ReactPlayer rend un div avec position relative — on le force à remplir
     > div {
       width: 100% !important;
       height: 100% !important;
@@ -388,7 +333,6 @@
     }
   }
 
-  // Skeleton de chargement pendant que react-player charge
   .video-modal__player-loading {
     width: 100%;
     aspect-ratio: 16 / 9;
@@ -397,20 +341,19 @@
   }
 }
 
-// Infos dans la modal
+// clamp : 1rem/1.25rem (360px) → 1.25rem/1.5rem (768px)
 .video-modal__info {
-  padding: 1rem 1.25rem 1.25rem;
+  padding: clamp(1rem, 0.3vw + 0.89rem, 1.25rem)
+    clamp(1.25rem, 0.3vw + 1.14rem, 1.5rem)
+    clamp(1.25rem, 0.3vw + 1.14rem, 1.5rem);
   flex-shrink: 0;
   overflow-y: auto;
   max-height: 35vh;
-
-  @include from('medium-sm') {
-    padding: 1.25rem 1.5rem 1.5rem;
-  }
 }
 
+// clamp : 1rem (360px) → 1.2rem (1280px)
 .video-modal__title {
-  font-size: 1rem;
+  font-size: clamp(1rem, 0.22vw + 0.92rem, 1.2rem);
   font-weight: 700;
   color: $text-color;
   line-height: 1.3;
@@ -418,13 +361,6 @@
   text-transform: uppercase;
   letter-spacing: 0.03em;
   padding-right: 2rem;
-
-  @include from('medium-sm') {
-    font-size: 1.1rem;
-  }
-  @include from('large-xs') {
-    font-size: 1.2rem;
-  }
 }
 
 .video-modal__meta {
@@ -474,7 +410,6 @@
     aspect-ratio: auto;
     flex: 1;
     min-height: 0;
-    // En paysage mobile, le player prend toute la hauteur disponible
     height: 100%;
   }
 
@@ -488,29 +423,23 @@
 }
 
 // =============================
-// TRÈS PETITS ÉCRANS
+// CAS SPÉCIAUX
 // =============================
 
-@media (max-width: 360px) {
+@media (max-width: 359px) {
   .video-card {
     width: 93%;
   }
-
   .video-card__info {
     padding: 1rem;
   }
 }
 
-// =============================
-// TRÈS GRANDS ÉCRANS
-// =============================
-
-@include from('large-xxxl') {
+@include from('large-1920') {
   .video-card {
     width: 55%;
     max-width: 640px;
   }
-
   .video-modal {
     width: 75vw;
   }
@@ -521,30 +450,23 @@
 // =============================
 
 @include reduced-motion {
-  .video-card__inner {
-    transition: none;
-  }
-  .video-card:hover .video-card__inner {
-    transform: none;
-  }
-  .video-card__thumb-img {
-    transition: none;
-  }
-  .video-card:hover .video-card__thumb-img {
-    transform: none;
-  }
-  .video-card__play-btn {
-    transition: none;
-  }
+  .video-card__inner,
+  .video-card__thumb-img,
+  .video-card__play-btn,
   .video-card__play-icon {
     transition: none;
   }
-  .video-modal-overlay {
-    animation: none;
+
+  .video-card:hover .video-card__inner,
+  .video-card:hover .video-card__thumb-img {
+    transform: none;
   }
+
+  .video-modal-overlay,
   .video-modal {
     animation: none;
   }
+
   .video-modal__close {
     transition: none;
     &:hover {
