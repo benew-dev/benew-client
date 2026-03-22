@@ -125,9 +125,6 @@ const Contact = () => {
     setIsModalOpen(false);
   }, []);
 
-  // components/contact/index.jsx — temporaire
-  throw new Error('Test contact error boundary');
-
   return (
     <div>
       <PageTracker
