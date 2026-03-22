@@ -1,9 +1,9 @@
 @use 'sass:color';
 @use '../../../app/styles/abstracts' as *;
 
-// =============================
-// 📄 _tables.scss - NETTOYÉ
-// =============================
+// ================================
+// 📄 _tables.scss
+// ================================
 
 .info-table-container,
 .needs-table-container,
@@ -13,26 +13,15 @@
   border-radius: var(--badge-border-radius);
   backdrop-filter: blur(10px);
   overflow: hidden;
-
-  max-height: 350px;
+  max-height: clamp(280px, 7.61vw + 252.6px, 350px);
   overflow-y: auto;
-
-  @include until('small-sm') {
-    max-height: 280px;
-  }
-
-  @include from('medium-lg') {
-    max-height: 300px;
-  }
 
   &::-webkit-scrollbar {
     width: 4px;
   }
-
   &::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0.05);
   }
-
   &::-webkit-scrollbar-thumb {
     background: rgba($color-purple, 0.3);
     border-radius: 2px;
@@ -43,7 +32,6 @@
 .pricing-table-container {
   &::-webkit-scrollbar-thumb {
     background: rgba($color-orange, 0.3);
-
     &:hover {
       background: rgba($color-orange, 0.5);
     }
@@ -66,42 +54,30 @@
   &:hover {
     background: rgba($color-light, 0.02);
   }
-
   &:last-child {
     border-bottom: none;
   }
 }
 
 .info-label {
-  padding: 1rem 1.25rem;
+  padding: clamp(0.875rem, 0.14vw + 0.82rem, 1rem)
+    clamp(1rem, 0.27vw + 0.9rem, 1.25rem);
   color: $text-color-muted;
   font-weight: 500;
   text-align: left;
   vertical-align: top;
   width: 45%;
-
-  font-size: 0.85rem;
-
-  @include until('small-sm') {
-    padding: 0.875rem 1rem;
-    font-size: 0.8rem;
-    width: 40%;
-  }
+  font-size: clamp(0.8rem, 0.05vw + 0.78rem, 0.85rem);
 }
 
 .info-value {
-  padding: 1rem 1.25rem;
+  padding: clamp(0.875rem, 0.14vw + 0.82rem, 1rem)
+    clamp(1rem, 0.27vw + 0.9rem, 1.25rem);
   color: $color-light;
   font-weight: 600;
   text-align: left;
   vertical-align: top;
-
-  font-size: 0.85rem;
-
-  @include until('small-sm') {
-    padding: 0.875rem 1rem;
-    font-size: 0.8rem;
-  }
+  font-size: clamp(0.8rem, 0.05vw + 0.78rem, 0.85rem);
 }
 
 .info-link {
@@ -119,11 +95,9 @@
 .needs-row {
   &.free-tools {
     background: rgba($color-orange, 0.05);
-
     &:hover {
       background: rgba($color-orange, 0.08);
     }
-
     .needs-text {
       color: $color-orange;
       font-weight: 600;
@@ -132,36 +106,23 @@
 }
 
 .needs-item {
-  padding: 1rem 1.25rem;
+  padding: clamp(0.875rem, 0.14vw + 0.82rem, 1rem)
+    clamp(1rem, 0.27vw + 0.9rem, 1.25rem);
   vertical-align: middle;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-
-  @include until('small-sm') {
-    padding: 0.875rem 1rem;
-    gap: 0.625rem;
-  }
+  gap: clamp(0.625rem, 0.14vw + 0.57rem, 0.75rem);
 
   .needs-icon {
-    font-size: 1.2rem;
+    font-size: clamp(1.1rem, 0.11vw + 1.06rem, 1.2rem);
     flex-shrink: 0;
-
-    @include until('small-sm') {
-      font-size: 1.1rem;
-    }
   }
 
   .needs-text {
     color: $color-light;
     font-weight: 500;
     line-height: 1.4;
-
-    font-size: 0.9rem;
-
-    @include until('small-sm') {
-      font-size: 0.85rem;
-    }
+    font-size: clamp(0.85rem, 0.05vw + 0.83rem, 0.9rem);
   }
 }
 
@@ -174,11 +135,7 @@
     .pricing-value {
       font-weight: 700;
       color: $color-orange;
-      font-size: 1.1rem;
-
-      @include until('small-sm') {
-        font-size: 1rem;
-      }
+      font-size: clamp(1rem, 0.11vw + 0.96rem, 1.1rem);
     }
 
     &:hover {
@@ -188,35 +145,24 @@
 }
 
 .pricing-label {
-  padding: 1rem 1.25rem;
+  padding: clamp(0.875rem, 0.14vw + 0.82rem, 1rem)
+    clamp(1rem, 0.27vw + 0.9rem, 1.25rem);
   color: $text-color-muted;
   font-weight: 500;
   text-align: left;
   vertical-align: top;
   width: 60%;
-
-  font-size: 0.85rem;
-
-  @include until('small-sm') {
-    padding: 0.875rem 1rem;
-    font-size: 0.8rem;
-    width: 55%;
-  }
+  font-size: clamp(0.8rem, 0.05vw + 0.78rem, 0.85rem);
 }
 
 .pricing-value {
-  padding: 1rem 1.25rem;
+  padding: clamp(0.875rem, 0.14vw + 0.82rem, 1rem)
+    clamp(1rem, 0.27vw + 0.9rem, 1.25rem);
   color: $color-light;
   font-weight: 600;
   text-align: right;
   vertical-align: top;
-
-  font-size: 0.9rem;
-
-  @include until('small-sm') {
-    padding: 0.875rem 1rem;
-    font-size: 0.85rem;
-  }
+  font-size: clamp(0.85rem, 0.05vw + 0.83rem, 0.9rem);
 }
 
 .pricing-note {
@@ -227,10 +173,6 @@
   small {
     color: $text-color-muted;
     font-style: italic;
-    font-size: 0.75rem;
-
-    @include until('small-sm') {
-      font-size: 0.7rem;
-    }
+    font-size: clamp(0.7rem, 0.05vw + 0.68rem, 0.75rem);
   }
 }

@@ -1,27 +1,23 @@
 @use 'sass:color';
 @use '../../../app/styles/abstracts' as *;
 
-// =============================
-// 📄 _responsive.scss - NETTOYÉ
-// =============================
+// ================================
+// 📄 _responsive.scss
+// ================================
 
 @include mobile-landscape {
   .app-header-section .app-header-container {
     padding: 1rem 0.75rem;
   }
-
   .app-details-section .app-details-container {
     padding: 1rem 0.75rem;
   }
-
   .app-header {
     gap: 1.5rem;
   }
-
   .title-block .app-title {
     font-size: 2rem;
   }
-
   .badge {
     padding: 0.75rem 0.625rem;
   }
@@ -30,13 +26,13 @@
 @include tall-screen {
   .app-header-container,
   .app-details-container {
-    @include until('medium-lg') {
+    @include below-desktop {
       gap: 3rem;
     }
   }
 
   .description-content .description-text {
-    @include until('medium-lg') {
+    @include below-desktop {
       max-height: 220px;
     }
   }
@@ -46,17 +42,14 @@
   .btn {
     min-height: 48px;
   }
-
   .badge {
     min-width: 48px;
     min-height: 48px;
   }
-
   .btn:hover,
   .badge:hover {
     transform: none;
   }
-
   .btn:active {
     transform: scale(0.98);
   }
@@ -70,45 +63,39 @@
   .pricing-section {
     transition: none;
     animation: none;
-
     &:hover,
     &:active {
       transform: none;
     }
   }
-
   .btn::before {
     display: none;
   }
 }
 
-@include from('large-xxxl') {
+@include from('large-1920') {
   .app-header-container,
   .app-details-container {
     max-width: 1600px;
   }
-
   .title-block .app-title {
     font-size: 3rem;
   }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 359px) {
   .app-header-container,
   .app-details-container {
     padding: 0 0.75rem;
     gap: 2rem;
   }
-
   .title-block .app-title {
     font-size: 2rem;
   }
-
   .badge {
     padding: 0.25rem 0.5rem;
     font-size: 0.75rem;
   }
-
   .btn {
     padding: 1.25rem 1.5rem;
     font-size: 0.9rem;

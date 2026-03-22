@@ -2,95 +2,21 @@
 @use '../../../app/styles/abstracts' as *;
 
 // ================================
-// 📄 _buttons.scss - TEXTE VISIBLE + ICÔNES CACHÉES SUR MOBILE
+// 📄 _buttons.scss
 // ================================
 
 .action-buttons {
   display: flex;
-  gap: 0.75rem;
+  gap: clamp(0.5rem, 0.27vw + 0.4rem, 0.75rem);
   width: 100%;
-  margin-top: auto; // Pousse vers le bas
-
-  @include small-screens {
-    gap: 0.5rem;
-  }
-
-  @include from('small-sm') {
-    gap: 0.55rem;
-  }
-
-  @include from('small-lg') {
-    gap: 0.6rem;
-  }
-
-  @include from('small-xl') {
-    gap: 0.65rem;
-  }
-
-  @include from('large-xxl') {
-    gap: 0.5rem;
-  }
+  margin-top: auto;
 
   .btn {
-    flex: 1; // Partage équitable de l'espace
-
-    // 📱 MOBILE FIRST - Boutons tactiles optimaux avec nouveaux breakpoints
-    padding: 1rem 1.25rem;
-    font-size: 0.95rem;
-    min-height: 48px;
-
-    // 📟 TRÈS PETITS ÉCRANS - Boutons plus compacts
-    @include small-screens {
-      padding: 0.625rem 0.75rem;
-      font-size: 0.8rem;
-      min-height: 40px;
-    }
-
-    @include from('small-sm') {
-      padding: 0.7rem 0.85rem;
-      font-size: 0.82rem;
-      min-height: 42px;
-    }
-
-    @include from('small-lg') {
-      padding: 0.75rem 0.9rem;
-      font-size: 0.84rem;
-      min-height: 44px;
-    }
-
-    @include from('small-xl') {
-      padding: 0.8rem 1rem;
-      font-size: 0.86rem;
-      min-height: 46px;
-    }
-
-    // 📟 MOYENS ÉCRANS - Ajustements progressifs
-    @include between('small-xl', 'medium-sm') {
-      padding: 0.83rem 1.05rem;
-      font-size: 0.88rem;
-    }
-
-    @include from('medium-sm') {
-      padding: 0.85rem 1.1rem;
-      font-size: 0.89rem;
-    }
-
-    @include from('medium-lg') {
-      padding: 0.4rem 0.8rem;
-      font-size: 0.9rem;
-    }
-
-    @include from('medium-xxl') {
-      padding: 0.5rem 0.9rem;
-      font-size: 0.9rem;
-    }
-
-    // 🖥️ GRANDS ÉCRANS
-    @include from('large-xxl') {
-      padding: 0.6rem 0.9rem; // ✅ Réduit de ~20%
-      font-size: 0.875rem;
-      min-height: auto;
-    }
+    flex: 1;
+    padding: clamp(0.625rem, 0.38vw + 0.49rem, 1rem)
+      clamp(0.75rem, 0.54vw + 0.55rem, 1.25rem);
+    font-size: clamp(0.8rem, 0.1vw + 0.76rem, 0.9rem);
+    min-height: clamp(40px, 0.87vw + 36.9px, 48px);
   }
 }
 
@@ -111,7 +37,6 @@
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-
     &:hover {
       transform: none;
     }
@@ -121,7 +46,6 @@
     transform: translateY(1px);
   }
 
-  // Effet de brillance
   &::before {
     content: '';
     position: absolute;
@@ -142,46 +66,12 @@
     left: 100%;
   }
 
-  // ✅ ICÔNES - CACHÉES SUR MOBILE/TABLET, VISIBLES SUR DESKTOP
+  // Icônes cachées mobile, visibles desktop
   svg {
     transition: transform 0.3s ease;
+    display: none;
 
-    // 📱 MOBILE - Cacher l'icône
-    @include small-screens {
-      display: none;
-    }
-
-    @include from('small-sm') {
-      display: none;
-    }
-
-    @include from('small-lg') {
-      display: none;
-    }
-
-    @include from('small-xl') {
-      display: none;
-    }
-
-    // 📟 MOYENS ÉCRANS - Cacher l'icône
-    @include between('small-xl', 'medium-sm') {
-      display: none;
-    }
-
-    @include from('medium-sm') {
-      display: none;
-    }
-
-    @include from('medium-lg') {
-      display: none;
-    }
-
-    @include from('medium-xxl') {
-      display: none;
-    }
-
-    // 🖥️ DESKTOP - Afficher l'icône
-    @include from('large-xs') {
+    @include desktop-up {
       display: inline-block;
     }
   }
@@ -190,10 +80,6 @@
     transform: scale(1.1);
   }
 }
-
-// =============================
-// BOUTON COMMANDER (btn-cart)
-// =============================
 
 .btn-cart {
   background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
@@ -211,15 +97,10 @@
     box-shadow: 0 8px 25px rgba($secondary-color, 0.4);
   }
 
-  // ✅ TEXTE - TOUJOURS VISIBLE
   .btn-text {
-    display: inline; // Visible partout
+    display: inline;
   }
 }
-
-// =============================
-// BOUTON VOIR + (btn-preview)
-// =============================
 
 .btn-preview {
   background: transparent;
@@ -234,8 +115,7 @@
     box-shadow: 0 6px 20px rgba($primary-color, 0.3);
   }
 
-  // ✅ TEXTE - TOUJOURS VISIBLE
   .btn-text {
-    display: inline; // Visible partout
+    display: inline;
   }
 }

@@ -2,20 +2,15 @@
 @use '../../../app/styles/abstracts' as *;
 
 // ================================
-// 📄 _typography.scss - AVEC INDICATEUR VISUEL
+// 📄 _typography.scss
 // ================================
 
-// ✅ Link wrapper pour le titre + indicateur
 .minimalTitleLink {
   text-decoration: none;
   color: inherit;
   display: block;
   cursor: pointer;
-  margin-bottom: 0.75rem; // ✅ Espacement avant la catégorie
-
-  @include small-screens {
-    margin-bottom: 0.5rem;
-  }
+  margin-bottom: clamp(0.5rem, 0.27vw + 0.4rem, 0.75rem);
 
   &:hover {
     text-decoration: none;
@@ -28,77 +23,17 @@
   }
 }
 
+// clamp : 1.3rem (360px) → 1.8rem (1280px)
 .minimalTitle {
-  // ✅ MAJUSCULES sur le titre
   text-transform: uppercase;
-
-  font-size: 1.5rem;
+  font-size: clamp(1.3rem, 0.54vw + 1.1rem, 1.8rem);
   font-weight: 700;
   color: $text-color;
-  margin: 0 0 0.5rem 0; // ✅ Petit espace avant l'indicateur
+  margin: 0 0 0.5rem 0;
   line-height: 1.3;
   transition: all 0.3s ease;
-
-  // Meilleure lisibilité des majuscules
   letter-spacing: 0.05em;
 
-  // 📱 MOBILE avec nouveaux breakpoints
-  @include small-screens {
-    font-size: 1.3rem;
-    line-height: 1.4;
-    margin-bottom: 0.4rem;
-  }
-
-  @include from('small-sm') {
-    font-size: 1.32rem;
-    line-height: 1.38;
-  }
-
-  @include from('small-lg') {
-    font-size: 1.35rem;
-    line-height: 1.36;
-  }
-
-  @include from('small-xl') {
-    font-size: 1.38rem;
-    line-height: 1.34;
-  }
-
-  // 📟 MOYENS ÉCRANS - Progression
-  @include between('small-xl', 'medium-sm') {
-    font-size: 1.4rem;
-    line-height: 1.32;
-  }
-
-  @include from('medium-sm') {
-    font-size: 1.45rem;
-    line-height: 1.31;
-  }
-
-  @include from('medium-lg') {
-    font-size: 1.6rem;
-    line-height: 1.3;
-  }
-
-  @include from('medium-xxl') {
-    font-size: 1.65rem;
-    line-height: 1.3;
-  }
-
-  // 🖥️ GRANDS ÉCRANS - Desktop
-  @include from('large-xs') {
-    font-size: 1.7rem;
-  }
-
-  @include from('large-lg') {
-    font-size: 1.75rem;
-  }
-
-  @include from('large-xxl') {
-    font-size: 1.8rem;
-  }
-
-  // Effet hover uniquement via le Link parent
   .minimalTitleLink:hover & {
     color: $primary-color;
     transform: translateX(4px);
@@ -106,38 +41,23 @@
 }
 
 // ================================
-// ✅ INDICATEUR VISUEL "VOIR LES DÉTAILS"
+// INDICATEUR "VOIR +"
 // ================================
-
 .view-details-indicator {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-
-  padding: 0.4rem 0.75rem;
-
+  padding: clamp(0.35rem, 0.11vw + 0.31rem, 0.45rem)
+    clamp(0.65rem, 0.16vw + 0.59rem, 0.8rem);
   background: linear-gradient(
     135deg,
     rgba($primary-color, 0.12),
     rgba($secondary-color, 0.08)
   );
-
   border: 1px solid rgba($primary-color, 0.3);
   border-radius: 20px;
-
   transition: all 0.3s ease;
 
-  // 📱 MOBILE
-  @include small-screens {
-    padding: 0.35rem 0.65rem;
-    gap: 0.4rem;
-  }
-
-  @include from('medium-sm') {
-    padding: 0.45rem 0.8rem;
-  }
-
-  // Effet hover via parent Link
   .minimalTitleLink:hover & {
     background: linear-gradient(
       135deg,
@@ -150,57 +70,24 @@
 }
 
 .indicator-text {
-  font-size: 0.75rem;
+  font-size: clamp(0.7rem, 0.08vw + 0.67rem, 0.8rem);
   font-weight: 600;
   color: $primary-color;
-
-  // ✅ Minuscules pour l'indicateur (plus discret)
   text-transform: lowercase;
   letter-spacing: 0.02em;
-
   transition: color 0.3s ease;
 
-  @include small-screens {
-    font-size: 0.7rem;
-  }
-
-  @include from('medium-sm') {
-    font-size: 0.78rem;
-  }
-
-  @include from('large-xs') {
-    font-size: 0.8rem;
-  }
-
-  // Hover via parent Link
   .minimalTitleLink:hover & {
     color: color.adjust($primary-color, $lightness: 10%);
   }
 }
 
 .indicator-arrow {
-  width: 14px;
-  height: 14px;
+  width: clamp(12px, 0.43vw + 10.4px, 16px);
+  height: clamp(12px, 0.43vw + 10.4px, 16px);
   color: $primary-color;
-
   transition: transform 0.3s ease;
 
-  @include small-screens {
-    width: 12px;
-    height: 12px;
-  }
-
-  @include from('medium-sm') {
-    width: 15px;
-    height: 15px;
-  }
-
-  @include from('large-xs') {
-    width: 16px;
-    height: 16px;
-  }
-
-  // ✅ ANIMATION FLÈCHE au hover
   .minimalTitleLink:hover & {
     transform: translateX(4px);
     color: color.adjust($primary-color, $lightness: 10%);
@@ -210,8 +97,6 @@
 // ================================
 // ACCESSIBILITÉ
 // ================================
-
-// Réduction des animations
 @include reduced-motion {
   .view-details-indicator,
   .indicator-arrow,
@@ -224,10 +109,9 @@
   }
 }
 
-// Écrans tactiles
 @media (pointer: coarse) {
   .view-details-indicator {
-    padding: 0.5rem 0.9rem; // Zone tactile plus grande
+    padding: 0.5rem 0.9rem;
 
     .minimalTitleLink:hover & {
       transform: none;

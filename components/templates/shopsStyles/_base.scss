@@ -2,9 +2,8 @@
 @use '../../../app/styles/abstracts' as *;
 
 // ================================
-// 📄 _base.scss - AVEC BACKGROUND STARS ET ALIGNEMENT OPTIMISÉ
+// 📄 _base.scss
 // ================================
-// ✅ CORRECTION : Moins de padding bas sur PC pour laisser place aux dots
 
 .projectSection {
   width: 100%;
@@ -13,71 +12,17 @@
   align-items: center;
   justify-content: center;
   position: relative;
-
-  // ✅ BACKGROUND STARS
   background-image: url('/stars.png');
   background-repeat: repeat;
   background-size: auto;
   background-position: center;
 
-  // 📱 MOBILE FIRST - Padding équilibré
-  padding: 2.5rem 1rem 2rem 1rem;
+  // clamp : 2rem (360px) → 2.5rem (768px) vertical, 1rem → 2rem horizontal
+  padding: clamp(2rem, 0.54vw + 1.8rem, 2.5rem)
+    clamp(1rem, 1.09vw + 0.61rem, 2rem) clamp(1.5rem, 0.54vw + 1.3rem, 2rem);
 
-  // 📟 TRÈS PETITS ÉCRANS
-  @include small-screens {
-    padding: 2rem 0.75rem 1.5rem 0.75rem;
-    align-items: center;
-  }
-
-  @include from('small-sm') {
-    padding: 2.2rem 0.8rem 1.6rem 0.8rem;
-    align-items: center;
-  }
-
-  @include from('small-lg') {
-    padding: 2.3rem 0.9rem 1.7rem 0.9rem;
-    align-items: center;
-  }
-
-  @include from('small-xl') {
-    padding: 2.4rem 1rem 1.8rem 1rem;
-    align-items: center;
-  }
-
-  // 📟 MOYENS ÉCRANS
-  @include between('small-xl', 'medium-sm') {
-    padding: 2rem 1.2rem 2rem 1.2rem;
-    align-items: center;
-  }
-
-  @include from('medium-sm') {
-    padding: 1.8rem 1.3rem 2rem 1.3rem;
-    align-items: center;
-  }
-
-  @include from('medium-lg') {
-    padding: 1.5rem 1.5rem 2rem 1.5rem;
-    align-items: center;
-  }
-
-  @include from('medium-xxl') {
-    padding: 1.8rem 1.7rem;
-    align-items: center;
-  }
-
-  // 🖥️ GRANDS ÉCRANS - PADDING BAS RÉDUIT pour laisser place aux dots
-  @include from('large-xs') {
-    padding: 2.5rem 2rem 1rem 2rem; // ✅ 1rem en bas au lieu de 2.5rem
-    align-items: center;
-  }
-
-  @include from('large-lg') {
-    padding: 2.8rem 2.2rem 1rem 2.2rem; // ✅ 1rem en bas au lieu de 2.8rem
-    align-items: center;
-  }
-
-  @include from('large-xxl') {
-    padding: 3rem 3rem 1rem 3rem; // ✅ 1rem en bas au lieu de 3rem
-    align-items: center;
+  // Desktop : padding bas réduit pour laisser place aux dots
+  @include desktop-up {
+    padding: 2.5rem 2rem 1rem 2rem;
   }
 }

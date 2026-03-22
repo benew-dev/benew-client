@@ -12,61 +12,9 @@
   justify-content: center;
   border-bottom: 1px solid rgba($primary-color, 0.08);
 
-  // 📱 MOBILE FIRST - Hauteur RÉDUITE
-  height: 260px; // ✅ Réduit de 280px
-  padding: 1.4rem; // ✅ Réduit de 1.5rem
-
-  @include from('small-sm') {
-    height: 270px; // ✅ Réduit de 290px
-    padding: 1.5rem; // ✅ Réduit de 1.6rem
-  }
-
-  @include from('small-lg') {
-    height: 275px; // ✅ Réduit de 295px
-    padding: 1.55rem; // ✅ Réduit de 1.65rem
-  }
-
-  @include from('small-xl') {
-    height: 280px; // ✅ Réduit de 300px
-    padding: 1.6rem; // ✅ Réduit de 1.75rem
-  }
-
-  // 📟 MOYENS ÉCRANS - Croissance progressive
-  @include between('small-xl', 'medium-sm') {
-    height: 300px; // ✅ Réduit de 320px
-    padding: 1.8rem; // ✅ Réduit de 2rem
-  }
-
-  @include from('medium-sm') {
-    height: 330px; // ✅ Réduit de 350px
-    padding: 2rem; // ✅ Réduit de 2.2rem
-  }
-
-  @include from('medium-lg') {
-    height: 360px; // ✅ Réduit de 380px
-    padding: 2.3rem; // ✅ Réduit de 2.5rem
-  }
-
-  @include from('medium-xxl') {
-    height: 380px; // ✅ Réduit de 400px
-    padding: 2.6rem; // ✅ Réduit de 2.8rem
-  }
-
-  // 🖥️ GRANDS ÉCRANS - Desktop RÉDUIT
-  @include from('large-xs') {
-    height: 380px; // ✅ Réduit de 420px
-    padding: 2.5rem; // ✅ Réduit de 3rem
-  }
-
-  @include from('large-lg') {
-    height: 400px; // ✅ Réduit de 440px
-    padding: 2.7rem; // ✅ Réduit de 3.2rem
-  }
-
-  @include from('large-xxl') {
-    height: 420px; // ✅ Réduit de 460px
-    padding: 3rem; // ✅ Réduit de 3.5rem
-  }
+  // clamp : 260px (360px) → 420px (1280px)
+  height: clamp(260px, 17.39vw + 197.4px, 420px);
+  padding: clamp(1.4rem, 1.63vw + 0.81rem, 3rem);
 }
 
 .minimalImage {

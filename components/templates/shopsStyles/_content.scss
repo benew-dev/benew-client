@@ -5,125 +5,28 @@
 // 📄 _content.scss
 // ================================
 
+// clamp : 1.75rem (360px) → 2rem (1280px) vertical,
+//         1.25rem → 1.5rem horizontal
 .card-content {
-  // 📱 MOBILE FIRST - Flexbox pour structurer le contenu avec nouveaux breakpoints
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 2rem 1.5rem;
+  padding: clamp(1.75rem, 0.27vw + 1.65rem, 2rem)
+    clamp(1.25rem, 0.27vw + 1.15rem, 1.5rem);
   position: relative;
   z-index: 2;
-
-  // 📟 TRÈS PETITS ÉCRANS
-  @include small-screens {
-    padding: 1.75rem 1.25rem;
-  }
-
-  @include from('small-sm') {
-    padding: 1.8rem 1.3rem;
-  }
-
-  @include from('small-lg') {
-    padding: 1.85rem 1.35rem;
-  }
-
-  @include from('small-xl') {
-    padding: 1.9rem 1.4rem;
-  }
-
-  // 📟 MOYENS ÉCRANS - Réduction progressive
-  @include between('small-xl', 'medium-sm') {
-    padding: 1.85rem 1.38rem;
-  }
-
-  @include from('medium-sm') {
-    padding: 1.8rem 1.37rem;
-  }
-
-  @include from('medium-lg') {
-    padding: 1.75rem 1.375rem;
-  }
-
-  @include from('medium-xxl') {
-    padding: 1.7rem 1.36rem;
-  }
-
-  // 🖥️ GRANDS ÉCRANS - Desktop
-  @include from('large-xs') {
-    padding: 1.65rem 1.35rem;
-  }
-
-  @include from('large-lg') {
-    padding: 1.6rem 1.3rem;
-  }
-
-  @include from('large-xxl') {
-    padding: 1.5rem; // Valeur desktop originale
-  }
 }
 
-// =============================
-// META INFORMATIONS (LEVEL - CATEGORY)
-// =============================
-
+// clamp : 0.8rem (360px) → 0.85rem (1280px)
 .app-meta {
   color: $text-color-muted;
-  margin: 0 0 1.5rem 0;
+  margin: 0 0 clamp(1.25rem, 0.27vw + 1.15rem, 1.5rem) 0;
   line-height: 1.4;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   flex-wrap: wrap;
-
-  // 📱 MOBILE FIRST avec nouveaux breakpoints
-  font-size: 0.85rem;
-
-  // 📟 TRÈS PETITS ÉCRANS
-  @include small-screens {
-    font-size: 0.8rem;
-    margin: 0 0 1.25rem 0;
-  }
-
-  @include from('small-sm') {
-    font-size: 0.81rem;
-    margin: 0 0 1.3rem 0;
-  }
-
-  @include from('small-lg') {
-    font-size: 0.82rem;
-    margin: 0 0 1.35rem 0;
-  }
-
-  @include from('small-xl') {
-    font-size: 0.83rem;
-    margin: 0 0 1.4rem 0;
-  }
-
-  // 📟 MOYENS ÉCRANS - Progression
-  @include between('small-xl', 'medium-sm') {
-    font-size: 0.84rem;
-    margin: 0 0 1.45rem 0;
-  }
-
-  @include from('medium-sm') {
-    font-size: 0.84rem;
-    margin: 0 0 1.48rem 0;
-  }
-
-  @include from('medium-lg') {
-    font-size: 0.83rem;
-    margin: 0 0 1.49rem 0;
-  }
-
-  @include from('medium-xxl') {
-    font-size: 0.82rem;
-    margin: 0 0 1.5rem 0;
-  }
-
-  // 🖥️ GRANDS ÉCRANS - Desktop
-  @include from('large-xxl') {
-    font-size: 0.8rem;
-  }
+  font-size: clamp(0.8rem, 0.05vw + 0.78rem, 0.85rem);
 
   .level,
   .category {

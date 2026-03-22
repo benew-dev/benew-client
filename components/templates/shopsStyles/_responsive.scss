@@ -5,7 +5,6 @@
 // 📄 _responsive.scss
 // ================================
 
-// Mode paysage sur mobile - Layout optimisé
 @include mobile-landscape {
   .projectSection {
     padding: 1rem 0.75rem;
@@ -39,22 +38,18 @@
   }
 }
 
-// Écrans très hauts (iPhone X, 11, etc.)
 @include tall-screen {
   .application-card {
-    @include until('large-xs') {
+    @include below-desktop {
       min-height: 450px;
-    }
 
-    .card-image {
-      @include until('large-xs') {
+      .card-image {
         height: 260px;
       }
     }
   }
 }
 
-// Support pour écrans tactiles - Zones tactiles optimisées
 @media (pointer: coarse) {
   .btn {
     min-width: 44px;
@@ -63,7 +58,6 @@
     &:hover {
       transform: none;
     }
-
     &:active {
       opacity: 0.8;
       transform: scale(0.98);
@@ -71,15 +65,13 @@
   }
 
   .application-card:hover {
-    transform: none; // Pas d'effet hover sur tactile au repos
+    transform: none;
   }
-
   .application-card:active {
     transform: translateY(-5px);
   }
 }
 
-// Amélioration pour l'accessibilité - Réduction des animations
 @include reduced-motion {
   .application-card,
   .app-image,
@@ -104,7 +96,6 @@
   }
 }
 
-// Support pour écrans haute densité
 @include high-density {
   .application-card {
     box-shadow:
@@ -118,8 +109,7 @@
   }
 }
 
-// ÉCRANS TRÈS PETITS - Mobile
-@media (max-width: 360px) {
+@media (max-width: 359px) {
   .projectSection {
     padding: 0.75rem 0.5rem;
   }
@@ -132,23 +122,18 @@
     .card-image {
       height: 200px;
     }
-
     .card-content {
       padding: 1.5rem 1rem;
     }
-
     .app-title {
       font-size: 1.15rem;
     }
-
     .app-meta {
       font-size: 0.75rem;
     }
-
     .price {
       font-size: 0.8rem;
     }
-
     .rent-price {
       font-size: 0.8rem;
     }
@@ -161,8 +146,7 @@
   }
 }
 
-// Très grands écrans - Limitation de la taille
-@include from('large-xxxl') {
+@include from('large-1920') {
   .projectSection {
     padding: 3rem 2rem;
   }
@@ -174,11 +158,9 @@
     .card-image {
       height: 220px;
     }
-
     .app-title {
       font-size: 1.3rem;
     }
-
     .price {
       font-size: 1.2rem;
     }

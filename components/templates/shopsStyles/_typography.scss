@@ -5,74 +5,17 @@
 // 📄 _typography.scss
 // ================================
 
+// clamp : 1.25rem (360px) → 1.4rem (1280px)
 .app-title {
   font-weight: 700;
   color: $text-color;
-  margin: 0 0 1rem 0;
+  margin: 0 0 clamp(0.875rem, 0.14vw + 0.82rem, 1rem) 0;
   line-height: 1.3;
   text-shadow: 0 2px 4px rgba($background-color, 0.5);
   transition: all 0.3s ease;
 
-  // 📱 MOBILE FIRST - Titre bien visible avec nouveaux breakpoints
-  font-size: 1.4rem;
+  font-size: clamp(1.25rem, 0.16vw + 1.19rem, 1.4rem);
 
-  // 📟 TRÈS PETITS ÉCRANS - Toujours lisible
-  @include small-screens {
-    font-size: 1.25rem;
-    margin: 0 0 0.875rem 0;
-  }
-
-  @include from('small-sm') {
-    font-size: 1.28rem;
-    margin: 0 0 0.9rem 0;
-  }
-
-  @include from('small-lg') {
-    font-size: 1.32rem;
-    margin: 0 0 0.93rem 0;
-  }
-
-  @include from('small-xl') {
-    font-size: 1.35rem;
-    margin: 0 0 0.95rem 0;
-  }
-
-  // 📟 MOYENS ÉCRANS - Réduction progressive
-  @include between('small-xl', 'medium-sm') {
-    font-size: 1.33rem;
-    margin: 0 0 0.93rem 0;
-  }
-
-  @include from('medium-sm') {
-    font-size: 1.32rem;
-    margin: 0 0 0.9rem 0;
-  }
-
-  @include from('medium-lg') {
-    font-size: 1.3rem;
-    margin: 0 0 0.85rem 0;
-  }
-
-  @include from('medium-xxl') {
-    font-size: 1.25rem;
-    margin: 0 0 0.8rem 0;
-  }
-
-  // 🖥️ GRANDS ÉCRANS - Desktop
-  @include from('large-xs') {
-    font-size: 1.2rem;
-  }
-
-  @include from('large-lg') {
-    font-size: 1.16rem;
-  }
-
-  @include from('large-xxl') {
-    font-size: 1.125rem; // Valeur desktop originale
-    margin: 0 0 0.75rem 0;
-  }
-
-  // Effet hover amélioré
   .application-card:hover & {
     color: $primary-color;
     transform: translateX(5px);
