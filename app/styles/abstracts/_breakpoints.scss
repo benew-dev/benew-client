@@ -1,218 +1,63 @@
 // =============================================================================
-// SYSTÈME DE BREAKPOINTS OPTIMISÉ - 3 GRANDES CATÉGORIES (2025)
+// SYSTÈME DE BREAKPOINTS — CALIBRÉ POUR DJIBOUTI / AFRIQUE 2026
 // =============================================================================
-// Approche simplifiée et logique : PETITS | MOYENS | GRANDS ÉCRANS
-// Mobile-first avec réduction intelligente pour performance et maintenabilité
-// RÉDUCTION : 40+ breakpoints → 18 breakpoints essentiels (-59%)
+// Audience : ~500 users/jour, marché émergent, appareils budget dominants
+// Source statistiques : StatCounter Afrique jan. 2026
+//
+// RÈGLE D'USAGE :
+//   - 90% des composants n'utilisent que 3 paliers : base / medium-768 / large-1280
+//   - Les valeurs scalables (font-size, spacing, padding) utilisent clamp()
+//   - Les breakpoints servent uniquement aux changements structurels (layout, display, position)
+// =============================================================================
 
-// ✅ IMPORT DES MODULES SASS MODERNES
 @use 'sass:map';
 @use 'sass:list';
 
 // =============================================================================
-// 1. BREAKPOINTS - 3 CATÉGORIES OPTIMISÉES (18 BREAKPOINTS ESSENTIELS)
+// 1. BREAKPOINTS — 8 VALEURS CALIBRÉES
 // =============================================================================
 
 $breakpoints: (
-  // 📱 PETITS ÉCRANS (320px - 700px) - 4 BREAKPOINTS ESSENTIELS
-  // === SMARTPHONES & APPAREILS PORTABLES ===
-  // Sélection basée sur part de marché et standards industrie
-  'small-xs': 360px,
-  // Android budget dominant + Samsung Galaxy S25 standard
-  'small-sm': 375px,
-  // iPhone historique (6/7/8) encore très utilisé
-  'small-lg': 393px,
-  // iPhone 15/16 (standard Apple actuel)
-  'small-xl': 430px,
-  // iPhone Plus + limite supérieure mobiles
-  // 📟 MOYENS ÉCRANS (701px - 1199px) - 4 BREAKPOINTS ESSENTIELS
-  // === TABLETTES & ÉCRANS INTERMÉDIAIRES ===
-  // Focus sur iPads dominants + grandes tablettes Android
-  'medium-sm': 768px,
-  // iPad classique 9.7" (référence historique absolue)
-  'medium-lg': 834px,
-  // iPad Pro 11" (toutes générations - standard Apple)
-  'medium-xl': 900px,
-  // Grandes tablettes Android 13-14" (Samsung, OnePlus)
-  'medium-xxl': 1024px,
-  // iPad Pro 12.9" + tablettes en paysage
-  // 🖥️ GRANDS ÉCRANS (1200px+) - 6 BREAKPOINTS ESSENTIELS
-  // === LAPTOPS & DESKTOPS ===
-  // Sélection basée sur statistiques d'usage réelles
-  'large-xs': 1200px,
-  // Standard industrie absolu - seuil desktop (Bootstrap, Tailwind)
-  'large-sm': 1280px,
-  // Laptops standards 14-15" (très populaire - MacBook Air, Dell XPS)
-  'large-md': 1366px,
-  // Laptops budget + anciens écrans (11,69% marché global)
-  'large-lg': 1440px,
-  // Desktop 2K entry + laptops premium (point d'équilibre)
-  'large-xxl': 1920px,
-  // Desktop Full HD (22% marché mondial - DOMINANT)
-  'large-xxxl': 2560px // Desktop 2K/QHD premium gaming/pro
+  // 📱 MOBILE
+  // 360px : résolution dominante Afrique (13,75% StatCounter)
+  // 414px : Android mid-range Afrique (Samsung Galaxy A-series, Tecno, Infinix)
+  'small-360': 360px,
+  'small-414': 414px,
+
+  // 📟 TABLETTE
+  // 768px : iPad classique, référence absolue industrie
+  // 1024px : iPad Pro, tablettes landscape, Chromebooks
+  'medium-768': 768px,
+  'medium-1024': 1024px,
+
+  // 🖥️ DESKTOP
+  // 1280px : laptops 14-15" standard (MacBook Air, Dell XPS)
+  // 1366px : laptops budget + anciens écrans (11,69% marché global)
+  // 1440px : desktop 2K entry, laptops premium
+  // 1920px : Full HD dominant (22% marché mondial)
+  'large-1280': 1280px,
+  'large-1366': 1366px,
+  'large-1440': 1440px,
+  'large-1920': 1920px
 ) !default;
 
 // =============================================================================
-// 2. APPAREILS SPÉCIFIQUES RATIONALISÉS (18 APPAREILS ESSENTIELS)
+// 2. FONCTIONS UTILITAIRES
 // =============================================================================
 
-$device-breakpoints: (
-  // 📱 MOBILES ESSENTIELS - 8 APPAREILS (vs 17 avant)
-  // === IPHONE DOMINANTS ===
-  'iphone-13-14': (
-      width: 390px,
-      height: 844px,
-    ),
-  // Génération dominante encore très utilisée
-  'iphone-15-16': (
-      width: 393px,
-      height: 852px,
-    ),
-  // Standard Apple actuel (majoritaire)
-  'iphone-15-16-plus': (
-      width: 430px,
-      height: 932px,
-    ),
-  // Plus grandes versions populaires
-  // === ANDROID FLAGSHIPS DOMINANTS ===
-  'galaxy-s25': (
-      width: 360px,
-      height: 780px,
-    ),
-  // Samsung standard 6.2" (leader Android)
-  'pixel-9': (
-      width: 412px,
-      height: 915px,
-    ),
-  // Google Pixel 6.3" (référence Android pure)
-  'oneplus-13': (
-      width: 455px,
-      height: 809px,
-    ),
-  // OnePlus flagship 6.82" (performance)
-  // 📟 TABLETTES ESSENTIELLES - 6 APPAREILS (vs 12 avant)
-  // === IPAD STANDARDS ===
-  'ipad-air-11-2024': (
-      width: 820px,
-      height: 1180px,
-    ),
-  // iPad Air 11" M2 (équilibre prix/performance)
-  'ipad-pro-11-m4': (
-      width: 834px,
-      height: 1194px,
-    ),
-  // iPad Pro 11" M4 (standard professionnel)
-  'ipad-pro-13-m4': (
-      width: 1032px,
-      height: 1376px,
-    ),
-  // iPad Pro 13" M4 (haut de gamme)
-  // === TABLETTES ANDROID POPULAIRES ===
-  'galaxy-tab-s10': (
-      width: 800px,
-      height: 1280px,
-    ),
-  // Samsung Tab S10 11" (leader Android tablettes)
-  'pixel-tablet': (
-      width: 800px,
-      height: 1280px,
-    ),
-  // Google Pixel Tablet 10.95" (référence Google)
-  'oneplus-pad-3': (
-      width: 900px,
-      height: 1200px,
-    ),
-  // OnePlus Pad 3 13"+ (premium Android)
-  // 🖥️ LAPTOPS/DESKTOPS ESSENTIELS - 4 APPAREILS (vs 8 avant)
-  // === LAPTOPS POPULAIRES ===
-  'macbook-air-13-m4': (
-      width: 1280px,
-      height: 832px,
-    ),
-  // CSS pixels (scaling 2x) - leader laptops premium
-  'laptop-fhd-15': (
-      width: 1920px,
-      height: 1080px,
-    ),
-  // Laptops 15" standard Windows (majoritaire)
-  // === DESKTOPS DOMINANTS ===
-  'desktop-fhd': (
-      width: 1920px,
-      height: 1080px,
-    ),
-  // Full HD dominant (22% marché mondial)
-  'desktop-2k': (
-      width: 2560px,
-      height: 1440px,
-    ) // 2K/QHD premium (gaming/pro en croissance)
-) !default;
-
-// =============================================================================
-// 3. FONCTIONS UTILITAIRES - CONSERVÉES ET OPTIMISÉES
-// =============================================================================
-
-/// Récupère une valeur de breakpoint avec validation améliorée
-/// @param {String} $name - Nom du breakpoint
-/// @return {String|null} - Valeur du breakpoint ou null si introuvable
 @function breakpoint($name) {
   @if map.has-key($breakpoints, $name) {
     @return map.get($breakpoints, $name);
   }
-  @warn "⚠️ Breakpoint `#{$name}` introuvable. Breakpoints disponibles: #{map.keys($breakpoints)}";
+  @warn "⚠️ Breakpoint `#{$name}` introuvable. Disponibles: #{map.keys($breakpoints)}";
   @return null;
-}
-
-/// Récupère les dimensions d'un appareil
-/// @param {String} $device - Nom de l'appareil
-/// @param {String} $property - 'width' ou 'height'
-/// @return {String|null} - Valeur de la dimension
-@function device-dimension($device, $property: 'width') {
-  @if map.has-key($device-breakpoints, $device) {
-    $device-map: map.get($device-breakpoints, $device);
-    @if map.has-key($device-map, $property) {
-      @return map.get($device-map, $property);
-    }
-    @warn "⚠️ Propriété `#{$property}` introuvable pour `#{$device}`.";
-    @return null;
-  }
-  @warn "⚠️ Appareil `#{$device}` introuvable. Appareils disponibles: #{map.keys($device-breakpoints)}";
-  @return null;
-}
-
-/// Obtient le breakpoint suivant dans la même catégorie
-/// @param {String} $name - Nom du breakpoint actuel
-/// @return {String|null} - Breakpoint suivant
-@function next-breakpoint($name) {
-  $breakpoint-names: map.keys($breakpoints);
-  $index: list.index($breakpoint-names, $name);
-
-  @if $index and $index < length($breakpoint-names) {
-    $next-name: list.nth($breakpoint-names, $index + 1);
-    @return map.get($breakpoints, $next-name);
-  }
-  @return null;
-}
-
-/// Détermine la catégorie d'un breakpoint
-/// @param {String} $name - Nom du breakpoint
-/// @return {String} - 'small', 'medium' ou 'large'
-@function breakpoint-category($name) {
-  @if str-index($name, 'small-') == 1 {
-    @return 'small';
-  } @else if str-index($name, 'medium-') == 1 {
-    @return 'medium';
-  } @else if str-index($name, 'large-') == 1 {
-    @return 'large';
-  }
-  @return 'unknown';
 }
 
 // =============================================================================
-// 4. MIXINS RESPONSIVE - APPROCHE 3 CATÉGORIES (CONSERVÉS)
+// 3. MIXINS PRINCIPAUX
 // =============================================================================
 
-/// Mixin mobile-first standard
-/// @param {String} $breakpoint - Nom du breakpoint
+/// Mobile-first standard
 @mixin from($breakpoint) {
   $value: breakpoint($breakpoint);
   @if $value {
@@ -222,8 +67,7 @@ $device-breakpoints: (
   }
 }
 
-/// Mixin desktop-first standard
-/// @param {String} $breakpoint - Nom du breakpoint
+/// Desktop-first standard
 @mixin until($breakpoint) {
   $value: breakpoint($breakpoint);
   @if $value {
@@ -233,170 +77,82 @@ $device-breakpoints: (
   }
 }
 
-/// Mixin entre deux breakpoints
-/// @param {String} $from-breakpoint - Breakpoint minimum
-/// @param {String} $until-breakpoint - Breakpoint maximum
-@mixin between($from-breakpoint, $until-breakpoint) {
-  $from-value: breakpoint($from-breakpoint);
-  $until-value: breakpoint($until-breakpoint);
-
-  @if $from-value and $until-value {
-    @media (min-width: $from-value) and (max-width: calc(#{$until-value} - 1px)) {
-      @content;
-    }
-  }
-}
-
-/// Mixin pour une catégorie entière
-/// @param {String} $category - 'small', 'medium' ou 'large'
-@mixin screen-category($category) {
-  @if $category == 'small' {
-    @media (max-width: 700px) {
-      @content;
-    }
-  } @else if $category == 'medium' {
-    @media (min-width: 701px) and (max-width: 1199px) {
-      @content;
-    }
-  } @else if $category == 'large' {
-    @media (min-width: 1200px) {
+/// Entre deux breakpoints
+@mixin between($from-bp, $until-bp) {
+  $from-val: breakpoint($from-bp);
+  $until-val: breakpoint($until-bp);
+  @if $from-val and $until-val {
+    @media (min-width: $from-val) and (max-width: calc(#{$until-val} - 1px)) {
       @content;
     }
   }
 }
 
 // =============================================================================
-// 5. MIXINS CATÉGORIES - APPROCHE SIMPLIFIÉE
+// 4. MIXINS CATÉGORIES — LES 3 PALIERS STRUCTURELS
 // =============================================================================
 
-/// 📱 PETITS ÉCRANS - Smartphones et appareils portables
-@mixin small-screens {
-  @include screen-category('small') {
+/// 📱 Mobile uniquement (< 768px)
+@mixin mobile-only {
+  @media (max-width: calc(#{breakpoint('medium-768')} - 1px)) {
     @content;
   }
 }
 
-/// 📟 MOYENS ÉCRANS - Tablettes
-@mixin medium-screens {
-  @include screen-category('medium') {
+/// 📟 Tablette et plus (≥ 768px)
+@mixin tablet-up {
+  @include from('medium-768') {
     @content;
   }
 }
 
-/// 🖥️ GRANDS ÉCRANS - Laptops et desktops
-@mixin large-screens {
-  @include screen-category('large') {
+/// 🖥️ Desktop et plus (≥ 1280px)
+@mixin desktop-up {
+  @include from('large-1280') {
     @content;
   }
 }
 
-/// COMBO: Petits ET moyens écrans (mobile + tablettes)
-@mixin mobile-and-tablets {
-  @media (max-width: 1199px) {
-    @content;
-  }
-}
-
-/// COMBO: Moyens ET grands écrans (tablettes + ordinateurs)
-@mixin tablets-and-computers {
-  @media (min-width: 701px) {
+/// Mobile + Tablette uniquement (< 1280px)
+@mixin below-desktop {
+  @media (max-width: calc(#{breakpoint('large-1280')} - 1px)) {
     @content;
   }
 }
 
 // =============================================================================
-// 6. MIXINS SPÉCIFIQUES PAR APPAREIL
+// 5. MIXINS CONTEXTUELS — CONSERVÉS POUR ACCESSIBILITÉ ET CAS SPÉCIAUX
 // =============================================================================
 
-/// Mixin pour cibler un appareil spécifique avec orientation
-/// @param {String} $device - Nom de l'appareil
-/// @param {String} $orientation - 'portrait', 'landscape', ou null
-@mixin device($device, $orientation: null) {
-  @if map.has-key($device-breakpoints, $device) {
-    $device-map: map.get($device-breakpoints, $device);
-    $width: map.get($device-map, 'width');
-    $height: map.get($device-map, 'height');
-
-    @if $orientation == 'portrait' {
-      @media (width: $width) and (height: $height) and (orientation: portrait) {
-        @content;
-      }
-    } @else if $orientation == 'landscape' {
-      @media (width: $height) and (height: $width) and (orientation: landscape) {
-        @content;
-      }
-    } @else {
-      @media (width: $width) and (height: $height) {
-        @content;
-      }
-    }
-  } @else {
-    @warn "⚠️ Appareil `#{$device}` introuvable pour le mixin device.";
-  }
-}
-
-// =============================================================================
-// 7. MIXINS POUR ORIENTATIONS
-// =============================================================================
-
-/// Orientation portrait
-@mixin portrait {
-  @media (orientation: portrait) {
-    @content;
-  }
-}
-
-/// Orientation paysage
-@mixin landscape {
-  @media (orientation: landscape) {
-    @content;
-  }
-}
-
-/// Mode paysage mobile spécifique
+/// Mode paysage mobile
 @mixin mobile-landscape {
-  @media (max-width: 700px) and (orientation: landscape) {
+  @media (max-width: calc(#{breakpoint('medium-768')} - 1px)) and (orientation: landscape) {
     @content;
   }
 }
 
-/// Écrans hauts (nouveaux smartphones 2025)
+/// Écrans hauts (smartphones modernes avec grande hauteur)
 @mixin tall-screen {
   @media (min-height: 850px) {
     @content;
   }
 }
 
-/// Écrans courts
+/// Écrans courts (paysage budget, laptops compacts)
 @mixin short-screen {
   @media (max-height: 700px) {
     @content;
   }
 }
 
-// =============================================================================
-// 8. MIXINS POUR DENSITÉ D'ÉCRAN
-// =============================================================================
-
-/// Écrans haute densité (Retina, 2x, 3x)
+/// Haute densité (Retina, 2x)
 @mixin high-density {
   @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     @content;
   }
 }
 
-/// Écrans très haute densité (iPhone Pro, flagships Android)
-@mixin ultra-density {
-  @media (-webkit-min-device-pixel-ratio: 3), (min-resolution: 288dpi) {
-    @content;
-  }
-}
-
-// =============================================================================
-// 9. MIXINS POUR PRÉFÉRENCES UTILISATEUR
-// =============================================================================
-
-/// Mode sombre (très populaire en 2025)
+/// Mode sombre
 @mixin dark-mode {
   @media (prefers-color-scheme: dark) {
     @content;
@@ -424,218 +180,105 @@ $device-breakpoints: (
   }
 }
 
-/// Données réduites
-@mixin reduced-data {
-  @media (prefers-reduced-data: reduce) {
+/// Écrans tactiles
+@mixin touch-screen {
+  @media (pointer: coarse) {
     @content;
   }
 }
 
 // =============================================================================
-// 10. MIXINS POUR CONTENEURS
+// 6. HELPERS RÉTROCOMPATIBILITÉ
+// =============================================================================
+// Ces alias permettent aux anciens fichiers non encore migrés de continuer
+// à compiler pendant la période de transition.
+// À supprimer une fois tous les composants migrés.
+
+@mixin small-screens {
+  @include mobile-only {
+    @content;
+  }
+}
+
+@mixin medium-screens {
+  @include between('medium-768', 'large-1280') {
+    @content;
+  }
+}
+
+@mixin large-screens {
+  @include desktop-up {
+    @content;
+  }
+}
+
+@mixin mobile-and-tablets {
+  @include below-desktop {
+    @content;
+  }
+}
+
+@mixin tablets-and-computers {
+  @include tablet-up {
+    @content;
+  }
+}
+
+// =============================================================================
+// 7. CONTENEUR RESPONSIVE UTILITAIRE
 // =============================================================================
 
-/// Conteneur responsive avec largeurs par catégorie
 @mixin container($max-width: null) {
   width: 100%;
-  padding-inline: clamp(1rem, 5vw, 2rem);
+  padding-inline: clamp(1rem, 4vw, 2rem);
   margin-inline: auto;
 
   @if $max-width {
     max-width: $max-width;
   } @else {
-    // Petits écrans : largeur fluide
-    @include small-screens {
-      max-width: 100%;
-      padding-inline: 1rem;
-    }
-
-    // Moyens écrans : largeurs tablettes
-    @include medium-screens {
-      max-width: 90%;
-    }
-
-    // Grands écrans : largeurs fixes progressives
-    @include from('large-xs') {
+    @include desktop-up {
       max-width: 1140px;
     }
-
-    @include from('large-lg') {
+    @include from('large-1440') {
       max-width: 1320px;
     }
-
-    @include from('large-xxl') {
+    @include from('large-1920') {
       max-width: 1540px;
     }
   }
 }
 
 // =============================================================================
-// 11. HELPERS RAPIDES - APPROCHE 3 CATÉGORIES
-// =============================================================================
-
-/// Cacher sur petits écrans uniquement
-@mixin hide-small {
-  @include small-screens {
-    display: none !important;
-  }
-}
-
-/// Afficher sur petits écrans uniquement
-@mixin show-small-only {
-  @include medium-screens {
-    display: none !important;
-  }
-  @include large-screens {
-    display: none !important;
-  }
-}
-
-/// Cacher sur moyens écrans uniquement
-@mixin hide-medium {
-  @include medium-screens {
-    display: none !important;
-  }
-}
-
-/// Optimisations spécifiques par catégorie
-@mixin optimize-for-category($category) {
-  @if $category == 'small' {
-    // Optimisations mobiles
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-  } @else if $category == 'medium' {
-    // Optimisations tablettes
-    scroll-behavior: smooth;
-  } @else if $category == 'large' {
-    // Optimisations desktop
-    cursor: pointer;
-    user-select: none;
-  }
-}
-
-// =============================================================================
-// 12. EXEMPLES D'UTILISATION OPTIMISÉS
+// 8. NOTES MIGRATION
 // =============================================================================
 
 /*
-// Utilisation simplifiée avec les breakpoints essentiels
-.component {
-  padding: 1rem;
-  
-  // 📱 PETITS ÉCRANS (4 breakpoints max si nécessaire)
-  @include small-screens {
-    padding: 0.5rem;
-    font-size: 0.9rem;
-  }
-  
-  @include from('small-lg') { // iPhone 15/16+
-    font-size: 1rem;
-  }
-  
-  // 📟 MOYENS ÉCRANS (4 breakpoints max si nécessaire)  
-  @include medium-screens {
-    padding: 1.5rem;
-    font-size: 1.1rem;
-  }
-  
-  @include from('medium-xxl') { // iPad Pro 12.9"+
-    padding: 2rem;
-  }
-  
-  // 🖥️ GRANDS ÉCRANS (6 breakpoints max si nécessaire)
-  @include large-screens {
-    padding: 2.5rem;
-    font-size: 1.2rem;
-  }
-  
-  @include from('large-xxl') { // Desktop FHD+
-    max-width: 1920px;
-    font-size: 1.3rem;
-  }
-}
+SUPPRESSIONS PAR RAPPORT À L'ANCIENNE VERSION :
 
-// Navigation adaptée - Approche simplifiée
-.navigation {
-  @include small-screens {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-  }
-  
-  @include medium-screens {
-    position: sticky;
-    top: 0;
-    padding: 1rem;
-  }
-  
-  @include large-screens {
-    display: flex;
-    justify-content: space-between;
-    padding: 1.5rem 2rem;
-  }
-}
+✅ $device-breakpoints supprimé (18 appareils — code mort, jamais utilisé)
+✅ 44 breakpoints → 8 breakpoints (-82%)
+✅ Mixins screen-category() remplacés par mobile-only/tablet-up/desktop-up
+✅ Mixins from('small-xs')...from('large-xxxl') remplacés par clamp() dans les composants
 
-// Grille responsive - Plus simple
-.grid {
-  display: grid;
-  gap: 1rem;
-  
-  @include small-screens {
-    grid-template-columns: 1fr;
-  }
-  
-  @include medium-screens {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  @include large-screens {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  }
-}
-*/
+BREAKPOINTS SUPPRIMÉS ET LEUR ÉQUIVALENT :
+  small-xs (360px)   → small-360 (renommé, même valeur)
+  small-sm (375px)   → clamp() gère le fluide
+  small-lg (393px)   → clamp() gère le fluide
+  small-xl (430px)   → small-414 (414px, plus représentatif Afrique)
+  medium-sm (768px)  → medium-768 (renommé, même valeur)
+  medium-lg (834px)  → clamp() gère le fluide
+  medium-xl (900px)  → clamp() gère le fluide
+  medium-xxl (1024px)→ medium-1024 (renommé, même valeur)
+  large-xs (1200px)  → large-1280 (ajusté sur laptops réels)
+  large-sm (1280px)  → large-1280 (fusionné)
+  large-md (1366px)  → large-1366 (renommé, même valeur)
+  large-lg (1440px)  → large-1440 (renommé, même valeur)
+  large-xxl (1920px) → large-1920 (renommé, même valeur)
+  large-xxxl (2560px)→ géré par from('large-1920') dans les rares composants concernés
 
-// =============================================================================
-// 13. CHANGEMENTS ET MIGRATION
-// =============================================================================
-
-/*
-CHANGEMENTS MAJEURS - BREAKPOINTS OPTIMISÉS (2025):
-
-RÉDUCTIONS EFFECTUÉES:
-✅ SMALL: 7 → 4 breakpoints (-43%)
-   - Conservés: small-xs, small-sm, small-lg, small-xl
-   - Éliminés: small-md, small-xxl, small-max
-
-✅ MEDIUM: 7 → 4 breakpoints (-43%)  
-   - Conservés: medium-sm, medium-lg, medium-xl, medium-xxl
-   - Éliminés: medium-xs, medium-md, medium-max
-
-✅ LARGE: 9 → 6 breakpoints (-33%)
-   - Conservés: large-xs, large-sm, large-md, large-lg, large-xxl, large-xxxl
-   - Éliminés: large-xl, large-max, large-ultra
-
-✅ APPAREILS: 37 → 18 appareils (-51%)
-   - Focus sur appareils dominants et standards industrie
-   - Élimination des variantes mineures et appareils niche
-
-TOTAL: ~44 → 18 breakpoints (-59% de réduction)
-
-POINTS DE TRANSITION CONSERVÉS:
-✅ 700px: Mobile → Tablette  
-✅ 1199px: Tablette → Desktop
-✅ 1200px: Seuil desktop standard industrie
-
-AVANTAGES:
-✅ Performance CSS améliorée (-59% de breakpoints)
-✅ Maintenance simplifiée
-✅ Alignement sur standards 2025
-✅ Compatibilité frameworks préservée
-✅ Logique 3 catégories conservée
-
-MIGRATION:
-- Aucun changement des mixins principaux
-- Nomenclature identique conservée
-- API fonctions inchangée
-- Transitions critiques préservées
+AUDIENCE DJIBOUTIENNE — PRIORITÉS :
+  1. 360px : base par défaut (13,75% Afrique)
+  2. 414px : Android mid-range (Tecno, Infinix, Samsung A-series)
+  3. 768px : tablettes (utilisation bureau/commerce)
+  4. 1280px+ : desktop (cybercafés, bureaux)
 */

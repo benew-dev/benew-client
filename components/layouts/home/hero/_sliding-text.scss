@@ -5,92 +5,31 @@
 // 📄 _sliding-text.scss
 // ================================
 
-// ✨ TEXTE ANIMÉ "BENEW" - Mobile-first ADAPTÉ
+// ✨ TEXTE ANIMÉ "BENEW"
+// clamp : 7rem (360px) → 20rem (1280px)
+// formule : 8.3vw + 4.1rem donne ~7.1rem à 360px, ~20rem à 1280px
+
 .slidingTextContainer {
   position: absolute;
-  bottom: -40px; // ✅ Position ajustée pour petits écrans
   white-space: nowrap;
-  color: rgba($text-color, 0.06); // ✅ Plus visible mais pas envahissant
+  color: rgba($text-color, 0.05);
   width: 100%;
   font-weight: bold;
   z-index: 0;
 
-  // 📱 MOBILE - Taille adaptée
-  font-size: 8rem; // ✅ Taille réduite
+  font-size: clamp(7rem, 8.3vw + 4.1rem, 20rem);
+  bottom: clamp(-35px, -2.5vw - 15px, -90px);
 
-  // 📟 TRÈS PETITS ÉCRANS - TEXTE TRÈS RÉDUIT
-  @media (max-width: 400px) and (max-height: 680px) {
-    font-size: 6rem; // ✅ Encore plus petit
-    bottom: -30px;
-    color: rgba($text-color, 0.04);
-  }
-
-  // 📟 ÉCRANS ULTRA-COMPACTS
-  @media (max-width: 360px) and (max-height: 650px) {
-    font-size: 5rem; // ✅ Taille minimale
-    bottom: -25px;
+  @include from('medium-768') {
     color: rgba($text-color, 0.03);
   }
 
-  // 📱 PETITS ÉCRANS - Progression avec nouveaux breakpoints
-  @include small-screens {
-    font-size: 7rem;
-    bottom: -35px;
-    color: rgba($text-color, 0.05);
-  }
-
-  @include from('small-sm') {
-    font-size: 7.5rem;
-    bottom: -37px;
-  }
-
-  @include from('small-lg') {
-    font-size: 8rem;
-    bottom: -40px;
-  }
-
-  @include from('small-xl') {
-    font-size: 8.5rem;
-    bottom: -42px;
-  }
-
-  // 📟 MOYENS ÉCRANS - Croissance progressive
-  @include from('medium-sm') {
-    font-size: 14rem;
-    bottom: -70px;
-    color: rgba($text-color, 0.035);
-  }
-
-  @include from('medium-lg') {
-    font-size: 17rem;
-    bottom: -80px;
-    color: rgba($text-color, 0.025);
-  }
-
-  @include from('medium-xxl') {
-    font-size: 18rem;
-    bottom: -85px;
-  }
-
-  // 🖥️ GRANDS ÉCRANS - Tailles desktop
-  @include from('large-xs') {
-    font-size: 20rem; // Taille desktop originale
-    bottom: -90px;
+  @include from('large-1280') {
     color: rgba($text-color, 0.02);
   }
 
-  @include from('large-lg') {
-    font-size: 21rem;
-    bottom: -95px;
-  }
-
-  @include from('large-xxl') {
+  @include from('large-1920') {
     font-size: 22rem;
     bottom: -100px;
-  }
-
-  @include from('large-xxxl') {
-    font-size: 24rem;
-    bottom: -120px;
   }
 }

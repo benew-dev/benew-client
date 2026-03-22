@@ -3,44 +3,42 @@
 
 // ================================
 // 📄 _responsive.scss
+// Cas spéciaux uniquement — le reste est géré par clamp()
 // ================================
 
 // =============================
-// ADAPTATIONS SPÉCIALES
+// MODE PAYSAGE MOBILE
 // =============================
-
-// Mode paysage sur mobile - Layout optimisé AVEC CORRECTIONS
 @include mobile-landscape {
   .hero .wrapper {
     flex-direction: row;
-    padding: 0.5rem; // ✅ Padding réduit
+    padding: 0.5rem;
 
     .textContainer {
-      width: 65%; // ✅ Plus d'espace pour le texte
+      width: 65%;
       height: 100%;
       min-height: auto;
-      gap: 1rem; // ✅ Gap réduit
+      gap: 1rem;
       align-items: flex-start;
       text-align: left;
       padding: 0.75rem;
 
       h2 {
-        font-size: 0.95rem; // ✅ Taille adaptée au paysage
+        font-size: 0.95rem;
         line-height: 1.1;
       }
-
       h1 {
-        font-size: 2rem; // ✅ Taille adaptée au paysage
+        font-size: 2rem;
         line-height: 1;
       }
 
       .buttonGroup {
         flex-direction: row;
-        gap: 0.5rem; // ✅ Gap réduit
+        gap: 0.5rem;
 
         .primaryButton,
         .secondaryButton {
-          padding: 0.6rem 1.2rem; // ✅ Padding réduit
+          padding: 0.6rem 1.2rem;
           font-size: 0.8rem;
           min-height: 40px;
         }
@@ -54,68 +52,44 @@
   }
 
   .hero .imageContainer {
-    width: 35%; // ✅ Moins d'espace pour l'image
+    width: 35%;
     height: 100%;
     min-height: auto;
     position: absolute;
     right: 0;
-    bottom: auto;
     top: 0;
+    bottom: auto;
+    left: auto;
+    opacity: 0.8;
 
     .heroImage {
       max-width: 85%;
       max-height: 85%;
+      filter: none;
     }
   }
 
   .hero .slidingTextContainer {
-    font-size: 5rem; // ✅ Taille réduite pour paysage
+    font-size: 5rem;
     bottom: -25px;
   }
 }
 
-// Adaptation pour écrans très hauts (iPhone X, 11, etc.) - AVEC CORRECTIONS
-@include tall-screen {
-  .hero .wrapper .textContainer {
-    gap: 2rem; // ✅ Gap augmenté sur écrans hauts
-
-    @include until('large-xs') {
-      min-height: 55vh; // ✅ Peut prendre plus de place
-    }
-  }
-
-  .hero .imageContainer {
-    @include until('large-xs') {
-      min-height: 40vh; // ✅ Plus d'espace pour l'image
-    }
-  }
-}
-
 // =============================
-// ÉCRANS COURTS
+// ÉCRANS COURTS (ex: paysage budget)
 // =============================
 @include short-screen {
   .hero .wrapper .textContainer {
     gap: 1rem;
-    min-height: 50vh;
-
-    h2 {
-      font-size: 0.95rem;
-    }
 
     h1 {
       font-size: 1.8rem;
     }
 
-    .buttonGroup {
-      gap: 0.5rem;
-      max-width: 280px;
-
-      .primaryButton,
-      .secondaryButton {
-        padding: 0.8rem 1.3rem;
-        font-size: 0.85rem;
-      }
+    .buttonGroup .primaryButton,
+    .buttonGroup .secondaryButton {
+      padding: 0.8rem 1.3rem;
+      font-size: 0.85rem;
     }
 
     img {
@@ -125,24 +99,18 @@
   }
 
   .hero .imageContainer {
-    min-height: 30vh;
-  }
-
-  .hero .slidingTextContainer {
-    font-size: 6rem;
-    bottom: -30px;
+    min-height: 28vh;
   }
 }
 
 // =============================
-// AMÉLIORATION POUR L'ACCESSIBILITÉ
+// ACCESSIBILITÉ
 // =============================
 @include reduced-motion {
   .hero .wrapper .textContainer {
     img {
       animation: none;
     }
-
     h1 {
       animation: none;
     }
@@ -151,11 +119,9 @@
   .hero .wrapper .buttonGroup .primaryButton,
   .hero .wrapper .buttonGroup .secondaryButton {
     transition: none;
-
     &:hover {
       transform: none;
     }
-
     &:focus {
       animation: none;
     }
@@ -167,33 +133,12 @@
 }
 
 // =============================
-// SUPPORT POUR ÉCRANS HAUTE DENSITÉ
+// HAUTE DENSITÉ
 // =============================
 @include high-density {
   .hero .imageContainer .heroImage {
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
-  }
-}
-
-// =============================
-// SUPPORT TACTILE
-// =============================
-@media (pointer: coarse) {
-  .hero .wrapper .buttonGroup {
-    .primaryButton,
-    .secondaryButton {
-      min-height: 44px;
-
-      &:hover {
-        transform: none;
-      }
-
-      &:active {
-        opacity: 0.8;
-        transform: scale(0.98);
-      }
-    }
   }
 }
 
@@ -207,7 +152,6 @@
         0 2px 4px rgba($background-color, 0.9),
         0 0 25px rgba($background-color, 0.7);
     }
-
     h1 {
       text-shadow:
         0 3px 6px rgba($background-color, 0.9),
@@ -219,7 +163,6 @@
     .primaryButton {
       box-shadow: 0 0 0 2px rgba($text-color, 0.3);
     }
-
     .secondaryButton {
       border-width: 3px;
     }
@@ -227,9 +170,9 @@
 }
 
 // =============================
-// TRÈS GRANDS ÉCRANS
+// TRÈS GRANDS ÉCRANS (2560px+)
 // =============================
-@include from('large-xxxl') {
+@include from('large-1920') {
   .hero .wrapper {
     max-width: 1400px;
   }
@@ -238,75 +181,8 @@
     h2 {
       font-size: 1.4rem;
     }
-
-    h1 {
-      font-size: 5rem;
-    }
-
-    .buttonGroup {
-      gap: 1.3rem;
-
-      .primaryButton,
-      .secondaryButton {
-        padding: 1.2rem 2.4rem;
-        font-size: 1.1rem;
-      }
-    }
-
     img {
       width: 2.8rem;
     }
-  }
-
-  .hero .slidingTextContainer {
-    font-size: 24rem;
-    bottom: -120px;
-  }
-}
-
-// =============================
-// ORIENTATION PAYSAGE TABLETTES
-// =============================
-@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-  .hero .wrapper {
-    flex-direction: row;
-    padding: 1.5rem;
-  }
-
-  .hero .wrapper .textContainer {
-    width: 60%;
-    height: 100%;
-    gap: 1.5rem;
-    align-items: flex-start;
-    text-align: left;
-
-    h2 {
-      font-size: 1.1rem;
-    }
-
-    h1 {
-      font-size: 3rem;
-    }
-
-    .buttonGroup {
-      flex-direction: row;
-      max-width: 400px;
-      gap: 1rem;
-
-      .primaryButton,
-      .secondaryButton {
-        flex: 1;
-        padding: 1rem 1.8rem;
-        font-size: 0.95rem;
-      }
-    }
-  }
-
-  .hero .imageContainer {
-    width: 40%;
-    height: 100%;
-    position: absolute;
-    right: 0;
-    top: 0;
   }
 }
