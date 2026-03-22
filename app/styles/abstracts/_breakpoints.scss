@@ -38,7 +38,43 @@ $breakpoints: (
   'large-1280': 1280px,
   'large-1366': 1366px,
   'large-1440': 1440px,
-  'large-1920': 1920px
+  'large-1920': 1920px,
+
+  // =============================================================================
+  // ALIAS RÉTROCOMPATIBILITÉ — À supprimer après migration complète
+  // =============================================================================
+  // Ces valeurs permettent aux fichiers non encore migrés de continuer
+  // à compiler correctement pendant la période de transition.
+  // 📱 Anciens breakpoints small
+  'small-sm': 375px,
+  // → clamp() après migration
+  'small-lg': 393px,
+  // → clamp() après migration
+  'small-xl': 430px,
+
+  // → small-414 après migration
+  // 📟 Anciens breakpoints medium
+  'medium-sm': 768px,
+  // → medium-768 après migration
+  'medium-lg': 834px,
+  // → clamp() après migration
+  'medium-xl': 900px,
+  // → clamp() après migration
+  'medium-xxl': 1024px,
+
+  // → medium-1024 après migration
+  // 🖥️ Anciens breakpoints large
+  'large-xs': 1200px,
+  // → large-1280 après migration (seuil structurel contact)
+  'large-sm': 1280px,
+  // → large-1280 après migration
+  'large-md': 1366px,
+  // → large-1366 après migration
+  'large-lg': 1440px,
+  // → large-1440 après migration
+  'large-xxl': 1920px,
+  // → large-1920 après migration
+  'large-xxxl': 2560px // → from('large-1920') après migration
 ) !default;
 
 // =============================================================================
@@ -188,10 +224,10 @@ $breakpoints: (
 }
 
 // =============================================================================
-// 6. HELPERS RÉTROCOMPATIBILITÉ
+// 6. HELPERS RÉTROCOMPATIBILITÉ MIXINS
 // =============================================================================
-// Ces alias permettent aux anciens fichiers non encore migrés de continuer
-// à compiler pendant la période de transition.
+// Ces alias de mixins permettent aux anciens fichiers non encore migrés
+// de continuer à compiler pendant la période de transition.
 // À supprimer une fois tous les composants migrés.
 
 @mixin small-screens {
@@ -256,25 +292,28 @@ $breakpoints: (
 SUPPRESSIONS PAR RAPPORT À L'ANCIENNE VERSION :
 
 ✅ $device-breakpoints supprimé (18 appareils — code mort, jamais utilisé)
-✅ 44 breakpoints → 8 breakpoints (-82%)
+✅ 44 breakpoints → 8 breakpoints calibrés Djibouti/Afrique (-82%)
 ✅ Mixins screen-category() remplacés par mobile-only/tablet-up/desktop-up
 ✅ Mixins from('small-xs')...from('large-xxxl') remplacés par clamp() dans les composants
 
-BREAKPOINTS SUPPRIMÉS ET LEUR ÉQUIVALENT :
-  small-xs (360px)   → small-360 (renommé, même valeur)
+ALIAS RÉTROCOMPATIBILITÉ (section 1, bas de la map) :
+  Ces valeurs sont temporaires. Les supprimer fichier par fichier une fois
+  chaque composant migré vers clamp() + nouveaux noms de breakpoints.
+
+BREAKPOINTS CANONIQUES ET LEUR ÉQUIVALENT APRÈS MIGRATION :
   small-sm (375px)   → clamp() gère le fluide
   small-lg (393px)   → clamp() gère le fluide
-  small-xl (430px)   → small-414 (414px, plus représentatif Afrique)
-  medium-sm (768px)  → medium-768 (renommé, même valeur)
+  small-xl (430px)   → small-414 (414px)
+  medium-sm (768px)  → medium-768
   medium-lg (834px)  → clamp() gère le fluide
   medium-xl (900px)  → clamp() gère le fluide
-  medium-xxl (1024px)→ medium-1024 (renommé, même valeur)
-  large-xs (1200px)  → large-1280 (ajusté sur laptops réels)
-  large-sm (1280px)  → large-1280 (fusionné)
-  large-md (1366px)  → large-1366 (renommé, même valeur)
-  large-lg (1440px)  → large-1440 (renommé, même valeur)
-  large-xxl (1920px) → large-1920 (renommé, même valeur)
-  large-xxxl (2560px)→ géré par from('large-1920') dans les rares composants concernés
+  medium-xxl (1024px)→ medium-1024
+  large-xs (1200px)  → large-1280 (seuil structurel — vérifier visuellement)
+  large-sm (1280px)  → large-1280
+  large-md (1366px)  → large-1366
+  large-lg (1440px)  → large-1440
+  large-xxl (1920px) → large-1920
+  large-xxxl (2560px)→ from('large-1920')
 
 AUDIENCE DJIBOUTIENNE — PRIORITÉS :
   1. 360px : base par défaut (13,75% Afrique)
