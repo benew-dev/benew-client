@@ -51,8 +51,9 @@
     // clamp : 65vh (360px) → 70vh (768px)
     height: clamp(65vh, 1.23vw + 60.6vh, 70vh);
     width: auto;
-    opacity: clamp(0.28, 0.005vw + 0.26, 0.3);
-    filter: blur(clamp(1.8px, 0.05vw + 1.62px, 2px));
+    // opacity et filter : valeurs stables — clamp() incompatible avec valeurs sans unité et px+vw
+    opacity: 0.3;
+    filter: blur(2px);
     transition: all 0.4s ease;
   }
 }
