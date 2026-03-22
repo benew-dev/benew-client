@@ -461,6 +461,8 @@ const SingleTemplateShops = ({
   template,
   platforms = [],
 }) => {
+  // components/templates/SingleTemplateShops.jsx — temporaire
+  throw new Error('Test template detail error boundary');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedApp, setSelectedApp] = useState(null);
   const [viewedApps, setViewedApps] = useState(new Set());

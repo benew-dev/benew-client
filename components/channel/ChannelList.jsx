@@ -269,9 +269,6 @@ const ChannelList = ({ videos: initialVideos = [] }) => {
     setActiveVideo(null);
   }, []);
 
-  // components/channel/ChannelList.jsx — temporaire
-  throw new Error('Test channel error boundary');
-
   return (
     <div className="channel-container">
       <PageTracker pageName="channel_list" />
