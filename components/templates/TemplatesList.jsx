@@ -351,9 +351,6 @@ const TemplatesList = ({ templates = [] }) => {
     );
   }
 
-  // components/templates/TemplatesList.jsx — temporaire
-  throw new Error('Test templates error boundary');
-
   // Rendu principal
   return (
     <div className="templates-container">

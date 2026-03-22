@@ -547,9 +547,6 @@ const SingleApplication = ({ application, template, platforms, context }) => {
     },
   ];
 
-  // components/templates/SingleApplication.jsx — temporaire
-  throw new Error('Test application detail error boundary');
-
   return (
     <div>
       <PageTracker

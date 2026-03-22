@@ -600,9 +600,6 @@ const SingleTemplateShops = ({
   const templateName = template?.template_name || 'Template';
   const hasPaymentMethods = platforms && platforms.length > 0;
 
-  // components/templates/SingleTemplateShops.jsx — temporaire
-  throw new Error('Test template detail error boundary');
-
   return (
     <div className="single-template-container">
       <PageTracker

@@ -189,9 +189,6 @@ const PresentationComponent = () => {
     setTimeout(() => setModalContent(null), 300);
   };
 
-  // components/presentation/index.jsx — temporaire
-  throw new Error('Test presentation error boundary');
-
   return (
     <>
       {/* ⭐ PAGETRACKER */}
