@@ -2,6 +2,7 @@
 
 // ================================
 // 📄 _responsive.scss
+// Cas spéciaux uniquement — le reste est géré par clamp() dans _base.scss
 // ================================
 
 // =============================
@@ -31,7 +32,6 @@
     font-size: 0.9rem;
   }
 
-  // Catégories en mode paysage mobile
   .categories-content {
     padding: 1.5rem 1rem;
   }
@@ -58,7 +58,7 @@
 // =============================
 // ÉCRANS TRÈS PETITS (< 360px)
 // =============================
-@media (max-width: 360px) {
+@media (max-width: 359px) {
   .presentation-content {
     padding: 1.5rem 0.75rem;
   }
@@ -84,7 +84,6 @@
     font-size: 0.85rem;
   }
 
-  // Catégories sur très petits écrans
   .categories-content {
     padding: 1.5rem 0.75rem;
   }
@@ -94,21 +93,21 @@
   }
 
   .category-card {
-    min-height: 95px;
-    padding: 0.875rem 0.625rem;
+    min-height: 75px;
+    padding: 0.6rem 0.4rem;
   }
 
   .category-icon {
-    font-size: 1.6rem;
+    font-size: 1.3rem;
   }
 
   .category-title {
-    font-size: 0.9rem;
+    font-size: 0.75rem;
   }
 }
 
 // =============================
-// ÉCRANS COURTS (hauteur limitée)
+// ÉCRANS COURTS
 // =============================
 @include short-screen {
   .presentation-content {
@@ -118,37 +117,27 @@
 
   .benew-title {
     margin-bottom: 2rem;
-
-    @include until('medium-sm') {
-      font-size: 2.5rem;
-    }
   }
 
   .sky-limit-card {
     padding: 2.5rem 2rem;
 
-    @include until('medium-sm') {
+    @include mobile-only {
       padding: 2rem 1.5rem;
     }
   }
 
-  // Catégories sur écrans courts
   .categories-content {
     padding: 1.5rem 1rem;
   }
 
-  .categories-grid {
-    gap: 1rem;
-  }
-
   .category-card {
-    min-height: 90px;
-    padding: 0.875rem 0.75rem;
+    min-height: 85px;
   }
 }
 
 // =============================
-// ÉCRANS HAUTS (plus d'espace vertical)
+// ÉCRANS HAUTS
 // =============================
 @include tall-screen {
   .presentation-content {
@@ -159,7 +148,7 @@
   .benew-title {
     margin-bottom: 6rem;
 
-    @include from('large-xs') {
+    @include from('large-1280') {
       margin-bottom: 7rem;
     }
   }
@@ -167,18 +156,13 @@
   .sky-limit-card {
     padding: 6rem 4rem;
 
-    @include from('large-xs') {
+    @include from('large-1280') {
       padding: 7rem 5rem;
     }
   }
 
-  // Catégories sur écrans hauts
   .categories-content {
     padding: 3rem 2rem;
-  }
-
-  .categories-grid {
-    gap: 2rem;
   }
 
   .category-card {
@@ -192,9 +176,9 @@
 }
 
 // =============================
-// TRÈS GRANDS ÉCRANS
+// TRÈS GRANDS ÉCRANS (1920px+)
 // =============================
-@include from('large-xxxl') {
+@include from('large-1920') {
   .presentation-content {
     padding: 5rem 3rem;
   }
@@ -218,7 +202,6 @@
     font-size: 1.3rem;
   }
 
-  // Catégories sur très grands écrans
   .categories-content {
     padding: 4rem 3rem;
   }
@@ -243,45 +226,26 @@
 }
 
 // =============================
-// OPTIMISATIONS TABLETTES
+// OPTIMISATIONS TABLETTES (768px–1280px)
 // =============================
-@include medium-screens {
-  .presentation-content {
+@include between('medium-768', 'large-1280') {
+  .presentation-content,
+  .categories-content {
     min-height: 100vh;
     justify-content: center;
   }
 
-  .benew-title {
-    margin-bottom: 4rem;
-  }
-
   .sky-limit-card {
     max-width: 600px;
-  }
-
-  // Catégories sur tablettes
-  .categories-content {
-    min-height: 100vh;
-  }
-
-  .categories-grid {
-    gap: 1.5rem;
-  }
-
-  .category-card {
-    min-height: 110px;
-
-    &:hover {
-      transform: translateY(-4px) scale(1.02);
-    }
   }
 }
 
 // =============================
 // OPTIMISATIONS DESKTOP
 // =============================
-@include large-screens {
-  .presentation-content {
+@include desktop-up {
+  .presentation-content,
+  .categories-content {
     min-height: 100vh;
     justify-content: center;
   }
@@ -292,18 +256,7 @@
     }
   }
 
-  // Catégories sur desktop
-  .categories-content {
-    min-height: 100vh;
-  }
-
-  .categories-grid {
-    gap: 1.75rem;
-  }
-
   .category-card {
-    min-height: 120px;
-
     &:hover {
       transform: translateY(-5px) scale(1.03);
     }
@@ -339,22 +292,20 @@
 }
 
 // =============================
-// OPTIMISATIONS PERFORMANCE
+// PERFORMANCE — mobile
 // =============================
-
-// Réduction de la qualité des effets sur petits écrans
-@media (max-width: 768px) {
+@include mobile-only {
   .sky-limit-card,
   .category-card {
     backdrop-filter: blur(8px);
 
     &::before {
-      display: none; // Pas d'effet de brillance sur mobile
+      display: none;
     }
   }
 }
 
-// Focus visible pour la navigation au clavier
+// Focus clavier
 .sky-limit-card:focus-visible,
 .category-card:focus-visible {
   outline: 3px solid $primary-color;
@@ -362,7 +313,7 @@
 }
 
 // =============================
-// PRINT STYLES
+// PRINT
 // =============================
 @media print {
   .presentation-content,
