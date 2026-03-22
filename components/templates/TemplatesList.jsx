@@ -289,8 +289,6 @@ TemplateCard.displayName = 'TemplateCard';
 
 // Composant principal simplifié
 const TemplatesList = ({ templates = [] }) => {
-  // components/templates/TemplatesList.jsx — temporaire
-  throw new Error('Test templates error boundary');
   const [viewedTemplates, setViewedTemplates] = useState(new Set());
 
   // Tracking de la page view
@@ -352,6 +350,9 @@ const TemplatesList = ({ templates = [] }) => {
       </>
     );
   }
+
+  // components/templates/TemplatesList.jsx — temporaire
+  throw new Error('Test templates error boundary');
 
   // Rendu principal
   return (

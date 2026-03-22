@@ -147,8 +147,6 @@ const categories = [
 ];
 
 const PresentationComponent = () => {
-  // components/presentation/index.jsx — temporaire
-  throw new Error('Test presentation error boundary');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
 
@@ -190,6 +188,9 @@ const PresentationComponent = () => {
     // Réinitialiser le contenu après la fermeture (optionnel)
     setTimeout(() => setModalContent(null), 300);
   };
+
+  // components/presentation/index.jsx — temporaire
+  throw new Error('Test presentation error boundary');
 
   return (
     <>

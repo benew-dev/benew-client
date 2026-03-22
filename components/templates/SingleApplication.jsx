@@ -417,8 +417,6 @@ PricingSection.displayName = 'PricingSection';
 // ✅ COMPOSANT PRINCIPAL
 // =============================
 const SingleApplication = ({ application, template, platforms, context }) => {
-  // components/templates/SingleApplication.jsx — temporaire
-  throw new Error('Test application detail error boundary');
   const allImages = useMemo(() => {
     const mainImages = application?.application_images || [];
     const otherVersions = application?.application_other_versions || [];
@@ -548,6 +546,9 @@ const SingleApplication = ({ application, template, platforms, context }) => {
       color: 'orange',
     },
   ];
+
+  // components/templates/SingleApplication.jsx — temporaire
+  throw new Error('Test application detail error boundary');
 
   return (
     <div>

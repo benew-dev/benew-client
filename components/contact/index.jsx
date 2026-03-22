@@ -89,8 +89,6 @@ const variants = {
 
 // Composant principal
 const Contact = () => {
-  // components/contact/index.jsx — temporaire
-  throw new Error('Test contact error boundary');
   const ref = useRef();
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -126,6 +124,9 @@ const Contact = () => {
 
     setIsModalOpen(false);
   }, []);
+
+  // components/contact/index.jsx — temporaire
+  throw new Error('Test contact error boundary');
 
   return (
     <div>
