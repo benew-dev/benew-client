@@ -12,27 +12,72 @@ form {
   z-index: 10;
   background: rgba($background-color, 0.7);
   backdrop-filter: blur(10px);
-  border-radius: clamp(12px, 0.43vw + 10.4px, 16px);
+  border-radius: 16px;
   border: 1px solid rgba($primary-color, 0.2);
 
-  // clamp : 1rem (360px) → 1.8rem (768px) pour gap
-  // clamp : 1.25rem/1rem (360px) → 2rem/1.8rem (768px) pour padding
-  gap: clamp(1rem, 1.95vw + 0.3rem, 1.8rem);
-  padding: clamp(1.25rem, 1.63vw + 0.66rem, 2rem)
-    clamp(1rem, 1.95vw + 0.3rem, 1.8rem);
+  // 📱 MOBILE FIRST - Formulaire compact et accessible
+  gap: 1.25rem;
+  padding: 1.5rem 1.25rem;
 
-  @include mobile-only {
+  @include until('small-sm') {
+    gap: 1rem;
+    padding: 1.25rem 1rem;
     border-radius: 12px;
   }
 
-  // Desktop : fond transparent, sans bordure
-  @include desktop-up {
+  // 📱 PETITS ÉCRANS - Ajustements progressifs
+  @include from('small-sm') {
+    gap: 1.3rem;
+    padding: 1.55rem 1.3rem;
+  }
+
+  @include from('small-lg') {
+    gap: 1.35rem;
+    padding: 1.6rem 1.35rem;
+  }
+
+  @include from('small-xl') {
+    gap: 1.4rem;
+    padding: 1.65rem 1.4rem;
+  }
+
+  // 📟 MOYENS ÉCRANS - Ajustements progressifs
+  @include from('medium-sm') {
+    gap: 1.5rem;
+    padding: 1.75rem 1.5rem;
+  }
+
+  @include from('medium-lg') {
+    gap: 1.6rem;
+    padding: 1.85rem 1.6rem;
+  }
+
+  @include from('medium-xl') {
+    gap: 1.7rem;
+    padding: 1.95rem 1.7rem;
+  }
+
+  @include from('medium-xxl') {
+    gap: 1.8rem;
+    padding: 2rem 1.8rem;
+  }
+
+  // 🖥️ GRANDS ÉCRANS - Style original mais avec espacement réduit
+  @include from('large-xs') {
     background: transparent;
     backdrop-filter: none;
     border: none;
     border-radius: 0;
     padding: 0;
-    gap: clamp(1.2rem, 0.22vw + 1.12rem, 1.4rem);
+    gap: 1.2rem; // Réduit pour s'adapter à la hauteur
     max-height: 100%;
+  }
+
+  @include from('large-lg') {
+    gap: 1.3rem;
+  }
+
+  @include from('large-xxl') {
+    gap: 1.4rem;
   }
 }

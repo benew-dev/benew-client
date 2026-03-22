@@ -5,12 +5,14 @@
 // 📄 _contact-info-modal.scss
 // ================================
 
-@include desktop-up {
+// 🖥️ DESKTOP - Modal COMPLÈTEMENT CACHÉE
+@include from('large-xs') {
   .contact-info-modal-overlay {
     display: none !important;
   }
 }
 
+// 📱 MOBILE/TABLETTE - Modal active
 .contact-info-modal-overlay {
   position: fixed;
   inset: 0;
@@ -20,8 +22,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(0.75rem, 0.3vw + 0.64rem, 1rem);
+  padding: 1rem;
+
+  // Animation smooth
   transition: all 0.3s ease;
+
+  @include until('small-sm') {
+    padding: 0.75rem;
+  }
 }
 
 .contact-info-modal-content {
@@ -32,37 +40,98 @@
   );
   backdrop-filter: blur(20px);
   border: 2px solid rgba($primary-color, 0.3);
-  border-radius: clamp(12px, 0.43vw + 10.4px, 16px);
-  padding: clamp(1.5rem, 0.61vw + 1.28rem, 2rem);
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 90%;
   width: 100%;
-  max-width: clamp(400px, 2.17vw + 392.2px, 420px);
+  max-width: 400px;
   box-shadow: 0 8px 32px rgba($primary-color, 0.2);
+
+  @include until('small-sm') {
+    padding: 1.5rem;
+    border-radius: 12px;
+    max-width: 95%;
+  }
+
+  @include from('small-sm') {
+    padding: 1.75rem;
+  }
+
+  @include from('medium-sm') {
+    padding: 2rem;
+    max-width: 420px;
+  }
 
   h2 {
     text-align: center;
-    margin: 0 0 clamp(1.25rem, 0.61vw + 1.03rem, 1.75rem) 0;
+    margin: 0 0 1.5rem 0;
     color: $text-color;
-    font-size: clamp(1.3rem, 0.33vw + 1.18rem, 1.6rem);
+    font-size: 1.5rem;
     font-weight: 600;
+
+    @include until('small-sm') {
+      font-size: 1.3rem;
+      margin-bottom: 1.25rem;
+    }
+
+    @include from('small-sm') {
+      font-size: 1.4rem;
+    }
+
+    @include from('medium-sm') {
+      font-size: 1.6rem;
+      margin-bottom: 1.75rem;
+    }
   }
 }
 
+// Items de contact dans la modal
 .modal-contact-items {
   display: flex;
   flex-direction: column;
-  gap: clamp(0.875rem, 0.43vw + 0.72rem, 1.25rem);
-  margin-bottom: clamp(1.25rem, 0.61vw + 1.03rem, 1.75rem);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  @include until('small-sm') {
+    gap: 0.875rem;
+    margin-bottom: 1.25rem;
+  }
+
+  @include from('small-sm') {
+    gap: 1.1rem;
+  }
+
+  @include from('medium-sm') {
+    gap: 1.25rem;
+    margin-bottom: 1.75rem;
+  }
 }
 
 .modal-contact-item {
   display: flex;
   align-items: center;
-  gap: clamp(0.875rem, 0.3vw + 0.77rem, 1.15rem);
-  padding: clamp(0.875rem, 0.27vw + 0.78rem, 1.1rem);
+  gap: 1rem;
+  padding: 1rem;
   background: rgba($text-color, 0.05);
-  border-radius: clamp(10px, 0.22vw + 9.2px, 12px);
+  border-radius: 12px;
   border: 1px solid rgba($primary-color, 0.2);
   transition: all 0.3s ease;
+
+  @include until('small-sm') {
+    gap: 0.875rem;
+    padding: 0.875rem;
+    border-radius: 10px;
+  }
+
+  @include from('small-sm') {
+    gap: 1.05rem;
+    padding: 0.95rem;
+  }
+
+  @include from('medium-sm') {
+    gap: 1.15rem;
+    padding: 1.1rem;
+  }
 
   &:hover {
     background: rgba($primary-color, 0.1);
@@ -77,24 +146,49 @@
 
 .modal-contact-icon {
   color: $primary-color;
-  font-size: clamp(1.3rem, 0.33vw + 1.18rem, 1.6rem);
+  font-size: 1.5rem;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @include until('small-sm') {
+    font-size: 1.3rem;
+  }
+
+  @include from('small-sm') {
+    font-size: 1.4rem;
+  }
+
+  @include from('medium-sm') {
+    font-size: 1.6rem;
+  }
 }
 
 .modal-contact-item p {
   color: $text-color;
   margin: 0;
-  font-size: clamp(0.9rem, 0.16vw + 0.84rem, 1.05rem);
+  font-size: 1rem;
   font-weight: 500;
   letter-spacing: 0.5px;
+
+  @include until('small-sm') {
+    font-size: 0.9rem;
+  }
+
+  @include from('small-sm') {
+    font-size: 0.95rem;
+  }
+
+  @include from('medium-sm') {
+    font-size: 1.05rem;
+  }
 }
 
+// Bouton fermer
 .modal-close-button {
   width: 100%;
-  padding: clamp(0.875rem, 0.27vw + 0.78rem, 1.1rem);
+  padding: 1rem;
   background: linear-gradient(
     135deg,
     $primary-color,
@@ -102,8 +196,8 @@
   );
   color: $background-color;
   border: none;
-  border-radius: clamp(10px, 0.22vw + 9.2px, 12px);
-  font-size: clamp(0.95rem, 0.12vw + 0.91rem, 1.05rem);
+  border-radius: 12px;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -112,6 +206,22 @@
   justify-content: center;
   gap: 0.5rem;
   box-shadow: 0 4px 12px rgba($primary-color, 0.3);
+
+  @include until('small-sm') {
+    padding: 0.875rem;
+    font-size: 0.95rem;
+    border-radius: 10px;
+  }
+
+  @include from('small-sm') {
+    padding: 0.95rem;
+    font-size: 0.97rem;
+  }
+
+  @include from('medium-sm') {
+    padding: 1.1rem;
+    font-size: 1.05rem;
+  }
 
   svg {
     font-size: 1.25rem;
@@ -132,26 +242,32 @@
   }
 }
 
+// Accessibilité - Réduction des animations
 @include reduced-motion {
   .modal-contact-item {
     transition: none;
+
     &:hover,
     &:active {
       transform: none;
     }
   }
+
   .modal-close-button {
     transition: none;
+
     &:hover {
       transform: none;
     }
   }
 }
 
+// Support tactile optimisé
 @media (pointer: coarse) {
   .modal-contact-item {
     min-height: 48px;
   }
+
   .modal-close-button {
     min-height: 48px;
   }
