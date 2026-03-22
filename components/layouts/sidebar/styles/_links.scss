@@ -5,10 +5,6 @@
 // 📄 _links.scss
 // ================================
 
-// =============================
-// LIENS DE NAVIGATION - OPTIMISATION PAR CATÉGORIE D'ÉCRAN
-// =============================
-
 .sidebar .bg .links {
   position: absolute;
   width: 100%;
@@ -17,82 +13,52 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2rem; // Plus d'espace entre les liens sur mobile
   cursor: pointer;
 
-  // 📱 PETITS ÉCRANS - Police plus grande et plus lisible
-  font-size: 1.8rem;
-  padding: 1rem; // Padding pour éviter que ça touche les bords
+  // clamp : 1.7rem (360px) → 1.7rem desktop (stable, ajusté par paliers structurels)
+  font-size: clamp(1.5rem, 0.22vw + 1.42rem, 1.8rem);
+  gap: clamp(1.8rem, 0.22vw + 1.72rem, 2rem);
+  padding: 1rem;
 
-  // Ajustements progressifs simplifiés pour smartphones
-  @include from('small-sm') {
-    font-size: 1.7rem;
-    gap: 1.9rem;
-  }
-
-  // Fusion des valeurs small-md + small-lg optimisées
-  @include from('small-lg') {
-    font-size: 1.6rem;
-    gap: 1.8rem;
-  }
-
-  // 📟 MOYENS ÉCRANS - Taille intermédiaire
-  @include medium-screens {
+  @include tablet-up {
     font-size: 1.5rem;
     gap: 1.6rem;
     padding: 1.2rem;
   }
 
-  // 🖥️ GRANDS ÉCRANS - Taille desktop optimale
-  @include large-screens {
-    font-size: 1.7rem; // Taille desktop optimisée
+  @include desktop-up {
+    font-size: 1.7rem;
     gap: 1.4rem;
     padding: 1.5rem;
   }
 
-  @include from('large-xxxl') {
+  @include from('large-1920') {
     font-size: 1.6rem;
     gap: 1.3rem;
   }
 
   // =============================
-  // ITEMS DE NAVIGATION
+  // ITEMS
   // =============================
   .link {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 1.25rem;
-
-    // 📱 PETITS ÉCRANS - Zone tactile optimisée
-    padding: 1rem 1.5rem;
-    width: 90%; // Presque toute la largeur pour une meilleure zone tactile
-    min-height: 60px; // Zone tactile minimale recommandée
-
+    padding: clamp(0.85rem, 0.16vw + 0.79rem, 1rem)
+      clamp(1.3rem, 0.22vw + 1.22rem, 1.5rem);
+    width: clamp(85%, 1.09vw + 81.1%, 90%);
+    min-height: clamp(56px, 0.43vw + 54.4px, 60px);
     border-radius: 12px;
     transition: all 0.3s ease;
 
-    // Ajustements progressifs simplifiés pour petits écrans
-    @include from('small-sm') {
-      padding: 0.9rem 1.4rem;
-      min-height: 58px;
-    }
-
-    // Fusion optimisée small-md + small-lg
-    @include from('small-lg') {
-      padding: 0.85rem 1.3rem;
-      min-height: 56px;
-    }
-
-    // 📟 MOYENS ÉCRANS - Taille intermédiaire
-    @include medium-screens {
+    @include tablet-up {
       padding: 0.8rem 1.2rem;
       min-height: 54px;
       width: 85%;
     }
 
-    // 🖥️ GRANDS ÉCRANS - Retour aux valeurs desktop
-    @include large-screens {
+    @include desktop-up {
       padding: 0.7rem 1rem;
       min-height: 50px;
       width: 80%;
@@ -108,7 +74,6 @@
       transform: translateX(10px);
     }
 
-    // 📱 PETITS ÉCRANS - Effet tactile visuel
     &:active {
       transform: translateX(5px) scale(0.98);
       background: linear-gradient(
@@ -119,7 +84,7 @@
     }
 
     // =============================
-    // 🆕 ÉTAT ACTIF - Page courante
+    // ÉTAT ACTIF
     // =============================
     &.active {
       background: linear-gradient(
@@ -129,8 +94,6 @@
       );
       border: 2px solid rgba($secondary-color, 0.5);
       box-shadow: 0 4px 12px rgba($primary-color, 0.3);
-
-      // Indicateur visuel à gauche
       position: relative;
 
       &::before {
@@ -139,22 +102,12 @@
         left: 0;
         top: 50%;
         transform: translateY(-50%);
-        width: 4px;
+        width: clamp(4px, 0.11vw + 3.6px, 5px);
         height: 70%;
         background: $background-color;
         border-radius: 0 4px 4px 0;
 
-        @include from('small-sm') {
-          width: 5px;
-        }
-
-        @include from('medium-sm') {
-          width: 5px;
-          height: 60%;
-        }
-
-        @include from('large-xs') {
-          width: 4px;
+        @include tablet-up {
           height: 60%;
         }
       }
@@ -165,7 +118,7 @@
           color.adjust($primary-color, $lightness: 5%),
           $secondary-color
         );
-        transform: translateX(8px); // Moins de mouvement que les liens inactifs
+        transform: translateX(8px);
       }
 
       a {
@@ -175,31 +128,25 @@
       }
     }
 
-    // =============================
-    // LIENS TEXTE
-    // =============================
     a {
       color: $background-color;
       text-decoration: none;
-      font-weight: 600; // Plus gras pour une meilleure lisibilité mobile
+      font-weight: 600;
       transition: all 0.3s ease;
       text-align: center;
       width: 100%;
 
-      // 📱 PETITS ÉCRANS - Amélioration de la lisibilité
-      @include small-screens {
+      @include mobile-only {
         font-weight: 700;
         letter-spacing: 0.5px;
       }
 
-      // 📟 MOYENS ÉCRANS - Poids intermédiaire
-      @include medium-screens {
+      @include tablet-up {
         font-weight: 650;
         letter-spacing: 0.3px;
       }
 
-      // 🖥️ GRANDS ÉCRANS - Poids desktop optimisé
-      @include large-screens {
+      @include desktop-up {
         font-weight: 600;
         letter-spacing: 0.2px;
       }

@@ -13,6 +13,7 @@
   text-align: center;
   padding: 0 1rem;
 
+  // clamp : 1rem (360px) → 2rem (1280px)
   .section-main-title {
     font-weight: 800;
     line-height: 1.2;
@@ -23,51 +24,7 @@
     position: relative;
     margin: 0;
 
-    font-size: 1.4rem;
-
-    @include small-screens {
-      font-size: 1rem;
-    }
-
-    @include from('small-sm') {
-      font-size: 1.05rem;
-    }
-
-    @include from('small-lg') {
-      font-size: 1.1rem;
-    }
-
-    @include from('small-xl') {
-      font-size: 1.15rem;
-    }
-
-    @include between('small-xl', 'medium-sm') {
-      font-size: 1.2rem;
-    }
-
-    @include from('medium-sm') {
-      font-size: 1.5rem;
-    }
-
-    @include from('medium-lg') {
-      font-size: 1.6rem;
-    }
-
-    @include from('medium-xxl') {
-      font-size: 1.7rem;
-    }
-
-    @include from('large-xs') {
-      font-size: 1.8rem;
-    }
-
-    @include from('large-lg') {
-      font-size: 1.9rem;
-    }
-
-    @include from('large-xxl') {
-      font-size: 2rem;
-    }
+    font-size: clamp(1rem, 1.09vw + 0.61rem, 2rem);
 
     // Trait de soulignement
     &::after {
@@ -77,26 +34,10 @@
       transform: translateX(-50%);
       background: linear-gradient(90deg, $color-pink, $color-purple);
       border-radius: 3px;
-      bottom: -0.5rem;
+      bottom: clamp(-0.4rem, -0.02vw - 0.33rem, -0.6rem);
 
-      width: 50px;
-      height: 2px;
-
-      @include small-screens {
-        width: 35px;
-        height: 2px;
-        bottom: -0.4rem;
-      }
-
-      @include from('medium-sm') {
-        width: 55px;
-      }
-
-      @include from('large-xs') {
-        width: 70px;
-        height: 3px;
-        bottom: -0.6rem;
-      }
+      width: clamp(35px, 3.8vw + 21.3px, 70px);
+      height: clamp(2px, 0.11vw + 1.6px, 3px);
     }
   }
 }

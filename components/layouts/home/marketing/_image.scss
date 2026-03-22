@@ -5,122 +5,60 @@
 // 📄 _image.scss
 // ================================
 
-// =============================
-// IMAGE DESKTOP - À GAUCHE
-// =============================
-@include from('large-xs') {
+// Desktop
+@include desktop-up {
   .profit-image {
     max-height: 90vh;
     height: auto;
     width: auto;
     flex: 0 0 auto;
-
     margin: 0;
     padding: 0;
-
     opacity: 0.9;
     filter: none;
     transition: all 0.3s ease;
-
     position: relative;
     z-index: 5;
-
     border-radius: 28px;
   }
 }
 
-// =============================
-// IMAGE TABLETTE - EN HAUT, SANS BLUR NI OPACITY
-// =============================
-@include between('medium-sm', 'large-xs') {
+// Tablette
+@include between('medium-768', 'large-1280') {
   .profit-image {
     position: absolute;
     top: 2%;
     left: 50%;
     transform: translateX(-50%);
-
     z-index: 1;
-
     opacity: 1;
     filter: none;
-
     transition: all 0.4s ease;
-
-    height: 62vh;
+    // clamp : 62vh (768px) → 66vh (1024px)
+    height: clamp(62vh, 1.56vw + 60vh, 66vh);
     width: auto;
-
-    @include from('medium-lg') {
-      height: 64vh;
-    }
-
-    @include from('medium-xxl') {
-      height: 66vh;
-    }
   }
 }
 
-// =============================
-// IMAGE MOBILE - EN BAS, AVEC BLUR ET OPACITY
-// =============================
-@include until('medium-sm') {
+// Mobile
+@include mobile-only {
   .profit-image {
     position: absolute;
     bottom: 5%;
     left: 50%;
     transform: translateX(-50%);
-
     z-index: 1;
-
-    height: 70vh;
+    // clamp : 65vh (360px) → 70vh (768px)
+    height: clamp(65vh, 1.23vw + 60.6vh, 70vh);
     width: auto;
-
-    // ✅ Blur et opacity remis
-    opacity: 0.3;
-    filter: blur(2px);
-
+    opacity: clamp(0.28, 0.005vw + 0.26, 0.3);
+    filter: blur(clamp(1.8px, 0.05vw + 1.62px, 2px));
     transition: all 0.4s ease;
-
-    @include small-screens {
-      height: 65vh;
-      bottom: 4%;
-      opacity: 0.28;
-      filter: blur(1.8px);
-    }
-
-    @include from('small-sm') {
-      height: 66vh;
-      bottom: 4%;
-      opacity: 0.29;
-      filter: blur(1.9px);
-    }
-
-    @include from('small-lg') {
-      height: 68vh;
-      bottom: 5%;
-      opacity: 0.3;
-      filter: blur(2px);
-    }
-
-    @include from('small-xl') {
-      height: 69vh;
-      bottom: 5%;
-      opacity: 0.3;
-      filter: blur(2px);
-    }
-
-    @include between('small-xl', 'medium-sm') {
-      height: 70vh;
-      bottom: 5%;
-      opacity: 0.3;
-      filter: blur(2px);
-    }
   }
 }
 
-// =============================
-// BREAKPOINT DE TRANSITION SPÉCIAL
-// =============================
-@include between('medium-lg', 'large-xs') {
+// Transition tablette → desktop
+@include between('medium-1024', 'large-1280') {
   .profit-image {
     max-height: 85vh;
   }

@@ -5,16 +5,13 @@
 // 📄 _responsive.scss
 // ================================
 
-// =============================
-// ÉCRANS TRÈS PETITS
-// =============================
-@media (max-width: 360px) {
+@media (max-width: 359px) {
   .main-content {
     gap: 0;
   }
 
   .text-container {
-    @include until('large-xs') {
+    @include below-desktop {
       padding: 1rem 0.8rem;
       width: 94%;
     }
@@ -33,19 +30,16 @@
   }
 }
 
-// =============================
-// MODE PAYSAGE MOBILE
-// =============================
 @include mobile-landscape {
   .main-content {
-    @include until('large-xs') {
+    @include below-desktop {
       flex-direction: row;
       gap: 1rem;
     }
   }
 
   .profit-image {
-    @include until('large-xs') {
+    @include below-desktop {
       position: relative;
       transform: none;
       top: auto;
@@ -59,7 +53,7 @@
   }
 
   .text-container {
-    @include until('large-xs') {
+    @include below-desktop {
       position: relative;
       bottom: auto;
       left: auto;
@@ -86,29 +80,23 @@
   }
 }
 
-// =============================
-// ÉCRANS HAUTS
-// =============================
 @include tall-screen {
   .profit-image {
-    @include from('large-xs') {
+    @include desktop-up {
       max-height: 95vh;
     }
   }
 
   .text-container {
-    @include until('large-xs') {
+    @include below-desktop {
       bottom: 4%;
     }
   }
 }
 
-// =============================
-// ÉCRANS COURTS
-// =============================
 @include short-screen {
   .profit-image {
-    @include from('large-xs') {
+    @include desktop-up {
       max-height: 75vh;
     }
   }
@@ -117,7 +105,7 @@
     font-size: 1.8rem;
     margin: 0 0 0.5rem 0;
 
-    @include from('large-xs') {
+    @include desktop-up {
       font-size: 2.2rem;
     }
   }
@@ -127,9 +115,6 @@
   }
 }
 
-// =============================
-// AMÉLIORATIONS POUR L'ACCESSIBILITÉ
-// =============================
 @include reduced-motion {
   .profit-image {
     transition: none;
@@ -138,7 +123,7 @@
       transform: none;
     }
 
-    @include until('large-xs') {
+    @include below-desktop {
       &:hover {
         transform: translateX(-50%);
       }
@@ -147,28 +132,19 @@
 
   .profit-blog-link {
     transition: none;
-
-    &:hover {
-      transform: none;
-    }
-
+    &:hover,
     &:active {
       transform: none;
     }
   }
 }
 
-// =============================
-// SUPPORT TACTILE
-// =============================
 @media (pointer: coarse) {
   .profit-blog-link {
     min-height: 44px;
-
     &:hover {
       transform: none;
     }
-
     &:active {
       opacity: 0.8;
       transform: scale(0.98);
@@ -176,9 +152,6 @@
   }
 }
 
-// =============================
-// SUPPORT ÉCRANS HAUTE DENSITÉ
-// =============================
 @include high-density {
   .profit-image {
     image-rendering: -webkit-optimize-contrast;
@@ -186,9 +159,6 @@
   }
 }
 
-// =============================
-// CONTRASTE ÉLEVÉ
-// =============================
 @include high-contrast {
   .main-title {
     text-shadow:
@@ -202,29 +172,22 @@
   }
 }
 
-// =============================
-// TRÈS GRANDS ÉCRANS
-// =============================
-@include from('large-xxxl') {
+@include from('large-1920') {
   .main-content {
     gap: 4rem;
   }
-
   .profit-image {
     max-height: 95vh;
     border-radius: 32px;
   }
-
   .text-container {
     padding: 0 2rem;
   }
-
   .main-title {
     font-size: 3.6rem;
     letter-spacing: 1.6px;
     margin: 0 0 1.2rem 0;
   }
-
   .profit-blog-link {
     font-size: 1.2rem;
     padding: 1rem 2.6rem;
@@ -232,27 +195,20 @@
   }
 }
 
-// =============================
-// ORIENTATION PAYSAGE TABLETTES
-// =============================
 @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
   .main-content {
     gap: 1.5rem;
   }
-
   .profit-image {
     max-height: 80vh;
   }
-
   .text-container {
     padding: 0 0.5rem;
   }
-
   .main-title {
     font-size: 2.2rem;
     letter-spacing: 1px;
   }
-
   .profit-blog-link {
     font-size: 0.9rem;
     padding: 0.7rem 1.8rem;

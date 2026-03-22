@@ -1,5 +1,9 @@
 @use '../../../app/styles/abstracts' as *;
 
+// ================================
+// 📄 parallax.scss
+// ================================
+
 .parallax {
   width: 100%;
   height: 100%;
@@ -9,10 +13,12 @@
   justify-content: center;
   overflow: hidden;
 
+  // =============================
+  // TITRE — clamp : 2.2rem (360px) → 5rem (1280px)
+  // formule : 3.04vw + 1.1rem → ~2.2rem à 360px, ~5rem à 1280px
+  // =============================
   h1 {
-    // 🎯 FORCE L'UTILISATION DE RINT BASIC POUR PARALLAX
-    font-family: font-family('parallax') !important; // Rint Basic
-
+    font-family: font-family('parallax') !important;
     background: linear-gradient(
       45deg,
       $text-color,
@@ -25,253 +31,74 @@
     text-shadow: 0 4px 8px rgba($background-color, 0.3);
     font-weight: 400;
     letter-spacing: 0.02em;
-
-    // 📱 MOBILE FIRST - Titre adapté aux petits écrans
-    font-size: 2.5rem;
+    font-size: clamp(2.2rem, 3.04vw + 1.1rem, 5rem);
     text-align: center;
 
-    @include until('small-sm') {
-      font-size: 2.2rem;
-      letter-spacing: 0.01em;
-    }
-
-    // 📱 PETITS ÉCRANS - Progression
-    @include from('small-sm') {
-      font-size: 2.6rem;
-    }
-
-    @include from('small-lg') {
-      font-size: 2.8rem;
-    }
-
-    @include from('small-xl') {
-      font-size: 3rem;
-    }
-
-    // 📟 MOYENS ÉCRANS - Croissance progressive
-    @include from('medium-sm') {
-      font-size: 3.5rem;
-    }
-
-    @include from('medium-lg') {
-      font-size: 3.8rem;
-    }
-
-    @include from('medium-xl') {
-      font-size: 4rem;
-    }
-
-    @include from('medium-xxl') {
-      font-size: 4.2rem;
-    }
-
-    // 🖥️ GRANDS ÉCRANS - Taille desktop
-    @include from('large-xs') {
-      font-size: 4.5rem; // Taille desktop originale
-      letter-spacing: 0.02em;
-    }
-
-    @include from('large-lg') {
-      font-size: 4.7rem;
-    }
-
-    @include from('large-xxl') {
-      font-size: 5rem;
-    }
-
-    @include from('large-xxxl') {
+    @include from('large-1920') {
       font-size: 5.2rem;
     }
   }
 
+  // =============================
+  // MOUNTAINS — contain sur mobile, cover sur desktop
+  // =============================
   .mountains {
     background-image: url('/mountains.png');
     background-position: bottom;
+    background-repeat: no-repeat;
     width: 100%;
     height: 100%;
     position: absolute;
     z-index: 3;
 
-    // 📱 MOBILE FIRST - Background adapté aux petits écrans
+    // Mobile/tablette : contain pour ne pas couper l'image
     background-size: contain;
-    background-repeat: no-repeat;
 
-    @include until('small-sm') {
-      background-size: contain;
-      background-repeat: no-repeat;
-    }
-
-    // 📱 PETITS ÉCRANS - Maintien du style contain
-    @include from('small-sm') {
-      background-size: contain;
-      background-repeat: no-repeat;
-    }
-
-    @include from('small-lg') {
-      background-size: contain;
-      background-repeat: no-repeat;
-    }
-
-    @include from('small-xl') {
-      background-size: contain;
-      background-repeat: no-repeat;
-    }
-
-    // 📟 MOYENS ÉCRANS - Transition progressive
-    @include from('medium-sm') {
-      background-size: contain;
-      background-repeat: no-repeat;
-    }
-
-    @include from('medium-lg') {
-      background-size: contain;
-      background-repeat: no-repeat;
-    }
-
-    @include from('medium-xl') {
-      background-size: contain;
-      background-repeat: no-repeat;
-    }
-
-    @include from('medium-xxl') {
-      background-size: contain;
-      background-repeat: no-repeat;
-    }
-
-    // 🖥️ GRANDS ÉCRANS - Style desktop cover
-    @include from('large-xs') {
+    // Desktop : cover pour remplir
+    @include desktop-up {
       background-size: cover;
       background-repeat: repeat;
     }
   }
 
+  // =============================
+  // PLANETS — même logique que mountains
+  // =============================
   .planets {
     background-position: bottom;
+    background-repeat: no-repeat;
     width: 100%;
     height: 100%;
     position: absolute;
     z-index: 2;
 
-    // 📱 MOBILE FIRST - Background adapté aux petits écrans
     background-size: contain;
-    background-repeat: no-repeat;
 
-    @include until('small-sm') {
-      background-size: contain;
-      background-repeat: no-repeat;
-    }
-
-    // 📱 PETITS ÉCRANS - Maintien du style contain
-    @include from('small-sm') {
-      background-size: contain;
-      background-repeat: no-repeat;
-    }
-
-    @include from('small-lg') {
-      background-size: contain;
-      background-repeat: no-repeat;
-    }
-
-    @include from('small-xl') {
-      background-size: contain;
-      background-repeat: no-repeat;
-    }
-
-    // 📟 MOYENS ÉCRANS - Transition progressive
-    @include from('medium-sm') {
-      background-size: contain;
-      background-repeat: no-repeat;
-    }
-
-    @include from('medium-lg') {
-      background-size: contain;
-      background-repeat: no-repeat;
-    }
-
-    @include from('medium-xl') {
-      background-size: contain;
-      background-repeat: no-repeat;
-    }
-
-    @include from('medium-xxl') {
-      background-size: contain;
-      background-repeat: no-repeat;
-    }
-
-    // 🖥️ GRANDS ÉCRANS - Style desktop cover
-    @include from('large-xs') {
+    @include desktop-up {
       background-size: cover;
       background-repeat: repeat;
     }
   }
 
+  // =============================
+  // STARS — toujours cover
+  // =============================
   .stars {
     background-image: url('/stars.png');
     background-position: bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
     width: 100%;
     height: 100%;
     position: absolute;
     z-index: 1;
-
-    // 📱 MOBILE FIRST - Background adapté
-    background-size: cover;
-    background-repeat: no-repeat;
-
-    @include until('small-sm') {
-      background-size: cover;
-      background-repeat: no-repeat;
-    }
-
-    // 📱 PETITS ÉCRANS - Progression
-    @include from('small-sm') {
-      background-size: cover;
-      background-repeat: no-repeat;
-    }
-
-    @include from('small-lg') {
-      background-size: cover;
-      background-repeat: no-repeat;
-    }
-
-    @include from('small-xl') {
-      background-size: cover;
-      background-repeat: no-repeat;
-    }
-
-    // 📟 MOYENS ÉCRANS - Transition
-    @include from('medium-sm') {
-      background-size: cover;
-      background-repeat: no-repeat;
-    }
-
-    @include from('medium-lg') {
-      background-size: cover;
-      background-repeat: no-repeat;
-    }
-
-    @include from('medium-xl') {
-      background-size: cover;
-      background-repeat: no-repeat;
-    }
-
-    @include from('medium-xxl') {
-      background-size: cover;
-      background-repeat: no-repeat;
-    }
-
-    // 🖥️ GRANDS ÉCRANS - Style desktop cover
-    @include from('large-xs') {
-      background-size: cover;
-      background-repeat: no-repeat;
-    }
   }
 }
 
 // =============================
-// ADAPTATIONS SPÉCIALES
+// CAS SPÉCIAUX
 // =============================
 
-// Mode paysage sur mobile - Optimisations spécifiques
 @include mobile-landscape {
   .parallax {
     h1 {
@@ -288,45 +115,34 @@
   }
 }
 
-// Écrans très hauts - Ajustements pour iPhone X, 11, etc.
 @include tall-screen {
   .parallax h1 {
-    @include until('large-xs') {
+    @include below-desktop {
       font-size: 3.2rem;
     }
   }
 }
 
-// Amélioration pour l'accessibilité - Réduction des animations
 @include reduced-motion {
-  .parallax {
-    // Réduction des effets parallax si demandé
-    .mountains,
-    .planets,
-    .stars {
-      transform: none !important;
-    }
+  .parallax .mountains,
+  .parallax .planets,
+  .parallax .stars {
+    transform: none !important;
   }
 }
 
-// Support pour écrans haute densité
 @include high-density {
-  .parallax {
-    .mountains,
-    .planets,
-    .stars {
-      image-rendering: -webkit-optimize-contrast;
-      image-rendering: crisp-edges;
-    }
+  .parallax .mountains,
+  .parallax .planets,
+  .parallax .stars {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
   }
 }
 
-// Très grands écrans - Optimisations supplémentaires
-@include from('large-xxxl') {
-  .parallax {
-    h1 {
-      font-size: 5.5rem;
-      letter-spacing: 0.03em;
-    }
+@include from('large-1920') {
+  .parallax h1 {
+    font-size: 5.5rem;
+    letter-spacing: 0.03em;
   }
 }

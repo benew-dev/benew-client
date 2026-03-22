@@ -5,10 +5,6 @@
 // 📄 _toggle-button.scss
 // ================================
 
-// =============================
-// BOUTON TOGGLE - OPTIMISATION PAR CATÉGORIE D'ÉCRAN
-// =============================
-
 .sidebar button {
   background-color: transparent;
   border: none;
@@ -18,57 +14,37 @@
   transition: all 0.3s ease;
   border-radius: 50%;
 
-  // 📱 MOBILE - Calcul automatique du centre
-  width: 3rem;
-  height: 3rem;
+  // clamp : 3rem (360px) → 2.2rem (768px) via paliers
+  // Mobile : centré dans navbar 5rem
+  width: clamp(2.7rem, -0.1vw + 3.1rem, 3rem);
+  height: clamp(2.7rem, -0.1vw + 3.1rem, 3rem);
   left: 1.625rem;
+  top: calc((5rem - clamp(2.7rem, -0.1vw + 3.1rem, 3rem)) / 2);
 
-  // ✅ CALCUL AUTOMATIQUE: (hauteur navbar - hauteur button) / 2
-  top: calc((5rem - 3rem) / 2); // = 1rem = 16px (centre parfait)
-
-  @include from('small-xs') {
-    width: 2.9rem;
-    height: 2.9rem;
-    top: calc((5rem - 2.9rem) / 2);
-  }
-
-  @include from('small-sm') {
-    width: 2.8rem;
-    height: 2.8rem;
-    top: calc((5rem - 2.8rem) / 2);
-  }
-
-  @include from('small-lg') {
-    width: 2.7rem;
-    height: 2.7rem;
-    top: calc((5rem - 2.7rem) / 2);
-  }
-
-  // 📟 MOYENS ÉCRANS - Navbar = 5.5rem
-  @include from('medium-sm') {
+  // Tablette : navbar 5.5rem
+  @include tablet-up {
     width: 2.5rem;
     height: 2.5rem;
-    top: calc((5.5rem - 2.5rem) / 2); // = 1.5rem
+    top: calc((5.5rem - 2.5rem) / 2);
   }
 
-  // 🖥️ DESKTOP - Navbar = 6.25rem
-  @include from('large-lg') {
+  // Desktop : navbar 6.25rem
+  @include desktop-up {
     width: 2.2rem;
     height: 2.2rem;
-    top: calc((6.25rem - 2.2rem) / 2); // = 2.025rem (centre parfait)
+    top: calc((6.25rem - 2.2rem) / 2);
   }
 
-  @include from('large-xxxl') {
+  @include from('large-1920') {
     width: 2rem;
     height: 2rem;
-    top: calc((6.25rem - 2rem) / 2); // = 2.125rem
+    top: calc((6.25rem - 2rem) / 2);
   }
 
   &:hover {
     transform: scale(1.1);
 
-    // 🖥️ GRANDS ÉCRANS - Comportement desktop amélioré
-    @include large-screens {
+    @include desktop-up {
       background-color: rgba($primary-color, 0.1);
       transform: scale(1.15);
     }
@@ -78,82 +54,29 @@
     transform: scale(0.95);
   }
 
-  // =============================
-  // CORRECTION SPÉCIFIQUE POUR LES PAGES TEMPLATE DÉTAIL
-  // =============================
-  &.template-detail-fix {
-    // 📱 PETITS ÉCRANS - Ajustements pour les pages template
-    @include small-screens {
-      top: 1rem;
-      left: 1rem;
-    }
-
-    // 📟 MOYENS ÉCRANS - Position ajustée
-    @include medium-screens {
-      top: 1.25rem;
-      left: 1.25rem;
-    }
-
-    // 🖥️ GRANDS ÉCRANS - Position desktop
-    @include large-screens {
-      top: 1.5rem;
-      left: 1.2rem;
-    }
-  }
-
-  // =============================
-  // ICÔNE SVG DU BOUTON
-  // =============================
   svg {
-    // 📱 PETITS ÉCRANS - Icône plus grande pour la visibilité
-    width: 1.5rem;
-    height: 1.5rem;
+    width: clamp(1.25rem, 0.03vw + 1.14rem, 1.5rem);
+    height: clamp(1.25rem, 0.03vw + 1.14rem, 1.5rem);
 
-    @include from('small-sm') {
-      width: 1.4rem;
-      height: 1.4rem;
-    }
-
-    // Fusion optimisée small-md + small-lg
-    @include from('small-lg') {
-      width: 1.35rem;
-      height: 1.35rem;
-    }
-
-    // 📟 MOYENS ÉCRANS - Taille intermédiaire
-    @include medium-screens {
+    @include tablet-up {
       width: 1.3rem;
       height: 1.3rem;
     }
 
-    // 🖥️ GRANDS ÉCRANS - Taille desktop optimisée
-    @include large-screens {
+    @include desktop-up {
       width: 1.25rem;
       height: 1.25rem;
-    }
-
-    @include from('large-xxxl') {
-      width: 1.2rem; // Taille desktop optimale
-      height: 1.2rem;
     }
 
     path {
       stroke: $primary-color;
       transition: all 0.3s ease;
+      stroke-width: clamp(3px, 0.11vw + 2.6px, 4px);
 
-      // 📱 PETITS ÉCRANS - Trait plus épais pour la visibilité
-      @include small-screens {
-        stroke-width: 4;
-        stroke: $primary-color;
-      }
-
-      // 📟 MOYENS ÉCRANS - Épaisseur intermédiaire
-      @include medium-screens {
+      @include tablet-up {
         stroke-width: 3.5;
       }
-
-      // 🖥️ GRANDS ÉCRANS - Épaisseur desktop
-      @include large-screens {
+      @include desktop-up {
         stroke-width: 3;
       }
     }

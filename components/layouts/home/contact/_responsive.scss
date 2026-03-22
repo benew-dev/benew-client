@@ -5,10 +5,7 @@
 // 📄 _responsive.scss
 // ================================
 
-// =============================
-// ÉCRANS TRÈS PETITS
-// =============================
-@media (max-width: 360px) {
+@media (max-width: 359px) {
   .contact-text-block {
     padding: 1.25rem;
 
@@ -29,12 +26,9 @@
   }
 }
 
-// =============================
-// MODE PAYSAGE MOBILE
-// =============================
 @include mobile-landscape {
   .contact-main-container {
-    flex-direction: row; // Revenir en horizontal en paysage
+    flex-direction: row;
   }
 
   .contact-text-block,
@@ -58,27 +52,21 @@
   }
 }
 
-// =============================
-// ÉCRANS TRÈS HAUTS
-// =============================
 @include tall-screen {
   .contact-text-block {
-    @include until('medium-sm') {
-      height: 35%; // Moins d'espace sur écrans très hauts
+    @include mobile-only {
+      height: 35%;
       padding: 2rem 1.5rem;
     }
   }
 
   .contact-image-block {
-    @include until('medium-sm') {
-      height: 45%; // Plus d'espace pour l'image
+    @include mobile-only {
+      height: 45%;
     }
   }
 }
 
-// =============================
-// ÉCRANS COURTS
-// =============================
 @include short-screen {
   .contact-text-block {
     padding: 1.5rem;
@@ -100,17 +88,11 @@
   }
 }
 
-// =============================
-// ACCESSIBILITÉ
-// =============================
 @include reduced-motion {
   .contact-button {
     transition: none;
 
-    &:hover {
-      transform: none;
-    }
-
+    &:hover,
     &:active {
       transform: none;
     }
@@ -126,9 +108,6 @@
   }
 }
 
-// =============================
-// SUPPORT TACTILE
-// =============================
 @media (pointer: coarse) {
   .contact-button {
     min-height: 44px;
@@ -145,9 +124,6 @@
   }
 }
 
-// =============================
-// SUPPORT ÉCRANS HAUTE DENSITÉ
-// =============================
 @include high-density {
   .contact-logo-image {
     image-rendering: -webkit-optimize-contrast;
@@ -155,9 +131,6 @@
   }
 }
 
-// =============================
-// CONTRASTE ÉLEVÉ
-// =============================
 @include high-contrast {
   .contact-button {
     border-width: 3px;
@@ -171,10 +144,7 @@
   }
 }
 
-// =============================
-// TRÈS GRANDS ÉCRANS
-// =============================
-@include from('large-xxxl') {
+@include from('large-1920') {
   .contact-text-block {
     padding: 3.5rem;
 
@@ -196,9 +166,6 @@
   }
 }
 
-// =============================
-// ORIENTATION PAYSAGE TABLETTES
-// =============================
 @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
   .contact-main-container {
     flex-direction: row;
