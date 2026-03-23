@@ -5,9 +5,6 @@
 // 📄 marketing-skeleton.scss
 // ================================
 
-// =============================
-// ANIMATION SKELETON
-// =============================
 @keyframes skeletonPulse {
   0% {
     opacity: 1;
@@ -29,18 +26,12 @@
   }
 }
 
-// =============================
-// MARKETING SKELETON - BASE STRUCTURE
-// =============================
 .marketing-skeleton {
   width: 100%;
   height: 100%;
   position: relative;
 }
 
-// =============================
-// SKELETON ELEMENTS - BASE
-// =============================
 .skeleton-animate {
   background: linear-gradient(
     90deg,
@@ -54,64 +45,53 @@
 }
 
 // =============================
-// STRUCTURE DESKTOP/TABLETTE (medium-sm et plus)
+// LAYOUT DESKTOP (≥ 768px)
 // =============================
-@include from('medium-sm') {
+@include tablet-up {
   .main-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     width: 100%;
     max-width: 100%;
     height: 100%;
     max-height: 100vh;
-
-    gap: 2rem;
+    gap: clamp(2rem, 1.09vw + 1.61rem, 3rem);
     box-sizing: border-box;
-
-    @include from('large-xs') {
-      gap: 3rem;
-    }
   }
 }
 
 // =============================
-// STRUCTURE MOBILE (jusqu'à medium-sm exclu)
+// LAYOUT MOBILE (< 768px)
 // =============================
-@include until('medium-sm') {
+@include mobile-only {
   .main-content {
     position: relative;
     width: 100%;
     height: 100%;
-
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
     gap: 0;
     box-sizing: border-box;
   }
 }
 
 // =============================
-// SKELETON IMAGE DESKTOP/TABLETTE - À GAUCHE
+// SKELETON IMAGE DESKTOP
 // =============================
-@include from('medium-sm') {
+@include tablet-up {
   .skeleton-profit-image {
     max-height: 90vh;
-    width: 256px; // Largeur de l'image originale
-    height: 384px; // Hauteur de l'image originale
+    // width/height : 220px (768px) → 256px (1280px)
+    width: clamp(220px, 7.17vw + 164.8px, 256px);
+    height: clamp(330px, 10.87vw + 246.7px, 384px);
     flex: 0 0 auto;
-
     margin: 0;
     padding: 0;
-
-    // Position normale dans le flux
     position: relative;
     z-index: 5;
-
     background: linear-gradient(
       90deg,
       rgba($color-orange, 0.2) 25%,
@@ -119,84 +99,42 @@
       rgba($color-orange, 0.2) 75%
     );
 
-    @include from('large-xs') {
+    @include from('large-1280') {
       border-radius: 28px;
-    }
-
-    // Ajustements pour tablettes
-    @include between('medium-lg', 'large-xs') {
-      max-height: 85vh;
-      width: 220px;
-      height: 330px;
+      max-height: 90vh;
     }
   }
 }
 
 // =============================
-// SKELETON IMAGE MOBILE - EN ARRIÈRE-PLAN
+// SKELETON IMAGE MOBILE
+// clamp : 60vh (360px) → 68vh (768px)
 // =============================
-@include until('medium-sm') {
+@include mobile-only {
   .skeleton-profit-image {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-
-    z-index: 1; // En arrière-plan
-
-    width: auto;
-    height: 70vh;
-
-    // Effet blur et opacité réduite comme l'original
+    z-index: 1;
+    // height : 60vh → 68vh
+    height: clamp(60vh, 1.96vw + 52.9vh, 68vh);
+    width: 180px;
     opacity: 0.3;
     filter: blur(2px);
-
     background: linear-gradient(
       90deg,
       rgba($color-orange, 0.15) 25%,
       rgba($color-orange, 0.25) 50%,
       rgba($color-orange, 0.15) 75%
     );
-
-    @include small-screens {
-      height: 60vh;
-      opacity: 0.25;
-      filter: blur(1.5px);
-    }
-
-    @include from('small-sm') {
-      height: 62vh;
-      opacity: 0.26;
-      filter: blur(1.6px);
-    }
-
-    @include from('small-lg') {
-      height: 64vh;
-      opacity: 0.27;
-      filter: blur(1.7px);
-    }
-
-    @include from('small-xl') {
-      height: 66vh;
-      opacity: 0.28;
-      filter: blur(1.8px);
-    }
-
-    @include between('small-xl', 'medium-sm') {
-      height: 68vh;
-      opacity: 0.29;
-      filter: blur(1.9px);
-    }
-
-    // Dimensions fixes pour mobile
-    width: 180px; // Approximation basée sur la proportion
   }
 }
 
 // =============================
-// SKELETON TEXT CONTAINER DESKTOP - À DROITE
+// TEXT CONTAINER DESKTOP
 // =============================
-@include from('medium-sm') {
+@include desktop-up {
   .text-container {
     flex: 1;
     display: flex;
@@ -204,245 +142,139 @@
     align-items: flex-start;
     text-align: left;
     justify-content: center;
-
     margin: 0;
     padding: 0 1rem;
-
     position: relative;
     z-index: 10;
   }
 }
 
 // =============================
-// SKELETON TEXT CONTAINER MOBILE - AU PREMIER PLAN
+// TEXT CONTAINER TABLETTE
 // =============================
-@include until('medium-sm') {
+@include between('medium-768', 'large-1280') {
   .text-container {
-    position: relative;
-    z-index: 10; // Au premier plan
-
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-
-    width: 100%;
-    height: 100%;
-
-    padding: 2rem 1rem;
+    width: clamp(75%, 3.85vw + 64.4%, 85%);
+    padding: clamp(1.75rem, 0.48vw + 1.58rem, 2rem)
+      clamp(1.5rem, 0.48vw + 1.33rem, 1.75rem);
     margin: 0;
+    background: rgba(220, 220, 230, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: clamp(20px, 0.77vw + 17.1px, 24px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
 
-    @include small-screens {
-      padding: 1.5rem 0.8rem;
-    }
-
-    @include from('small-sm') {
-      padding: 1.55rem 0.85rem;
-    }
-
-    @include from('small-lg') {
-      padding: 1.6rem 0.9rem;
-    }
-
-    @include from('small-xl') {
-      padding: 1.65rem 0.95rem;
-    }
-
-    @include between('small-xl', 'medium-sm') {
-      padding: 1.8rem 1rem;
-    }
+// =============================
+// TEXT CONTAINER MOBILE
+// =============================
+@include mobile-only {
+  .text-container {
+    position: absolute;
+    bottom: 3%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: clamp(92%, 2.17vw + 84.2%, 94%);
+    padding: clamp(1rem, 0.61vw + 0.78rem, 1.25rem)
+      clamp(0.8rem, 0.49vw + 0.62rem, 1rem);
+    margin: 0;
+    background: transparent;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 0;
+    border: none;
   }
 }
 
 // =============================
 // SKELETON TITLES
+// clamp height : 1.6rem (360px) → 3.4rem (1280px)
 // =============================
 .skeleton-title-1,
 .skeleton-title-2 {
   width: 100%;
   border-radius: 6px;
-  margin-bottom: 0.8rem;
-
+  // height : 1.6rem → 3.4rem
+  height: clamp(1.6rem, 1.96vw + 0.89rem, 3.4rem);
+  margin-bottom: clamp(0.5rem, 0.54vw + 0.3rem, 1rem);
   background: linear-gradient(
     90deg,
     rgba($color-orange, 0.2) 25%,
     rgba($color-orange, 0.3) 50%,
     rgba($color-orange, 0.2) 75%
   );
-
-  // Tailles responsives identiques aux titres originaux
-  height: 2.2rem;
-
-  @include small-screens {
-    height: 1.6rem;
-    margin-bottom: 0.5rem;
-  }
-
-  @include from('small-sm') {
-    height: 1.65rem;
-  }
-
-  @include from('small-lg') {
-    height: 1.7rem;
-  }
-
-  @include from('small-xl') {
-    height: 1.75rem;
-  }
-
-  @include between('small-xl', 'medium-sm') {
-    height: 1.9rem;
-  }
-
-  @include from('medium-sm') {
-    height: 2.6rem;
-  }
-
-  @include from('medium-lg') {
-    height: 2.7rem;
-  }
-
-  @include from('medium-xxl') {
-    height: 2.8rem;
-  }
-
-  @include from('large-sm') {
-    height: 2.9rem;
-  }
-
-  @include from('large-xs') {
-    height: 3.4rem;
-    margin-bottom: 1rem;
-  }
-
-  // Transition spéciale pour tablettes
-  @include between('medium-lg', 'large-xs') {
-    height: 2.4rem;
-  }
 }
 
-// Différenciation des deux titres
 .skeleton-title-1 {
-  max-width: 90%; // Premier titre un peu plus long
+  max-width: 90%;
 }
-
 .skeleton-title-2 {
-  max-width: 85%; // Deuxième titre un peu plus court
-  margin-bottom: 1.5rem; // Plus d'espace avant le bouton
-
-  @include small-screens {
-    margin-bottom: 1.2rem;
-  }
-
-  @include from('large-xs') {
-    margin-bottom: 2rem;
-  }
+  max-width: 85%;
+  margin-bottom: clamp(1.2rem, 0.87vw + 0.89rem, 2rem);
 }
 
 // =============================
 // SKELETON BUTTON
+// clamp : 2.1rem (360px) → 2.7rem (1280px)
 // =============================
 .skeleton-profit-button {
   border-radius: 50px;
-  margin-top: 1.5rem;
-
+  margin-top: clamp(1.2rem, 0.87vw + 0.89rem, 2rem);
+  // height : 2.1rem → 2.7rem
+  height: clamp(2.1rem, 0.65vw + 1.86rem, 2.7rem);
+  // width : 140px → 180px
+  width: clamp(140px, 4.35vw + 124.3px, 180px);
   background: linear-gradient(
     90deg,
     rgba($color-orange, 0.3) 25%,
     rgba($color-pink, 0.3) 50%,
     rgba($color-orange, 0.3) 75%
   );
-
-  // Dimensions responsive identiques au bouton original
-  height: 2.4rem; // Approximation pour padding + font-size
-  width: 160px; // Largeur approximative du bouton
-
-  @include small-screens {
-    height: 2.1rem;
-    width: 140px;
-    margin-top: 1.2rem;
-  }
-
-  @include from('small-sm') {
-    height: 2.15rem;
-    width: 145px;
-    margin-top: 1.25rem;
-  }
-
-  @include from('small-lg') {
-    height: 2.18rem;
-    width: 148px;
-    margin-top: 1.28rem;
-  }
-
-  @include from('small-xl') {
-    height: 2.2rem;
-    width: 150px;
-    margin-top: 1.3rem;
-  }
-
-  @include between('small-xl', 'medium-sm') {
-    height: 2.25rem;
-    width: 152px;
-  }
-
-  @include from('medium-sm') {
-    height: 2.35rem;
-    width: 155px;
-    margin-top: 1.4rem;
-  }
-
-  @include from('medium-lg') {
-    height: 2.4rem;
-    width: 158px;
-    margin-top: 1.45rem;
-  }
-
-  @include from('medium-xxl') {
-    height: 2.4rem;
-    width: 160px;
-    margin-top: 1.5rem;
-  }
-
-  @include from('large-xs') {
-    height: 2.7rem;
-    width: 180px;
-    margin-top: 2rem;
-  }
 }
 
 // =============================
-// ADAPTATIONS SPÉCIALES
+// CAS SPÉCIAUX
 // =============================
 
-// Écrans très petits
 @media (max-width: 360px) {
   .main-content {
     gap: 0;
   }
-
   .skeleton-profit-image {
-    @include until('medium-sm') {
+    @include mobile-only {
       height: 55vh;
       width: 150px;
       opacity: 0.2;
       filter: blur(1.2px);
     }
   }
-
   .text-container {
-    @include until('medium-sm') {
+    @include mobile-only {
       padding: 1.2rem 0.6rem;
     }
   }
-
   .skeleton-title-1,
   .skeleton-title-2 {
     height: 1.4rem;
     margin-bottom: 0.4rem;
   }
-
   .skeleton-profit-button {
     height: 1.9rem;
     width: 120px;
@@ -450,17 +282,15 @@
   }
 }
 
-// Mode paysage mobile
 @include mobile-landscape {
   .main-content {
-    @include until('medium-sm') {
+    @include mobile-only {
       flex-direction: row;
       gap: 1rem;
     }
   }
-
   .skeleton-profit-image {
-    @include until('medium-sm') {
+    @include mobile-only {
       position: relative;
       transform: none;
       top: auto;
@@ -472,25 +302,26 @@
       z-index: 5;
     }
   }
-
   .text-container {
-    @include until('medium-sm') {
+    @include mobile-only {
       width: 60%;
       height: 100%;
       align-items: flex-start;
       text-align: left;
       padding: 1rem;
       z-index: 10;
+      position: relative;
+      bottom: auto;
+      left: auto;
+      transform: none;
     }
   }
-
   .skeleton-title-1,
   .skeleton-title-2 {
     height: 1.4rem;
     margin-bottom: 0.5rem;
     max-width: 100%;
   }
-
   .skeleton-profit-button {
     height: 1.9rem;
     width: 120px;
@@ -498,64 +329,54 @@
   }
 }
 
-// Écrans hauts
 @include tall-screen {
   .skeleton-profit-image {
-    @include until('medium-sm') {
+    @include mobile-only {
       height: 75vh;
       opacity: 0.35;
     }
-
-    @include from('medium-sm') {
+    @include tablet-up {
       max-height: 95vh;
-      height: 450px; // Ajustement pour écrans hauts
+      height: 450px;
     }
   }
-
   .text-container {
-    @include until('medium-sm') {
+    @include mobile-only {
       padding: 2.5rem 1rem;
     }
   }
 }
 
-// Écrans courts
 @include short-screen {
   .skeleton-profit-image {
-    @include until('medium-sm') {
+    @include mobile-only {
       height: 50vh;
       width: 140px;
       opacity: 0.2;
     }
-
-    @include from('medium-sm') {
+    @include tablet-up {
       max-height: 75vh;
       height: 280px;
     }
   }
-
   .text-container {
-    @include until('medium-sm') {
+    @include mobile-only {
       padding: 1rem 0.8rem;
     }
   }
-
   .skeleton-title-1,
   .skeleton-title-2 {
     height: 1.8rem;
     margin-bottom: 0.5rem;
-
-    @include from('medium-sm') {
+    @include tablet-up {
       height: 2.2rem;
     }
   }
-
   .skeleton-profit-button {
     margin-top: 1rem;
   }
 }
 
-// Support écrans haute densité
 @include high-density {
   .skeleton-profit-image {
     image-rendering: -webkit-optimize-contrast;
@@ -563,36 +384,30 @@
   }
 }
 
-// Accessibilité - Réduction des animations
 @include reduced-motion {
   .skeleton-animate {
     animation: skeletonPulse 2s infinite ease-in-out;
   }
 }
 
-// Très grands écrans
-@include from('large-xxxl') {
+@include from('large-1920') {
   .main-content {
     gap: 4rem;
   }
-
   .skeleton-profit-image {
     max-height: 95vh;
     width: 300px;
     height: 450px;
     border-radius: 32px;
   }
-
   .text-container {
     padding: 0 2rem;
   }
-
   .skeleton-title-1,
   .skeleton-title-2 {
     height: 3.6rem;
     margin-bottom: 1.2rem;
   }
-
   .skeleton-profit-button {
     height: 3rem;
     width: 200px;
@@ -600,37 +415,25 @@
   }
 }
 
-// Orientation paysage tablettes
 @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
   .main-content {
     gap: 1.5rem;
   }
-
   .skeleton-profit-image {
     max-height: 80vh;
     width: 200px;
     height: 300px;
   }
-
   .text-container {
     padding: 0 0.5rem;
   }
-
   .skeleton-title-1,
   .skeleton-title-2 {
     height: 2.2rem;
   }
-
   .skeleton-profit-button {
     height: 2.2rem;
     width: 140px;
     margin-top: 1.2rem;
-  }
-}
-
-// Breakpoint de transition spécial
-@include between('medium-lg', 'large-xs') {
-  .text-container {
-    padding: 0 0.8rem;
   }
 }
