@@ -16,7 +16,7 @@
   background-repeat: repeat;
   background-size: auto;
   background-position: center;
-  overflow: hidden; // ✅ Évite scroll horizontal
+  overflow: hidden;
 }
 
 // =============================
@@ -26,18 +26,16 @@
 .gallery-carousel-container {
   width: 100%;
   height: 100%;
-  overflow: hidden; // ✅ Évite débordement
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 2rem 1rem;
+  // clamp : 1.5rem (360px) → 2rem (768px), 1rem → 1rem horizontal
+  padding: clamp(1.5rem, 0.54vw + 1.3rem, 2rem)
+    clamp(0.75rem, 0.27vw + 0.65rem, 1rem);
 
-  @include until('small-sm') {
-    padding: 1.5rem 0.75rem;
-  }
-
-  @include from('large-xs') {
+  @include desktop-up {
     padding: 3rem 2rem;
   }
 }
@@ -46,16 +44,11 @@
   position: relative;
   width: 100%;
   height: 100%;
-  max-width: 900px;
-  max-height: 700px;
-  overflow: hidden; // ✅ Évite débordement
+  max-width: clamp(100%, 0vw + 100%, 900px);
+  max-height: clamp(500px, 21.74vw + 421.7px, 700px);
+  overflow: hidden;
 
-  @include until('small-sm') {
-    max-width: 100%;
-    max-height: 500px;
-  }
-
-  @include from('large-xs') {
+  @include desktop-up {
     max-width: 1000px;
     max-height: 800px;
   }
@@ -120,117 +113,53 @@
 }
 
 // =============================
-// ✅ DOTS INDICATORS - VISIBLES + RESPONSIVE
+// DOTS INDICATORS
 // =============================
 
 .gallery-carousel-indicators {
   position: absolute;
-  bottom: 1.5rem;
+  bottom: clamp(1.5rem, 0.54vw + 1.3rem, 2rem);
   left: 50%;
   transform: translateX(-50%);
-
   display: flex;
   gap: 0.5rem;
   z-index: 10;
-  // Mobile très petit
-  @include until('small-xs') {
-    bottom: 1.75rem;
-  }
 
-  // Mobile standard
-  @include from('small-xs') {
-    bottom: 2rem;
-  }
-
-  // Tablettes portrait
-  @include from('medium-sm') {
+  @include tablet-up {
     bottom: 2.5rem;
   }
 
-  // Tablettes paysage
-  @include from('medium-xxl') {
-    bottom: 2.75rem;
-  }
-
-  // Desktop
-  @include from('large-xs') {
+  @include desktop-up {
     bottom: 3rem;
   }
 }
 
 .gallery-carousel-dot {
-  // ✅ DOTS INACTIVES - Couleur violette/lavande visible sur fond sombre
   border-color: grey;
   cursor: pointer;
   transition: all 0.3s ease;
   padding: 0;
   border-radius: 50%;
+  // clamp : 6px (360px) → 9px (768px) mobile
+  width: clamp(6px, 0.33vw + 4.8px, 9px);
+  height: clamp(6px, 0.33vw + 4.8px, 9px);
 
-  // ✅ MOBILE (< 375px) - Très petits écrans
-  @include until('small-xs') {
-    width: 6px;
-    height: 6px;
+  @include tablet-up {
+    // clamp : 9px (768px) → 12px (1280px)
+    width: clamp(9px, 0.59vw + 4.5px, 12px);
+    height: clamp(9px, 0.59vw + 4.5px, 12px);
   }
 
-  // ✅ MOBILE (375px - 767px) - Smartphones standards
-  @include from('small-xs') {
-    width: 7px;
-    height: 7px;
+  @include desktop-up {
+    // clamp : 12px (1280px) → 16px (1920px)
+    width: clamp(12px, 0.63vw + 3.9px, 16px);
+    height: clamp(12px, 0.63vw + 3.9px, 16px);
   }
 
-  @include from('small-sm') {
-    width: 8px;
-    height: 8px;
-  }
-
-  // ✅ TABLET (768px - 1023px) - Tablettes portrait
-  @include from('medium-sm') {
-    width: 9px;
-    height: 9px;
-  }
-
-  @include from('medium-lg') {
-    width: 10px;
-    height: 10px;
-  }
-
-  // ✅ TABLET LARGE (1024px - 1199px) - Tablettes paysage
-  @include from('medium-xxl') {
-    width: 11px;
-    height: 11px;
-  }
-
-  // ✅ LAPTOP (1200px - 1439px) - Laptops standards
-  @include from('large-xs') {
-    width: 12px;
-    height: 12px;
-  }
-
-  @include from('large-sm') {
-    width: 13px;
-    height: 13px;
-  }
-
-  // ✅ DESKTOP (1440px - 1919px) - Écrans desktop standards
-  @include from('large-lg') {
-    width: 14px;
-    height: 14px;
-  }
-
-  // ✅ LARGE DESKTOP (1920px+) - Grands écrans
-  @include from('large-xxl') {
-    width: 16px;
-    height: 16px;
-  }
-
-  // ✅ DOT ACTIVE - Orange vif, MÊME TAILLE que les inactives
   &.active {
     background: $color-orange;
     border-color: $color-orange;
     box-shadow: 0 2px 8px rgba($color-orange, 0.5);
-
-    // ✅ Hérite automatiquement de la taille des dots inactives
-    // Pas besoin de redéfinir width/height
   }
 }
 
@@ -240,25 +169,18 @@
 
 .gallery-carousel-counter {
   position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
+  top: clamp(1rem, 0.54vw + 0.8rem, 1.5rem);
+  right: clamp(1rem, 0.54vw + 0.8rem, 1.5rem);
   z-index: 10;
-
   background: rgba($color-dark, 0.8);
   color: $color-light;
-  padding: 0.5rem 1rem;
+  padding: clamp(0.4rem, 0.11vw + 0.36rem, 0.5rem)
+    clamp(0.8rem, 0.22vw + 0.72rem, 1rem);
   border-radius: 20px;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: clamp(0.85rem, 0.05vw + 0.83rem, 0.9rem);
   backdrop-filter: blur(10px);
   border: 1px solid rgba($color-orange, 0.3);
-
-  @include until('small-sm') {
-    top: 1rem;
-    right: 1rem;
-    padding: 0.4rem 0.8rem;
-    font-size: 0.85rem;
-  }
 }
 
 // =============================
@@ -271,30 +193,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
-
-  @include until('small-sm') {
-    padding: 1.5rem;
-  }
+  padding: clamp(1.5rem, 0.54vw + 1.3rem, 2rem);
 }
 
 .gallery-image-solo {
   width: 100%;
   height: auto;
-  max-width: 900px;
-  max-height: 700px;
+  max-width: clamp(100%, 0vw + 100%, 900px);
+  max-height: clamp(500px, 21.74vw + 421.7px, 700px);
   object-fit: contain;
   border-radius: 12px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 
-  @include until('small-sm') {
-    max-width: 100%;
-    max-height: 500px;
+  @include desktop-up {
+    max-width: 900px;
+    max-height: 700px;
   }
 }
 
 // =============================
-// RESPONSIVE
+// CAS SPÉCIAUX
 // =============================
 
 @include mobile-landscape {
@@ -323,7 +241,7 @@
 
 @media (pointer: coarse) {
   button.gallery-carousel-dot {
-    min-width: unset; // ← Annule la règle globale
+    min-width: unset;
     min-height: unset;
   }
 }
