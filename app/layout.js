@@ -5,7 +5,8 @@
 // =============================
 // 🔴 CRITIQUE - NEXT/FONT INTÉGRÉ
 // =============================
-import { orbitron, inter } from './fonts';
+import { josefinSans, inter } from './fonts';
+// import { orbitron, inter } from './fonts';
 
 import './styles/main.scss';
 import Navbar from '../components/layouts/navbar';
@@ -146,7 +147,7 @@ export default function RootLayout({ children }) {
   }
 
   return (
-    <html lang="fr" className={`${orbitron.variable} ${inter.variable}`}>
+    <html lang="fr" className={`${josefinSans.variable} ${inter.variable}`}>
       <head>
         {/* ⭐ CRITIQUE : Script pré-hydratation en PREMIER */}
         <HydrationFix />

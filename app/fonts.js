@@ -2,6 +2,38 @@
 import localFont from 'next/font/local';
 
 // =============================
+// JOSEFIN SANS - Titres et UI
+// =============================
+export const josefinSans = localFont({
+  src: [
+    {
+      path: './fonts/JosefinSans-Light.ttf',
+      weight: '300',
+      style: 'normal',
+    },
+    {
+      path: './fonts/JosefinSans-Regular.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: './fonts/JosefinSans-SemiBold.ttf',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: './fonts/JosefinSans-Bold.ttf',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-display',
+  display: 'swap',
+  adjustFontFallback: 'Arial',
+  preload: true,
+});
+
+// =============================
 // ORBITRON - Titres et UI
 // =============================
 export const orbitron = localFont({
