@@ -16,6 +16,8 @@ import {
   hasInjectionAttempt,
 } from '@/utils/sanitizers/orderSanitizer';
 import { checkServerActionRateLimit } from '@/backend/rateLimiter';
+import * as Sentry from '@sentry/nextjs';
+import { headers } from 'next/headers';
 
 // =============================
 // CRÉATION DE COMMANDE
@@ -37,355 +39,369 @@ export async function createOrder(
   applicationFee,
   isCashPayment = false,
 ) {
-  let client = null;
-  const startTime = Date.now();
+  return Sentry.withServerActionInstrumentation(
+    'createOrder',
+    {
+      headers: await headers(),
+      recordResponse: true,
+    },
+    async () => {
+      let client = null;
+      const startTime = Date.now();
 
-  try {
-    // =============================
-    // ÉTAPE 1: RATE LIMITING
-    // =============================
-
-    // Extraire l'email ou le téléphone comme identifiant
-    // (FormData n'est pas encore parsé, donc on le fait ici)
-    const emailIdentifier =
-      formData.get('email') || formData.get('phone') || 'anonymous';
-
-    const rateLimitResult = await checkServerActionRateLimit(
-      emailIdentifier,
-      'order',
-    );
-
-    if (!rateLimitResult.success) {
-      const waitMinutes = Math.ceil(rateLimitResult.reset / 60);
-      const waitSeconds = rateLimitResult.reset;
-
-      // Message adapté selon la durée et le code d'erreur
-      let message;
-
-      if (
-        rateLimitResult.code === 'BLOCKED' ||
-        rateLimitResult.code === 'BLOCKED_ABUSE'
-      ) {
-        message =
-          'Accès temporairement bloqué suite à un usage abusif. Réessayez plus tard.';
-      } else if (waitMinutes < 1) {
-        message = `Trop de tentatives de commande. Veuillez réessayer dans ${waitSeconds} seconde${waitSeconds > 1 ? 's' : ''}.`;
-      } else {
-        message = `Trop de tentatives de commande. Veuillez réessayer dans ${waitMinutes} minute${waitMinutes > 1 ? 's' : ''}.`;
-      }
-
-      return {
-        success: false,
-        message,
-        code: rateLimitResult.code || 'RATE_LIMITED',
-      };
-    }
-
-    // =============================
-    // ÉTAPE 2: VALIDATION PRÉLIMINAIRE
-    // =============================
-
-    // Convertir applicationFee en number si c'est une string
-    const numericFee =
-      typeof applicationFee === 'string'
-        ? parseFloat(applicationFee)
-        : applicationFee;
-
-    // Vérifier que applicationId et applicationFee sont valides
-    if (!isValidUUID(applicationId)) {
-      return {
-        success: false,
-        message: "ID d'application invalide.",
-        code: 'INVALID_APPLICATION_ID',
-      };
-    }
-
-    if (!isValidAmount(numericFee)) {
-      return {
-        success: false,
-        message: 'Montant invalide.',
-        code: 'INVALID_AMOUNT',
-      };
-    }
-
-    // =============================
-    // ÉTAPE 3: PRÉPARATION ET SANITIZATION
-    // =============================
-
-    const rawData = prepareOrderDataFromFormData(
-      formData,
-      applicationId,
-      numericFee,
-      isCashPayment,
-    );
-
-    // Détection précoce d'injection
-    const dataString = JSON.stringify(rawData);
-    if (hasInjectionAttempt(dataString)) {
-      captureException(new Error('Injection attempt detected'), {
-        tags: { component: 'order_actions', severity: 'high' },
-        extra: { applicationId },
-      });
-
-      return {
-        success: false,
-        message: 'Données suspectes détectées.',
-        code: 'SECURITY_VIOLATION',
-      };
-    }
-
-    // Sanitization
-    const sanitizationResult = sanitizeOrderData(rawData);
-    if (!sanitizationResult.success) {
-      return {
-        success: false,
-        message:
-          'Données invalides: ' +
-          (sanitizationResult.issues?.join(', ') || 'Erreur'),
-        code: 'SANITIZATION_FAILED',
-      };
-    }
-
-    // =============================
-    // ÉTAPE 4: VALIDATION YUP
-    // =============================
-
-    const yupValidation = await validateOrderServer(
-      sanitizationResult.sanitized,
-    );
-
-    if (!yupValidation.success) {
-      return {
-        success: false,
-        message:
-          'Validation échouée: ' + formatValidationErrors(yupValidation.errors),
-        code: 'VALIDATION_FAILED',
-        errors: yupValidation.errors,
-      };
-    }
-
-    // =============================
-    // ÉTAPE 5: VALIDATION MÉTIER
-    // =============================
-
-    const businessRulesValidation = validateBusinessRules(yupValidation.data);
-    if (!businessRulesValidation.valid) {
-      return {
-        success: false,
-        message:
-          'Critères métier non respectés: ' +
-          businessRulesValidation.violations.join(', '),
-        code: 'BUSINESS_RULES_FAILED',
-      };
-    }
-
-    // =============================
-    // ÉTAPE 6: VÉRIFICATION DE SÉCURITÉ FINALE
-    // =============================
-
-    const safetyCheck = validateSanitizedDataSafety(yupValidation.data);
-    if (!safetyCheck.safe) {
-      captureException(new Error('Security check failed'), {
-        tags: { component: 'order_actions', severity: 'critical' },
-        extra: { threats: safetyCheck.threats },
-      });
-
-      return {
-        success: false,
-        message: 'Erreur de sécurité détectée.',
-        code: 'SAFETY_CHECK_FAILED',
-      };
-    }
-
-    // =============================
-    // ÉTAPE 7: INSERTION EN BASE DE DONNÉES
-    // =============================
-
-    client = await getClient();
-
-    // Vérifier que l'application existe et est active
-    const appCheck = await client.query(
-      'SELECT application_name, application_fee FROM catalog.applications WHERE application_id = $1 AND is_active = true',
-      [yupValidation.data.applicationId],
-    );
-
-    if (appCheck.rows.length === 0) {
-      return {
-        success: false,
-        message: "L'application sélectionnée n'est pas disponible.",
-        code: 'APPLICATION_NOT_FOUND',
-      };
-    }
-
-    // Vérifier que la plateforme de paiement existe et est active
-    const platformCheck = await client.query(
-      'SELECT platform_name, is_cash_payment FROM admin.platforms WHERE platform_id = $1 AND is_active = true',
-      [yupValidation.data.paymentMethod],
-    );
-
-    if (platformCheck.rows.length === 0) {
-      return {
-        success: false,
-        message: "La méthode de paiement sélectionnée n'est pas disponible.",
-        code: 'PLATFORM_NOT_FOUND',
-      };
-    }
-
-    // ✅ VÉRIFICATION COHÉRENCE MODE CASH
-    const platformIsCash = platformCheck.rows[0].is_cash_payment;
-    if (platformIsCash !== yupValidation.data.isCashPayment) {
-      return {
-        success: false,
-        message: 'Incohérence détectée dans le mode de paiement.',
-        code: 'PAYMENT_MODE_MISMATCH',
-      };
-    }
-
-    // Vérifier le montant (protection contre manipulation)
-    const expectedFee = parseFloat(appCheck.rows[0].application_fee);
-    if (Math.abs(yupValidation.data.applicationFee - expectedFee) > 0.01) {
-      captureException(new Error('Price manipulation attempt'), {
-        tags: { component: 'order_actions', severity: 'high' },
-        extra: {
-          expected: expectedFee,
-          received: yupValidation.data.applicationFee,
-          applicationId,
-        },
-      });
-
-      return {
-        success: false,
-        message: 'Erreur de montant. Veuillez actualiser la page.',
-        code: 'PRICE_MISMATCH',
-      };
-    }
-
-    // ✅ INSERTION - order_client avec [name, email, phone]
-    const clientInfo = [
-      yupValidation.data.name, // ✅ Un seul champ name
-      yupValidation.data.email,
-      yupValidation.data.phone,
-    ];
-
-    const insertResult = await client.query(
-      `INSERT INTO admin.orders (
-        order_client,
-        order_platform_id,
-        order_payment_name,
-        order_payment_number,
-        order_application_id,
-        order_price,
-        order_payment_status
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7)
-      RETURNING order_id, order_created, order_payment_status`,
-      [
-        clientInfo,
-        yupValidation.data.paymentMethod,
-        yupValidation.data.accountName,
-        yupValidation.data.accountNumber,
-        yupValidation.data.applicationId,
-        yupValidation.data.applicationFee,
-        'unpaid',
-      ],
-    );
-
-    const newOrder = insertResult.rows[0];
-
-    if (!newOrder?.order_id) {
-      return {
-        success: false,
-        message: 'Erreur lors de la création de la commande.',
-        code: 'INSERT_FAILED',
-      };
-    }
-
-    // Log du temps de traitement
-    const processingTime = Date.now() - startTime;
-    if (processingTime > 5000) {
-      captureException(new Error('Slow order creation'), {
-        tags: { component: 'order_actions', severity: 'warning' },
-        extra: { processingTime, orderId: newOrder.order_id },
-      });
-    }
-
-    return {
-      success: true,
-      message: 'Commande créée avec succès',
-      orderId: newOrder.order_id,
-      orderDetails: {
-        id: newOrder.order_id,
-        status: newOrder.order_payment_status,
-        created: newOrder.order_created,
-        applicationName: appCheck.rows[0].application_name,
-        amount: yupValidation.data.applicationFee,
-        platform: platformCheck.rows[0].platform_name,
-        isCashPayment: platformIsCash,
-      },
-    };
-  } catch (error) {
-    // =============================
-    // GESTION D'ERREURS ROBUSTE
-    // =============================
-
-    // Log détaillé de l'erreur
-    captureException(error, {
-      tags: { component: 'order_actions', operation: 'create_order' },
-      extra: {
-        applicationId,
-        applicationFee,
-        isCashPayment,
-        processingTime: Date.now() - startTime,
-      },
-    });
-
-    // Messages d'erreur contextualisés
-    let errorMessage = 'Une erreur est survenue. Veuillez réessayer.';
-    let errorCode = 'SYSTEM_ERROR';
-
-    // Erreurs de base de données
-    if (error.code === '23505') {
-      // Duplicate key
-      errorMessage = 'Cette commande existe déjà.';
-      errorCode = 'DUPLICATE_ORDER';
-    } else if (error.code === '23503') {
-      // Foreign key violation
-      errorMessage = 'Référence invalide. Veuillez actualiser la page.';
-      errorCode = 'INVALID_REFERENCE';
-    } else if (error.code === '23514') {
-      // Check constraint violation
-      errorMessage = 'Données invalides détectées.';
-      errorCode = 'CONSTRAINT_VIOLATION';
-    } else if (/timeout|timed out/i.test(error.message)) {
-      errorMessage = 'Délai dépassé. Veuillez réessayer.';
-      errorCode = 'TIMEOUT';
-    } else if (/connection|pool/i.test(error.message)) {
-      errorMessage = 'Problème de connexion. Veuillez patienter.';
-      errorCode = 'CONNECTION_ERROR';
-    } else if (error.name === 'ValidationError') {
-      errorMessage = 'Erreur de validation des données.';
-      errorCode = 'VALIDATION_ERROR';
-    }
-
-    return {
-      success: false,
-      message: errorMessage,
-      code: errorCode,
-      error: process.env.NODE_ENV === 'production' ? undefined : error.message,
-    };
-  } finally {
-    // =============================
-    // NETTOYAGE
-    // =============================
-    if (client) {
       try {
-        await client.release();
-      } catch (releaseError) {
-        captureException(releaseError, {
-          tags: { component: 'order_actions', operation: 'client_release' },
+        // =============================
+        // ÉTAPE 1: RATE LIMITING
+        // =============================
+
+        // Extraire l'email ou le téléphone comme identifiant
+        // (FormData n'est pas encore parsé, donc on le fait ici)
+        const emailIdentifier =
+          formData.get('email') || formData.get('phone') || 'anonymous';
+
+        const rateLimitResult = await checkServerActionRateLimit(
+          emailIdentifier,
+          'order',
+        );
+
+        if (!rateLimitResult.success) {
+          const waitMinutes = Math.ceil(rateLimitResult.reset / 60);
+          const waitSeconds = rateLimitResult.reset;
+
+          // Message adapté selon la durée et le code d'erreur
+          let message;
+
+          if (
+            rateLimitResult.code === 'BLOCKED' ||
+            rateLimitResult.code === 'BLOCKED_ABUSE'
+          ) {
+            message =
+              'Accès temporairement bloqué suite à un usage abusif. Réessayez plus tard.';
+          } else if (waitMinutes < 1) {
+            message = `Trop de tentatives de commande. Veuillez réessayer dans ${waitSeconds} seconde${waitSeconds > 1 ? 's' : ''}.`;
+          } else {
+            message = `Trop de tentatives de commande. Veuillez réessayer dans ${waitMinutes} minute${waitMinutes > 1 ? 's' : ''}.`;
+          }
+
+          return {
+            success: false,
+            message,
+            code: rateLimitResult.code || 'RATE_LIMITED',
+          };
+        }
+
+        // =============================
+        // ÉTAPE 2: VALIDATION PRÉLIMINAIRE
+        // =============================
+
+        // Convertir applicationFee en number si c'est une string
+        const numericFee =
+          typeof applicationFee === 'string'
+            ? parseFloat(applicationFee)
+            : applicationFee;
+
+        // Vérifier que applicationId et applicationFee sont valides
+        if (!isValidUUID(applicationId)) {
+          return {
+            success: false,
+            message: "ID d'application invalide.",
+            code: 'INVALID_APPLICATION_ID',
+          };
+        }
+
+        if (!isValidAmount(numericFee)) {
+          return {
+            success: false,
+            message: 'Montant invalide.',
+            code: 'INVALID_AMOUNT',
+          };
+        }
+
+        // =============================
+        // ÉTAPE 3: PRÉPARATION ET SANITIZATION
+        // =============================
+
+        const rawData = prepareOrderDataFromFormData(
+          formData,
+          applicationId,
+          numericFee,
+          isCashPayment,
+        );
+
+        // Détection précoce d'injection
+        const dataString = JSON.stringify(rawData);
+        if (hasInjectionAttempt(dataString)) {
+          captureException(new Error('Injection attempt detected'), {
+            tags: { component: 'order_actions', severity: 'high' },
+            extra: { applicationId },
+          });
+
+          return {
+            success: false,
+            message: 'Données suspectes détectées.',
+            code: 'SECURITY_VIOLATION',
+          };
+        }
+
+        // Sanitization
+        const sanitizationResult = sanitizeOrderData(rawData);
+        if (!sanitizationResult.success) {
+          return {
+            success: false,
+            message:
+              'Données invalides: ' +
+              (sanitizationResult.issues?.join(', ') || 'Erreur'),
+            code: 'SANITIZATION_FAILED',
+          };
+        }
+
+        // =============================
+        // ÉTAPE 4: VALIDATION YUP
+        // =============================
+
+        const yupValidation = await validateOrderServer(
+          sanitizationResult.sanitized,
+        );
+
+        if (!yupValidation.success) {
+          return {
+            success: false,
+            message:
+              'Validation échouée: ' +
+              formatValidationErrors(yupValidation.errors),
+            code: 'VALIDATION_FAILED',
+            errors: yupValidation.errors,
+          };
+        }
+
+        // =============================
+        // ÉTAPE 5: VALIDATION MÉTIER
+        // =============================
+
+        const businessRulesValidation = validateBusinessRules(
+          yupValidation.data,
+        );
+        if (!businessRulesValidation.valid) {
+          return {
+            success: false,
+            message:
+              'Critères métier non respectés: ' +
+              businessRulesValidation.violations.join(', '),
+            code: 'BUSINESS_RULES_FAILED',
+          };
+        }
+
+        // =============================
+        // ÉTAPE 6: VÉRIFICATION DE SÉCURITÉ FINALE
+        // =============================
+
+        const safetyCheck = validateSanitizedDataSafety(yupValidation.data);
+        if (!safetyCheck.safe) {
+          captureException(new Error('Security check failed'), {
+            tags: { component: 'order_actions', severity: 'critical' },
+            extra: { threats: safetyCheck.threats },
+          });
+
+          return {
+            success: false,
+            message: 'Erreur de sécurité détectée.',
+            code: 'SAFETY_CHECK_FAILED',
+          };
+        }
+
+        // =============================
+        // ÉTAPE 7: INSERTION EN BASE DE DONNÉES
+        // =============================
+
+        client = await getClient();
+
+        // Vérifier que l'application existe et est active
+        const appCheck = await client.query(
+          'SELECT application_name, application_fee FROM catalog.applications WHERE application_id = $1 AND is_active = true',
+          [yupValidation.data.applicationId],
+        );
+
+        if (appCheck.rows.length === 0) {
+          return {
+            success: false,
+            message: "L'application sélectionnée n'est pas disponible.",
+            code: 'APPLICATION_NOT_FOUND',
+          };
+        }
+
+        // Vérifier que la plateforme de paiement existe et est active
+        const platformCheck = await client.query(
+          'SELECT platform_name, is_cash_payment FROM admin.platforms WHERE platform_id = $1 AND is_active = true',
+          [yupValidation.data.paymentMethod],
+        );
+
+        if (platformCheck.rows.length === 0) {
+          return {
+            success: false,
+            message:
+              "La méthode de paiement sélectionnée n'est pas disponible.",
+            code: 'PLATFORM_NOT_FOUND',
+          };
+        }
+
+        // ✅ VÉRIFICATION COHÉRENCE MODE CASH
+        const platformIsCash = platformCheck.rows[0].is_cash_payment;
+        if (platformIsCash !== yupValidation.data.isCashPayment) {
+          return {
+            success: false,
+            message: 'Incohérence détectée dans le mode de paiement.',
+            code: 'PAYMENT_MODE_MISMATCH',
+          };
+        }
+
+        // Vérifier le montant (protection contre manipulation)
+        const expectedFee = parseFloat(appCheck.rows[0].application_fee);
+        if (Math.abs(yupValidation.data.applicationFee - expectedFee) > 0.01) {
+          captureException(new Error('Price manipulation attempt'), {
+            tags: { component: 'order_actions', severity: 'high' },
+            extra: {
+              expected: expectedFee,
+              received: yupValidation.data.applicationFee,
+              applicationId,
+            },
+          });
+
+          return {
+            success: false,
+            message: 'Erreur de montant. Veuillez actualiser la page.',
+            code: 'PRICE_MISMATCH',
+          };
+        }
+
+        // ✅ INSERTION - order_client avec [name, email, phone]
+        const clientInfo = [
+          yupValidation.data.name, // ✅ Un seul champ name
+          yupValidation.data.email,
+          yupValidation.data.phone,
+        ];
+
+        const insertResult = await client.query(
+          `INSERT INTO admin.orders (
+            order_client,
+            order_platform_id,
+            order_payment_name,
+            order_payment_number,
+            order_application_id,
+            order_price,
+            order_payment_status
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+          RETURNING order_id, order_created, order_payment_status`,
+          [
+            clientInfo,
+            yupValidation.data.paymentMethod,
+            yupValidation.data.accountName,
+            yupValidation.data.accountNumber,
+            yupValidation.data.applicationId,
+            yupValidation.data.applicationFee,
+            'unpaid',
+          ],
+        );
+
+        const newOrder = insertResult.rows[0];
+
+        if (!newOrder?.order_id) {
+          return {
+            success: false,
+            message: 'Erreur lors de la création de la commande.',
+            code: 'INSERT_FAILED',
+          };
+        }
+
+        // Log du temps de traitement
+        const processingTime = Date.now() - startTime;
+        if (processingTime > 5000) {
+          captureException(new Error('Slow order creation'), {
+            tags: { component: 'order_actions', severity: 'warning' },
+            extra: { processingTime, orderId: newOrder.order_id },
+          });
+        }
+
+        return {
+          success: true,
+          message: 'Commande créée avec succès',
+          orderId: newOrder.order_id,
+          orderDetails: {
+            id: newOrder.order_id,
+            status: newOrder.order_payment_status,
+            created: newOrder.order_created,
+            applicationName: appCheck.rows[0].application_name,
+            amount: yupValidation.data.applicationFee,
+            platform: platformCheck.rows[0].platform_name,
+            isCashPayment: platformIsCash,
+          },
+        };
+      } catch (error) {
+        // =============================
+        // GESTION D'ERREURS ROBUSTE
+        // =============================
+
+        // Log détaillé de l'erreur
+        captureException(error, {
+          tags: { component: 'order_actions', operation: 'create_order' },
+          extra: {
+            applicationId,
+            applicationFee,
+            isCashPayment,
+            processingTime: Date.now() - startTime,
+          },
         });
+
+        // Messages d'erreur contextualisés
+        let errorMessage = 'Une erreur est survenue. Veuillez réessayer.';
+        let errorCode = 'SYSTEM_ERROR';
+
+        // Erreurs de base de données
+        if (error.code === '23505') {
+          // Duplicate key
+          errorMessage = 'Cette commande existe déjà.';
+          errorCode = 'DUPLICATE_ORDER';
+        } else if (error.code === '23503') {
+          // Foreign key violation
+          errorMessage = 'Référence invalide. Veuillez actualiser la page.';
+          errorCode = 'INVALID_REFERENCE';
+        } else if (error.code === '23514') {
+          // Check constraint violation
+          errorMessage = 'Données invalides détectées.';
+          errorCode = 'CONSTRAINT_VIOLATION';
+        } else if (/timeout|timed out/i.test(error.message)) {
+          errorMessage = 'Délai dépassé. Veuillez réessayer.';
+          errorCode = 'TIMEOUT';
+        } else if (/connection|pool/i.test(error.message)) {
+          errorMessage = 'Problème de connexion. Veuillez patienter.';
+          errorCode = 'CONNECTION_ERROR';
+        } else if (error.name === 'ValidationError') {
+          errorMessage = 'Erreur de validation des données.';
+          errorCode = 'VALIDATION_ERROR';
+        }
+
+        return {
+          success: false,
+          message: errorMessage,
+          code: errorCode,
+          error:
+            process.env.NODE_ENV === 'production' ? undefined : error.message,
+        };
+      } finally {
+        // =============================
+        // NETTOYAGE
+        // =============================
+        if (client) {
+          try {
+            await client.release();
+          } catch (releaseError) {
+            captureException(releaseError, {
+              tags: { component: 'order_actions', operation: 'client_release' },
+            });
+          }
+        }
       }
-    }
-  }
+    },
+  );
 }
 
 // =============================
