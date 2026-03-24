@@ -37,7 +37,7 @@ export const orbitron = localFont({
       style: 'normal',
     },
   ],
-  variable: '--font-orbitron',
+  variable: '--font-display',
   display: 'swap',
   adjustFontFallback: 'Arial',
   preload: true,
