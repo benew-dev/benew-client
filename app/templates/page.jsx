@@ -242,16 +242,16 @@ async function getTemplates() {
       try {
         // Query avec timeout intégré - ✅ CORRIGÉ: template_images (pluriel)
         const queryPromise = client.query(`
-          SELECT 
-            template_id, 
-            template_name, 
-            template_images, 
-            template_has_web, 
+          SELECT
+            template_id,
+            template_name,
+            template_images,
+            template_has_web,
             template_has_mobile,
-            (SELECT COUNT(*) FROM catalog.applications 
+            (SELECT COUNT(*) FROM catalog.applications
              WHERE application_template_id = t.template_id AND is_active = true) as applications_count
           FROM catalog.templates t
-          WHERE is_active = true 
+          WHERE is_active = true
           ORDER BY template_added DESC
         `);
 
@@ -503,4 +503,4 @@ export const metadata = {
 export const revalidate = 300;
 
 // Force static pour performance optimale
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';

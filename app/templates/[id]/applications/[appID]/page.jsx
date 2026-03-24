@@ -217,7 +217,7 @@ async function getApplicationData(applicationId, templateId) {
       try {
         // ✅ QUERY OPTIMISÉE - Une seule requête avec tous les JOIN nécessaires
         const queryPromise = client.query(
-          `SELECT 
+          `SELECT
             -- ✅ Application complète
             a.application_id,
             a.application_name,
@@ -231,18 +231,18 @@ async function getApplicationData(applicationId, templateId) {
             a.application_other_versions,
             a.application_level,
             a.sales_count as application_sales,
-            
+
             -- ✅ Template parent
             t.template_id,
             t.template_name,
-            
+
             -- ✅ Stats template
-            (SELECT COUNT(*) 
-             FROM catalog.applications 
-             WHERE application_template_id = t.template_id 
+            (SELECT COUNT(*)
+             FROM catalog.applications
+             WHERE application_template_id = t.template_id
                AND is_active = true
             ) as template_total_applications,
-            
+
             -- ✅ Applications similaires (JSON aggregation pour performance)
             (SELECT COALESCE(json_agg(
               json_build_object(
@@ -261,7 +261,7 @@ async function getApplicationData(applicationId, templateId) {
                AND app.is_active = true
              LIMIT 6
             ) as related_applications,
-            
+
             -- ✅ Plateformes de paiement (JSON aggregation avec toutes les colonnes)
             (SELECT COALESCE(json_agg(
               json_build_object(
@@ -276,13 +276,13 @@ async function getApplicationData(applicationId, templateId) {
              FROM admin.platforms p
              WHERE p.is_active = true
             ) as platforms
-            
+
           FROM catalog.applications a
-          JOIN catalog.templates t 
+          JOIN catalog.templates t
             ON a.application_template_id = t.template_id
-          WHERE a.application_id = $1 
+          WHERE a.application_id = $1
             AND a.application_template_id = $2
-            AND a.is_active = true 
+            AND a.is_active = true
             AND t.is_active = true`,
           [applicationId, templateId],
         );
@@ -593,16 +593,16 @@ export async function generateMetadata({ params }) {
     const client = await getClient();
     try {
       const queryPromise = client.query(
-        `SELECT 
+        `SELECT
           a.application_name,
           a.application_description,
           a.application_category,
           a.application_images,
           t.template_name
         FROM catalog.applications a
-        JOIN catalog.templates t 
+        JOIN catalog.templates t
           ON a.application_template_id = t.template_id
-        WHERE a.application_id = $1 
+        WHERE a.application_id = $1
           AND a.application_template_id = $2
           AND a.is_active = true`,
         [validation.applicationId, validation.templateId],
@@ -673,4 +673,4 @@ export async function generateMetadata({ params }) {
 export const revalidate = 300;
 
 // ✅ Force static pour performance optimale
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';

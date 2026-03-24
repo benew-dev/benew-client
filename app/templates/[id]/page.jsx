@@ -199,11 +199,11 @@ async function getTemplateData(templateId) {
       try {
         // ✅ QUERY FUSIONNÉE - Template + Applications en un seul LEFT JOIN
         const queryPromise = client.query(
-          `SELECT 
+          `SELECT
             -- Template info
             t.template_id,
             t.template_name,
-            
+
             -- Applications (peut être NULL si pas d'apps)
             a.application_id,
             a.application_name,
@@ -214,12 +214,12 @@ async function getTemplateData(templateId) {
             a.application_other_versions,
             a.application_level,
             a.sales_count
-            
+
           FROM catalog.templates t
-          LEFT JOIN catalog.applications a 
-            ON a.application_template_id = t.template_id 
+          LEFT JOIN catalog.applications a
+            ON a.application_template_id = t.template_id
             AND a.is_active = true
-          WHERE t.template_id = $1 
+          WHERE t.template_id = $1
             AND t.is_active = true
           ORDER BY a.application_level ASC, a.created_at DESC`,
           [templateId],
@@ -228,7 +228,7 @@ async function getTemplateData(templateId) {
         // Query platforms séparée (comme avant)
         const platformsQueryPromise = client.query(
           `SELECT platform_id, platform_name, account_name, account_number, is_cash_payment, description
-           FROM admin.platforms 
+           FROM admin.platforms
            WHERE is_active = true
            ORDER BY CASE WHEN is_cash_payment = true THEN 0 ELSE 1 END, platform_name ASC`,
         );
@@ -557,4 +557,4 @@ export async function generateMetadata({ params }) {
 }
 
 export const revalidate = 300;
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
