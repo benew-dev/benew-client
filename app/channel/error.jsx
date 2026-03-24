@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import * as Sentry from '@sentry/nextjs';
 import { trackEvent } from '@/utils/analytics';
 import './error.scss';
 
@@ -17,22 +18,20 @@ export default function ChannelError({ error, reset }) {
   useEffect(() => {
     if (!error) return;
 
-    if (typeof window !== 'undefined' && window.Sentry) {
-      window.Sentry.captureException(error, {
-        tags: {
-          component: 'channel_error_boundary',
-          page: 'channel',
-          error_type: 'client_side_error',
-        },
-        extra: {
-          errorName: error?.name || 'Unknown',
-          errorMessage: error?.message || 'No message',
-          errorStack: error?.stack?.substring(0, 500),
-          retryCount,
-        },
-        level: 'error',
-      });
-    }
+    Sentry.captureException(error, {
+      tags: {
+        component: 'channel_error_boundary',
+        page: 'channel',
+        error_type: 'client_side_error',
+      },
+      extra: {
+        errorName: error?.name || 'Unknown',
+        errorMessage: error?.message || 'No message',
+        errorStack: error?.stack?.substring(0, 500),
+        retryCount,
+      },
+      level: 'error',
+    });
 
     try {
       trackEvent('error_boundary_shown', {

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import * as Sentry from '@sentry/nextjs';
 import { trackEvent } from '@/utils/analytics';
 import './error.scss';
 
@@ -17,31 +18,26 @@ export default function TemplateDetailError({ error, reset }) {
   const templateId = params?.id;
   const MAX_RETRIES = 3;
 
-  // Capture Sentry côté client + Analytics tracking
   useEffect(() => {
     if (!error) return;
 
-    // 🔴 CRITIQUE : Capturer dans Sentry côté client
-    if (typeof window !== 'undefined' && window.Sentry) {
-      window.Sentry.captureException(error, {
-        tags: {
-          component: 'template_detail_error_boundary',
-          page: 'template_detail',
-          error_type: 'client_side_error',
-          template_id: templateId || 'unknown',
-        },
-        extra: {
-          errorName: error?.name || 'Unknown',
-          errorMessage: error?.message || 'No message',
-          errorStack: error?.stack?.substring(0, 500),
-          retryCount: retryCount,
-          templateId: templateId,
-        },
-        level: 'error',
-      });
-    }
+    Sentry.captureException(error, {
+      tags: {
+        component: 'template_detail_error_boundary',
+        page: 'template_detail',
+        error_type: 'client_side_error',
+        template_id: templateId || 'unknown',
+      },
+      extra: {
+        errorName: error?.name || 'Unknown',
+        errorMessage: error?.message || 'No message',
+        errorStack: error?.stack?.substring(0, 500),
+        retryCount: retryCount,
+        templateId: templateId,
+      },
+      level: 'error',
+    });
 
-    // Analytics tracking sécurisé
     try {
       trackEvent('error_boundary_shown', {
         event_category: 'errors',
@@ -59,16 +55,12 @@ export default function TemplateDetailError({ error, reset }) {
     }
   }, [error, templateId, retryCount]);
 
-  /**
-   * Gestion du retry avec tracking
-   */
   const handleRetry = async () => {
     if (retryCount >= MAX_RETRIES || isRetrying) return;
 
     setIsRetrying(true);
     setRetryCount((prev) => prev + 1);
 
-    // Track retry attempt
     try {
       trackEvent('error_retry_attempt', {
         event_category: 'errors',
@@ -82,7 +74,6 @@ export default function TemplateDetailError({ error, reset }) {
       console.warn('[Analytics] Error tracking retry:', error);
     }
 
-    // Délai simple (1s, 2s, 3s)
     const delay = Math.min(1000 * (retryCount + 1), 3000);
 
     setTimeout(() => {
@@ -91,7 +82,6 @@ export default function TemplateDetailError({ error, reset }) {
     }, delay);
   };
 
-  // Handler pour les liens avec tracking
   const handleLinkClick = (destination) => {
     try {
       trackEvent('error_recovery_navigation', {
@@ -108,7 +98,6 @@ export default function TemplateDetailError({ error, reset }) {
   const canRetry = retryCount < MAX_RETRIES;
   const isMaxRetriesReached = retryCount >= MAX_RETRIES;
 
-  // Déterminer le type d'erreur pour message contextuel
   const errorType = error?.name || 'Unknown';
   const isNetworkError =
     errorType.includes('Network') ||
@@ -117,7 +106,6 @@ export default function TemplateDetailError({ error, reset }) {
   const isTimeoutError =
     errorType.includes('Timeout') || error?.message?.includes('timeout');
 
-  // Message contextuel basé sur le type d'erreur
   const getErrorMessage = () => {
     if (isTimeoutError) {
       return 'Le chargement de ce template prend trop de temps. Le serveur est peut-être surchargé.';
@@ -132,15 +120,12 @@ export default function TemplateDetailError({ error, reset }) {
     <section className="first">
       <div className="template-error">
         <div className="error-container">
-          {/* Icône d'erreur contextuelle */}
           <div className="error-icon">
             {isTimeoutError ? '⏱️' : isNetworkError ? '🌐' : '⚠️'}
           </div>
 
-          {/* Titre principal */}
           <h2 className="error-title">Oops ! Une erreur est survenue</h2>
 
-          {/* Message contextuel */}
           <p className="error-message">
             {getErrorMessage()}
             {canRetry
@@ -148,7 +133,6 @@ export default function TemplateDetailError({ error, reset }) {
               : ' Veuillez revenir plus tard ou contacter le support.'}
           </p>
 
-          {/* Indicateur de tentatives */}
           {retryCount > 0 && (
             <div className="retry-indicator">
               {isMaxRetriesReached ? (
@@ -163,7 +147,6 @@ export default function TemplateDetailError({ error, reset }) {
             </div>
           )}
 
-          {/* Actions utilisateur */}
           <div className="error-actions">
             {canRetry && (
               <button
@@ -203,7 +186,6 @@ export default function TemplateDetailError({ error, reset }) {
             </Link>
           </div>
 
-          {/* Message d'aide */}
           <div className="help-text">
             <p>
               Si le problème persiste, vous pouvez{' '}
@@ -214,7 +196,6 @@ export default function TemplateDetailError({ error, reset }) {
             </p>
           </div>
 
-          {/* Debug info (dev uniquement) */}
           {process.env.NODE_ENV === 'development' && error && (
             <details className="debug-info">
               <summary>Informations techniques (dev)</summary>

@@ -542,6 +542,6 @@ export const metadata = {
   },
 };
 
-// Configuration Next.js 15 pour page statique avec revalidation
-export const dynamic = 'force-static';
+// ✅ force-dynamic : page lit process.env au runtime via validateContactServices()
+export const dynamic = 'force-dynamic';
 export const revalidate = 600;
