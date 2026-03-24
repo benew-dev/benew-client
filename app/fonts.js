@@ -69,7 +69,7 @@ export const inter = localFont({
       style: 'normal',
     },
   ],
-  variable: '--font-inter',
+  variable: '--font-content',
   display: 'swap',
   adjustFontFallback: 'Arial',
   preload: true,

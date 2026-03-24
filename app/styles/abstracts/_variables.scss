@@ -33,10 +33,11 @@ $background-color-light: color.adjust($background-color, $lightness: 10%);
 // 2. Inter (--font-content) : Contenu (paragraphes, texte, corps)
 
 // Orbitron - Pour titres (h1-h6) + UI (nav, boutons, liens)
-$font-family-display: var(--font-display), 'Roboto', system-ui, sans-serif;
+$font-family-display:
+  var(--font-display), 'Helvetica Neue', system-ui, sans-serif;
 
 // Orbitron également pour UI (nav, boutons, liens)
-$font-family-ui: var(--font-display), 'Roboto', system-ui, sans-serif;
+$font-family-ui: var(--font-display), 'Helvetica Neue', system-ui, sans-serif;
 
 // Inter - Pour contenu (paragraphes, texte)
 $font-family-content:
@@ -186,11 +187,11 @@ p { font-family: font-family('content'); } // Inter
 // Responsive avec espacements
 .responsive-component {
   padding: $spacing-sm;
-  
+
   @include from('medium-sm') {
     padding: $spacing-md;
   }
-  
+
   @include from('large-xs') {
     padding: $spacing-lg;
   }
