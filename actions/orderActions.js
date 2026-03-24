@@ -16,7 +16,6 @@ import {
   hasInjectionAttempt,
 } from '@/utils/sanitizers/orderSanitizer';
 import { checkServerActionRateLimit } from '@/backend/rateLimiter';
-import { headers } from 'next/headers';
 
 // =============================
 // CRÉATION DE COMMANDE
@@ -270,14 +269,14 @@ export async function createOrder(
 
     const insertResult = await client.query(
       `INSERT INTO admin.orders (
-        order_client, 
-        order_platform_id, 
-        order_payment_name, 
-        order_payment_number, 
-        order_application_id, 
-        order_price, 
+        order_client,
+        order_platform_id,
+        order_payment_name,
+        order_payment_number,
+        order_application_id,
+        order_price,
         order_payment_status
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7) 
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING order_id, order_created, order_payment_status`,
       [
         clientInfo,

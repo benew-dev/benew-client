@@ -437,10 +437,12 @@ export const captureException = (error, context = {}) => {
  * @param {string} message - Le message à capturer
  * @param {string} level - Niveau du message
  */
-export const captureMessage = (message, level = 'info') => {
+export const captureMessage = (message, options = {}) => {
   const filteredMessage = containsSensitiveData(message)
     ? filterMessage(message)
     : message;
 
-  Sentry.captureMessage(filteredMessage, level);
+  const level = typeof options === 'string' ? options : (options.level || 'info');
+
+  Sentry.captureMessage(filteredMessage, { level, ...options.extra && { extra: options.extra } });
 };

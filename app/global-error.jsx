@@ -6,6 +6,7 @@ import './styles/global-error.scss';
 // =============================
 // 🔴 CRITIQUE - NEXT/FONT INTÉGRÉ
 // =============================
+import * as Sentry from '@sentry/nextjs';
 import { josefinSans, inter } from './fonts';
 // import { orbitron, inter } from './fonts';
 
@@ -19,46 +20,11 @@ import { josefinSans, inter } from './fonts';
  */
 export default function GlobalError({ error, reset }) {
   useEffect(() => {
-    // =============================
-    // SENTRY CAPTURE - ACTIVÉ EN PRODUCTION
-    // =============================
-    if (error) {
-      // ✅ Import dynamique Sentry en production uniquement
-      if (process.env.NODE_ENV === 'production') {
-        import('@sentry/nextjs')
-          .then((Sentry) => {
-            Sentry.captureException(error, {
-              tags: {
-                component: 'global_error_boundary',
-                error_type: 'unhandled_global',
-                severity: 'critical',
-              },
-              level: 'error',
-              extra: {
-                errorName: error?.name || 'Unknown',
-                errorMessage: error?.message || 'No message',
-                errorStack: error?.stack?.substring(0, 500),
-                timestamp: new Date().toISOString(),
-                userAgent:
-                  typeof window !== 'undefined'
-                    ? window.navigator.userAgent
-                    : 'unknown',
-                url:
-                  typeof window !== 'undefined'
-                    ? window.location.href
-                    : 'unknown',
-              },
-            });
-          })
-          .catch((sentryError) => {
-            console.error('[GlobalError] Sentry import failed:', sentryError);
-          });
-      }
+    Sentry.captureException(error);
 
-      // Log en console pour debug (seulement en dev)
-      if (process.env.NODE_ENV === 'development') {
-        console.error('[GlobalError] Erreur critique capturée:', error);
-      }
+    // Log dev conservé
+    if (process.env.NODE_ENV === 'development') {
+      console.error('[GlobalError] Erreur critique capturée:', error);
     }
   }, [error]);
 

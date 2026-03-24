@@ -1,3 +1,5 @@
+import * as Sentry from '@sentry/nextjs';
+
 // instrumentation.js
 // Configuration Sentry Next.js 15 - Architecture 3 fichiers séparés
 // Hook officiel Next.js 15 pour monitoring serveur
@@ -22,7 +24,7 @@ export async function register() {
   if (process.env.NEXT_RUNTIME === 'edge') {
     console.log('🔧 Loading Sentry edge configuration...');
     // Note: Pas de config edge pour l'instant
-    // Décommenter si besoin : await import('./sentry.edge.config');
+    await import('./sentry.edge.config');
   }
 
   console.log('✅ Sentry instrumentation registered successfully');
@@ -38,13 +40,7 @@ export async function register() {
  *
  * Documentation : https://nextjs.org/docs/app/guides/instrumentation
  */
-export const onRequestError = async (err, request, context) => {
-  // Import dynamique de Sentry pour éviter problèmes de bundle
-  const Sentry = await import('@sentry/nextjs');
-
-  // Capturer l'erreur avec contexte Next.js 15
-  Sentry.captureRequestError(err, request, context);
-};
+export const onRequestError = Sentry.captureRequestError;
 
 // =============================================
 // NOTES IMPORTANTES
