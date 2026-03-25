@@ -321,6 +321,10 @@ async function reconnectPool(attempt = 1) {
         `[${getTimestamp()}] 🚨 Échec final après ${CONFIG.retry.maxAttempts} tentatives`,
       );
 
+      // Réinitialiser la promise pour permettre une nouvelle tentative
+      // au prochain appel getClient() si PostgreSQL revient
+      initializationPromise = null;
+
       captureMessage('Reconnexion finale échouée', {
         level: 'error',
         tags: { component: 'database_pool', error_type: 'reconnection_failed' },
@@ -539,8 +543,6 @@ process.on('SIGTERM', () => {
 // =============================================
 // EXPORTS
 // =============================================
-
-export default pool;
 
 // API de monitoring simplifiée
 export const monitoring = {
