@@ -23,6 +23,19 @@ import { headers } from 'next/headers';
 // CRÉATION DE COMMANDE
 // =============================
 
+function withTimeout(promise, timeoutMs, errorMessage = 'Timeout') {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => {
+      setTimeout(() => {
+        const timeoutError = new Error(errorMessage);
+        timeoutError.name = 'TimeoutError';
+        reject(timeoutError);
+      }, timeoutMs);
+    }),
+  ]);
+}
+
 /**
  * Crée une nouvelle commande - PRODUCTION-READY
  * Optimisé pour 500 utilisateurs/jour avec support CASH
@@ -216,9 +229,13 @@ export async function createOrder(
         client = await getClient();
 
         // Vérifier que l'application existe et est active
-        const appCheck = await client.query(
-          'SELECT application_name, application_fee FROM catalog.applications WHERE application_id = $1 AND is_active = true',
-          [yupValidation.data.applicationId],
+        const appCheck = await withTimeout(
+          client.query(
+            'SELECT application_name, application_fee FROM catalog.applications WHERE application_id = $1 AND is_active = true',
+            [yupValidation.data.applicationId],
+          ),
+          5000,
+          'Application check timeout',
         );
 
         if (appCheck.rows.length === 0) {
@@ -230,9 +247,13 @@ export async function createOrder(
         }
 
         // Vérifier que la plateforme de paiement existe et est active
-        const platformCheck = await client.query(
-          'SELECT platform_name, is_cash_payment FROM admin.platforms WHERE platform_id = $1 AND is_active = true',
-          [yupValidation.data.paymentMethod],
+        const platformCheck = await withTimeout(
+          client.query(
+            'SELECT platform_name, is_cash_payment FROM admin.platforms WHERE platform_id = $1 AND is_active = true',
+            [yupValidation.data.paymentMethod],
+          ),
+          5000,
+          'Platform check timeout',
         );
 
         if (platformCheck.rows.length === 0) {
@@ -280,26 +301,30 @@ export async function createOrder(
           yupValidation.data.phone,
         ];
 
-        const insertResult = await client.query(
-          `INSERT INTO admin.orders (
-            order_client,
-            order_platform_id,
-            order_payment_name,
-            order_payment_number,
-            order_application_id,
-            order_price,
-            order_payment_status
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7)
-          RETURNING order_id, order_created, order_payment_status`,
-          [
-            clientInfo,
-            yupValidation.data.paymentMethod,
-            yupValidation.data.accountName,
-            yupValidation.data.accountNumber,
-            yupValidation.data.applicationId,
-            yupValidation.data.applicationFee,
-            'unpaid',
-          ],
+        const insertResult = await withTimeout(
+          client.query(
+            `INSERT INTO admin.orders (
+              order_client,
+              order_platform_id,
+              order_payment_name,
+              order_payment_number,
+              order_application_id,
+              order_price,
+              order_payment_status
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+            RETURNING order_id, order_created, order_payment_status`,
+            [
+              clientInfo,
+              yupValidation.data.paymentMethod,
+              yupValidation.data.accountName,
+              yupValidation.data.accountNumber,
+              yupValidation.data.applicationId,
+              yupValidation.data.applicationFee,
+              'unpaid',
+            ],
+          ),
+          5000,
+          'Order insert timeout',
         );
 
         const newOrder = insertResult.rows[0];

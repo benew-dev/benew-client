@@ -62,7 +62,7 @@ const CONFIG = {
   // Pool adapté pour 500 visiteurs/jour
   pool: {
     max: 20, // Largement suffisant pour le trafic
-    min: 10, // Une connexion minimum
+    min: 2, // Une connexion minimum
     idleTimeoutMillis: 30000, // 30 secondes
     connectionTimeoutMillis: 5000,
   },
@@ -158,6 +158,13 @@ async function createPool() {
       `[${getTimestamp()}] 🔧 Pool créé avec ${CONFIG.pool.max} connexions max`,
     );
   }
+
+  // statement_timeout : PostgreSQL annule toute requête dépassant 10s
+  // Protège le pool contre les requêtes bloquées (deadlocks, table locks)
+  // Complémentaire aux withTimeout() Node.js des pages — agit côté PostgreSQL
+  newPool.on('connect', async (client) => {
+    await client.query('SET statement_timeout = 10000');
+  });
 
   // Gestion d'erreurs critiques uniquement
   newPool.on('error', (err, client) => {

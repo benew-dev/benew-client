@@ -75,6 +75,19 @@ function formatVideo(row) {
 // FETCH INITIAL — appelé par page.jsx (Server Component)
 // =============================
 
+function withTimeout(promise, timeoutMs, errorMessage = 'Timeout') {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => {
+      setTimeout(() => {
+        const timeoutError = new Error(errorMessage);
+        timeoutError.name = 'TimeoutError';
+        reject(timeoutError);
+      }, timeoutMs);
+    }),
+  ]);
+}
+
 /**
  * Récupère toutes les vidéos actives, triées par date de création DESC
  * Utilisé uniquement côté serveur dans page.jsx — pas de rate limiting nécessaire
@@ -88,7 +101,8 @@ export async function getVideos() {
   try {
     client = await getClient();
 
-    const result = await client.query(`
+    const result = await withTimeout(
+      client.query(`
       SELECT
         video_id,
         video_title,
@@ -103,7 +117,10 @@ export async function getVideos() {
       WHERE is_active = true
       ORDER BY created_at DESC
       LIMIT 200
-    `);
+  `),
+      5000,
+      'Get videos timeout',
+    );
 
     const queryDuration = Date.now() - startTime;
 
@@ -210,8 +227,9 @@ export async function searchVideos(query) {
 
         const searchPattern = `%${cleanQuery}%`;
 
-        const result = await client.query(
-          `
+        const result = await withTimeout(
+          client.query(
+            `
           SELECT
             video_id,
             video_title,
@@ -236,11 +254,15 @@ export async function searchVideos(query) {
             created_at DESC
           LIMIT 100
           `,
-          [searchPattern],
+            [searchPattern],
+          ),
+          5000,
+          'Search videos timeout',
         );
 
-        const countResult = await client.query(
-          `
+        const countResult = await withTimeout(
+          client.query(
+            `
           SELECT COUNT(*) as total
           FROM catalog.channel_videos
           WHERE is_active = true
@@ -250,7 +272,10 @@ export async function searchVideos(query) {
               OR array_to_string(video_tags, ' ') ILIKE $1
             )
           `,
-          [searchPattern],
+            [searchPattern],
+          ),
+          5000,
+          'Search videos count timeout',
         );
 
         const queryDuration = Date.now() - startTime;
