@@ -468,9 +468,6 @@ export default async function TemplatesPage() {
 
 // Metadata pour SEO e-commerce avec monitoring en cas d'erreur
 export const metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || 'https://benew-dj.com',
-  ),
   title: 'Templates - Benew | Solutions E-commerce',
   description:
     'Découvrez notre collection de templates e-commerce professionnels. Solutions complètes pour votre boutique en ligne.',

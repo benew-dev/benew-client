@@ -15,7 +15,6 @@ import PageTracker from 'components/analytics/PageTracker';
 // Import dynamique des composants
 const Hero = dynamic(() => import('components/layouts/home/hero'), {
   loading: () => <HeroSkeleton />,
-  ssr: true,
 });
 
 // Import dynamique des composants
@@ -23,7 +22,6 @@ const MarketingHome = dynamic(
   () => import('components/layouts/home/marketing'),
   {
     loading: () => <MarketingSkeleton />,
-    ssr: true,
   },
 );
 
@@ -32,7 +30,6 @@ const QualitiesHome = dynamic(
   () => import('components/layouts/home/qualities'),
   {
     loading: () => <QualitiesSkeleton />,
-    ssr: true,
   },
 );
 
@@ -40,13 +37,11 @@ const PromoLaunch = dynamic(
   () => import('components/layouts/home/promoLaunch'),
   {
     loading: () => <AppExamplesSkeleton />,
-    ssr: true,
   },
 );
 
 const ContactHome = dynamic(() => import('components/layouts/home/contact'), {
   loading: () => <ContactSkeleton />,
-  ssr: true,
 });
 
 const HomeComponent = () => {

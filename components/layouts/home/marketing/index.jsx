@@ -14,7 +14,6 @@ const MarketingHome = () => {
         height={384}
         className="profit-image"
         priority
-        unoptimized
       />
 
       <div className="text-container">
