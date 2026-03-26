@@ -129,9 +129,24 @@ export default function TemplatesError({ error, reset }) {
           {retryCount > 0 && (
             <div className="retry-indicator">
               {isMaxRetriesReached ? (
-                <span className="max-retries">
-                  Nombre maximum de tentatives atteint ({MAX_RETRIES})
-                </span>
+                <div className="max-retries-exhausted">
+                  <span className="max-retries">
+                    Nombre maximum de tentatives atteint ({MAX_RETRIES})
+                  </span>
+                  <p className="exhausted-message">
+                    {isNetworkError
+                      ? 'Vérifiez votre connexion internet puis réessayez dans quelques minutes.'
+                      : isTimeoutError
+                        ? 'Nos serveurs semblent surchargés. Réessayez dans quelques minutes.'
+                        : 'Une interruption technique est en cours. Notre équipe a été notifiée.'}
+                  </p>
+                  <Link
+                    href="/contact"
+                    className="contact-link exhausted-contact"
+                  >
+                    Nous contacter si le problème persiste
+                  </Link>
+                </div>
               ) : (
                 <span className="retry-count">
                   Tentative {retryCount} sur {MAX_RETRIES}

@@ -12,6 +12,7 @@ import {
 } from '../../../sentry.server.config';
 import { sanitizeAndValidateUUID } from '@/utils/validation';
 import Loading from './loading';
+import ReloadButton from '@/components/reloadButton';
 
 // =============================
 // CONFIGURATION
@@ -385,14 +386,7 @@ function TemplateError({ errorType, userMessage, shouldRetry, templateId }) {
               </h2>
               <p className="error-message">{userMessage}</p>
               <div className="error-actions">
-                {shouldRetry && (
-                  <button
-                    onClick={() => window.location.reload()}
-                    className="cta-button primary"
-                  >
-                    🔄 Réessayer
-                  </button>
-                )}
+                {shouldRetry && <ReloadButton className="cta-button primary" />}
                 <a href="/templates" className="cta-button secondary">
                   📋 Templates
                 </a>

@@ -24,7 +24,11 @@ const CONFIG = {
   logging: process.env.NODE_ENV === 'development',
 };
 
-// Cache simple avec Map native
+// ⚠️ IMPORTANT : Ce rate limiter utilise la mémoire du process Node.js.
+// Il fonctionne correctement UNIQUEMENT en single-process (PM2 instances: 1).
+// En multi-process/cluster, chaque worker a sa propre Map indépendante,
+// ce qui multiplie effectivement les limites par le nombre de workers.
+// Si passage en multi-process → migrer vers Redis pour l'état partagé.
 const requestsCache = new Map();
 const blockedIPs = new Map();
 

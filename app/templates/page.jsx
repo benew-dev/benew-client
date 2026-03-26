@@ -10,6 +10,7 @@ import TemplatesList from '@/components/templates/TemplatesList';
 import { getClient } from '@/backend/dbConnect';
 import { captureException, captureMessage } from '../../sentry.server.config';
 import Loading from './loading';
+import ReloadButton from '@/components/reloadButton';
 
 // Configuration étendue avec gestion d'erreurs avancée
 const CONFIG = {
@@ -356,14 +357,7 @@ function TemplatesError({ errorType, userMessage, shouldRetry }) {
             </h2>
             <p className="error-message">{userMessage}</p>
             <div className="error-actions">
-              {shouldRetry && (
-                <button
-                  onClick={() => window.location.reload()}
-                  className="cta-button primary"
-                >
-                  🔄 Réessayer
-                </button>
-              )}
+              {shouldRetry && <ReloadButton className="cta-button primary" />}
               <Link href="/" className="cta-button secondary">
                 🏠 Retour à l&apos;accueil
               </Link>

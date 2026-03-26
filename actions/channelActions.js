@@ -116,7 +116,7 @@ export async function getVideos() {
       FROM catalog.channel_videos
       WHERE is_active = true
       ORDER BY created_at DESC
-      LIMIT 200
+      LIMIT 20
   `),
       5000,
       'Get videos timeout',

@@ -444,5 +444,20 @@ export const captureMessage = (message, options = {}) => {
 
   const level = typeof options === 'string' ? options : (options.level || 'info');
 
-  Sentry.captureMessage(filteredMessage, { level, ...options.extra && { extra: options.extra } });
+  Sentry.withScope((scope) => {
+    if (options.tags && typeof options === 'object') {
+      Object.entries(options.tags).forEach(([key, value]) => {
+        scope.setTag(key, value);
+      });
+    }
+
+    if (options.extra && typeof options === 'object') {
+      Object.entries(options.extra).forEach(([key, value]) => {
+        scope.setExtra(key, value);
+      });
+    }
+
+    scope.setLevel(level);
+    Sentry.captureMessage(filteredMessage);
+  });
 };

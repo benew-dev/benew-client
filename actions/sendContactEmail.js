@@ -41,8 +41,8 @@ function detectBot(data, metadata = {}) {
   const reasons = [];
 
   // Check 1: FillTime trop rapide (< 3 secondes)
-  if (metadata.fillTime && metadata.fillTime < 3000) {
-    riskScore += 5;
+  if (metadata.fillTime && metadata.fillTime < 1500) {
+    riskScore += 3;
     reasons.push(`fillTime_too_fast: ${metadata.fillTime}ms`);
   }
 
@@ -70,7 +70,7 @@ function detectBot(data, metadata = {}) {
     reasons.push('honeypot_filled');
   }
 
-  const isSuspicious = riskScore >= 5;
+  const isSuspicious = riskScore >= 7;
 
   if (isSuspicious && process.env.NODE_ENV === 'development') {
     console.log('[Bot Detection]', {
@@ -91,6 +91,11 @@ function detectBot(data, metadata = {}) {
 // =============================
 // ✅ ANTI-DOUBLONS EN MÉMOIRE
 // =============================
+// ⚠️ IMPORTANT : Anti-doublons en mémoire locale au worker.
+// Fonctionne correctement en single-process uniquement.
+// En multi-process, un doublon envoyé sur deux workers différents
+// quasi-simultanément peut passer. Protection principale = rate limiter.
+// Si passage en multi-process → migrer vers vérification PostgreSQL.
 const recentEmails = new Map();
 
 function checkDuplicate(email, subject) {
