@@ -24,7 +24,47 @@ import { formatPrice, getApplicationLevelLabel } from '@/utils/helpers';
 import { trackEvent } from '@/utils/analytics';
 import PageTracker from '../analytics/PageTracker';
 
-const OrderModal = dynamic(() => import('../modal/OrderModal'));
+const OrderModal = dynamic(() => import('../modal/OrderModal'), {
+  loading: () => (
+    <div className="modal-loading-overlay">
+      <div className="modal-loading-spinner" aria-label="Chargement..." />
+    </div>
+  ),
+});
+
+// Ajouter en haut du fichier, avec les autres composants mémoïsés
+const AppImage = memo(({ src, alt, width, height, className, loading }) => {
+  const [hasError, setHasError] = useState(false);
+
+  if (hasError) {
+    return (
+      <img
+        src="/placeholder-application.png"
+        alt={alt}
+        width={width}
+        height={height}
+        className={className}
+      />
+    );
+  }
+
+  return (
+    <CldImage
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      className={className}
+      loading={loading}
+      quality="auto"
+      format="auto"
+      crop={{ type: 'fit', gravity: 'auto' }}
+      onError={() => setHasError(true)}
+    />
+  );
+});
+
+AppImage.displayName = 'AppImage';
 
 // =============================
 // COMPOSANT GALLERYMODAL AVEC IMAGES COMBINÉES
@@ -35,12 +75,13 @@ const GalleryModal = memo(({ isOpen, onClose, images, applicationName }) => {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      setSelectedImage(0);
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = ''; // ← supprime le style inline
     }
 
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = ''; // ← cleanup aussi
     };
   }, [isOpen]);
 
@@ -88,14 +129,12 @@ const GalleryModal = memo(({ isOpen, onClose, images, applicationName }) => {
                 onClick={() => setSelectedImage(index)}
                 aria-label={`Aller à l'image ${index + 1}`}
               >
-                <CldImage
-                  src={img}
-                  alt={`Miniature ${index + 1}`}
-                  width={120}
-                  height={120}
-                  crop={{ type: 'fill', gravity: 'center' }}
-                  quality="auto"
-                  format="auto"
+                <AppImage
+                  src={images[selectedImage]}
+                  alt={`${applicationName} - Version ${selectedImage + 1}`}
+                  width={800}
+                  height={600}
+                  className="gallery-image"
                 />
               </button>
             ))}
@@ -160,19 +199,13 @@ const ApplicationCard = memo(
         data-app-name={app.application_name}
       >
         <div className="card-image">
-          <CldImage
+          <AppImage
             src={firstImage}
             alt={app.application_name}
             width={400}
             height={200}
             className="app-image"
             loading="lazy"
-            quality="auto"
-            format="auto"
-            crop={{ type: 'fit', gravity: 'auto' }}
-            onError={(e) => {
-              e.currentTarget.src = '/placeholder-application.png';
-            }}
           />
         </div>
 
@@ -337,23 +370,24 @@ const ApplicationsCarousel = memo(
       goToSlide(nextIndex);
     }, [currentIndex, applications.length, goToSlide]);
 
-    const [touchStart, setTouchStart] = useState(null);
-    const [touchEnd, setTouchEnd] = useState(null);
+    const touchStartRef = useRef(null);
+    const touchEndRef = useRef(null);
     const minSwipeDistance = 50;
 
     const onTouchStart = (e) => {
-      setTouchEnd(null);
-      setTouchStart(e.targetTouches[0].clientX);
+      touchEndRef.current = null;
+      touchStartRef.current = e.targetTouches[0].clientX;
     };
 
     const onTouchMove = (e) => {
-      setTouchEnd(e.targetTouches[0].clientX);
+      touchEndRef.current = e.targetTouches[0].clientX; // ← mutation directe, 0 re-render
     };
 
     const onTouchEnd = useCallback(() => {
-      if (!touchStart || !touchEnd || isTransitioning) return;
+      if (!touchStartRef.current || !touchEndRef.current || isTransitioning)
+        return;
 
-      const distance = touchStart - touchEnd;
+      const distance = touchStartRef.current - touchEndRef.current;
       const isLeftSwipe = distance > minSwipeDistance;
       const isRightSwipe = distance < -minSwipeDistance;
 
@@ -366,14 +400,7 @@ const ApplicationsCarousel = memo(
           (currentIndex - 1 + applications.length) % applications.length,
         );
       }
-    }, [
-      touchStart,
-      touchEnd,
-      currentIndex,
-      applications.length,
-      isTransitioning,
-      handleSlideChange,
-    ]);
+    }, [currentIndex, applications.length, isTransitioning, handleSlideChange]);
 
     return (
       <div
@@ -460,10 +487,12 @@ const SingleTemplateShops = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedApp, setSelectedApp] = useState(null);
-  const [viewedApps, setViewedApps] = useState(new Set());
   const [galleryApp, setGalleryApp] = useState(null);
   const [galleryImages, setGalleryImages] = useState([]);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [paymentError, setPaymentError] = useState(false);
+
+  const viewedAppsRef = useRef(new Set());
 
   useEffect(() => {
     if (templateID && applications.length > 0) {
@@ -487,9 +516,12 @@ const SingleTemplateShops = ({
   const handleOrderClick = useCallback(
     (app) => {
       if (!platforms || platforms.length === 0) {
-        alert('Aucune méthode de paiement disponible pour le moment');
+        setPaymentError(true);
+        setTimeout(() => setPaymentError(false), 4000); // disparaît après 4s
         return;
       }
+
+      setPaymentError(false);
 
       try {
         trackEvent('order_start', {
@@ -541,7 +573,7 @@ const SingleTemplateShops = ({
 
   const handleApplicationView = useCallback(
     (app) => {
-      if (!viewedApps.has(app.application_id)) {
+      if (!viewedAppsRef.current.has(app.application_id)) {
         try {
           trackEvent('application_detail_click', {
             event_category: 'navigation',
@@ -553,10 +585,10 @@ const SingleTemplateShops = ({
           console.warn('[Analytics] Error tracking view:', error);
         }
 
-        setViewedApps((prev) => new Set([...prev, app.application_id]));
+        viewedAppsRef.current.add(app.application_id); // ← mutation directe, 0 re-render
       }
     },
-    [templateID, viewedApps],
+    [templateID], // ← stable pour toute la durée de vie du composant
   );
 
   const handleModalClose = useCallback(() => {
@@ -623,6 +655,12 @@ const SingleTemplateShops = ({
             hasPaymentMethods={hasPaymentMethods}
           />
         </section>
+      )}
+
+      {paymentError && (
+        <div className="payment-error-message" role="alert">
+          Aucune méthode de paiement disponible pour le moment.
+        </div>
       )}
 
       {applications.length > 1 && (
