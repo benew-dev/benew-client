@@ -3,6 +3,7 @@
 
 import { Suspense, cache } from 'react';
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 
 import SingleTemplateShops from '@/components/templates/SingleTemplateShops';
 import { getClient } from '@/backend/dbConnect';
@@ -365,12 +366,12 @@ function TemplateError({ errorType, userMessage, shouldRetry, templateId }) {
                 Le template demandé n&apos;existe pas ou a été supprimé.
               </p>
               <div className="error-actions">
-                <a href="/templates" className="cta-button primary">
+                <Link href="/templates" className="cta-button primary">
                   📋 Tous les templates
-                </a>
-                <a href="/" className="cta-button secondary">
+                </Link>
+                <Link href="/" className="cta-button secondary">
                   🏠 Accueil
-                </a>
+                </Link>
               </div>
             </div>
           ) : (
@@ -387,9 +388,9 @@ function TemplateError({ errorType, userMessage, shouldRetry, templateId }) {
               <p className="error-message">{userMessage}</p>
               <div className="error-actions">
                 {shouldRetry && <ReloadButton className="cta-button primary" />}
-                <a href="/templates" className="cta-button secondary">
+                <Link href="/templates" className="cta-button secondary">
                   📋 Templates
-                </a>
+                </Link>
               </div>
             </div>
           )}
