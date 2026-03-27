@@ -12,6 +12,7 @@ const QualitiesHome = () => {
 
   useEffect(() => {
     const checkDevice = () => {
+      console.log('checkDevice est declenchee');
       setIsMobile(window.innerWidth < 1200);
     };
     checkDevice();
