@@ -1,7 +1,7 @@
 // app/templates/[id]/page.jsx
 // ✅ MODIFICATION 1: Fusion Query 1 + Query 2 (pas Query 3 platforms)
 
-import { Suspense } from 'react';
+import { Suspense, cache } from 'react';
 import { notFound } from 'next/navigation';
 
 import SingleTemplateShops from '@/components/templates/SingleTemplateShops';
@@ -190,7 +190,7 @@ function validateTemplateId(templateId) {
  * ✅ MODIFICATION 1: FUSION Query 1 + Query 2 en une seule requête
  * Récupère template + applications en un seul appel
  */
-async function getTemplateData(templateId) {
+const getTemplateData = cache(async function getTemplateData(templateId) {
   const startTime = performance.now();
 
   try {
@@ -346,7 +346,7 @@ async function getTemplateData(templateId) {
       error: process.env.NODE_ENV === 'development' ? error.message : undefined,
     };
   }
-}
+});
 
 /**
  * Composant d'erreur réutilisable
@@ -486,66 +486,41 @@ export async function generateMetadata({ params }) {
     };
   }
 
-  try {
-    const client = await getClient();
-    try {
-      const queryPromise = client.query(
-        `SELECT template_name, template_images
-        FROM catalog.templates
-        WHERE template_id = $1 AND is_active = true`,
-        [validation.templateId],
-      );
+  // Réutilise getTemplateData — déjà en cache si SingleTemplatePage s'est exécuté avant
+  // Ou exécute la requête si generateMetadata s'exécute en premier — résultat mis en cache
+  const data = await getTemplateData(validation.templateId);
 
-      const result = await withTimeout(queryPromise, 2000, 'Metadata timeout');
-
-      if (result.rows.length > 0) {
-        const template = result.rows[0];
-
-        return {
-          title: `${template.template_name} - Templates | Benew`,
-          description: `Découvrez les applications basées sur ${template.template_name} sur Benew.`,
-          keywords: [
-            template.template_name,
-            'template',
-            'applications',
-            'e-commerce',
-            'Benew',
-            'Djibouti',
-          ],
-          openGraph: {
-            title: `${template.template_name} - Applications`,
-            description: `Explorez les applications du template ${template.template_name}.`,
-            images:
-              template.template_images?.length > 0
-                ? [template.template_images[0]]
-                : [],
-            url: `/templates/${validation.templateId}`,
-          },
-          alternates: {
-            canonical: `/templates/${validation.templateId}`,
-          },
-        };
-      }
-    } finally {
-      client.release();
-    }
-  } catch (error) {
-    captureMessage('Metadata generation failed', {
-      level: 'warning',
-      tags: { component: 'single_template_metadata' },
-      extra: {
-        templateId: validation.templateId,
-        errorMessage: error.message,
-      },
-    });
+  if (!data.success || !data.template) {
+    return {
+      title: 'Template - Benew',
+      description: 'Découvrez ce template sur Benew.',
+    };
   }
 
+  const template = data.template;
+
   return {
-    title: 'Template - Benew',
-    description: 'Découvrez ce template sur Benew.',
+    title: `${template.template_name} - Templates | Benew`,
+    description: `Découvrez les applications basées sur ${template.template_name} sur Benew.`,
+    keywords: [
+      template.template_name,
+      'template',
+      'applications',
+      'e-commerce',
+      'Benew',
+      'Djibouti',
+    ],
     openGraph: {
-      title: 'Template Benew',
+      title: `${template.template_name} - Applications`,
+      description: `Explorez les applications du template ${template.template_name}.`,
+      images:
+        data.applications?.[0]?.application_images?.length > 0
+          ? [data.applications[0].application_images[0]]
+          : [],
       url: `/templates/${validation.templateId}`,
+    },
+    alternates: {
+      canonical: `/templates/${validation.templateId}`,
     },
   };
 }
