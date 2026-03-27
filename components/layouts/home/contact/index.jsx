@@ -20,7 +20,7 @@ const ContactHome = () => {
       </div>
 
       {/* BLOC DROITE - IMAGE LOGO */}
-      <div className="contact-image-block">
+      <div className="contact-image-block" style={{ position: 'relative' }}>
         <div className="contact-logo-container">
           <Image
             src="/benew_head_only_transparent_fixed.png"
