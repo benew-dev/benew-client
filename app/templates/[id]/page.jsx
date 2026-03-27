@@ -519,10 +519,10 @@ export async function generateMetadata({ params }) {
               template.template_images?.length > 0
                 ? [template.template_images[0]]
                 : [],
-            url: `${process.env.NEXT_PUBLIC_SITE_URL}/templates/${validation.templateId}`,
+            url: `/templates/${validation.templateId}`,
           },
           alternates: {
-            canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/templates/${validation.templateId}`,
+            canonical: `/templates/${validation.templateId}`,
           },
         };
       }
@@ -545,7 +545,7 @@ export async function generateMetadata({ params }) {
     description: 'Découvrez ce template sur Benew.',
     openGraph: {
       title: 'Template Benew',
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/templates/${validation.templateId}`,
+      url: `/templates/${validation.templateId}`,
     },
   };
 }

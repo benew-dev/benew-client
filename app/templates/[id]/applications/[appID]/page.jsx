@@ -629,10 +629,10 @@ export async function generateMetadata({ params }) {
               app.application_images?.length > 0
                 ? [app.application_images[0]]
                 : [],
-            url: `${process.env.NEXT_PUBLIC_SITE_URL}/templates/${validation.templateId}/applications/${validation.applicationId}`,
+            url: `/templates/${validation.templateId}/applications/${validation.applicationId}`,
           },
           alternates: {
-            canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/templates/${validation.templateId}/applications/${validation.applicationId}`,
+            canonical: `/templates/${validation.templateId}/applications/${validation.applicationId}`,
           },
         };
       }
@@ -658,7 +658,7 @@ export async function generateMetadata({ params }) {
     description: 'Découvrez cette application sur Benew.',
     openGraph: {
       title: 'Application Benew',
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/templates/${validation.templateId}/applications/${validation.applicationId}`,
+      url: `/templates/${validation.templateId}/applications/${validation.applicationId}`,
     },
   };
 }

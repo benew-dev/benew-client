@@ -533,15 +533,15 @@ export const metadata = {
     title: 'Contact Benew - Démarrez votre projet',
     description:
       'Contactez-nous pour transformer vos idées en solutions digitales.',
-    url: `${process.env.NEXT_PUBLIC_SITE_URL}/contact`,
+    url: `/contact`,
     type: 'website',
     locale: 'fr_FR',
   },
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/contact`,
+    canonical: `/contact`,
   },
 };
 
 // ✅ force-dynamic : page lit process.env au runtime via validateContactServices()
-export const dynamic = 'force-dynamic';
+export const dynamic = 'force-static';
 export const revalidate = 600;

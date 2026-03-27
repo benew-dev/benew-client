@@ -473,10 +473,10 @@ export const metadata = {
     title: 'Templates E-commerce Benew',
     description:
       'Collection de templates professionnels pour votre boutique en ligne.',
-    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://benew-dj.com'}/templates`,
+    url: `/templates`,
   },
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://benew-dj.com'}/templates`,
+    canonical: `/templates`,
   },
 };
 

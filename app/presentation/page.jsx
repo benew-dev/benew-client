@@ -549,12 +549,12 @@ export const metadata = {
   openGraph: {
     title: 'Présentation Benew - Notre Vision',
     description: 'Notre manifeste, nos produits et notre fondateur.',
-    url: `${process.env.NEXT_PUBLIC_SITE_URL}/presentation`,
+    url: `/presentation`,
     type: 'website',
     locale: 'fr_FR',
   },
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/presentation`,
+    canonical: `/presentation`,
   },
 };
 

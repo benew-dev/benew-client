@@ -276,9 +276,6 @@ export default async function ChannelPage() {
 // =============================
 
 export const metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || 'https://benew-dj.com',
-  ),
   title: 'Chaîne - Benew | Tutoriels & Présentations',
   description:
     'Découvrez nos tutoriels, démonstrations et présentations vidéo. Apprenez à utiliser nos templates et applications e-commerce.',
@@ -294,12 +291,12 @@ export const metadata = {
     title: 'Chaîne Benew — Tutoriels & Vidéos',
     description:
       'Tutoriels, démonstrations et présentations pour maîtriser nos solutions e-commerce.',
-    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://benew-dj.com'}/channel`,
+    url: `/channel`,
   },
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://benew-dj.com'}/channel`,
+    canonical: `/channel`,
   },
 };
 
 export const revalidate = 120;
-export const dynamic = 'force-dynamic';
+export const dynamic = 'force-static';
