@@ -543,5 +543,4 @@ export const metadata = {
 };
 
 // ✅ force-dynamic : page lit process.env au runtime via validateContactServices()
-export const dynamic = 'force-static';
 export const revalidate = 600;

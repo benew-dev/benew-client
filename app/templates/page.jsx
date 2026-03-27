@@ -482,6 +482,3 @@ export const metadata = {
 
 // Configuration ISR Next.js 15
 export const revalidate = 300;
-
-// Force static pour performance optimale
-export const dynamic = 'force-static';
