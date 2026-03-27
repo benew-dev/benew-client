@@ -1,5 +1,3 @@
-'use client';
-
 export function HydrationFix() {
   return (
     <script
@@ -10,12 +8,12 @@ export function HydrationFix() {
             // Liste des attributs problématiques d'extensions
             var problematicAttributes = [
               'webcrx',
-              'cz-shortcut-listen', 
+              'cz-shortcut-listen',
               'data-lt-installed',
               'data-new-gr-c-s-check-loaded',
               'data-gr-ext-installed'
             ];
-            
+
             // Fonction pour nettoyer les attributs
             function cleanAttributes() {
               var htmlElement = document.documentElement;
@@ -25,16 +23,16 @@ export function HydrationFix() {
                 }
               });
             }
-            
+
             // Nettoyer immédiatement
             cleanAttributes();
-            
+
             // Observer pour nettoyer en continu
             if (window.MutationObserver) {
               var observer = new MutationObserver(function(mutations) {
                 mutations.forEach(function(mutation) {
                   if (
-                    mutation.type === 'attributes' && 
+                    mutation.type === 'attributes' &&
                     mutation.target === document.documentElement &&
                     problematicAttributes.indexOf(mutation.attributeName) !== -1
                   ) {
@@ -42,7 +40,7 @@ export function HydrationFix() {
                   }
                 });
               });
-              
+
               observer.observe(document.documentElement, {
                 attributes: true,
                 attributeFilter: problematicAttributes
