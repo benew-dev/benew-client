@@ -408,24 +408,6 @@ export default async function TemplatesPage() {
 
   // Gestion différenciée des erreurs
   if (!data.success) {
-    // En production, on peut choisir de montrer une page d'erreur custom
-    // plutôt que notFound() pour certains types d'erreurs temporaires
-    if (data.shouldRetry && process.env.NODE_ENV === 'production') {
-      return (
-        <TemplatesError
-          errorType={data.errorType}
-          userMessage={data.userMessage}
-          shouldRetry={data.shouldRetry}
-        />
-      );
-    }
-
-    // Pour les erreurs non récupérables en production
-    if (process.env.NODE_ENV === 'production') {
-      notFound();
-    }
-
-    // En dev, affichage détaillé
     return (
       <TemplatesError
         errorType={data.errorType}
