@@ -289,7 +289,14 @@ const ApplicationsCarousel = memo(
   }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAutoScrolling, setIsAutoScrolling] = useState(true);
+    // Ajouter avec les autres états :
+    const isTransitioningRef = useRef(false);
     const [isTransitioning, setIsTransitioning] = useState(false);
+
+    const setIsTransitioningSync = useCallback((value) => {
+      isTransitioningRef.current = value;
+      setIsTransitioning(value);
+    }, []); // ← stable, jamais recréé
 
     // ✅ MODIFICATION : Arrêter l'auto-scroll si modal ou galerie ouverte
     useEffect(() => {
@@ -297,8 +304,8 @@ const ApplicationsCarousel = memo(
         !isAutoScrolling ||
         applications.length <= 1 ||
         isTransitioning ||
-        isModalOpen || // ✅ ARRÊT si modal commande ouverte
-        isGalleryOpen // ✅ ARRÊT si galerie ouverte
+        isModalOpen ||
+        isGalleryOpen
       ) {
         return;
       }
@@ -312,9 +319,10 @@ const ApplicationsCarousel = memo(
       isAutoScrolling,
       applications.length,
       currentIndex,
-      isTransitioning,
-      isModalOpen, // ✅ AJOUT dépendance
-      isGalleryOpen, // ✅ AJOUT dépendance
+      isTransitioning, // ← garde pour la condition d'arrêt visuelle
+      isModalOpen,
+      isGalleryOpen,
+      handleSlideChange, // ← stable maintenant
     ]);
 
     useEffect(() => {
@@ -328,16 +336,14 @@ const ApplicationsCarousel = memo(
 
     const handleSlideChange = useCallback(
       (newIndex) => {
-        if (isTransitioning) return;
-
-        setIsTransitioning(true);
+        if (isTransitioningRef.current) return; // ← lit la ref, pas le state
+        setIsTransitioningSync(true);
         setCurrentIndex(newIndex);
-
         setTimeout(() => {
-          setIsTransitioning(false);
+          setIsTransitioningSync(false);
         }, 600);
       },
-      [isTransitioning],
+      [setIsTransitioningSync], // ← stable
     );
 
     const goToSlide = useCallback(
