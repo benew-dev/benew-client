@@ -667,4 +667,4 @@ export async function generateMetadata({ params }) {
 export const revalidate = 300;
 
 // ✅ Force static pour performance optimale
-export const dynamic = 'force-dynamic';
+export const dynamic = 'force-static';
