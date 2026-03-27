@@ -1,7 +1,13 @@
+@use '../../../app/styles/abstracts' as *;
+
 .template-error-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0c0c1a 0%, #1a1a2e 100%);
-  color: #fae6d1;
+  background: linear-gradient(
+    135deg,
+    $background-color 0%,
+    color.adjust($background-color, $lightness: 5%) 100%
+  );
+  color: $text-color;
 }
 
 .error-content {
@@ -21,7 +27,7 @@
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(15px);
   border-radius: 20px;
-  border: 1px solid rgba(246, 160, 55, 0.25);
+  border: 1px solid rgba($primary-color, 0.25);
   padding: 3rem 2rem;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
 }
@@ -47,9 +53,9 @@
 .error-code {
   font-size: 3rem;
   font-weight: 700;
-  color: #f6a037;
+  color: $primary-color;
   margin-bottom: 1rem;
-  text-shadow: 0 2px 4px rgba(246, 160, 55, 0.3);
+  text-shadow: 0 2px 4px rgba($primary-color, 0.3);
 }
 
 .error-title {
