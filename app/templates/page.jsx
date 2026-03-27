@@ -244,16 +244,24 @@ async function getTemplates() {
         // Query avec timeout intégré - ✅ CORRIGÉ: template_images (pluriel)
         const queryPromise = client.query(`
           SELECT
-            template_id,
-            template_name,
-            template_images,
-            template_has_web,
-            template_has_mobile,
-            (SELECT COUNT(*) FROM catalog.applications
-             WHERE application_template_id = t.template_id AND is_active = true) as applications_count
+            t.template_id,
+            t.template_name,
+            t.template_images,
+            t.template_has_web,
+            t.template_has_mobile,
+            COUNT(a.application_id) as applications_count
           FROM catalog.templates t
-          WHERE is_active = true
-          ORDER BY template_added DESC
+          LEFT JOIN catalog.applications a
+            ON a.application_template_id = t.template_id
+            AND a.is_active = true
+          WHERE t.is_active = true
+          GROUP BY
+            t.template_id,
+            t.template_name,
+            t.template_images,
+            t.template_has_web,
+            t.template_has_mobile
+          ORDER BY t.template_added DESC
         `);
 
         const result = await withTimeout(
