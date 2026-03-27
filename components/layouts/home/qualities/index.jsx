@@ -15,9 +15,23 @@ const QualitiesHome = () => {
       console.log('checkDevice est declenchee');
       setIsMobile(window.innerWidth < 1200);
     };
+
+    // Exécution initiale
     checkDevice();
-    window.addEventListener('resize', checkDevice);
-    return () => window.removeEventListener('resize', checkDevice);
+
+    // Debounce — attend 200ms après le dernier resize avant d'exécuter
+    let debounceTimer;
+    const handleResize = () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(checkDevice, 200);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(debounceTimer); // nettoyage si le composant est démonté pendant un resize
+    };
   }, []);
 
   const handlePlayPause = useCallback(async () => {
