@@ -61,12 +61,6 @@ const TemplateImageCarousel = memo(({ images, templateName }) => {
   // Modifier le useState existant pour synchroniser la ref
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Créer un setter qui maintient les deux en sync
-  const setIsTransitioningSync = useCallback((value) => {
-    isTransitioningRef.current = value;
-    setIsTransitioning(value);
-  }, []);
-
   // Fallback si pas d'images
   const imageList = useMemo(() => {
     if (!images || images.length === 0) {
@@ -74,6 +68,25 @@ const TemplateImageCarousel = memo(({ images, templateName }) => {
     }
     return images;
   }, [images]);
+
+  // ✅ setter synchronisé — déclaré tôt, pas de dépendances
+  const setIsTransitioningSync = useCallback((value) => {
+    isTransitioningRef.current = value;
+    setIsTransitioning(value);
+  }, []);
+
+  // ✅ handleSlideChange déclaré AVANT les useEffect qui l'utilisent
+  const handleSlideChange = useCallback(
+    (newIndex) => {
+      if (isTransitioningRef.current) return;
+      setIsTransitioningSync(true);
+      setCurrentSlide(newIndex);
+      setTimeout(() => {
+        setIsTransitioningSync(false);
+      }, 600);
+    },
+    [setIsTransitioningSync],
+  );
 
   // Auto-scroll avec 4 secondes d'intervalle
   useEffect(() => {
@@ -103,21 +116,6 @@ const TemplateImageCarousel = memo(({ images, templateName }) => {
       return () => clearTimeout(timeout);
     }
   }, [isAutoScrolling]);
-
-  // Gérer le changement de slide avec animation
-  const handleSlideChange = useCallback(
-    (newIndex) => {
-      if (isTransitioningRef.current) return; // ← lit la ref, pas le state
-
-      setIsTransitioningSync(true); // ← met à jour ref + state
-      setCurrentSlide(newIndex);
-
-      setTimeout(() => {
-        setIsTransitioningSync(false);
-      }, 600);
-    },
-    [setIsTransitioningSync], // ← stable, ne change jamais
-  );
 
   // Navigation manuelle via dots
   const goToSlide = useCallback(
