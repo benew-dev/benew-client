@@ -40,17 +40,27 @@ const promoTiers = [
 
 const PromoLaunch = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    // Initialisation lazy — exécutée une seule fois
+    // typeof window vérifie qu'on est bien côté client
+    if (typeof window === 'undefined') return false; // serveur → false
+    return window.innerWidth < 768; // client → valeur réelle immédiate
+  });
 
-  // Détecter si on est sur mobile
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+    let debounceTimer;
+    const handleResize = () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        setIsMobile(window.innerWidth < 768);
+      }, 200);
     };
 
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(debounceTimer);
+    };
   }, []);
 
   // Auto-play slider — seulement sur mobile

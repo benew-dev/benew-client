@@ -11,26 +11,21 @@ const QualitiesHome = () => {
   const isTransitioning = useRef(false);
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia('(pointer: coarse)');
+
     const checkDevice = () => {
-      console.log('checkDevice est declenchee');
-      setIsMobile(window.innerWidth < 1200);
+      setIsMobile(mediaQuery.matches);
     };
 
     // Exécution initiale
     checkDevice();
 
-    // Debounce — attend 200ms après le dernier resize avant d'exécuter
-    let debounceTimer;
-    const handleResize = () => {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(checkDevice, 200);
-    };
-
-    window.addEventListener('resize', handleResize);
+    // matchMedia a son propre listener — pas besoin de debounce
+    // car il ne se déclenche qu'une fois quand le type de pointeur change
+    mediaQuery.addEventListener('change', checkDevice);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
-      clearTimeout(debounceTimer); // nettoyage si le composant est démonté pendant un resize
+      mediaQuery.removeEventListener('change', checkDevice);
     };
   }, []);
 
