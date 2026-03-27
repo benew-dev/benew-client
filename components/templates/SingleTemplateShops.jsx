@@ -298,6 +298,18 @@ const ApplicationsCarousel = memo(
       setIsTransitioning(value);
     }, []); // ← stable, jamais recréé
 
+    const handleSlideChange = useCallback(
+      (newIndex) => {
+        if (isTransitioningRef.current) return; // ← lit la ref, pas le state
+        setIsTransitioningSync(true);
+        setCurrentIndex(newIndex);
+        setTimeout(() => {
+          setIsTransitioningSync(false);
+        }, 600);
+      },
+      [setIsTransitioningSync], // ← stable
+    );
+
     // ✅ MODIFICATION : Arrêter l'auto-scroll si modal ou galerie ouverte
     useEffect(() => {
       if (
@@ -333,18 +345,6 @@ const ApplicationsCarousel = memo(
         return () => clearTimeout(timeout);
       }
     }, [isAutoScrolling]);
-
-    const handleSlideChange = useCallback(
-      (newIndex) => {
-        if (isTransitioningRef.current) return; // ← lit la ref, pas le state
-        setIsTransitioningSync(true);
-        setCurrentIndex(newIndex);
-        setTimeout(() => {
-          setIsTransitioningSync(false);
-        }, 600);
-      },
-      [setIsTransitioningSync], // ← stable
-    );
 
     const goToSlide = useCallback(
       (index) => {
