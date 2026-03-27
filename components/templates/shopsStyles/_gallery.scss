@@ -543,15 +543,15 @@
 
 .btn-gallery {
   background: transparent;
-  color: css-var(secondary-color);
-  border: 2px solid css-var(secondary-color);
+  color: $secondary-color;
+  border: 2px solid $secondary-color;
   backdrop-filter: blur(10px);
 
   &:hover:not(:disabled) {
-    background: rgba(css-var(secondary-color), 0.15);
-    border-color: css-var(accent-color);
+    background: rgba($secondary-color, 0.15); // ← SCSS résout à la compilation
+    border-color: $accent-color;
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(css-var(secondary-color), 0.3);
+    box-shadow: 0 6px 20px rgba($secondary-color, 0.3); // ← idem
   }
 
   svg {

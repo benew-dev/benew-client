@@ -74,8 +74,16 @@ export default function TemplateDetailNotFound() {
         <div className="content-wrapper">
           <h1 className="error-title">Template Introuvable</h1>
 
-          {templateId && (
-            <div className="template-id-badge">ID recherché : {templateId}</div>
+          {process.env.NODE_ENV === 'development' && (
+            <div className="debug-info">
+              <p>
+                <strong>Template ID :</strong> {templateId || 'unknown'}
+              </p>
+              <p>
+                <strong>URL :</strong>{' '}
+                {typeof window !== 'undefined' ? window.location.href : 'N/A'}
+              </p>
+            </div>
           )}
 
           <p className="error-message">

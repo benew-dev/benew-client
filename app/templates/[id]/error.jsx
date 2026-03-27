@@ -18,6 +18,7 @@ export default function TemplateDetailError({ error, reset }) {
   const templateId = params?.id;
   const MAX_RETRIES = 3;
 
+  // useEffect Sentry — se déclenche quand error ou templateId change
   useEffect(() => {
     if (!error) return;
 
@@ -32,11 +33,16 @@ export default function TemplateDetailError({ error, reset }) {
         errorName: error?.name || 'Unknown',
         errorMessage: error?.message || 'No message',
         errorStack: error?.stack?.substring(0, 500),
-        retryCount: retryCount,
         templateId: templateId,
+        // retryCount retiré — toujours 0 au moment de la capture initiale
       },
       level: 'error',
     });
+  }, [error, templateId]); // ← retryCount retiré
+
+  // useEffect Analytics — séparé, même dépendances
+  useEffect(() => {
+    if (!error) return;
 
     try {
       trackEvent('error_boundary_shown', {
@@ -53,7 +59,7 @@ export default function TemplateDetailError({ error, reset }) {
         analyticsError,
       );
     }
-  }, [error, templateId, retryCount]);
+  }, [error, templateId]);
 
   const handleRetry = async () => {
     if (retryCount >= MAX_RETRIES || isRetrying) return;

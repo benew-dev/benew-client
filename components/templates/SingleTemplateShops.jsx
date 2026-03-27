@@ -426,14 +426,19 @@ const ApplicationsCarousel = memo(
 
         <div className="applications-carousel-track">
           {applications.map((app, index) => {
-            let slidePosition = 'hidden';
-
-            if (index === currentIndex) {
-              slidePosition = isTransitioning ? 'entering' : 'active';
-            } else if (
+            const isActive = index === currentIndex;
+            const isPrevious =
               index ===
-              (currentIndex - 1 + applications.length) % applications.length
-            ) {
+              (currentIndex - 1 + applications.length) % applications.length;
+            const isRelevant = isActive || isPrevious;
+
+            // Démonter complètement les slides non pertinents
+            if (!isRelevant) return null;
+
+            let slidePosition = 'hidden';
+            if (isActive) {
+              slidePosition = isTransitioning ? 'entering' : 'active';
+            } else if (isPrevious) {
               slidePosition = isTransitioning ? 'exiting' : 'hidden';
             }
 
