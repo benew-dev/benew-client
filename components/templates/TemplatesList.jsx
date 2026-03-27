@@ -80,24 +80,25 @@ const TemplateImageCarousel = memo(({ images, templateName }) => {
   );
 
   // Gestion du swipe tactile
-  const [touchStart, setTouchStart] = useState(null);
-  const [touchEnd, setTouchEnd] = useState(null);
+  const touchStartRef = useRef(null);
+  const touchEndRef = useRef(null);
 
   const minSwipeDistance = 50;
 
   const onTouchStart = (e) => {
-    setTouchEnd(null);
-    setTouchStart(e.targetTouches[0].clientX);
+    touchEndRef.current = null;
+    touchStartRef.current = e.targetTouches[0].clientX;
   };
 
   const onTouchMove = (e) => {
-    setTouchEnd(e.targetTouches[0].clientX);
+    touchEndRef.current = e.targetTouches[0].clientX;
   };
 
   const onTouchEnd = useCallback(() => {
-    if (!touchStart || !touchEnd || isTransitioning) return;
+    if (!touchStartRef.current || !touchEndRef.current || isTransitioning)
+      return;
 
-    const distance = touchStart - touchEnd;
+    const distance = touchStartRef.current - touchEndRef.current;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
 
@@ -110,14 +111,7 @@ const TemplateImageCarousel = memo(({ images, templateName }) => {
         (currentSlide - 1 + imageList.length) % imageList.length,
       );
     }
-  }, [
-    touchStart,
-    touchEnd,
-    currentSlide,
-    imageList.length,
-    isTransitioning,
-    handleSlideChange,
-  ]);
+  }, [currentSlide, imageList.length, isTransitioning, handleSlideChange]);
 
   // Si une seule image, pas besoin de carousel
   if (imageList.length === 1) {

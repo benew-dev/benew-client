@@ -18,16 +18,13 @@ import './shopsStyles/index.scss';
 import ParallaxSkeleton from '../layouts/parallax/ParallaxSkeleton';
 const Parallax = dynamic(() => import('components/layouts/parallax'), {
   loading: () => <ParallaxSkeleton />,
-  ssr: true,
 });
 
 import { formatPrice, getApplicationLevelLabel } from '@/utils/helpers';
 import { trackEvent } from '@/utils/analytics';
 import PageTracker from '../analytics/PageTracker';
 
-const OrderModal = dynamic(() => import('../modal/OrderModal'), {
-  ssr: false,
-});
+const OrderModal = dynamic(() => import('../modal/OrderModal'));
 
 // =============================
 // COMPOSANT GALLERYMODAL AVEC IMAGES COMBINÉES
