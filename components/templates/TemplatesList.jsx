@@ -16,11 +16,56 @@ const Parallax = dynamic(() => import('components/layouts/parallax'), {
 import { trackEvent } from '@/utils/analytics';
 import PageTracker from '../analytics/PageTracker';
 
+// Créer un sous-composant pour gérer l'erreur proprement
+const CarouselImage = memo(
+  ({ src, alt, width, height, className, loading, isEager }) => {
+    const [hasError, setHasError] = useState(false);
+
+    if (hasError) {
+      return (
+        <img
+          src="/placeholder-template.png"
+          alt={alt}
+          width={width}
+          height={height}
+          className={className}
+        />
+      );
+    }
+
+    return (
+      <CldImage
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        className={className}
+        loading={loading}
+        quality="auto"
+        format="auto"
+        crop={{ type: 'fit', gravity: 'auto' }}
+        onError={() => setHasError(true)}
+      />
+    );
+  },
+);
+
 // Composant Carousel pour les images du template
 const TemplateImageCarousel = memo(({ images, templateName }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoScrolling, setIsAutoScrolling] = useState(true);
+
+  // Ajouter une ref pour isTransitioning
+  const isTransitioningRef = useRef(false);
+
+  // Modifier le useState existant pour synchroniser la ref
   const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // Créer un setter qui maintient les deux en sync
+  const setIsTransitioningSync = useCallback((value) => {
+    isTransitioningRef.current = value;
+    setIsTransitioning(value);
+  }, []);
 
   // Fallback si pas d'images
   const imageList = useMemo(() => {
@@ -41,7 +86,13 @@ const TemplateImageCarousel = memo(({ images, templateName }) => {
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [isAutoScrolling, imageList.length, currentSlide, isTransitioning]);
+  }, [
+    isAutoScrolling,
+    imageList.length,
+    currentSlide,
+    isTransitioning,
+    handleSlideChange,
+  ]);
 
   // Reprendre l'auto-scroll après 10 secondes d'inactivité
   useEffect(() => {
@@ -56,17 +107,16 @@ const TemplateImageCarousel = memo(({ images, templateName }) => {
   // Gérer le changement de slide avec animation
   const handleSlideChange = useCallback(
     (newIndex) => {
-      if (isTransitioning) return;
+      if (isTransitioningRef.current) return; // ← lit la ref, pas le state
 
-      setIsTransitioning(true);
+      setIsTransitioningSync(true); // ← met à jour ref + state
       setCurrentSlide(newIndex);
 
-      // Fin de la transition après 600ms (durée de l'animation CSS)
       setTimeout(() => {
-        setIsTransitioning(false);
+        setIsTransitioningSync(false);
       }, 600);
     },
-    [isTransitioning],
+    [setIsTransitioningSync], // ← stable, ne change jamais
   );
 
   // Navigation manuelle via dots
@@ -117,7 +167,7 @@ const TemplateImageCarousel = memo(({ images, templateName }) => {
   if (imageList.length === 1) {
     return (
       <div className="minimalImageContainer">
-        <CldImage
+        <CarouselImage
           src={imageList[0]}
           alt={`Template ${templateName}`}
           width={520}
@@ -159,7 +209,7 @@ const TemplateImageCarousel = memo(({ images, templateName }) => {
 
           return (
             <div key={index} className={`carousel-slide ${slidePosition}`}>
-              <CldImage
+              <CarouselImage
                 src={imgUrl}
                 alt={`${templateName} - Image ${index + 1}`}
                 width={520}
