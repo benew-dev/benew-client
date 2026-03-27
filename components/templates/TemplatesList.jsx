@@ -4,14 +4,13 @@
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { CldImage } from 'next-cloudinary';
-import { useState, useEffect, memo, useCallback, useMemo } from 'react';
+import { useState, useEffect, memo, useCallback, useMemo, useRef } from 'react';
 import { MdMonitor, MdPhoneIphone } from 'react-icons/md';
 import './templatesStyles/index.scss';
 
 import ParallaxSkeleton from '../layouts/parallax/ParallaxSkeleton';
 const Parallax = dynamic(() => import('components/layouts/parallax'), {
   loading: () => <ParallaxSkeleton />,
-  ssr: true,
 });
 
 import { trackEvent } from '@/utils/analytics';
@@ -289,7 +288,7 @@ TemplateCard.displayName = 'TemplateCard';
 
 // Composant principal simplifié
 const TemplatesList = ({ templates = [] }) => {
-  const [viewedTemplates, setViewedTemplates] = useState(new Set());
+  const viewedTemplatesRef = useRef(new Set());
 
   // Tracking de la page view
   useEffect(() => {
@@ -309,7 +308,7 @@ const TemplatesList = ({ templates = [] }) => {
   // Handler pour le clic sur un template
   const handleTemplateClick = useCallback(
     (template) => {
-      if (!viewedTemplates.has(template.template_id)) {
+      if (!viewedTemplatesRef.current.has(template.template_id)) {
         try {
           trackEvent('template_click', {
             event_category: 'ecommerce',
@@ -319,15 +318,13 @@ const TemplatesList = ({ templates = [] }) => {
             applications_count: template.applications_count || 0,
           });
 
-          setViewedTemplates(
-            (prev) => new Set([...prev, template.template_id]),
-          );
+          viewedTemplatesRef.current.add(template.template_id); // mutation directe
         } catch (error) {
           console.warn('[Analytics] Error tracking template click:', error);
         }
       }
     },
-    [viewedTemplates],
+    [], // ← pas de dépendances — callback stable pour toujours
   );
 
   // États vides
