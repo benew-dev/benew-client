@@ -2,7 +2,7 @@
 // ✅ SERVER COMPONENT OPTIMISÉ POUR 500 USERS/DAY
 // ✅ Next.js 15 + PostgreSQL + Sécurité renforcée + Performance maximale
 
-import { Suspense } from 'react';
+import { Suspense, cache } from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
@@ -208,17 +208,18 @@ function validateIds(appId, templateId) {
  * ✅ FONCTION PRINCIPALE OPTIMISÉE
  * Récupère les données de l'application avec performance et sécurité maximales
  */
-async function getApplicationData(applicationId, templateId) {
-  const startTime = performance.now();
+const getApplicationData = cache(
+  async function getApplicationData(applicationId, templateId) {
+    const startTime = performance.now();
 
-  try {
-    return await executeWithRetry(async () => {
-      const client = await getClient();
+    try {
+      return await executeWithRetry(async () => {
+        const client = await getClient();
 
-      try {
-        // ✅ QUERY OPTIMISÉE - Une seule requête avec tous les JOIN nécessaires
-        const queryPromise = client.query(
-          `SELECT
+        try {
+          // ✅ QUERY OPTIMISÉE - Une seule requête avec tous les JOIN nécessaires
+          const queryPromise = client.query(
+            `SELECT
             -- ✅ Application complète
             a.application_id,
             a.application_name,
@@ -285,133 +286,158 @@ async function getApplicationData(applicationId, templateId) {
             AND a.application_template_id = $2
             AND a.is_active = true
             AND t.is_active = true`,
-          [applicationId, templateId],
-        );
-
-        const result = await withTimeout(
-          queryPromise,
-          CONFIG.performance.queryTimeout,
-          'Database query timeout',
-        );
-
-        const queryDuration = performance.now() - startTime;
-
-        // ✅ Log performance si lent
-        if (queryDuration > CONFIG.performance.slowQueryThreshold) {
-          captureMessage('Slow application query', {
-            level: 'warning',
-            tags: { component: 'single_application', performance: true },
-            extra: {
-              applicationId,
-              templateId,
-              duration: queryDuration,
-              timeout: CONFIG.performance.queryTimeout,
-            },
-          });
-        }
-
-        // ✅ Log succès en dev
-        if (process.env.NODE_ENV === 'development') {
-          console.log(
-            `[Application] Query: ${Math.round(queryDuration)}ms (timeout: ${CONFIG.performance.queryTimeout}ms)`,
+            [applicationId, templateId],
           );
-        }
 
-        // ✅ Application non trouvée
-        if (result.rows.length === 0) {
-          return {
-            application: null,
-            template: null,
-            relatedApplications: [],
-            platforms: [],
-            success: false,
-            errorType: ERROR_TYPES.NOT_FOUND,
-            httpStatus: 404,
-            userMessage: 'Application introuvable.',
+          const result = await withTimeout(
+            queryPromise,
+            CONFIG.performance.queryTimeout,
+            'Database query timeout',
+          );
+
+          const queryDuration = performance.now() - startTime;
+
+          // ✅ Log performance si lent
+          if (queryDuration > CONFIG.performance.slowQueryThreshold) {
+            captureMessage('Slow application query', {
+              level: 'warning',
+              tags: { component: 'single_application', performance: true },
+              extra: {
+                applicationId,
+                templateId,
+                duration: queryDuration,
+                timeout: CONFIG.performance.queryTimeout,
+              },
+            });
+          }
+
+          // ✅ Log succès en dev
+          if (process.env.NODE_ENV === 'development') {
+            console.log(
+              `[Application] Query: ${Math.round(queryDuration)}ms (timeout: ${CONFIG.performance.queryTimeout}ms)`,
+            );
+          }
+
+          // ✅ Application non trouvée
+          if (result.rows.length === 0) {
+            return {
+              application: null,
+              template: null,
+              relatedApplications: [],
+              platforms: [],
+              success: false,
+              errorType: ERROR_TYPES.NOT_FOUND,
+              httpStatus: 404,
+              userMessage: 'Application introuvable.',
+            };
+          }
+
+          const data = result.rows[0];
+
+          // ✅ Parse JSON aggregations
+          const parseJsonAgg = (value) => {
+            if (Array.isArray(value)) return value; // driver a déjà parsé → tableau JS
+            if (typeof value === 'string') {
+              try {
+                const parsed = JSON.parse(value);
+                return Array.isArray(parsed) ? parsed : []; // string JSON → parser
+              } catch {
+                return []; // JSON invalide → tableau vide
+              }
+            }
+            return []; // null, undefined, objet inattendu
           };
+
+          const relatedApps = parseJsonAgg(data.related_applications);
+          const platforms = parseJsonAgg(data.platforms);
+
+          // ✅ Construire l'objet application
+          const application = {
+            application_id: data.application_id,
+            application_name: data.application_name,
+            application_link: data.application_link,
+            application_admin_link: data.application_admin_link,
+            application_description: data.application_description,
+            application_category: data.application_category,
+            application_fee: data.application_fee,
+            application_rent: data.application_rent,
+            application_images: data.application_images,
+            application_other_versions: data.application_other_versions,
+            application_level: data.application_level,
+            application_sales: data.application_sales,
+          };
+
+          const template = {
+            template_id: data.template_id,
+            template_name: data.template_name,
+            template_total_applications: data.template_total_applications,
+          };
+
+          // ✅ Succès
+          return {
+            application,
+            template,
+            relatedApplications: relatedApps,
+            platforms,
+            success: true,
+            queryDuration,
+          };
+        } finally {
+          client.release();
         }
+      });
+    } catch (error) {
+      const errorInfo = classifyError(error);
+      const queryDuration = performance.now() - startTime;
 
-        const data = result.rows[0];
-
-        // ✅ Parse JSON aggregations
-        const relatedApps = Array.isArray(data.related_applications)
-          ? data.related_applications
-          : [];
-        const platforms = Array.isArray(data.platforms) ? data.platforms : [];
-
-        // ✅ Construire l'objet application
-        const application = {
-          application_id: data.application_id,
-          application_name: data.application_name,
-          application_link: data.application_link,
-          application_admin_link: data.application_admin_link,
-          application_description: data.application_description,
-          application_category: data.application_category,
-          application_fee: data.application_fee,
-          application_rent: data.application_rent,
-          application_images: data.application_images,
-          application_other_versions: data.application_other_versions,
-          application_level: data.application_level,
-          application_sales: data.application_sales,
-        };
-
-        const template = {
-          template_id: data.template_id,
-          template_name: data.template_name,
-          template_total_applications: data.template_total_applications,
-        };
-
-        // ✅ Succès
-        return {
-          application,
-          template,
-          relatedApplications: relatedApps,
-          platforms,
-          success: true,
+      // ✅ Log erreur détaillé
+      captureException(error, {
+        tags: {
+          component: 'single_application',
+          error_type: errorInfo.type,
+          should_retry: errorInfo.shouldRetry.toString(),
+          http_status: errorInfo.httpStatus.toString(),
+        },
+        extra: {
+          applicationId,
+          templateId,
           queryDuration,
-        };
-      } finally {
-        client.release();
-      }
-    });
-  } catch (error) {
-    const errorInfo = classifyError(error);
-    const queryDuration = performance.now() - startTime;
+          pgErrorCode: error.code,
+          errorMessage: error.message,
+        },
+      });
 
-    // ✅ Log erreur détaillé
-    captureException(error, {
-      tags: {
-        component: 'single_application',
-        error_type: errorInfo.type,
-        should_retry: errorInfo.shouldRetry.toString(),
-        http_status: errorInfo.httpStatus.toString(),
-      },
-      extra: {
-        applicationId,
-        templateId,
-        queryDuration,
-        pgErrorCode: error.code,
-        errorMessage: error.message,
-      },
-    });
-
-    return {
-      application: null,
-      template: null,
-      relatedApplications: [],
-      platforms: [],
-      success: false,
-      errorType: errorInfo.type,
-      httpStatus: errorInfo.httpStatus,
-      userMessage: errorInfo.userMessage,
-      shouldRetry: errorInfo.shouldRetry,
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined,
-    };
-  }
-}
+      return {
+        application: null,
+        template: null,
+        relatedApplications: [],
+        platforms: [],
+        success: false,
+        errorType: errorInfo.type,
+        httpStatus: errorInfo.httpStatus,
+        userMessage: errorInfo.userMessage,
+        shouldRetry: errorInfo.shouldRetry,
+        error:
+          process.env.NODE_ENV === 'development' ? error.message : undefined,
+      };
+    }
+  },
+);
 
 /**
  * ✅ Composant d'erreur réutilisable
+ */
+
+/**
+ * Composant d'erreur pour les pannes DB/timeout sur SingleApplicationPage.
+ * Rendu côté serveur — pas de 'use client'.
+ *
+ * Architecture :
+ * - <Link> utilisé à la place de <a> pour la navigation côté client Next.js
+ * - <ReloadButton> est un Client Component ('use client') importé ici intentionnellement.
+ *   Il crée un boundary client minimal autour du bouton reload uniquement.
+ *   Le reste du composant reste Server-rendered HTML statique.
+ *   Voir : components/reloadButton/index.jsx
  */
 function ApplicationError({
   errorType,
@@ -571,6 +597,7 @@ export default async function SingleApplicationPage({ params }) {
 /**
  * ✅ METADATA OPTIMISÉE
  */
+// Remplace toute la fonction generateMetadata par :
 export async function generateMetadata({ params }) {
   const { id: templateId, appID: appId } = await params;
 
@@ -583,82 +610,52 @@ export async function generateMetadata({ params }) {
     };
   }
 
-  try {
-    const client = await getClient();
-    try {
-      const queryPromise = client.query(
-        `SELECT
-          a.application_name,
-          a.application_description,
-          a.application_category,
-          a.application_images,
-          t.template_name
-        FROM catalog.applications a
-        JOIN catalog.templates t
-          ON a.application_template_id = t.template_id
-        WHERE a.application_id = $1
-          AND a.application_template_id = $2
-          AND a.is_active = true`,
-        [validation.applicationId, validation.templateId],
-      );
+  // Réutilise getApplicationData — résultat en cache si SingleApplicationPage
+  // s'est exécuté avant, sinon exécute la requête et met en cache pour lui
+  const data = await getApplicationData(
+    validation.applicationId,
+    validation.templateId,
+  );
 
-      const result = await withTimeout(queryPromise, 2000, 'Metadata timeout');
-
-      if (result.rows.length > 0) {
-        const app = result.rows[0];
-
-        return {
-          title: `${app.application_name} - ${app.template_name} | Benew`,
-          description:
-            app.application_description ||
-            `Découvrez ${app.application_name} sur Benew.`,
-          keywords: [
-            app.application_name,
-            app.template_name,
-            app.application_category,
-            'e-commerce',
-            'Benew',
-            'Djibouti',
-          ],
-          openGraph: {
-            title: `${app.application_name} - ${app.template_name}`,
-            description:
-              app.application_description ||
-              `Application ${app.application_name}.`,
-            images:
-              app.application_images?.length > 0
-                ? [app.application_images[0]]
-                : [],
-            url: `/templates/${validation.templateId}/applications/${validation.applicationId}`,
-          },
-          alternates: {
-            canonical: `/templates/${validation.templateId}/applications/${validation.applicationId}`,
-          },
-        };
-      }
-    } finally {
-      client.release();
-    }
-  } catch (error) {
-    const errorInfo = classifyError(error);
-
-    captureMessage('Metadata generation failed', {
-      level: 'warning',
-      tags: { component: 'single_application_metadata' },
-      extra: {
-        applicationId: validation.applicationId,
-        templateId: validation.templateId,
-        errorMessage: error.message,
+  if (!data.success || !data.application) {
+    return {
+      title: 'Application - Benew',
+      description: 'Découvrez cette application sur Benew.',
+      openGraph: {
+        title: 'Application Benew',
+        url: `/templates/${validation.templateId}/applications/${validation.applicationId}`,
       },
-    });
+    };
   }
 
+  const { application, template } = data;
+
   return {
-    title: 'Application - Benew',
-    description: 'Découvrez cette application sur Benew.',
+    title: `${application.application_name} - ${template.template_name} | Benew`,
+    description:
+      application.application_description ||
+      `Découvrez ${application.application_name} sur Benew.`,
+    keywords: [
+      application.application_name,
+      template.template_name,
+      application.application_category,
+      'e-commerce',
+      'Benew',
+      'Djibouti',
+    ],
     openGraph: {
-      title: 'Application Benew',
+      title: `${application.application_name} - ${template.template_name}`,
+      description:
+        application.application_description ||
+        `Application ${application.application_name}.`,
+      images:
+        application.application_images?.length > 0
+          ? [application.application_images[0]]
+          : [],
       url: `/templates/${validation.templateId}/applications/${validation.applicationId}`,
+    },
+    alternates: {
+      canonical: `/templates/${validation.templateId}/applications/${validation.applicationId}`,
     },
   };
 }

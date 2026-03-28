@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 // components/templates/SingleApplication.jsx
 'use client';
 
@@ -18,7 +17,6 @@ import { FaX } from 'react-icons/fa6';
 import ParallaxSkeleton from '../layouts/parallax/ParallaxSkeleton';
 const Parallax = dynamic(() => import('components/layouts/parallax'), {
   loading: () => <ParallaxSkeleton />,
-  ssr: true,
 });
 
 import OrderModal from '../modal/OrderModal';
@@ -34,6 +32,8 @@ const ApplicationGalleryCarousel = memo(
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isAutoScrolling, setIsAutoScrolling] = useState(true);
     const [isTransitioning, setIsTransitioning] = useState(false);
+    const touchStartRef = useRef(null); // ← useRef
+    const touchEndRef = useRef(null); // ← useRef
 
     const imageList = useMemo(() => {
       if (!images || images.length === 0) {
@@ -42,45 +42,56 @@ const ApplicationGalleryCarousel = memo(
       return images;
     }, [images]);
 
+    // ✅ 1. setter synchronisé — déclaré en premier
+    const setIsTransitioningSync = useCallback((value) => {
+      isTransitioningRef.current = value;
+      setIsTransitioning(value);
+    }, []);
+
+    // ✅ 2. handleSlideChange — déclaré AVANT les useEffect
+    const handleSlideChange = useCallback(
+      (newIndex) => {
+        if (isTransitioningRef.current) return;
+        setIsTransitioningSync(true);
+        setCurrentSlide(newIndex);
+        setTimeout(() => {
+          setIsTransitioningSync(false);
+        }, 600);
+      },
+      [setIsTransitioningSync],
+    );
+
+    // ✅ 3. useEffect auto-scroll — handleSlideChange existe déjà
     useEffect(() => {
-      if (!isAutoScrolling || imageList.length <= 1 || isTransitioning) {
-        return;
-      }
+      if (!isAutoScrolling || imageList.length <= 1 || isTransitioning) return;
 
       const interval = setInterval(() => {
         handleSlideChange((currentSlide + 1) % imageList.length);
       }, 5000);
 
       return () => clearInterval(interval);
-    }, [isAutoScrolling, imageList.length, currentSlide, isTransitioning]);
+    }, [
+      isAutoScrolling,
+      imageList.length,
+      currentSlide,
+      isTransitioning,
+      handleSlideChange,
+    ]);
 
+    // ✅ 4. useEffect reprendre auto-scroll
     useEffect(() => {
       if (!isAutoScrolling) {
-        const timeout = setTimeout(() => {
-          setIsAutoScrolling(true);
-        }, 15000);
+        const timeout = setTimeout(() => setIsAutoScrolling(true), 15000);
         return () => clearTimeout(timeout);
       }
     }, [isAutoScrolling]);
 
-    const handleSlideChange = useCallback(
-      (newIndex) => {
-        if (isTransitioning) return;
-        setIsTransitioning(true);
-        setCurrentSlide(newIndex);
-        setTimeout(() => {
-          setIsTransitioning(false);
-        }, 600);
-      },
-      [isTransitioning],
-    );
-
+    // ✅ 5. Callbacks — après les useEffect
     const goToSlide = useCallback(
       (index) => {
         if (index === currentSlide || isTransitioning) return;
         setIsAutoScrolling(false);
         handleSlideChange(index);
-
         try {
           trackEvent('gallery_dot_click', {
             event_category: 'gallery',
@@ -94,23 +105,22 @@ const ApplicationGalleryCarousel = memo(
       [currentSlide, isTransitioning, handleSlideChange, applicationId],
     );
 
-    const [touchStart, setTouchStart] = useState(null);
-    const [touchEnd, setTouchEnd] = useState(null);
     const minSwipeDistance = 50;
 
     const onTouchStart = (e) => {
-      setTouchEnd(null);
-      setTouchStart(e.targetTouches[0].clientX);
+      touchEndRef.current = null;
+      touchStartRef.current = e.targetTouches[0].clientX; // ← mutation directe
     };
 
     const onTouchMove = (e) => {
-      setTouchEnd(e.targetTouches[0].clientX);
+      touchEndRef.current = e.targetTouches[0].clientX; // ← 0 re-render
     };
 
     const onTouchEnd = useCallback(() => {
-      if (!touchStart || !touchEnd || isTransitioning) return;
+      if (!touchStartRef.current || !touchEndRef.current || isTransitioning)
+        return;
 
-      const distance = touchStart - touchEnd;
+      const distance = touchStartRef.current - touchEndRef.current;
       const isLeftSwipe = distance > minSwipeDistance;
       const isRightSwipe = distance < -minSwipeDistance;
 
@@ -121,14 +131,8 @@ const ApplicationGalleryCarousel = memo(
           : (currentSlide - 1 + imageList.length) % imageList.length;
         handleSlideChange(nextIndex);
       }
-    }, [
-      touchStart,
-      touchEnd,
-      isTransitioning,
-      currentSlide,
-      imageList.length,
-      handleSlideChange,
-    ]);
+    }, [currentSlide, imageList.length, isTransitioning, handleSlideChange]);
+    // ↑ touchStartRef/touchEndRef retirés des dépendances — refs stables
 
     if (imageList.length === 1) {
       return (
@@ -428,6 +432,9 @@ const SingleApplication = ({ application, template, platforms, context }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeModal, setActiveModal] = useState(null);
 
+  // Ajouter avec les autres états :
+  const [paymentError, setPaymentError] = useState(false);
+
   useEffect(() => {
     if (context?.applicationId && application?.application_name) {
       try {
@@ -441,7 +448,7 @@ const SingleApplication = ({ application, template, platforms, context }) => {
         console.warn('[Analytics] Error:', error);
       }
     }
-  }, []);
+  }, [context?.applicationId, application?.application_name, allImages.length]);
 
   const handleCardClick = useCallback(
     (cardType) => {
@@ -480,9 +487,12 @@ const SingleApplication = ({ application, template, platforms, context }) => {
 
   const handleOrderModalOpen = useCallback(() => {
     if (!platforms || platforms.length === 0) {
-      alert('Paiement indisponible');
+      setPaymentError(true);
+      setTimeout(() => setPaymentError(false), 4000);
       return;
     }
+
+    setPaymentError(false);
 
     try {
       trackEvent('order_modal_open', {
@@ -622,6 +632,12 @@ const SingleApplication = ({ application, template, platforms, context }) => {
                 {!hasPaymentMethods ? 'Indisponible' : 'Commander'}
               </span>
             </button>
+
+            {paymentError && (
+              <div className="payment-error-message" role="alert">
+                Aucune méthode de paiement disponible pour le moment.
+              </div>
+            )}
           </div>
         </div>
       </section>
