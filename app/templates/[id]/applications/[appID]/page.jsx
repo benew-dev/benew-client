@@ -245,25 +245,6 @@ const getApplicationData = cache(
                AND is_active = true
             ) as template_total_applications,
 
-            -- ✅ Applications similaires (JSON aggregation pour performance)
-            (SELECT COALESCE(json_agg(
-              json_build_object(
-                'application_id', app.application_id,
-                'application_name', app.application_name,
-                'application_category', app.application_category,
-                'application_fee', app.application_fee,
-                'application_level', app.application_level,
-                'primary_image', app.application_images[1],
-                'sales_count', app.sales_count
-              ) ORDER BY app.application_level ASC, app.sales_count DESC
-            ), '[]'::json)
-             FROM catalog.applications app
-             WHERE app.application_template_id = $2
-               AND app.application_id != $1
-               AND app.is_active = true
-             LIMIT 6
-            ) as related_applications,
-
             -- ✅ Plateformes de paiement (JSON aggregation avec toutes les colonnes)
             (SELECT COALESCE(json_agg(
               json_build_object(
@@ -323,7 +304,6 @@ const getApplicationData = cache(
             return {
               application: null,
               template: null,
-              relatedApplications: [],
               platforms: [],
               success: false,
               errorType: ERROR_TYPES.NOT_FOUND,
@@ -348,7 +328,6 @@ const getApplicationData = cache(
             return []; // null, undefined, objet inattendu
           };
 
-          const relatedApps = parseJsonAgg(data.related_applications);
           const platforms = parseJsonAgg(data.platforms);
 
           // ✅ Construire l'objet application
@@ -377,7 +356,6 @@ const getApplicationData = cache(
           return {
             application,
             template,
-            relatedApplications: relatedApps,
             platforms,
             success: true,
             queryDuration,
@@ -410,7 +388,6 @@ const getApplicationData = cache(
       return {
         application: null,
         template: null,
-        relatedApplications: [],
         platforms: [],
         success: false,
         errorType: errorInfo.type,
@@ -583,7 +560,6 @@ export default async function SingleApplicationPage({ params }) {
       <SingleApplication
         application={data.application}
         template={data.template}
-        relatedApplications={data.relatedApplications}
         platforms={data.platforms}
         context={{
           templateId: validation.templateId,
