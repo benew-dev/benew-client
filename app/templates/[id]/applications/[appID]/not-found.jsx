@@ -90,20 +90,24 @@ export default function ApplicationDetailNotFound() {
           {/* Titre */}
           <h1 className="error-title">Application Introuvable</h1>
 
-          {/* Badges IDs */}
-          <div className="id-badges">
-            {templateId && (
-              <div className="template-id-badge">Template: {templateId}</div>
-            )}
-            {appId && <div className="app-id-badge">App: {appId}</div>}
-          </div>
-
           {/* Message */}
           <p className="error-message">
             Désolé, l&apos;application que vous recherchez n&apos;existe pas ou
             a été retirée de notre catalogue.
             {templateId && " Explorez d'autres applications de ce template !"}
           </p>
+
+          {/* Bloc debug — dev uniquement */}
+          {process.env.NODE_ENV === 'development' && (
+            <div className="debug-info">
+              <p>
+                <strong>Template ID :</strong> {templateId || 'unknown'}
+              </p>
+              <p>
+                <strong>App ID :</strong> {appId || 'unknown'}
+              </p>
+            </div>
+          )}
 
           {/* Actions */}
           <div className="button-group">

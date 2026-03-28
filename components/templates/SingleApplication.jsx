@@ -689,6 +689,8 @@ const SingleApplication = ({ application, template, platforms, context }) => {
         platforms={platforms}
         applicationId={application.application_id}
         applicationFee={application.application_fee}
+        applicationName={application.application_name}
+        applicationCategory={application.application_category}
       />
     </div>
   );

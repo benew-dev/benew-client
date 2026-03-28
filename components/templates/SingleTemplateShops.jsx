@@ -696,6 +696,8 @@ const SingleTemplateShops = ({
           platforms={platforms}
           applicationId={selectedApp.application_id}
           applicationFee={selectedApp.application_fee}
+          applicationName={selectedApp.application_name}
+          applicationCategory={selectedApp.application_category}
         />
       )}
 

@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import './error.scss';
+// Ajouter l'import :
+import * as Sentry from '@sentry/nextjs';
+import { trackEvent } from '@/utils/analytics'; // ← utiliser trackEvent comme les autres, pas window.dataLayer directement
 
 /**
  * ✅ ERROR BOUNDARY OPTIMISÉ
@@ -21,20 +24,49 @@ export default function ApplicationDetailError({ error, reset }) {
   const MAX_RETRIES = 3;
 
   // ✅ Tracking analytics (simple et sécurisé)
+
+  // useEffect Sentry — capture une seule fois
   useEffect(() => {
-    if (error && typeof window !== 'undefined' && window.dataLayer) {
-      try {
-        window.dataLayer.push({
-          event: 'error_boundary_shown',
-          page: 'application_detail',
-          template_id: templateId || 'unknown',
-          app_id: appId || 'unknown',
-          error_name: error?.name || 'Unknown',
-          timestamp: Date.now(),
-        });
-      } catch (e) {
-        console.warn('[Analytics] Error tracking failed:', e);
-      }
+    if (!error) return;
+
+    Sentry.captureException(error, {
+      tags: {
+        component: 'application_detail_error_boundary',
+        page: 'application_detail',
+        error_type: 'client_side_error',
+        template_id: templateId || 'unknown',
+        app_id: appId || 'unknown',
+      },
+      extra: {
+        errorName: error?.name || 'Unknown',
+        errorMessage: error?.message || 'No message',
+        errorStack: error?.stack?.substring(0, 500),
+        templateId,
+        appId,
+      },
+      level: 'error',
+    });
+  }, [error, templateId, appId]); // retryCount absent intentionnellement
+
+  // useEffect Analytics — séparé
+  useEffect(() => {
+    if (!error) return;
+
+    try {
+      trackEvent('error_boundary_shown', {
+        event_category: 'errors',
+        event_label: 'application_detail_error',
+        error_name: error?.name || 'Unknown',
+        error_message: error?.message?.substring(0, 100) || 'No message',
+        template_id: templateId || 'unknown',
+        app_id: appId || 'unknown',
+        page: 'application_detail',
+      });
+    } catch (analyticsError) {
+      console.warn(
+        '[Analytics] Error tracking error boundary:',
+        analyticsError,
+      );
     }
   }, [error, templateId, appId]);
 
@@ -49,18 +81,16 @@ export default function ApplicationDetailError({ error, reset }) {
     setRetryCount(currentRetry);
 
     // Analytics
-    if (typeof window !== 'undefined' && window.dataLayer) {
-      try {
-        window.dataLayer.push({
-          event: 'error_retry_attempt',
-          page: 'application_detail',
-          template_id: templateId,
-          app_id: appId,
-          retry_number: currentRetry,
-        });
-      } catch (e) {
-        console.warn('[Analytics] Retry tracking failed:', e);
-      }
+    try {
+      trackEvent('error_retry_attempt', {
+        event_category: 'errors',
+        event_label: 'application_detail_retry',
+        retry_number: currentRetry,
+        template_id: templateId,
+        app_id: appId,
+      });
+    } catch (e) {
+      console.warn('[Analytics] Retry tracking failed:', e);
     }
 
     // ✅ Backoff exponentiel: 1s, 2s, 4s

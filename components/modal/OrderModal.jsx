@@ -1,7 +1,7 @@
 // components/modal/OrderModal.jsx
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { createOrder } from '../../actions/orderActions';
 import './orderStyles/index.scss';
 
@@ -12,12 +12,24 @@ import {
 } from '@/utils/analytics';
 import { formatPrice } from '@/utils/helpers';
 
+// Valeurs initiales extraites pour pouvoir les réutiliser proprement
+const INITIAL_FORM_DATA = {
+  name: '',
+  email: '',
+  phone: '',
+  paymentMethod: '',
+  accountName: '',
+  accountNumber: '',
+};
+
 const OrderModal = ({
   isOpen,
   onClose,
   platforms,
   applicationId,
   applicationFee,
+  applicationName, // ← ajouter
+  applicationCategory, // ← ajouter
 }) => {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -31,6 +43,9 @@ const OrderModal = ({
     accountNumber: '',
   });
 
+  // Ajouter une ref sur la modale
+  const modalRef = useRef(null);
+
   // Trouver la plateforme sélectionnée
   const selectedPlatform = platforms?.find(
     (p) => p.platform_id === formData.paymentMethod,
@@ -38,16 +53,85 @@ const OrderModal = ({
   const isCashPayment = selectedPlatform?.is_cash_payment || false;
 
   // ✅ FILTRER LES PLATEFORMES ÉLECTRONIQUES (non-CASH)
-  const electronicPlatforms = useMemo(() => {
-    if (!platforms || platforms.length === 0) return [];
+  const electronicPlatforms = !platforms
+    ? []
+    : platforms.filter(
+        (platform) =>
+          !platform.is_cash_payment &&
+          platform.account_name &&
+          platform.account_number,
+      );
 
-    return platforms.filter(
-      (platform) =>
-        !platform.is_cash_payment &&
-        platform.account_name &&
-        platform.account_number,
-    );
-  }, [platforms]);
+  // Focus trap + focus initial à l'ouverture
+  useEffect(() => {
+    if (!isOpen) return;
+
+    // Déplacer le focus dans la modale à l'ouverture
+    const previousFocus = document.activeElement;
+    modalRef.current?.focus();
+
+    const handleFocusTrap = (e) => {
+      if (!modalRef.current) return;
+
+      // Tous les éléments focusables dans la modale
+      const focusableSelectors = [
+        'button:not([disabled])',
+        'input:not([disabled])',
+        'select:not([disabled])',
+        'textarea:not([disabled])',
+        'a[href]',
+        '[tabindex]:not([tabindex="-1"])',
+      ].join(', ');
+
+      const focusableElements = Array.from(
+        modalRef.current.querySelectorAll(focusableSelectors),
+      );
+
+      if (focusableElements.length === 0) return;
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (e.key === 'Tab') {
+        if (e.shiftKey) {
+          // Shift+Tab : si on est sur le premier élément, aller au dernier
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          // Tab : si on est sur le dernier élément, aller au premier
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleFocusTrap);
+
+    return () => {
+      document.removeEventListener('keydown', handleFocusTrap);
+      // Rendre le focus à l'élément qui avait le focus avant l'ouverture
+      previousFocus?.focus();
+    };
+  }, [isOpen, step]); // ← step en dépendance car les éléments focusables changent entre étapes
+
+  // Reset à chaque fermeture
+  useEffect(() => {
+    if (!isOpen) {
+      // Délai court pour laisser l'animation de fermeture se terminer
+      // avant de réinitialiser — évite un flash visuel du contenu réinitialisé
+      const timeout = setTimeout(() => {
+        setStep(1);
+        setError('');
+        setFormData(INITIAL_FORM_DATA);
+      }, 300);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [isOpen]);
 
   // Tracker l'ouverture/fermeture de la modal
   useEffect(() => {
@@ -61,6 +145,8 @@ const OrderModal = ({
   }, [isOpen, applicationId]);
 
   const closeModal = () => {
+    if (isSubmitting) return; // ← ne pas fermer pendant le traitement
+
     try {
       trackModalClose('order_modal', 'user_close');
     } catch (error) {
@@ -93,10 +179,22 @@ const OrderModal = ({
       return false;
     }
 
-    const phoneRegex = /^\d{8,}$/;
-    if (!phoneRegex.test(formData.phone.replace(/\D/g, ''))) {
+    // Nettoyer le numéro — retirer espaces, tirets, indicatif pays
+    const cleanPhone = formData.phone
+      .replace(/\D/g, '') // supprimer tout sauf les chiffres
+      .replace(/^253/, ''); // retirer l'indicatif +253 si présent
+
+    // Numéros djiboutiens : 8 chiffres, préfixes mobiles connus
+    const djiboutiMobileRegex = /^(77|70|71)\d{6}$/;
+    // Numéros fixes djiboutiens : commencent par 21 ou 25
+    const djiboutiFixedRegex = /^(21|25)\d{6}$/;
+
+    if (
+      !djiboutiMobileRegex.test(cleanPhone) &&
+      !djiboutiFixedRegex.test(cleanPhone)
+    ) {
       setError(
-        'Veuillez fournir un numéro de téléphone valide (min. 8 chiffres)',
+        'Veuillez fournir un numéro djiboutien valide (ex: 77 83 12 34)',
       );
       return false;
     }
@@ -174,8 +272,8 @@ const OrderModal = ({
           {
             application_id: applicationId,
             application_fee: applicationFee,
-            application_name: `Application ${applicationId}`,
-            application_category: 'web',
+            application_name: applicationName || `Application ${applicationId}`,
+            application_category: applicationCategory || 'unknown',
           },
           result.orderId || Date.now().toString(),
           formData.paymentMethod,
@@ -201,8 +299,19 @@ const OrderModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="modalOverlay">
-      <div className="modal">
+    <div
+      className="modalOverlay"
+      onClick={closeModal} // ← clic overlay ferme la modale
+      role="dialog"
+      aria-modal="true"
+      aria-label="Formulaire de commande"
+    >
+      <div
+        className="modal"
+        onClick={(e) => e.stopPropagation()} // ← empêche la propagation vers l'overlay
+        ref={modalRef}
+        tabIndex={-1} // ← permet de recevoir le focus programmatiquement sans être dans l'ordre Tab naturel
+      >
         <div className="modal-content">
           {error && <div className="errorMessage">{error}</div>}
 

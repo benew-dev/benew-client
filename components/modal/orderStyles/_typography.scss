@@ -6,7 +6,8 @@
 // ================================
 
 // clamp : 1.25rem (360px) → 1.5rem (1280px)
-h2 {
+.modal h2,
+.step h2 {
   color: $primary-color;
   border-bottom: 1px solid rgba($primary-color, 0.4);
   text-shadow: 0 2px 4px rgba($background-color, 0.5);

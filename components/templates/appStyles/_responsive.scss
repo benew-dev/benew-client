@@ -6,15 +6,6 @@
 // ================================
 
 @include mobile-landscape {
-  .app-header-section .app-header-container {
-    padding: 1rem 0.75rem;
-  }
-  .app-details-section .app-details-container {
-    padding: 1rem 0.75rem;
-  }
-  .app-header {
-    gap: 1.5rem;
-  }
   .title-block .app-title {
     font-size: 2rem;
   }
@@ -24,13 +15,6 @@
 }
 
 @include tall-screen {
-  .app-header-container,
-  .app-details-container {
-    @include below-desktop {
-      gap: 3rem;
-    }
-  }
-
   .description-content .description-text {
     @include below-desktop {
       max-height: 220px;
