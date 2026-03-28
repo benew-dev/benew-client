@@ -79,7 +79,7 @@
   justify-content: center;
   flex-wrap: wrap;
 }
-
+// Un seul bloc .cta-button au lieu de deux :
 .cta-button {
   display: inline-flex;
   align-items: center;
@@ -93,32 +93,32 @@
   transition: all 0.3s ease;
   min-height: 48px;
   border: none;
-}
 
-.cta-button.primary {
-  background: linear-gradient(135deg, #f6a037, #f266b0);
-  color: #0c0c1a;
-  box-shadow: 0 4px 15px rgba(246, 160, 55, 0.3);
-}
+  &.primary {
+    background: linear-gradient(135deg, $primary-color, $secondary-color);
+    color: $background-color;
+    box-shadow: 0 4px 15px rgba($primary-color, 0.3);
 
-.cta-button.primary:hover {
-  background: linear-gradient(135deg, #f266b0, #9e1f9d);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(242, 102, 176, 0.4);
-}
+    &:hover {
+      background: linear-gradient(135deg, $secondary-color, $accent-color);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba($secondary-color, 0.4);
+    }
+  }
 
-.cta-button.secondary {
-  background: transparent;
-  color: #f6a037;
-  border: 2px solid #f6a037;
-  backdrop-filter: blur(10px);
-}
+  &.secondary {
+    background: transparent;
+    color: $primary-color;
+    border: 2px solid $primary-color;
+    backdrop-filter: blur(10px);
 
-.cta-button.secondary:hover {
-  background: rgba(246, 160, 55, 0.15);
-  border-color: #f266b0;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(246, 160, 55, 0.3);
+    &:hover {
+      background: rgba($primary-color, 0.15);
+      border-color: $secondary-color;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba($primary-color, 0.3);
+    }
+  }
 }
 
 .cta-button.outline {
