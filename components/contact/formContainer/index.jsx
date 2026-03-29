@@ -86,8 +86,10 @@ const StatusMessage = memo(({ type, message }) => (
 StatusMessage.displayName = 'StatusMessage';
 
 // Composant principal simplifié
-const FormContainer = ({ ref }) => {
+const FormContainer = () => {
   const formRef = useRef();
+  const containerRef = useRef(); // ← ref interne pour useInView
+
   const [formState, setFormState] = useState({
     error: false,
     success: false,
@@ -97,7 +99,7 @@ const FormContainer = ({ ref }) => {
 
   const formOpenedAt = useRef(Date.now());
 
-  const isInView = useInView(ref, { margin: '-100px' });
+  const isInView = useInView(containerRef, { margin: '-100px' });
 
   // Handler de soumission optimisé
   const handleSubmit = useCallback(async (e) => {
@@ -175,7 +177,7 @@ const FormContainer = ({ ref }) => {
   }, []);
 
   return (
-    <div className="formContainer">
+    <div className="formContainer" ref={containerRef}>
       <PhoneSvg isInView={isInView} />
 
       <motion.form
@@ -183,7 +185,7 @@ const FormContainer = ({ ref }) => {
         onSubmit={handleSubmit}
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
-        transition={{ delay: 4, duration: 1 }}
+        transition={{ delay: 0.5, duration: 0.6 }}
       >
         <FormField
           type="text"

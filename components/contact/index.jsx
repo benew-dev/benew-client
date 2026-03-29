@@ -18,16 +18,16 @@ import PageTracker from '../analytics/PageTracker';
 import Parallax from '../layouts/parallax';
 
 // Composant d'en-tête de contact mémorisé
-const ContactHeader = memo(({ isCollapsed, onToggle }) => (
-  <div className="collapsible-header" onClick={onToggle}>
-    <h2>Coordonnées</h2>
-    <MdKeyboardArrowDown
-      className={`toggle-icon ${!isCollapsed ? 'open' : ''}`}
-    />
-  </div>
-));
+// const ContactHeader = memo(({ isCollapsed, onToggle }) => (
+//   <div className="collapsible-header" onClick={onToggle}>
+//     <h2>Coordonnées</h2>
+//     <MdKeyboardArrowDown
+//       className={`toggle-icon ${!isCollapsed ? 'open' : ''}`}
+//     />
+//   </div>
+// ));
 
-ContactHeader.displayName = 'ContactHeader';
+// ContactHeader.displayName = 'ContactHeader';
 
 // Composant d'élément de contact mémorisé
 const ContactItem = memo(({ icon: Icon, text, variants }) => (
@@ -42,30 +42,22 @@ const ContactItem = memo(({ icon: Icon, text, variants }) => (
 ContactItem.displayName = 'ContactItem';
 
 // Composant des informations de contact mémorisé
-const ContactInfo = memo(({ isCollapsed, variants }) => (
-  <div className={`collapsible-content ${!isCollapsed ? 'open' : ''}`}>
-    <div className="content-wrapper">
-      {/* Titre principal - Desktop uniquement */}
-      <motion.h1 variants={variants}>Coordonnées</motion.h1>
-
-      <ContactItem icon={MdPhone} text="77.86.00.64" variants={variants} />
-
-      <ContactItem icon={MdPhone} text="77.19.68.18" variants={variants} />
-
-      <ContactItem icon={MdWhatsapp} text="77.19.68.18" variants={variants} />
-
-      <ContactItem
-        icon={MdMail}
-        text="benew-tech@benew-dj.com"
-        variants={variants}
-      />
-
-      <ContactItem
-        icon={MdMail}
-        text="service-client@benew-dj.com"
-        variants={variants}
-      />
-    </div>
+const ContactInfo = memo(({ variants }) => (
+  <div className="content-wrapper">
+    <motion.h1 variants={variants}>Coordonnées</motion.h1>
+    <ContactItem icon={MdPhone} text="77.86.00.64" variants={variants} />
+    <ContactItem icon={MdPhone} text="77.19.68.18" variants={variants} />
+    <ContactItem icon={MdWhatsapp} text="77.19.68.18" variants={variants} />
+    <ContactItem
+      icon={MdMail}
+      text="benew-tech@benew-dj.com"
+      variants={variants}
+    />
+    <ContactItem
+      icon={MdMail}
+      text="service-client@benew-dj.com"
+      variants={variants}
+    />
   </div>
 ));
 
@@ -90,19 +82,19 @@ const variants = {
 // Composant principal
 const Contact = () => {
   const ref = useRef();
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  // const [isCollapsed, setIsCollapsed] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Handler pour le toggle optimisé
-  const handleToggle = useCallback(() => {
-    trackEvent('contact_info_toggle', {
-      event_category: 'contact',
-      event_label: isCollapsed ? 'expand' : 'collapse',
-      action: isCollapsed ? 'expand' : 'collapse',
-    });
+  // const handleToggle = useCallback(() => {
+  //   trackEvent('contact_info_toggle', {
+  //     event_category: 'contact',
+  //     event_label: isCollapsed ? 'expand' : 'collapse',
+  //     action: isCollapsed ? 'expand' : 'collapse',
+  //   });
 
-    setIsCollapsed((prev) => !prev);
-  }, [isCollapsed]);
+  //   setIsCollapsed((prev) => !prev);
+  // }, [isCollapsed]);
 
   // Handler pour l'ouverture de la modal
   const handleOpenModal = useCallback(() => {
@@ -167,13 +159,11 @@ const Contact = () => {
         >
           {/* TextContainer - Visible uniquement sur DESKTOP */}
           <motion.div className="textContainer" variants={variants}>
-            <ContactHeader isCollapsed={isCollapsed} onToggle={handleToggle} />
-
-            <ContactInfo isCollapsed={isCollapsed} variants={variants} />
+            <ContactInfo variants={variants} />
           </motion.div>
 
           {/* FormContainer - Toujours visible, centré sur mobile */}
-          <FormContainer ref={ref} />
+          <FormContainer />
         </motion.div>
       </section>
     </div>
