@@ -3,7 +3,6 @@
 // Next.js 15 + PostgreSQL + Monitoring complet + Gestion d'erreurs avancée + Query Timeout
 
 import { Suspense } from 'react';
-import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
 import TemplatesList from '@/components/templates/TemplatesList';
@@ -241,6 +240,10 @@ async function getTemplates() {
       const client = await getClient();
 
       try {
+        // Définir le timeout PostgreSQL sur cette connexion spécifiquement
+        // plus court que le statement_timeout global (10s) du pool
+        await client.query('SET LOCAL statement_timeout = 5000');
+
         // Query avec timeout intégré - ✅ CORRIGÉ: template_images (pluriel)
         const queryPromise = client.query(`
           SELECT

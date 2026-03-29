@@ -228,6 +228,8 @@ export async function createOrder(
 
         client = await getClient();
 
+        await client.query('SET LOCAL statement_timeout = 5000');
+
         // Vérifier que l'application existe et est active
         const appCheck = await withTimeout(
           client.query(

@@ -111,16 +111,32 @@ async function getDatabaseConfig() {
     host: process.env.DB_HOST_NAME || process.env.DB_HOST,
     port: Number(process.env.DB_PORT) || 5432,
     database: process.env.DB_NAME,
-    username: process.env.DB_USER_NAME || process.env.DB_USER,
+    user: process.env.DB_USER_NAME || process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     ssl:
       process.env.NODE_ENV === 'production'
-        ? {
-            rejectUnauthorized: false,
-            ...(certificate && { ca: certificate }),
-          }
+        ? certificate
+          ? {
+              rejectUnauthorized: true, // ← vérification activée si on a le CA
+              ca: certificate,
+            }
+          : {
+              rejectUnauthorized: false, // ← fallback sans CA — accepté mais loggé
+            }
         : false,
   };
+
+  if (!certificate) {
+    // ← warning visible dans les logs Vercel/PM2
+    console.warn(
+      '[DB] ⚠️ Certificat CA non trouvé — connexion SSL sans vérification. ' +
+        'Risque MITM si la DB est sur un réseau non sécurisé.',
+    );
+    captureMessage('SSL connection without certificate verification', {
+      level: 'warning',
+      tags: { component: 'database_pool', security: 'ssl_no_verify' },
+    });
+  }
 
   if (CONFIG.logging.enabled) {
     console.log(`[${getTimestamp()}] ✅ Configuration base de données chargée`);
@@ -140,7 +156,7 @@ async function createPool() {
     host: config.host,
     port: config.port,
     database: config.database,
-    user: config.username,
+    user: config.user,
     password: config.password,
     ssl: config.ssl,
 
