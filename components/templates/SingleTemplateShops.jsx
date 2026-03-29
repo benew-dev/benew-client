@@ -23,6 +23,7 @@ const Parallax = dynamic(() => import('components/layouts/parallax'), {
 import { formatPrice, getApplicationLevelLabel } from '@/utils/helpers';
 import { trackEvent } from '@/utils/analytics';
 import PageTracker from '../analytics/PageTracker';
+import AppImage from './AppImage';
 
 const OrderModal = dynamic(() => import('../modal/OrderModal'), {
   loading: () => (
@@ -31,40 +32,6 @@ const OrderModal = dynamic(() => import('../modal/OrderModal'), {
     </div>
   ),
 });
-
-// Ajouter en haut du fichier, avec les autres composants mémoïsés
-const AppImage = memo(({ src, alt, width, height, className, loading }) => {
-  const [hasError, setHasError] = useState(false);
-
-  if (hasError) {
-    return (
-      <img
-        src="/placeholder-application.png"
-        alt={alt}
-        width={width}
-        height={height}
-        className={className}
-      />
-    );
-  }
-
-  return (
-    <CldImage
-      src={src}
-      alt={alt}
-      width={width}
-      height={height}
-      className={className}
-      loading={loading}
-      quality="auto"
-      format="auto"
-      crop={{ type: 'fit', gravity: 'auto' }}
-      onError={() => setHasError(true)}
-    />
-  );
-});
-
-AppImage.displayName = 'AppImage';
 
 // =============================
 // COMPOSANT GALLERYMODAL AVEC IMAGES COMBINÉES

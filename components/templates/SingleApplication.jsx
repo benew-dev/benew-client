@@ -23,6 +23,7 @@ import OrderModal from '../modal/OrderModal';
 import { formatPrice, getApplicationLevelLabel } from '@/utils/helpers';
 import { trackEvent } from '@/utils/analytics';
 import PageTracker from '../analytics/PageTracker';
+import AppImage from './AppImage';
 
 // =============================
 // ✅ CAROUSEL GALERIE OPTIMISÉ - SANS FLÈCHES
@@ -139,19 +140,14 @@ const ApplicationGalleryCarousel = memo(
     if (imageList.length === 1) {
       return (
         <div className="gallery-single-image">
-          <CldImage
+          <AppImage
             src={imageList[0]}
             alt={applicationName}
             width={800}
             height={600}
             className="gallery-image-solo"
             loading="eager"
-            quality="auto"
-            format="auto"
             crop={{ type: 'fit', gravity: 'center' }}
-            onError={(e) => {
-              e.currentTarget.src = '/placeholder-application.png';
-            }}
           />
         </div>
       );
@@ -182,19 +178,14 @@ const ApplicationGalleryCarousel = memo(
                 key={index}
                 className={`gallery-carousel-slide ${slidePosition}`}
               >
-                <CldImage
+                <AppImage
                   src={imgUrl}
                   alt={`${applicationName} - Image ${index + 1}`}
                   width={800}
                   height={600}
                   className="gallery-carousel-image"
                   loading={index === 0 ? 'eager' : 'lazy'}
-                  quality="auto"
-                  format="auto"
                   crop={{ type: 'fit', gravity: 'center' }}
-                  onError={(e) => {
-                    e.currentTarget.src = '/placeholder-application.png';
-                  }}
                 />
               </div>
             );
