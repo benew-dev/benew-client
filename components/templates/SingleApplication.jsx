@@ -4,7 +4,6 @@
 import dynamic from 'next/dynamic';
 import './appStyles/index.scss';
 import { useEffect, useState, useCallback, memo, useMemo, useRef } from 'react';
-import { CldImage } from 'next-cloudinary';
 import Link from 'next/link';
 import {
   MdDescription,

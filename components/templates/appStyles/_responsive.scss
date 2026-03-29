@@ -58,21 +58,12 @@
 }
 
 @include from('large-1920') {
-  .app-header-container,
-  .app-details-container {
-    max-width: 1600px;
-  }
   .title-block .app-title {
     font-size: 3rem;
   }
 }
 
 @media (max-width: 359px) {
-  .app-header-container,
-  .app-details-container {
-    padding: 0 0.75rem;
-    gap: 2rem;
-  }
   .title-block .app-title {
     font-size: 2rem;
   }
