@@ -269,8 +269,8 @@ export async function sendContactEmail(formData) {
     async () => {
       // 1. Vérification config env
       if (
-        !process.env.RESEND_API_KEY &&
-        !process.env.RESEND_TO_EMAIL &&
+        !process.env.RESEND_API_KEY ||
+        !process.env.RESEND_TO_EMAIL ||
         !process.env.RESEND_FROM_EMAIL
       ) {
         captureMessage('Resend configuration incomplete', {

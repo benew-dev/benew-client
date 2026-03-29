@@ -104,9 +104,6 @@ const FormContainer = ({ ref }) => {
 
     const fillTime = Date.now() - formOpenedAt.current;
 
-    const formData = new FormData(e.target);
-    formData.set('_fillTime', fillTime.toString());
-
     // Réinitialiser les états
     setFormState({
       error: false,
@@ -122,6 +119,8 @@ const FormContainer = ({ ref }) => {
 
     try {
       const formData = new FormData(formRef.current);
+      formData.set('_fillTime', fillTime.toString());
+
       const result = await sendContactEmail(formData);
 
       if (result.success) {
@@ -213,7 +212,6 @@ const FormContainer = ({ ref }) => {
           isTextarea
           rows={8}
         />
-        <input type="hidden" name="_fillTime" value={fillTime} />
 
         {/* Honeypot — à la fin, avant le bouton */}
         <input
