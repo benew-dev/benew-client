@@ -185,7 +185,7 @@ const FormContainer = () => {
         onSubmit={handleSubmit}
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
-        transition={{ delay: 0.5, duration: 0.6 }}
+        transition={{ delay: 4, duration: 1 }}
       >
         <FormField
           type="text"
