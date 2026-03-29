@@ -102,51 +102,6 @@
 /* ==========================================
    BADGES IDS
 ========================================== */
-.id-badges {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.8rem;
-  margin-bottom: 1.5rem;
-
-  @include until('small-sm') {
-    flex-direction: column;
-    align-items: center;
-    gap: 0.6rem;
-  }
-
-  @include from('medium-sm') {
-    flex-direction: row;
-  }
-}
-
-.template-id-badge,
-.app-id-badge {
-  display: inline-block;
-  border-radius: 20px;
-  font-family: monospace;
-  border: 1px solid rgba($color-orange, 0.3);
-  font-weight: 600;
-
-  padding: 0.3rem 1rem;
-  font-size: 0.8rem;
-
-  @include from('small-lg') {
-    padding: 0.4rem 1.2rem;
-    font-size: 0.9rem;
-  }
-}
-
-.template-id-badge {
-  background: rgba($color-orange, 0.1);
-  color: $color-orange;
-}
-
-.app-id-badge {
-  background: rgba($color-pink, 0.1);
-  color: $color-pink;
-  border-color: rgba($color-pink, 0.3);
-}
 
 .error-message {
   color: $text-color-muted;

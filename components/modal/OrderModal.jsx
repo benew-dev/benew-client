@@ -107,6 +107,11 @@ const OrderModal = ({
           }
         }
       }
+
+      // Dans le useEffect du focus trap, ajouter :
+      if (e.key === 'Escape') {
+        closeModal();
+      }
     };
 
     document.addEventListener('keydown', handleFocusTrap);

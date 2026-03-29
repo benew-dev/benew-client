@@ -35,6 +35,8 @@ const ApplicationGalleryCarousel = memo(
     const touchStartRef = useRef(null); // ← useRef
     const touchEndRef = useRef(null); // ← useRef
 
+    const isTransitioningRef = useRef(false); // ← à ajouter
+
     const imageList = useMemo(() => {
       if (!images || images.length === 0) {
         return ['/placeholder-application.png'];
