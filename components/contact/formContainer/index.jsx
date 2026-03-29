@@ -92,6 +92,7 @@ const FormContainer = ({ ref }) => {
     error: false,
     success: false,
     loading: false,
+    message: '',
   });
 
   const formOpenedAt = useRef(Date.now());
@@ -128,6 +129,7 @@ const FormContainer = ({ ref }) => {
           error: false,
           success: true,
           loading: false,
+          message: result.message,
         });
 
         // Tracker le succès
@@ -158,6 +160,7 @@ const FormContainer = ({ ref }) => {
         error: true,
         success: false,
         loading: false,
+        message: result.message,
       });
 
       // Tracker l'erreur technique
@@ -237,17 +240,11 @@ const FormContainer = ({ ref }) => {
         </button>
 
         {formState.error && (
-          <StatusMessage
-            type="error"
-            message="Erreur lors de l'envoi du message"
-          />
+          <StatusMessage type="error" message={formState.message} />
         )}
 
         {formState.success && (
-          <StatusMessage
-            type="success"
-            message="Message envoyé avec succès !"
-          />
+          <StatusMessage type="success" message={formState.message} />
         )}
       </motion.form>
     </div>
