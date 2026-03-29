@@ -145,6 +145,7 @@ const FormContainer = ({ ref }) => {
           error: true,
           success: false,
           loading: false,
+          message: result.message,
         });
 
         // Tracker l'erreur
@@ -160,7 +161,8 @@ const FormContainer = ({ ref }) => {
         error: true,
         success: false,
         loading: false,
-        message: result.message,
+        message:
+          'Problème de connexion. Vérifiez votre connexion internet et réessayez.',
       });
 
       // Tracker l'erreur technique

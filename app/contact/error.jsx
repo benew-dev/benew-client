@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { trackEvent } from '@/utils/analytics';
 import Link from 'next/link';
 import './error.scss';
 
@@ -12,18 +13,25 @@ import './error.scss';
 export default function ContactError({ error, reset }) {
   const [retryCount, setRetryCount] = useState(0);
   const [isRetrying, setIsRetrying] = useState(false);
+  const timeoutRef = useRef(null);
   const MAX_RETRIES = 3;
 
   // Log simple pour suivi des interactions utilisateur (tracking uniquement)
   useEffect(() => {
-    if (error && typeof window !== 'undefined' && window.dataLayer) {
-      window.dataLayer.push({
-        event: 'error_boundary_shown',
+    if (error) {
+      trackEvent('error_boundary_shown', {
         page: 'contact',
         error_name: error?.name || 'Unknown',
       });
     }
   }, [error]);
+
+  // Cleanup au démontage
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   /**
    * Gestion du retry avec délai simple
@@ -34,7 +42,6 @@ export default function ContactError({ error, reset }) {
     setIsRetrying(true);
     setRetryCount((prev) => prev + 1);
 
-    // Track retry attempt (analytics uniquement)
     if (typeof window !== 'undefined' && window.dataLayer) {
       window.dataLayer.push({
         event: 'error_retry_attempt',
@@ -43,10 +50,9 @@ export default function ContactError({ error, reset }) {
       });
     }
 
-    // Délai simple (1s, 2s, 3s)
     const delay = Math.min(1000 * (retryCount + 1), 3000);
 
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       setIsRetrying(false);
       reset();
     }, delay);
@@ -117,29 +123,28 @@ export default function ContactError({ error, reset }) {
           </div>
 
           {/* Alternatives de contact */}
-          <div className="contact-alternatives">
-            <h3 className="alternatives-title">
-              Autres moyens de nous contacter :
-            </h3>
-            <div className="alternatives-list">
-              <div className="alternative-item">
-                <span className="alternative-icon">📱</span>
-                <span className="alternative-text">
-                  Téléphone : +253 XX XX XX XX
-                </span>
-              </div>
-              <div className="alternative-item">
-                <span className="alternative-icon">📧</span>
-                <span className="alternative-text">
-                  Email : contact@benew.dj
-                </span>
-              </div>
-              <div className="alternative-item">
-                <span className="alternative-icon">💬</span>
-                <span className="alternative-text">
-                  WhatsApp : +253 XX XX XX XX
-                </span>
-              </div>
+          <div className="alternatives-list">
+            <div className="alternative-item">
+              <span className="alternative-icon">📱</span>
+              <span className="alternative-text">Téléphone : 77.86.00.64</span>
+            </div>
+            <div className="alternative-item">
+              <span className="alternative-icon">📱</span>
+              <span className="alternative-text">Téléphone : 77.19.68.18</span>
+            </div>
+            <div className="alternative-item">
+              <span className="alternative-icon">💬</span>
+              <span className="alternative-text">WhatsApp : 77.19.68.18</span>
+            </div>
+            <div className="alternative-item">
+              <span className="alternative-icon">📧</span>
+              <span className="alternative-text">benew-tech@benew-dj.com</span>
+            </div>
+            <div className="alternative-item">
+              <span className="alternative-icon">📧</span>
+              <span className="alternative-text">
+                service-client@benew-dj.com
+              </span>
             </div>
           </div>
 

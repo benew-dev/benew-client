@@ -97,6 +97,7 @@ function detectBot(data, metadata = {}) {
 // quasi-simultanément peut passer. Protection principale = rate limiter.
 // Si passage en multi-process → migrer vers vérification PostgreSQL.
 const recentEmails = new Map();
+const RECENT_EMAILS_MAX_SIZE = 500; // ~500 users/jour, large margin
 
 function checkDuplicate(email, subject) {
   const key = `${email}:${subject}`;
@@ -106,6 +107,16 @@ function checkDuplicate(email, subject) {
   for (const [k, timestamp] of recentEmails.entries()) {
     if (now - timestamp > 5 * 60 * 1000) {
       recentEmails.delete(k);
+    }
+  }
+
+  // Sécurité : si la Map est encore trop grande après nettoyage
+  // (rafale de bots avec sujets variés), vider les entrées les plus anciennes
+  if (recentEmails.size >= RECENT_EMAILS_MAX_SIZE) {
+    const overflow = recentEmails.size - RECENT_EMAILS_MAX_SIZE + 1;
+    const keys = recentEmails.keys();
+    for (let i = 0; i < overflow; i++) {
+      recentEmails.delete(keys.next().value);
     }
   }
 
@@ -141,6 +152,16 @@ async function executeWithRetry(operation, maxAttempts = 2) {
       return await operation();
     } catch (error) {
       lastError = error;
+
+      // Erreurs non-retriables : inutile de réessayer
+      const statusCode = error.statusCode || error.status;
+      const isNonRetriable =
+        statusCode === 429 || // Quota dépassé — retry aggrave le problème
+        (statusCode >= 400 && statusCode < 500); // Erreurs client (4xx)
+
+      if (isNonRetriable) {
+        throw error; // Sortir immédiatement sans retry
+      }
 
       if (attempt < maxAttempts) {
         const delay = Math.pow(2, attempt) * 1000;
