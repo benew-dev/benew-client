@@ -119,6 +119,17 @@ function checkDuplicate(email, subject) {
   return { isDuplicate: false };
 }
 
+// Ajouter en tête du fichier, avec les autres utilitaires
+function escapeHtml(str) {
+  if (!str || typeof str !== 'string') return '';
+  return str
+    .replace(/&/g, '&amp;') // ← en premier, sinon les & des autres remplacements sont doublés
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;');
+}
+
 // =============================
 // ✅ RETRY LOGIC AVEC BACKOFF
 // =============================
@@ -258,8 +269,8 @@ export async function sendContactEmail(formData) {
     async () => {
       // 1. Vérification config env
       if (
-        !process.env.RESEND_API_KEY ||
-        !process.env.RESEND_TO_EMAIL ||
+        !process.env.RESEND_API_KEY &&
+        !process.env.RESEND_TO_EMAIL &&
         !process.env.RESEND_FROM_EMAIL
       ) {
         captureMessage('Resend configuration incomplete', {
@@ -380,24 +391,19 @@ export async function sendContactEmail(formData) {
             to: process.env.RESEND_TO_EMAIL,
             subject: `[Contact Benew] ${data.subject}`,
             html: `
-              <h2>Nouveau message de contact</h2>
-              <p><strong>Date:</strong> ${new Date().toLocaleString('fr-FR', { timeZone: 'Africa/Djibouti' })}</p>
+                <h2>Nouveau message de contact</h2>
+                <p><strong>Date:</strong> ${new Date().toLocaleString('fr-FR', { timeZone: 'Africa/Djibouti' })}</p>
 
-              <h3>Expéditeur</h3>
-              <ul>
-                <li><strong>Nom:</strong> ${data.name}</li>
-                <li><strong>Email:</strong> ${data.email}</li>
-                <li><strong>Sujet:</strong> ${data.subject}</li>
-              </ul>
+                <h3>Expéditeur</h3>
+                <ul>
+                  <li><strong>Nom:</strong> ${escapeHtml(data.name)}</li>
+                  <li><strong>Email:</strong> ${escapeHtml(data.email)}</li>
+                  <li><strong>Sujet:</strong> ${escapeHtml(data.subject)}</li>
+                </ul>
 
-              <h3>Message</h3>
-              <p>${data.message.replace(/\n/g, '<br>')}</p>
-
-              <hr>
-              <p style="color: #666; font-size: 0.9em;">
-                ID de référence: ${Date.now().toString(36).toUpperCase()}
-              </p>
-            `,
+                <h3>Message</h3>
+                <p>${escapeHtml(data.message).replace(/\n/g, '<br>')}</p>
+              `,
             headers: {
               'X-Contact-Source': 'benew-website',
               'X-Contact-Version': '1.0',
