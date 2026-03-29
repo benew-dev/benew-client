@@ -172,12 +172,6 @@ const TemplateImageCarousel = memo(({ images, templateName }) => {
           height={460}
           className="minimalImage"
           loading="lazy"
-          quality="auto"
-          format="auto"
-          crop={{ type: 'fit', gravity: 'auto' }}
-          onError={(e) => {
-            e.currentTarget.src = '/placeholder-template.png';
-          }}
         />
       </div>
     );
@@ -214,12 +208,6 @@ const TemplateImageCarousel = memo(({ images, templateName }) => {
                 height={460}
                 className="minimalImage"
                 loading={index === 0 ? 'eager' : 'lazy'}
-                quality="auto"
-                format="auto"
-                crop={{ type: 'fit', gravity: 'auto' }}
-                onError={(e) => {
-                  e.currentTarget.src = '/placeholder-template.png';
-                }}
               />
             </div>
           );
