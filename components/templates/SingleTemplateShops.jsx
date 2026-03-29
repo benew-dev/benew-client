@@ -3,7 +3,6 @@
 
 import dynamic from 'next/dynamic';
 import { useState, useEffect, useCallback, memo, useMemo, useRef } from 'react';
-import { CldImage } from 'next-cloudinary';
 import Link from 'next/link';
 import {
   FaDollarSign,
@@ -97,10 +96,10 @@ const GalleryModal = memo(({ isOpen, onClose, images, applicationName }) => {
                 aria-label={`Aller à l'image ${index + 1}`}
               >
                 <AppImage
-                  src={images[selectedImage]}
-                  alt={`${applicationName} - Version ${selectedImage + 1}`}
-                  width={800}
-                  height={600}
+                  src={img}
+                  alt={`${applicationName} - Miniature ${index + 1}`}
+                  width={120}
+                  height={120}
                   className="gallery-image"
                 />
               </button>
@@ -108,18 +107,13 @@ const GalleryModal = memo(({ isOpen, onClose, images, applicationName }) => {
           </div>
 
           <div className="gallery-image-container">
-            <CldImage
+            <AppImage
               src={images[selectedImage]}
               alt={`${applicationName} - Version ${selectedImage + 1}`}
               width={800}
               height={600}
               className="gallery-image"
-              quality="auto"
-              format="auto"
               crop={{ type: 'fit', gravity: 'center' }}
-              onError={(e) => {
-                e.currentTarget.src = '/placeholder-application.png';
-              }}
             />
           </div>
         </div>

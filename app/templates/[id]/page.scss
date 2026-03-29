@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use '../../../app/styles/abstracts' as *;
 
 .template-error-page {
@@ -292,46 +293,6 @@
   gap: 1rem;
   justify-content: center;
   flex-wrap: wrap;
-}
-
-.cta-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.875rem 1.5rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  border-radius: 12px;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  min-height: 48px;
-}
-
-.cta-button.primary {
-  background: linear-gradient(135deg, #f6a037, #f266b0);
-  color: #0c0c1a;
-  box-shadow: 0 4px 15px rgba(246, 160, 55, 0.3);
-}
-
-.cta-button.primary:hover {
-  background: linear-gradient(135deg, #f266b0, #9e1f9d);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(242, 102, 176, 0.4);
-}
-
-.cta-button.secondary {
-  background: transparent;
-  color: #f6a037;
-  border: 2px solid #f6a037;
-  backdrop-filter: blur(10px);
-}
-
-.cta-button.secondary:hover {
-  background: rgba(246, 160, 55, 0.15);
-  border-color: #f266b0;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(246, 160, 55, 0.3);
 }
 
 /* Responsive */

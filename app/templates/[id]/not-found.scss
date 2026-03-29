@@ -138,25 +138,6 @@
   }
 }
 
-.template-id-badge {
-  display: inline-block;
-  background: rgba($primary-color, 0.1);
-  color: $primary-color;
-  border-radius: 20px;
-  font-family: monospace;
-  margin-bottom: 1.5rem;
-  border: 1px solid rgba($primary-color, 0.3);
-
-  // 📱 MOBILE FIRST
-  padding: 0.3rem 1rem;
-  font-size: 0.85rem;
-
-  @include from('small-lg') {
-    padding: 0.4rem 1.2rem;
-    font-size: 0.95rem;
-  }
-}
-
 .error-message {
   color: $text-color-muted;
   line-height: 1.7;
