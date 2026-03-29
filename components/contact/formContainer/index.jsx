@@ -94,11 +94,18 @@ const FormContainer = ({ ref }) => {
     loading: false,
   });
 
+  const formOpenedAt = useRef(Date.now());
+
   const isInView = useInView(ref, { margin: '-100px' });
 
   // Handler de soumission optimisé
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
+
+    const fillTime = Date.now() - formOpenedAt.current;
+
+    const formData = new FormData(e.target);
+    formData.set('_fillTime', fillTime.toString());
 
     // Réinitialiser les états
     setFormState({
@@ -205,6 +212,19 @@ const FormContainer = ({ ref }) => {
           disabled={formState.loading}
           isTextarea
           rows={8}
+        />
+        <input type="hidden" name="_fillTime" value={fillTime} />
+
+        {/* Honeypot — à la fin, avant le bouton */}
+        <input
+          type="text"
+          name="website"
+          value=""
+          onChange={() => {}}
+          style={{ display: 'none' }}
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
         />
 
         <button
