@@ -99,10 +99,14 @@ export function formatDate(date) {
   if (!date) return '';
 
   const d = new Date(date);
+
+  if (isNaN(d.getTime())) return ''; // date invalide
+
   return d.toLocaleDateString('fr-FR', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+    timeZone: 'Africa/Djibouti', // UTC+3, explicite
   });
 }
 
@@ -111,7 +115,7 @@ export function formatDate(date) {
  * @returns {string}
  */
 export function generateClientId() {
-  return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  return `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
 }
 
 /**
