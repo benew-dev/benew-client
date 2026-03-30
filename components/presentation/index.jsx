@@ -9,7 +9,6 @@ import ParallaxSkeleton from '../layouts/parallax/ParallaxSkeleton';
 // Import dynamique des composants
 const Parallax = dynamic(() => import('components/layouts/parallax'), {
   loading: () => <ParallaxSkeleton />,
-  ssr: true,
 });
 
 import PresentationModal from 'components/modal/PresentationModal';
