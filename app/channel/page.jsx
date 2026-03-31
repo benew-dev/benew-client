@@ -2,7 +2,6 @@
 // Server Component — chaîne vidéo Benew
 // Même pattern que app/templates/page.jsx
 
-import { Suspense } from 'react';
 import Link from 'next/link';
 
 import './page.scss'; // ← importé dans le Server Component
@@ -269,11 +268,7 @@ export default async function ChannelPage() {
     );
   }
 
-  return (
-    <Suspense fallback={<Loading />}>
-      <ChannelList videos={data.videos} />
-    </Suspense>
-  );
+  return <ChannelList videos={data.videos} />;
 }
 
 // =============================

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import * as Sentry from '@sentry/nextjs';
 import { trackEvent } from '@/utils/analytics';
@@ -13,8 +13,10 @@ import './error.scss';
 export default function ChannelError({ error, reset }) {
   const [retryCount, setRetryCount] = useState(0);
   const [isRetrying, setIsRetrying] = useState(false);
-  const MAX_RETRIES = 3; // useEffect Sentry — se déclenche une seule fois
+  const timeoutRef = useRef(null);
+  const MAX_RETRIES = 3;
 
+  // Sentry — se déclenche une seule fois à l'apparition de l'erreur
   useEffect(() => {
     if (!error) return;
 
@@ -34,7 +36,7 @@ export default function ChannelError({ error, reset }) {
     });
   }, [error]); // ← uniquement error
 
-  // useEffect Analytics — séparé
+  // Analytics — séparé
   useEffect(() => {
     if (!error) return;
 
@@ -47,42 +49,41 @@ export default function ChannelError({ error, reset }) {
     });
   }, [error]);
 
-  const handleRetry = async () => {
+  // Cleanup au démontage
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
+  const handleRetry = () => {
     if (retryCount >= MAX_RETRIES || isRetrying) return;
 
     setIsRetrying(true);
     setRetryCount((prev) => prev + 1);
 
-    try {
-      trackEvent('error_retry_attempt', {
-        event_category: 'errors',
-        event_label: 'channel_retry',
-        retry_number: retryCount + 1,
-        max_retries: MAX_RETRIES,
-        page: 'channel',
-      });
-    } catch (e) {
-      console.warn('[Analytics] Error tracking retry:', e);
-    }
+    trackEvent('error_retry_attempt', {
+      event_category: 'errors',
+      event_label: 'channel_retry',
+      retry_number: retryCount + 1,
+      max_retries: MAX_RETRIES,
+      page: 'channel',
+    });
 
     const delay = Math.min(1000 * (retryCount + 1), 3000);
 
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       setIsRetrying(false);
       reset();
     }, delay);
   };
 
   const handleGoHome = () => {
-    try {
-      trackEvent('error_recovery_home', {
-        event_category: 'errors',
-        event_label: 'channel_home',
-        retry_count: retryCount,
-      });
-    } catch (e) {
-      console.warn('[Analytics] Error tracking home button:', e);
-    }
+    trackEvent('error_recovery_home', {
+      event_category: 'errors',
+      event_label: 'channel_home',
+      retry_count: retryCount,
+    });
   };
 
   const canRetry = retryCount < MAX_RETRIES;
