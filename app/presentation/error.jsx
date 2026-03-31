@@ -119,10 +119,6 @@ export default function PresentationError({ error, reset }) {
             <Link href="/" className="home-button">
               🏠 Accueil
             </Link>
-
-            <Link href="/about" className="simple-version-button">
-              📄 Version simplifiée
-            </Link>
           </div>
 
           {/* Informations alternatives */}
@@ -135,8 +131,8 @@ export default function PresentationError({ error, reset }) {
               <Link href="/contact" className="alternative-link">
                 📞 Nous Contacter
               </Link>
-              <Link href="/about" className="alternative-link">
-                ℹ️ À Propos
+              <Link href="/" className="alternative-link">
+                🏠 Accueil
               </Link>
             </div>
           </div>

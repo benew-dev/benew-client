@@ -244,10 +244,14 @@ const PresentationComponent = () => {
           <h1 className="benew-title">BENEW</h1>
 
           {/* Carte centrale cliquable */}
-          <div className="sky-limit-card" onClick={handleCardClick}>
+          <button
+            className="sky-limit-card"
+            onClick={handleCardClick}
+            aria-label="Lire notre vision : Sky is the limit"
+          >
             <h2 className="sky-limit-text">SKY IS THE LIMIT</h2>
             <p className="card-hint">Lire →</p>
-          </div>
+          </button>
         </div>
       </section>
 
@@ -286,14 +290,17 @@ const PresentationComponent = () => {
         <div className="categories-content">
           <div className="categories-grid">
             {categories.map((category) => (
-              <div
+              <button
                 key={category.id}
                 className="category-card"
                 onClick={() => handleCategoryClick(category)}
+                aria-label={`Lire : ${category.title}`}
               >
-                <div className="category-icon">{category.icon}</div>
+                <div className="category-icon" aria-hidden="true">
+                  {category.icon}
+                </div>
                 <h3 className="category-title">{category.title}</h3>
-              </div>
+              </button>
             ))}
           </div>
         </div>
