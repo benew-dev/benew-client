@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import './error.scss';
+// Manquant en tête du fichier
+import { trackEvent } from '@/utils/analytics';
 
 /**
  * Error Boundary simplifié pour la page de présentation
@@ -24,9 +26,8 @@ export default function PresentationError({ error, reset }) {
 
   // Log simple pour suivi des interactions utilisateur (tracking uniquement)
   useEffect(() => {
-    if (error && typeof window !== 'undefined' && window.dataLayer) {
-      window.dataLayer.push({
-        event: 'error_boundary_shown',
+    if (error) {
+      trackEvent('error_boundary_shown', {
         page: 'presentation',
         error_name: error?.name || 'Unknown',
       });
