@@ -127,11 +127,12 @@ const PresentationComponent = () => {
       {/* SECTION 3: Grille des catégories - CLASSE SUPPLÉMENTAIRE */}
       <section className="others categories-section">
         {/* Backgrounds réutilisés */}
-        <div className="planets-background-container">
+        <div className="planets-background-container" aria-hidden="true">
           <Image
             src="/planets.png"
             alt=""
             fill
+            loading="lazy"
             priority={false}
             quality={75}
             style={{
@@ -141,11 +142,12 @@ const PresentationComponent = () => {
           />
         </div>
 
-        <div className="stars-container">
+        <div className="stars-container" aria-hidden="true">
           <Image
             src="/stars.png"
             alt=""
             fill
+            loading="lazy"
             priority={false}
             quality={60}
             style={{

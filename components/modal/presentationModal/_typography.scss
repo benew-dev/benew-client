@@ -5,7 +5,7 @@
 // 📄 _typography.scss
 // ================================
 
-h2 {
+.modalContent h2 {
   color: $primary-color;
   font-size: 1.8rem;
   text-align: center;
@@ -129,25 +129,6 @@ h2 {
     @include from('large-xs') {
       font-size: 1rem;
       line-height: 1.7;
-    }
-
-    // =============================
-    // GESTION DES LIGNES VIDES (paragraphes vides pour espacement)
-    // =============================
-    &:empty {
-      height: 0.5rem; // Espacement vertical pour les lignes vides
-
-      @include from('small-sm') {
-        height: 0.6rem;
-      }
-
-      @include from('medium-sm') {
-        height: 0.75rem;
-      }
-
-      @include from('large-xs') {
-        height: 1rem;
-      }
     }
   }
 }

@@ -181,6 +181,11 @@
   &:active {
     transform: translateY(-5px) scale(1);
   }
+
+  &:focus-visible {
+    outline: 3px solid $primary-color;
+    outline-offset: 4px;
+  }
 }
 
 @keyframes shine {
@@ -397,6 +402,11 @@
 
   &:active {
     transform: translateY(-3px) scale(1);
+  }
+
+  &:focus-visible {
+    outline: 3px solid $primary-color;
+    outline-offset: 4px;
   }
 }
 
