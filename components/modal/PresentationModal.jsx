@@ -70,7 +70,6 @@ const PresentationModal = ({ isOpen, onClose, content }) => {
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title" // ← pointe vers le h2
-        aria-label={content.title}
         tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
       >

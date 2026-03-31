@@ -12,7 +12,7 @@ const Parallax = dynamic(() => import('components/layouts/parallax'), {
 });
 
 // components/presentation/index.jsx
-import { categoryContents, categories } from '@/data/presentation';
+import { categoryContents, categories } from '@/lib/presentation';
 
 import PresentationModal from 'components/modal/PresentationModal';
 import PageTracker from '../analytics/PageTracker';

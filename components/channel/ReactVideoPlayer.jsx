@@ -15,6 +15,10 @@ function buildVideoUrl(publicId) {
   if (publicId.startsWith('http://') || publicId.startsWith('https://')) {
     return publicId;
   }
+  if (!CDN_BASE) {
+    console.warn('[ReactVideoPlayer] NEXT_PUBLIC_CDN_BASE_URL is not defined');
+    return null;
+  }
   return `${CDN_BASE}/video/upload/${publicId}`;
 }
 
@@ -22,6 +26,9 @@ function buildPosterUrl(thumbnailId) {
   if (!thumbnailId) return null;
   if (thumbnailId.startsWith('http://') || thumbnailId.startsWith('https://')) {
     return thumbnailId;
+  }
+  if (!CDN_BASE) {
+    return null; // Pas de warning ici — buildVideoUrl l'a déjà émis
   }
   return `${CDN_BASE}/image/upload/f_auto,q_auto,w_1280/${thumbnailId}`;
 }

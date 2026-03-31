@@ -13,7 +13,7 @@ import './error.scss';
 export default function ChannelError({ error, reset }) {
   const [retryCount, setRetryCount] = useState(0);
   const [isRetrying, setIsRetrying] = useState(false);
-  const MAX_RETRIES = 3;
+  const MAX_RETRIES = 3; // useEffect Sentry — se déclenche une seule fois
 
   useEffect(() => {
     if (!error) return;
@@ -28,23 +28,24 @@ export default function ChannelError({ error, reset }) {
         errorName: error?.name || 'Unknown',
         errorMessage: error?.message || 'No message',
         errorStack: error?.stack?.substring(0, 500),
-        retryCount,
+        // retryCount retiré — toujours 0 ici
       },
       level: 'error',
     });
+  }, [error]); // ← uniquement error
 
-    try {
-      trackEvent('error_boundary_shown', {
-        event_category: 'errors',
-        event_label: 'channel_error',
-        error_name: error?.name || 'Unknown',
-        error_message: error?.message?.substring(0, 100) || 'No message',
-        page: 'channel',
-      });
-    } catch (analyticsError) {
-      console.warn('[Analytics] Error tracking channel error:', analyticsError);
-    }
-  }, [error, retryCount]);
+  // useEffect Analytics — séparé
+  useEffect(() => {
+    if (!error) return;
+
+    trackEvent('error_boundary_shown', {
+      event_category: 'errors',
+      event_label: 'channel_error',
+      error_name: error?.name || 'Unknown',
+      error_message: error?.message?.substring(0, 100) || 'No message',
+      page: 'channel',
+    });
+  }, [error]);
 
   const handleRetry = async () => {
     if (retryCount >= MAX_RETRIES || isRetrying) return;

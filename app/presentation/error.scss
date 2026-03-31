@@ -7,23 +7,6 @@
 }
 
 // =============================
-// BOUTON TERTIAIRE
-// Spécifique à la page présentation uniquement
-// =============================
-
-.simple-version-button {
-  @extend %error-button-base;
-  background-color: rgba($secondary-color, 0.1);
-  color: $secondary-color;
-  border: 1px solid rgba($secondary-color, 0.3);
-
-  &:hover {
-    background-color: rgba($secondary-color, 0.2);
-    border-color: $secondary-color;
-  }
-}
-
-// =============================
 // LIENS ALTERNATIFS
 // Spécifique à la page présentation uniquement
 // =============================

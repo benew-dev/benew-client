@@ -2,29 +2,13 @@
 
 import { getClient } from '@/backend/dbConnect';
 import { captureException, captureMessage } from '../sentry.server.config';
-import { checkServerActionRateLimit } from '@/backend/rateLimiter';
+import { checkServerActionRateLimit, getClientIP } from '@/backend/rateLimiter';
 import { headers } from 'next/headers';
 import * as Sentry from '@sentry/nextjs';
 
 // =============================
 // UTILITAIRES
 // =============================
-
-/**
- * Extrait l'IP du client depuis les headers (pour rate limiting)
- */
-async function getClientIdentifier() {
-  try {
-    const headersList = await headers();
-    const forwarded = headersList.get('x-forwarded-for');
-    if (forwarded) return forwarded.split(',')[0].trim();
-    const realIp = headersList.get('x-real-ip');
-    if (realIp) return realIp;
-    return 'anonymous';
-  } catch {
-    return 'anonymous';
-  }
-}
 
 /**
  * Sanitize une chaîne de recherche
@@ -88,80 +72,6 @@ function withTimeout(promise, timeoutMs, errorMessage = 'Timeout') {
   ]);
 }
 
-/**
- * Récupère toutes les vidéos actives, triées par date de création DESC
- * Utilisé uniquement côté serveur dans page.jsx — pas de rate limiting nécessaire
- *
- * @returns {Promise<{ videos: Array, success: boolean, error?: string }>}
- */
-export async function getVideos() {
-  let client = null;
-  const startTime = Date.now();
-
-  try {
-    client = await getClient();
-
-    await client.query('SET LOCAL statement_timeout = 5000');
-
-    const result = await withTimeout(
-      client.query(`
-      SELECT
-        video_id,
-        video_title,
-        video_description,
-        video_category,
-        video_duration_seconds,
-        views_count,
-        created_at,
-        video_cloudinary_id,
-        video_thumbnail_id
-      FROM catalog.channel_videos
-      WHERE is_active = true
-      ORDER BY created_at DESC
-      LIMIT 20
-  `),
-      5000,
-      'Get videos timeout',
-    );
-
-    const queryDuration = Date.now() - startTime;
-
-    if (queryDuration > 2000) {
-      captureMessage('Slow channel videos query', {
-        level: 'warning',
-        tags: { component: 'channel_actions', operation: 'get_videos' },
-        extra: { queryDuration, rowCount: result.rows.length },
-      });
-    }
-
-    return {
-      videos: result.rows.map(formatVideo),
-      success: true,
-    };
-  } catch (error) {
-    captureException(error, {
-      tags: { component: 'channel_actions', operation: 'get_videos' },
-      extra: { durationMs: Date.now() - startTime, errorCode: error.code },
-    });
-
-    return {
-      videos: [],
-      success: false,
-      error: error.message,
-    };
-  } finally {
-    if (client) {
-      try {
-        client.release();
-      } catch (releaseError) {
-        captureException(releaseError, {
-          tags: { component: 'channel_actions', operation: 'client_release' },
-        });
-      }
-    }
-  }
-}
-
 // =============================
 // RECHERCHE — appelé côté client via useTransition
 // =============================
@@ -186,7 +96,7 @@ export async function searchVideos(query) {
 
       try {
         // ===== RATE LIMITING =====
-        const identifier = await getClientIdentifier();
+        const identifier = await getClientIP();
         const rateLimitResult = await checkServerActionRateLimit(
           `channel_search:${identifier}`,
           'api', // 20 req/min
@@ -208,10 +118,30 @@ export async function searchVideos(query) {
 
         // Requête vide → retourner toutes les vidéos
         if (!cleanQuery || cleanQuery.length < 1) {
-          return await getVideos().then((result) => ({
-            ...result,
-            total: result.videos.length,
-          }));
+          client = await getClient();
+
+          await client.query('SET LOCAL statement_timeout = 5000');
+
+          const result = await withTimeout(
+            client.query(`
+              SELECT
+                video_id, video_title, video_description, video_category,
+                video_duration_seconds, views_count, created_at,
+                video_cloudinary_id, video_thumbnail_id
+              FROM catalog.channel_videos
+              WHERE is_active = true
+              ORDER BY created_at DESC
+              LIMIT 20
+            `),
+            5000,
+            'Get all videos timeout',
+          );
+
+          return {
+            videos: result.rows.map(formatVideo),
+            success: true,
+            total: result.rows.length,
+          };
         }
 
         // Minimum 2 caractères pour une vraie recherche
@@ -264,24 +194,6 @@ export async function searchVideos(query) {
           'Search videos timeout',
         );
 
-        const countResult = await withTimeout(
-          client.query(
-            `
-          SELECT COUNT(*) as total
-          FROM catalog.channel_videos
-          WHERE is_active = true
-            AND (
-              video_title ILIKE $1
-              OR video_description ILIKE $1
-              OR array_to_string(video_tags, ' ') ILIKE $1
-            )
-          `,
-            [searchPattern],
-          ),
-          5000,
-          'Search videos count timeout',
-        );
-
         const queryDuration = Date.now() - startTime;
 
         if (queryDuration > 2000) {
@@ -299,7 +211,7 @@ export async function searchVideos(query) {
         return {
           videos: result.rows.map(formatVideo),
           success: true,
-          total: parseInt(countResult.rows[0].total, 10),
+          total: result.rows.length, // ← exact pour < 100 résultats
           query: cleanQuery,
         };
       } catch (error) {
@@ -368,7 +280,7 @@ export async function incrementVideoViews(videoId) {
         }
 
         // ===== RATE LIMITING =====
-        const identifier = await getClientIdentifier();
+        const identifier = await getClientIP();
         const rateLimitResult = await checkServerActionRateLimit(
           `channel_view:${identifier}:${videoId}`,
           'api',
@@ -383,24 +295,19 @@ export async function incrementVideoViews(videoId) {
         client = await getClient();
 
         // Insert dans video_views (évite les conflits sur views_count)
-        await client.query(
-          `INSERT INTO catalog.video_views (video_id, viewed_at)
-           VALUES ($1, NOW())`,
+        const result = await client.query(
+          `WITH view_insert AS (
+            INSERT INTO catalog.video_views (video_id, viewed_at)
+            VALUES ($1, NOW())
+          )
+          UPDATE catalog.channel_videos
+          SET views_count = views_count + 1
+          WHERE video_id = $1
+          RETURNING views_count`,
           [videoId],
         );
 
-        // Update du cache views_count
-        const updateResult = await client.query(
-          `UPDATE catalog.channel_videos
-           SET views_count = views_count + 1
-           WHERE video_id = $1
-           RETURNING views_count`,
-          [videoId],
-        );
-
-        const newCount = updateResult.rows[0]?.views_count ?? null;
-
-        return { success: true, newCount };
+        return { success: true, newCount: result.rows[0]?.views_count ?? null };
       } catch (error) {
         // Non critique — on log mais on ne bloque pas l'UX
         captureException(error, {

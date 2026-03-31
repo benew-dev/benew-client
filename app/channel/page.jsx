@@ -5,8 +5,10 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
 
+import './page.scss'; // ← importé dans le Server Component
+
 import ChannelList from '@/components/channel/ChannelList';
-import { getVideos } from '@/actions/channelActions';
+import { getVideos } from '@/lib/channelQueries';
 import { captureMessage } from '../../sentry.server.config';
 import Loading from './loading';
 import ReloadButton from '@/components/reloadButton';
@@ -213,7 +215,10 @@ export default async function ChannelPage() {
 
   // Erreur DB
   if (!data.success) {
-    const errorInfo = classifyError(new Error(data.error || 'Unknown error'));
+    const errorInfo = classifyError({
+      message: data.error || 'Unknown error',
+      code: data.errorCode || null,
+    });
 
     if (process.env.NODE_ENV === 'production') {
       return (

@@ -1,0 +1,21 @@
+// app/channel/page.scss — nouveau fichier
+@use '../styles/abstracts' as *;
+@use '../styles/components/error-shared' as *; // si ce mixin existe
+
+.channel-error-page,
+.channel-empty-state {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.channel-error-content,
+.empty-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+// ... les styles de .server-error, .empty-card, .cta-button, etc.

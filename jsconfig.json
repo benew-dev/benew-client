@@ -11,7 +11,8 @@
       "@/components/*": ["./components/*"],
       "@/utils/*": ["./utils/*"],
       "@/monitoring/*": ["./monitoring/*"],
-      "@/backend/*": ["./backend/*"]
+      "@/backend/*": ["./backend/*"],
+      "@/lib/*": ["./lib/*"]
     },
 
     // Controls how JSX constructs are emitted in JavaScript files.

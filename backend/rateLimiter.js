@@ -42,7 +42,7 @@ const WHITELIST_IPS = new Set(['127.0.0.1', '::1']);
 /**
  * Extraction d'IP simplifiée
  */
-function getClientIP(request) {
+export function getClientIP(request) {
   // Priorité aux headers de proxy les plus courants
   const forwarded = request.headers.get('x-forwarded-for');
   if (forwarded) {
