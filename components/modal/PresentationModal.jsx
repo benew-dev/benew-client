@@ -11,9 +11,11 @@ const PresentationModal = ({ isOpen, onClose, content }) => {
         <div className="modalContent">
           <h2>{content.title}</h2>
           <div className="modalText">
-            {content.paragraphs.map((paragraph, index) => (
-              <p key={index}>{paragraph}</p>
-            ))}
+            {content.paragraphs
+              .filter((paragraph) => paragraph !== '')
+              .map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
+              ))}
           </div>
           <button onClick={onClose} className="closeButton">
             Fermer
