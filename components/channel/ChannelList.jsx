@@ -91,9 +91,6 @@ const VideoModal = memo(({ video, onClose }) => {
   const modalRef = useRef(null);
   const previousFocusRef = useRef(null);
   const [playerError, setPlayerError] = useState(false);
-  const [shouldPlay, setShouldPlay] = useState(false);
-
-  console.log('Video Data', video);
 
   const handlePlayerError = useCallback(
     (e) => {
@@ -196,9 +193,8 @@ const VideoModal = memo(({ video, onClose }) => {
               key={video.video_id}
               src={video.video_cloudinary_id}
               poster={video.video_thumbnail_id}
-              autoPlay={shouldPlay}
+              autoPlay
               controls
-              onReady={() => setShouldPlay(true)} // ← déclenche play quand prêt
               onError={handlePlayerError}
             />
           )}

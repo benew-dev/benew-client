@@ -92,7 +92,7 @@ const ReactVideoPlayer = ({
           file: {
             attributes: {
               poster: posterUrl || undefined,
-              preload: 'auto',
+              preload: 'metadata', // ← changer 'auto' en 'metadata'
               playsInline: true,
             },
           },
@@ -100,14 +100,7 @@ const ReactVideoPlayer = ({
         onPlay={onPlay}
         onPause={onPause}
         onEnded={onEnded}
-        onReady={() => {
-          console.log('[VideoModal] onReady déclenché'); // ← ajoute ça
-          setShouldPlay(true);
-        }}
-        onError={(e) => {
-          console.error('[VideoModal] onError:', e); // ← ajoute ça
-          handlePlayerError(e);
-        }}
+        onError={handleError}
       />
     </div>
   );
