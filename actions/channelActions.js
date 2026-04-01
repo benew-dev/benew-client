@@ -6,7 +6,7 @@ import { getClient } from '@/backend/dbConnect';
 import { checkServerActionRateLimit, getClientIP } from '@/backend/rateLimiter';
 import { captureException, captureMessage } from '../sentry.server.config';
 // Importé dans les deux fichiers
-import { withTimeout, formatVideo } from './channelUtils';
+import { withTimeout, formatVideo } from '../lib/channelUtils';
 
 // =============================
 // UTILITAIRES
