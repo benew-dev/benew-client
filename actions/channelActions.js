@@ -1,10 +1,12 @@
 'use server';
 
-import { getClient } from '@/backend/dbConnect';
-import { captureException, captureMessage } from '../sentry.server.config';
-import { checkServerActionRateLimit, getClientIP } from '@/backend/rateLimiter';
 import { headers } from 'next/headers';
 import * as Sentry from '@sentry/nextjs';
+import { getClient } from '@/backend/dbConnect';
+import { checkServerActionRateLimit, getClientIP } from '@/backend/rateLimiter';
+import { captureException, captureMessage } from '../sentry.server.config';
+// Importé dans les deux fichiers
+import { withTimeout, formatVideo } from './channelUtils';
 
 // =============================
 // UTILITAIRES
@@ -33,43 +35,6 @@ function isValidUUID(value) {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
     value,
   );
-}
-
-/**
- * Formate les données brutes d'une vidéo pour le client
- * Seules les colonnes demandées sont exposées
- */
-function formatVideo(row) {
-  return {
-    video_id: row.video_id,
-    video_title: row.video_title || '[Sans titre]',
-    video_description: row.video_description || null,
-    video_category: row.video_category,
-    video_duration_seconds: row.video_duration_seconds
-      ? parseInt(row.video_duration_seconds, 10)
-      : null,
-    views_count: parseInt(row.views_count, 10) || 0,
-    created_at: row.created_at,
-    video_cloudinary_id: row.video_cloudinary_id,
-    video_thumbnail_id: row.video_thumbnail_id || null,
-  };
-}
-
-// =============================
-// FETCH INITIAL — appelé par page.jsx (Server Component)
-// =============================
-
-function withTimeout(promise, timeoutMs, errorMessage = 'Timeout') {
-  return Promise.race([
-    promise,
-    new Promise((_, reject) => {
-      setTimeout(() => {
-        const timeoutError = new Error(errorMessage);
-        timeoutError.name = 'TimeoutError';
-        reject(timeoutError);
-      }, timeoutMs);
-    }),
-  ]);
 }
 
 // =============================
