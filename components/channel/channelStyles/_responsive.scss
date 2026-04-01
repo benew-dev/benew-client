@@ -7,21 +7,9 @@
 // =============================
 
 @include mobile-landscape {
-  .channel-header {
-    padding: 3rem 1.5rem 2rem;
-  }
-
-  .channel-header__title {
-    font-size: 1.8rem;
-  }
-
   .channel-grid {
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 1rem;
-  }
-
-  .active-player__video-wrapper {
-    max-height: 55vh;
   }
 }
 
@@ -30,21 +18,6 @@
 // =============================
 
 @media (max-width: 360px) {
-  .channel-header {
-    padding: 4rem 1rem 2rem;
-  }
-
-  .channel-header__title {
-    font-size: 1.8rem;
-    gap: 0.5rem;
-  }
-
-  .channel-content,
-  .channel-player-section {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
   .channel-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
@@ -60,19 +33,6 @@
 // =============================
 
 @include from('large-xxxl') {
-  .channel-header {
-    padding: 8rem 4rem 5rem;
-  }
-
-  .channel-header__title {
-    font-size: 4rem;
-  }
-
-  .channel-content__inner,
-  .channel-player-section__inner {
-    max-width: 1400px;
-  }
-
   .channel-grid {
     grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
     gap: 2rem;
