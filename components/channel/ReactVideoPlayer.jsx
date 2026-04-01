@@ -67,6 +67,8 @@ const ReactVideoPlayer = ({
 }) => {
   const videoUrl = buildVideoUrl(src);
   const posterUrl = poster ? buildPosterUrl(poster) : null;
+  console.log('[ReactVideoPlayer] videoUrl:', videoUrl); // ← ajoute ça
+  console.log('[ReactVideoPlayer] autoPlay:', autoPlay);
 
   if (!videoUrl) return null;
 
@@ -95,11 +97,17 @@ const ReactVideoPlayer = ({
             },
           },
         }}
-        onReady={onReady}
         onPlay={onPlay}
         onPause={onPause}
         onEnded={onEnded}
-        onError={handleError} // ← handler local qui remonte
+        onReady={() => {
+          console.log('[VideoModal] onReady déclenché'); // ← ajoute ça
+          setShouldPlay(true);
+        }}
+        onError={(e) => {
+          console.error('[VideoModal] onError:', e); // ← ajoute ça
+          handlePlayerError(e);
+        }}
       />
     </div>
   );
