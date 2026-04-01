@@ -160,11 +160,7 @@ const VideoModal = memo(({ video, onClose }) => {
   }, [onClose]);
 
   return (
-    <div
-      className="video-modal-overlay"
-      onClick={onClose}
-      aria-hidden="true" // ← overlay masqué aux lecteurs d'écran
-    >
+    <div className="video-modal-overlay" onClick={onClose}>
       <div
         className="video-modal"
         ref={modalRef}
