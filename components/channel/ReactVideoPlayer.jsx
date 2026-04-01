@@ -19,7 +19,9 @@ function buildVideoUrl(publicId) {
     console.warn('[ReactVideoPlayer] NEXT_PUBLIC_CDN_BASE_URL is not defined');
     return null;
   }
-  return `${CDN_BASE}/video/upload/${publicId}`;
+  // Ajouter .mp4 si pas déjà d'extension
+  const withExt = publicId.includes('.') ? publicId : `${publicId}.mp4`;
+  return `${CDN_BASE}/video/upload/${withExt}`;
 }
 
 function buildPosterUrl(thumbnailId) {
