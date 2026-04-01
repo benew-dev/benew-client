@@ -61,16 +61,22 @@ const ReactVideoPlayer = ({
   onPlay,
   onPause,
   onEnded,
+  onError, // ← prop existante, maintenant utilisée
 }) => {
   const videoUrl = buildVideoUrl(src);
   const posterUrl = poster ? buildPosterUrl(poster) : null;
 
   if (!videoUrl) return null;
 
+  const handleError = (e) => {
+    console.warn('[ReactVideoPlayer] Error:', e);
+    if (onError) onError(e); // ← remonter au parent
+  };
+
   return (
     <div className={`react-video-wrapper ${className}`}>
       <ReactPlayer
-        src={videoUrl}
+        url={videoUrl}
         playing={autoPlay}
         controls={controls}
         // width/height en % — react-player applique ces valeurs directement
@@ -91,7 +97,7 @@ const ReactVideoPlayer = ({
         onPlay={onPlay}
         onPause={onPause}
         onEnded={onEnded}
-        onError={(e) => console.warn('[ReactVideoPlayer] Error:', e)}
+        onError={handleError} // ← handler local qui remonte
       />
     </div>
   );

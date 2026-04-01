@@ -9,8 +9,9 @@
 
 .video-card {
   display: block;
-
-  // clamp décroissant : 85% (360px) → 65% (1280px)
+  // Largeur DÉCROISSANTE : 85% sur mobile (360px) → 65% sur desktop (1280px)
+  // Formule inverse car la carte doit être plus petite sur grand écran
+  // (centrée verticalement, une seule par section)
   width: clamp(65%, -2.17vw + 92.8%, 85%);
   max-width: clamp(420px, 13.04vw + 373px, 540px);
 }

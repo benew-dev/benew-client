@@ -1,9 +1,10 @@
 // components/channel/ChannelList.jsx
 'use client';
 
-import { useState, useEffect, useCallback, memo } from 'react';
+import { useState, useEffect, useCallback, memo, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { CldImage } from 'next-cloudinary';
+import * as Sentry from '@sentry/nextjs';
 import { incrementVideoViews } from '@/actions/channelActions';
 import { trackEvent } from '@/utils/analytics';
 import PageTracker from '../analytics/PageTracker';
@@ -28,7 +29,6 @@ const ReactVideoPlayer = dynamic(() => import('./ReactVideoPlayer'), {
 
 const Parallax = dynamic(() => import('components/layouts/parallax'), {
   loading: () => <ParallaxSkeleton />,
-  ssr: true,
 });
 
 // =============================
@@ -45,10 +45,16 @@ function formatViews(count) {
 
 function formatDate(dateString) {
   if (!dateString) return '';
-  return new Date(dateString).toLocaleDateString('fr-FR', {
+
+  const d = new Date(dateString);
+
+  if (isNaN(d.getTime())) return '';
+
+  return d.toLocaleDateString('fr-FR', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
+    timeZone: 'Africa/Djibouti',
   });
 }
 
@@ -82,14 +88,73 @@ function getCategoryConfig(category) {
 // =============================
 
 const VideoModal = memo(({ video, onClose }) => {
+  const modalRef = useRef(null);
+  const previousFocusRef = useRef(null);
+  const [playerError, setPlayerError] = useState(false);
+
+  const handlePlayerError = useCallback(
+    (e) => {
+      Sentry.captureException(new Error('Video playback error'), {
+        tags: { component: 'video_modal', video_id: video.video_id },
+        extra: { error: String(e), videoTitle: video.video_title },
+      });
+      setPlayerError(true);
+    },
+    [video.video_id, video.video_title],
+  );
+
+  // Focus management — ouverture et fermeture
   useEffect(() => {
-    const handleKey = (e) => {
-      if (e.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', handleKey);
-    document.body.style.overflow = 'hidden';
+    previousFocusRef.current = document.activeElement;
+    modalRef.current?.focus();
+
     return () => {
-      document.removeEventListener('keydown', handleKey);
+      previousFocusRef.current?.focus();
+    };
+  }, []);
+
+  // Escape + focus trap + overflow
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+        return;
+      }
+
+      if (e.key !== 'Tab') return;
+
+      const focusableSelectors = [
+        'button',
+        'a[href]',
+        'input',
+        'textarea',
+        'select',
+        '[tabindex]:not([tabindex="-1"])',
+      ].join(', ');
+
+      const focusableElements = Array.from(
+        modalRef.current?.querySelectorAll(focusableSelectors) || [],
+      ).filter((el) => !el.disabled);
+
+      if (focusableElements.length === 0) return;
+
+      const first = focusableElements[0];
+      const last = focusableElements[focusableElements.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = '';
     };
   }, [onClose]);
@@ -98,11 +163,17 @@ const VideoModal = memo(({ video, onClose }) => {
     <div
       className="video-modal-overlay"
       onClick={onClose}
-      role="dialog"
-      aria-modal="true"
-      aria-label={`Lecteur : ${video.video_title}`}
+      aria-hidden="true" // ← overlay masqué aux lecteurs d'écran
     >
-      <div className="video-modal" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="video-modal"
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Lecteur : ${video.video_title}`}
+        tabIndex={-1} // ← permet focus programmatique
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Bouton fermer */}
         <button
           className="video-modal__close"
@@ -116,13 +187,21 @@ const VideoModal = memo(({ video, onClose }) => {
         {/* Lecteur react-player */}
         {/* key={video.video_id} force un remontage propre à chaque vidéo */}
         <div className="video-modal__player">
-          <ReactVideoPlayer
-            key={video.video_id}
-            src={video.video_cloudinary_id}
-            poster={video.video_thumbnail_id}
-            autoPlay
-            controls
-          />
+          {playerError ? (
+            <div className="video-modal__player-error">
+              <p>Impossible de lire cette vidéo.</p>
+              <button onClick={onClose}>Fermer</button>
+            </div>
+          ) : (
+            <ReactVideoPlayer
+              key={video.video_id}
+              src={video.video_cloudinary_id}
+              poster={video.video_thumbnail_id}
+              autoPlay
+              controls
+              onError={handlePlayerError}
+            />
+          )}
         </div>
 
         {/* Infos sous le lecteur */}
