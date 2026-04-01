@@ -229,72 +229,51 @@ export async function searchVideos(query) {
  * @returns {Promise<{ success: boolean, newCount?: number }>}
  */
 export async function incrementVideoViews(videoId) {
-  return Sentry.withServerActionInstrumentation(
-    'incrementVideoViews',
-    {
-      headers: await headers(),
-      recordResponse: true,
-    },
-    async () => {
-      let client = null;
+  let client = null;
 
+  try {
+    if (!isValidUUID(videoId)) {
+      return { success: false, error: 'Invalid video ID' };
+    }
+
+    const identifier = await getClientIP();
+    const rateLimitResult = await checkServerActionRateLimit(
+      `channel_view:${identifier}:${videoId}`,
+      'api',
+    );
+
+    if (!rateLimitResult.success) {
+      return { success: false, code: 'RATE_LIMITED' };
+    }
+
+    client = await getClient();
+
+    const result = await client.query(
+      `WITH view_insert AS (
+        INSERT INTO catalog.video_views (video_id, viewed_at)
+        VALUES ($1, NOW())
+      )
+      UPDATE catalog.channel_videos
+      SET views_count = views_count + 1
+      WHERE video_id = $1
+      RETURNING views_count`,
+      [videoId],
+    );
+
+    return { success: true, newCount: result.rows[0]?.views_count ?? null };
+  } catch (error) {
+    captureException(error, {
+      tags: { component: 'channel_actions', operation: 'increment_views' },
+      extra: { videoId, errorCode: error.code },
+    });
+    return { success: false, error: error.message };
+  } finally {
+    if (client) {
       try {
-        // ===== VALIDATION =====
-        if (!isValidUUID(videoId)) {
-          return { success: false, error: 'Invalid video ID' };
-        }
-
-        // ===== RATE LIMITING =====
-        const identifier = await getClientIP();
-        const rateLimitResult = await checkServerActionRateLimit(
-          `channel_view:${identifier}:${videoId}`,
-          'api',
-        );
-
-        if (!rateLimitResult.success) {
-          // Silencieux — pas besoin de notifier l'utilisateur
-          return { success: false, code: 'RATE_LIMITED' };
-        }
-
-        // ===== DB =====
-        client = await getClient();
-
-        // Insert dans video_views (évite les conflits sur views_count)
-        const result = await client.query(
-          `WITH view_insert AS (
-            INSERT INTO catalog.video_views (video_id, viewed_at)
-            VALUES ($1, NOW())
-          )
-          UPDATE catalog.channel_videos
-          SET views_count = views_count + 1
-          WHERE video_id = $1
-          RETURNING views_count`,
-          [videoId],
-        );
-
-        return { success: true, newCount: result.rows[0]?.views_count ?? null };
-      } catch (error) {
-        // Non critique — on log mais on ne bloque pas l'UX
-        captureException(error, {
-          tags: { component: 'channel_actions', operation: 'increment_views' },
-          extra: { videoId, errorCode: error.code },
-        });
-
-        return { success: false, error: error.message };
-      } finally {
-        if (client) {
-          try {
-            client.release();
-          } catch (releaseError) {
-            captureException(releaseError, {
-              tags: {
-                component: 'channel_actions',
-                operation: 'client_release',
-              },
-            });
-          }
-        }
+        client.release();
+      } catch (e) {
+        /* ignore */
       }
-    },
-  );
+    }
+  }
 }

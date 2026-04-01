@@ -240,7 +240,7 @@ const nextConfig = {
         "form-action 'self'",
         "frame-ancestors 'none'",
         "base-uri 'self'",
-        "media-src 'self' https://res.cloudinary.com",
+        "media-src 'self' https://res.cloudinary.com https://res.cloudinary.com/duzebhr9l blob:",
         `script-src-elem 'self' 'unsafe-inline' https://*.googletagmanager.com https://*.google-analytics.com https://unpkg.com blob:`,
       ];
       return baseCSP.join('; ');
