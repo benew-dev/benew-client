@@ -57,9 +57,9 @@ const ReactVideoPlayer = ({
   src,
   poster,
   autoPlay = false,
+  muted = false,
   controls = true,
   className = '',
-  onReady,
   onPlay,
   onPause,
   onEnded,
@@ -83,8 +83,7 @@ const ReactVideoPlayer = ({
         url={videoUrl}
         playing={autoPlay}
         controls={controls}
-        // width/height en % — react-player applique ces valeurs directement
-        // sur son conteneur interne. Le ratio 16/9 est géré par le CSS parent.
+        muted={true} // ← OBLIGATOIRE pour autoplay Chrome
         width="100%"
         height="100%"
         style={{ display: 'block' }}
@@ -92,8 +91,9 @@ const ReactVideoPlayer = ({
           file: {
             attributes: {
               poster: posterUrl || undefined,
-              preload: 'metadata', // ← changer 'auto' en 'metadata'
+              preload: 'metadata',
               playsInline: true,
+              muted: true, // ← aussi dans les attributes natifs
             },
           },
         }}
