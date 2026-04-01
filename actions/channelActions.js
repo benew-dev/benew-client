@@ -3,7 +3,10 @@
 import { headers } from 'next/headers';
 import * as Sentry from '@sentry/nextjs';
 import { getClient } from '@/backend/dbConnect';
-import { checkServerActionRateLimit, getClientIP } from '@/backend/rateLimiter';
+import {
+  checkServerActionRateLimit,
+  getClientIPFromAction,
+} from '@/backend/rateLimiter';
 import { captureException, captureMessage } from '../sentry.server.config';
 // Importé dans les deux fichiers
 import { withTimeout, formatVideo } from '../lib/channelUtils';
@@ -61,7 +64,7 @@ export async function searchVideos(query) {
 
       try {
         // ===== RATE LIMITING =====
-        const identifier = await getClientIP();
+        const identifier = await getClientIPFromAction();
         const rateLimitResult = await checkServerActionRateLimit(
           `channel_search:${identifier}`,
           'api', // 20 req/min
@@ -236,7 +239,7 @@ export async function incrementVideoViews(videoId) {
       return { success: false, error: 'Invalid video ID' };
     }
 
-    const identifier = await getClientIP();
+    const identifier = await getClientIPFromAction();
     const rateLimitResult = await checkServerActionRateLimit(
       `channel_view:${identifier}:${videoId}`,
       'api',

@@ -8,7 +8,10 @@ import {
   formatContactValidationErrors,
   validateContactEmail,
 } from '@/utils/schemas/contactEmailSchema';
-import { checkServerActionRateLimit } from '@/backend/rateLimiter';
+import {
+  checkServerActionRateLimit,
+  getClientIPFromAction,
+} from '@/backend/rateLimiter';
 import { getClient } from '@/backend/dbConnect';
 import { captureException, captureMessage } from '../sentry.server.config';
 import * as Sentry from '@sentry/nextjs';

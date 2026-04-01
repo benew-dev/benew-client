@@ -58,6 +58,21 @@ export function getClientIP(request) {
   return '127.0.0.1';
 }
 
+// ← NOUVELLE — pour les Server Actions (utilise next/headers)
+export async function getClientIPFromAction() {
+  try {
+    const headersList = await headers();
+    const forwarded = headersList.get('x-forwarded-for');
+    if (forwarded) return forwarded.split(',')[0].trim();
+    const realIP = headersList.get('x-real-ip');
+    if (realIP) return realIP;
+    return '127.0.0.1';
+  } catch {
+    // headers() peut throw hors du contexte d'une request
+    return '127.0.0.1';
+  }
+}
+
 /**
  * Anonymisation basique pour les logs
  */
