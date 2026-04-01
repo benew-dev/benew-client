@@ -57,7 +57,6 @@ const ReactVideoPlayer = ({
   src,
   poster,
   autoPlay = false,
-  muted = false,
   controls = true,
   className = '',
   onPlay,
@@ -67,8 +66,6 @@ const ReactVideoPlayer = ({
 }) => {
   const videoUrl = buildVideoUrl(src);
   const posterUrl = poster ? buildPosterUrl(poster) : null;
-  console.log('[ReactVideoPlayer] videoUrl:', videoUrl); // ← ajoute ça
-  console.log('[ReactVideoPlayer] autoPlay:', autoPlay);
 
   if (!videoUrl) return null;
 
@@ -83,7 +80,6 @@ const ReactVideoPlayer = ({
         src={videoUrl}
         playing={autoPlay}
         controls={controls}
-        muted={true} // ← OBLIGATOIRE pour autoplay Chrome
         width="100%"
         height="100%"
         style={{ display: 'block' }}
@@ -93,7 +89,6 @@ const ReactVideoPlayer = ({
               poster: posterUrl || undefined,
               preload: 'metadata',
               playsInline: true,
-              muted: true, // ← aussi dans les attributes natifs
             },
           },
         }}

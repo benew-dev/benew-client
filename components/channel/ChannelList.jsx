@@ -194,7 +194,6 @@ const VideoModal = memo(({ video, onClose }) => {
               src={video.video_cloudinary_id}
               poster={video.video_thumbnail_id}
               autoPlay={true}
-              muted={true} // ← ajouter
               controls
               onError={handlePlayerError}
             />
