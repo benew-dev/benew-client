@@ -80,7 +80,7 @@ const ReactVideoPlayer = ({
   return (
     <div className={`react-video-wrapper ${className}`}>
       <ReactPlayer
-        url={videoUrl}
+        src={videoUrl}
         playing={autoPlay}
         controls={controls}
         muted={true} // ← OBLIGATOIRE pour autoplay Chrome
