@@ -93,6 +93,8 @@ const VideoModal = memo(({ video, onClose }) => {
   const [playerError, setPlayerError] = useState(false);
   const [shouldPlay, setShouldPlay] = useState(false);
 
+  console.log('Video Data', video);
+
   const handlePlayerError = useCallback(
     (e) => {
       Sentry.captureException(new Error('Video playback error'), {
