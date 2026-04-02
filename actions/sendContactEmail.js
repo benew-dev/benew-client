@@ -10,12 +10,11 @@ import {
 } from '@/utils/schemas/contactEmailSchema';
 import {
   checkServerActionRateLimit,
-  getClientIPFromAction,
+  getClientIPFromAction, // ← utilisé ci-dessous
 } from '@/backend/rateLimiter';
 import { getClient } from '@/backend/dbConnect';
 import { captureException, captureMessage } from '../sentry.server.config';
-import * as Sentry from '@sentry/nextjs';
-import { headers } from 'next/headers';
+// ← import Sentry et headers SUPPRIMÉS
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
