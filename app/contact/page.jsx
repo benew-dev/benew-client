@@ -2,24 +2,14 @@
 // Server Component enrichi pour page de contact
 // Next.js 15 - Gestion d'erreurs avancée + Monitoring complet + Validation
 
-import { Suspense } from 'react';
-import { notFound } from 'next/navigation';
-import Link from 'next/link';
-
 import Contact from '@/components/contact';
-import { captureException, captureMessage } from '../../sentry.server.config';
-import Loading from './loading';
 
 /**
  * Composant principal avec validation et gestion d'erreurs avancée
  */
 export default async function ContactPage() {
   // Rendu normal avec Suspense - Error Boundary géré par error.jsx
-  return (
-    <Suspense fallback={<Loading />}>
-      <Contact />
-    </Suspense>
-  );
+  return <Contact />;
 }
 
 // Metadata pour SEO avec monitoring en cas d'erreur

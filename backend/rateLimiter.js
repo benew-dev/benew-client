@@ -2,6 +2,7 @@
 // Rate limiting simple et pragmatique pour petites applications (500 visiteurs/jour)
 // Next.js 15 - Version optimisée sans suringénierie
 
+import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
 
 // Configuration simple adaptée au trafic réel
