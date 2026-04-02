@@ -214,19 +214,11 @@ async function saveContactSubmission(data, metadata = {}) {
 
     const query = `
       INSERT INTO admin.contact_submissions (
-        name,
-        email,
-        subject,
-        message,
-        status,
-        resend_email_id,
-        ip_address,
-        user_agent,
-        bot_detected,
-        bot_risk_score,
-        fill_time_ms,
+        name, email, subject, message,
+        status, resend_email_id,
+        bot_detected, bot_risk_score,
         created_at
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, NOW())
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())
       RETURNING id, created_at
     `;
 
@@ -237,11 +229,8 @@ async function saveContactSubmission(data, metadata = {}) {
       data.message,
       metadata.status || 'sent',
       metadata.resendEmailId || null,
-      metadata.ipAddress || null,
-      metadata.userAgent || null,
       metadata.botDetected || false,
       metadata.botRiskScore || 0,
-      metadata.fillTime || null,
     ];
 
     const result = await client.query(query, values);
