@@ -69,18 +69,27 @@ function formatDuration(seconds) {
   return `${m}:${String(s).padStart(2, '0')}`;
 }
 
-const CATEGORY_CONFIG = {
-  tutorial: { label: 'Tutoriel', color: 'category-tutorial' },
-  overview: { label: 'Présentation', color: 'category-overview' },
-  demo: { label: 'Démo', color: 'category-demo' },
-  setup: { label: 'Configuration', color: 'category-setup' },
-  tips: { label: 'Conseils', color: 'category-tips' },
-};
+const CATEGORY_COLORS = [
+  'category-color-1',
+  'category-color-2',
+  'category-color-3',
+  'category-color-4',
+  'category-color-5',
+];
 
 function getCategoryConfig(category) {
-  return (
-    CATEGORY_CONFIG[category] || { label: category, color: 'category-default' }
-  );
+  if (!category) return { label: null, color: null };
+
+  // Hash simple et stable basé sur les caractères de la string
+  let hash = 0;
+  for (let i = 0; i < category.length; i++) {
+    hash = (hash * 31 + category.charCodeAt(i)) % CATEGORY_COLORS.length;
+  }
+
+  return {
+    label: category,
+    color: CATEGORY_COLORS[hash],
+  };
 }
 
 // =============================
@@ -275,9 +284,11 @@ const VideoCard = memo(({ video, onPlay }) => {
 
         <div className="video-card__info">
           <div className="video-card__info-top">
-            <span className={`video-card__category ${catConfig.color}`}>
-              {catConfig.label}
-            </span>
+            {catConfig.label && (
+              <span className={`video-card__category ${catConfig.color}`}>
+                {catConfig.label}
+              </span>
+            )}
           </div>
           <h3 className="video-card__title">{video.video_title}</h3>
           {video.video_description && (

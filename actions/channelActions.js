@@ -1,7 +1,5 @@
 'use server';
 
-import { headers } from 'next/headers';
-import * as Sentry from '@sentry/nextjs';
 import { getClient } from '@/backend/dbConnect';
 import {
   checkServerActionRateLimit,

@@ -2,11 +2,6 @@
 @use 'sass:color';
 @use '../../../app/styles/abstracts' as *;
 
-// =============================
-// BADGES CATÉGORIE
-// Utilisés dans video-card et active-player
-// =============================
-
 %category-badge {
   display: inline-flex;
   align-items: center;
@@ -20,50 +15,42 @@
   line-height: 1;
 }
 
-// Tutoriel — bleu électrique
-.category-tutorial {
-  @extend %category-badge;
-  background: rgba(59, 130, 246, 0.15);
-  color: #60a5fa;
-  border-color: rgba(59, 130, 246, 0.25);
-}
-
-// Présentation — violet
-.category-overview {
-  @extend %category-badge;
-  background: rgba(139, 92, 246, 0.15);
-  color: #a78bfa;
-  border-color: rgba(139, 92, 246, 0.25);
-}
-
-// Démo — vert émeraude
-.category-demo {
-  @extend %category-badge;
-  background: rgba(16, 185, 129, 0.15);
-  color: #34d399;
-  border-color: rgba(16, 185, 129, 0.25);
-}
-
-// Configuration — orange (couleur primaire)
-.category-setup {
+// Couleur 1 — orange (couleur primaire Benew)
+.category-color-1 {
   @extend %category-badge;
   background: rgba($primary-color, 0.15);
   color: $primary-color;
   border-color: rgba($primary-color, 0.25);
 }
 
-// Conseils — rose/magenta (couleur secondaire)
-.category-tips {
+// Couleur 2 — rose/magenta (couleur secondaire Benew)
+.category-color-2 {
   @extend %category-badge;
   background: rgba($secondary-color, 0.15);
   color: $secondary-color;
   border-color: rgba($secondary-color, 0.25);
 }
 
-// Défaut
-.category-default {
+// Couleur 3 — violet (couleur accent Benew)
+.category-color-3 {
   @extend %category-badge;
-  background: rgba($text-color, 0.08);
-  color: rgba($text-color, 0.55);
-  border-color: rgba($text-color, 0.12);
+  background: rgba($accent-color, 0.15);
+  color: $accent-color;
+  border-color: rgba($accent-color, 0.25);
+}
+
+// Couleur 4 — bleu électrique
+.category-color-4 {
+  @extend %category-badge;
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border-color: rgba(59, 130, 246, 0.25);
+}
+
+// Couleur 5 — vert émeraude
+.category-color-5 {
+  @extend %category-badge;
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border-color: rgba(16, 185, 129, 0.25);
 }
