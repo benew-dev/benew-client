@@ -297,26 +297,24 @@ export async function createOrder(
         }
 
         // ✅ INSERTION - order_client avec [name, email, phone]
-        const clientInfo = [
-          yupValidation.data.name, // ✅ Un seul champ name
-          yupValidation.data.email,
-          yupValidation.data.phone,
-        ];
-
         const insertResult = await withTimeout(
           client.query(
             `INSERT INTO admin.orders (
-              order_client,
+              order_client_name,
+              order_client_email,
+              order_client_phone,
               order_platform_id,
               order_payment_name,
               order_payment_number,
               order_application_id,
               order_price,
               order_payment_status
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
             RETURNING order_id, order_created, order_payment_status`,
             [
-              clientInfo,
+              yupValidation.data.name,
+              yupValidation.data.email,
+              yupValidation.data.phone,
               yupValidation.data.paymentMethod,
               yupValidation.data.accountName,
               yupValidation.data.accountNumber,

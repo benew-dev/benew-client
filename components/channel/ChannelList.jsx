@@ -5,7 +5,6 @@ import { useState, useEffect, useCallback, memo, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { CldImage } from 'next-cloudinary';
 import * as Sentry from '@sentry/nextjs';
-import { incrementVideoViews } from '@/actions/channelActions';
 import { trackEvent } from '@/utils/analytics';
 import PageTracker from '../analytics/PageTracker';
 import './channelStyles/index.scss';
@@ -34,14 +33,6 @@ const Parallax = dynamic(() => import('components/layouts/parallax'), {
 // =============================
 // UTILITAIRES
 // =============================
-
-function formatViews(count) {
-  if (!count || count === 0) return '0 vue';
-  if (count === 1) return '1 vue';
-  if (count >= 1_000_000) return `${(count / 1_000_000).toFixed(1)}M vues`;
-  if (count >= 1000) return `${(count / 1000).toFixed(1)}k vues`;
-  return `${count} vues`;
-}
 
 function formatDate(dateString) {
   if (!dateString) return '';
@@ -213,12 +204,6 @@ const VideoModal = memo(({ video, onClose }) => {
         <div className="video-modal__info">
           <h2 className="video-modal__title">{video.video_title}</h2>
           <div className="video-modal__meta">
-            <span className="video-modal__views">
-              {formatViews(video.views_count)}
-            </span>
-            <span className="video-modal__separator" aria-hidden="true">
-              ·
-            </span>
             <span className="video-modal__date">
               Publiée le {formatDate(video.created_at)}
             </span>
@@ -295,12 +280,6 @@ const VideoCard = memo(({ video, onPlay }) => {
             <p className="video-card__description">{video.video_description}</p>
           )}
           <div className="video-card__meta">
-            <span className="video-card__views">
-              {formatViews(video.views_count)}
-            </span>
-            <span className="video-card__separator" aria-hidden="true">
-              ·
-            </span>
             <span className="video-card__date">
               {formatDate(video.created_at)}
             </span>

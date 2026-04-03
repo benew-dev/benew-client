@@ -28,16 +28,6 @@ function sanitizeSearchQuery(query) {
     .replace(/\s+/g, ' ');
 }
 
-/**
- * Valide un UUID PostgreSQL
- */
-function isValidUUID(value) {
-  if (!value || typeof value !== 'string') return false;
-  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
-    value,
-  );
-}
-
 // =============================
 // RECHERCHE — appelé côté client via useTransition
 // =============================
@@ -85,7 +75,7 @@ export async function searchVideos(query) {
         client.query(`
           SELECT
             video_id, video_title, video_description, video_category,
-            video_duration_seconds, views_count, created_at,
+            video_duration_seconds, created_at,
             video_cloudinary_id, video_thumbnail_id
           FROM catalog.channel_videos
           WHERE is_active = true
@@ -129,7 +119,6 @@ export async function searchVideos(query) {
           video_description,
           video_category,
           video_duration_seconds,
-          views_count,
           created_at,
           video_cloudinary_id,
           video_thumbnail_id
@@ -142,7 +131,6 @@ export async function searchVideos(query) {
           )
         ORDER BY
           CASE WHEN video_title ILIKE $1 THEN 0 ELSE 1 END,
-          views_count DESC,
           created_at DESC
         LIMIT 100
         `,
@@ -202,64 +190,6 @@ export async function searchVideos(query) {
             operation: 'client_release',
           },
         });
-      }
-    }
-  }
-}
-
-// =============================
-// INCREMENT VIEWS — appelé quand une vidéo commence à jouer
-// =============================
-
-/**
- * Incrémente le compteur de vues d'une vidéo
- * Rate limitée : 20 req/min par IP
- * Insert dans catalog.video_views + update views_count en async
- *
- * @param {string} videoId - UUID de la vidéo
- * @returns {Promise<{ success: boolean, newCount?: number }>}
- */
-export async function incrementVideoViews(videoId) {
-  let client = null;
-
-  try {
-    if (!isValidUUID(videoId)) {
-      return { success: false, error: 'Invalid video ID' };
-    }
-
-    const identifier = await getClientIPFromAction();
-    const rateLimitResult = await checkServerActionRateLimit(
-      `channel_view:${identifier}:${videoId}`,
-      'api',
-    );
-
-    if (!rateLimitResult.success) {
-      return { success: false, code: 'RATE_LIMITED' };
-    }
-
-    client = await getClient();
-
-    const result = await client.query(
-      `UPDATE catalog.channel_videos
-      SET views_count = views_count + 1
-      WHERE video_id = $1
-      RETURNING views_count`,
-      [videoId],
-    );
-
-    return { success: true, newCount: result.rows[0]?.views_count ?? null };
-  } catch (error) {
-    captureException(error, {
-      tags: { component: 'channel_actions', operation: 'increment_views' },
-      extra: { videoId, errorCode: error.code },
-    });
-    return { success: false, error: error.message };
-  } finally {
-    if (client) {
-      try {
-        client.release();
-      } catch (e) {
-        /* ignore */
       }
     }
   }
