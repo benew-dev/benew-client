@@ -86,56 +86,61 @@ const PromoLaunch = () => {
         </p>
       </div>
 
-      {/* CARTES */}
-      <div className="promo-cards">
-        {promoTiers.map((tier, index) => {
-          const IconComponent = tier.icon;
-          return (
-            <div
-              key={tier.id}
-              className={`promo-card promo-card--${tier.color} ${
-                isMobile && index !== activeIndex ? 'promo-card--hidden' : ''
-              }`}
-            >
-              {/* Badge */}
-              <div className="promo-card__badge">{tier.badge}</div>
+      {/* CARDS + DOTS groupés */}
+      <div className="promo-cards-group">
+        {/* CARTES */}
+        <div className="promo-cards">
+          {promoTiers.map((tier, index) => {
+            const IconComponent = tier.icon;
+            return (
+              <div
+                key={tier.id}
+                className={`promo-card promo-card--${tier.color} ${
+                  isMobile && index !== activeIndex ? 'promo-card--hidden' : ''
+                }`}
+              >
+                {/* Badge */}
+                <div className="promo-card__badge">{tier.badge}</div>
 
-              {/* Icône */}
-              <div className="promo-card__icon">
-                <IconComponent />
+                {/* Icône */}
+                <div className="promo-card__icon">
+                  <IconComponent />
+                </div>
+
+                {/* Rang */}
+                <p className="promo-card__rank">{tier.rank}</p>
+
+                {/* Nombre de mois */}
+                <div className="promo-card__months">
+                  <span className="promo-card__months-number">
+                    {tier.months}
+                  </span>
+                  <span className="promo-card__months-label">{tier.label}</span>
+                </div>
+
+                {/* Description */}
+                <p className="promo-card__description">{tier.description}</p>
               </div>
-
-              {/* Rang */}
-              <p className="promo-card__rank">{tier.rank}</p>
-
-              {/* Nombre de mois */}
-              <div className="promo-card__months">
-                <span className="promo-card__months-number">{tier.months}</span>
-                <span className="promo-card__months-label">{tier.label}</span>
-              </div>
-
-              {/* Description */}
-              <p className="promo-card__description">{tier.description}</p>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* DOTS - seulement sur mobile */}
-      {isMobile && (
-        <div className="promo-dots">
-          {promoTiers.map((tier, index) => (
-            <button
-              key={index}
-              className={`promo-dot promo-dot--${tier.color} ${
-                index === activeIndex ? 'promo-dot--active' : ''
-              }`}
-              onClick={() => setActiveIndex(index)}
-              aria-label={`Aller à la carte ${index + 1}`}
-            />
-          ))}
+            );
+          })}
         </div>
-      )}
+
+        {/* DOTS - seulement sur mobile */}
+        {isMobile && (
+          <div className="promo-dots">
+            {promoTiers.map((tier, index) => (
+              <button
+                key={index}
+                className={`promo-dot promo-dot--${tier.color} ${
+                  index === activeIndex ? 'promo-dot--active' : ''
+                }`}
+                onClick={() => setActiveIndex(index)}
+                aria-label={`Aller à la carte ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
 
       {/* BOUTON */}
       <div className="promo-cta">
