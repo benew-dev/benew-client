@@ -14,6 +14,14 @@
   height: 100%;
   padding: 0 clamp(0.5rem, 1.63vw + -0.09rem, 2rem);
   box-sizing: border-box;
+
+  // Mobile/tablette : flex column pour empiler vidéo + titre
+  @include until('large-xs') {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0; // le margin-top du titre gère l'espacement
+  }
 }
 
 .video-wrapper {
@@ -31,7 +39,7 @@
   background: rgba($color-dark, 0.4);
 
   @include mobile-only {
-    max-width: 100%;
+    max-width: 88%; // 85-90% comme demandé
   }
 
   @include tablet-up {

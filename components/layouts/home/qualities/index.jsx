@@ -70,14 +70,14 @@ const QualitiesHome = () => {
 
   return (
     <>
-      {/* BLOC 1 : TITRE */}
-      <div className="services-title-block">
-        <h2 className="section-main-title">
+      {/* BLOC TITRE — desktop uniquement, au-dessus de la vidéo */}
+      <div className="services-title-block services-title-block--desktop">
+        <h1 className="section-main-title">
           Caractéristiques de nos magasins de vente en ligne
-        </h2>
+        </h1>
       </div>
 
-      {/* BLOC 2 : VIDÉO */}
+      {/* BLOC VIDÉO — contient aussi le titre sur mobile/tablette */}
       <div className="services-video-block">
         <div className="video-wrapper">
           <video
@@ -126,6 +126,12 @@ const QualitiesHome = () => {
               </button>
             </div>
           )}
+        </div>
+        {/* TITRE mobile/tablette — sous la vidéo */}
+        <div className="services-title-block services-title-block--mobile">
+          <h1 className="section-main-title">
+            Caractéristiques de nos magasins de vente en ligne
+          </h1>
         </div>
       </div>
     </>
