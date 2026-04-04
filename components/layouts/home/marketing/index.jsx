@@ -10,8 +10,7 @@ const MarketingHome = () => {
       <Image
         src="/tirelire.png"
         alt="Tirelire symbolisant l'économie et les profits"
-        width={256}
-        height={384}
+        fill={true}
         className="profit-image"
         priority
       />
