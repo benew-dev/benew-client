@@ -359,7 +359,6 @@ export async function createOrder(formData, applicationId, applicationFee) {
           extra: {
             applicationId,
             applicationFee,
-            isCashPayment,
             processingTime: Date.now() - startTime,
           },
         });

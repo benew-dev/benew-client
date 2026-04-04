@@ -275,7 +275,7 @@ const OrderModal = ({
             application_category: applicationCategory || 'unknown',
           },
           result.orderId || Date.now().toString(),
-          formData.paymentMethod,
+          formData.paymentMethods.join(','),
         );
       } catch (error) {
         console.warn('[Analytics] Error tracking purchase:', error);

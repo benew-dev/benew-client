@@ -80,7 +80,6 @@ export async function validateOrderServer(data) {
     const validatedData = await orderServerSchema.validate(data, {
       abortEarly: false,
       stripUnknown: true,
-      context: { isCashPayment: data.isCashPayment },
     });
 
     return {
