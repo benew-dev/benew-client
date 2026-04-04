@@ -29,7 +29,7 @@
 @include between('medium-768', 'large-1280') {
   .text-container {
     position: absolute;
-    bottom: 8%;
+    top: 52%;
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
