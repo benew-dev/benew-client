@@ -27,15 +27,14 @@
 @include between('medium-768', 'large-1280') {
   .profit-image {
     position: absolute;
-    top: 2%;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -58%);
     z-index: 1;
     opacity: 1;
     filter: none;
     transition: all 0.4s ease;
-    // clamp : 62vh (768px) → 66vh (1024px)
-    height: clamp(62vh, 1.56vw + 60vh, 66vh);
+    height: clamp(58vh, 1.56vw + 56vh, 62vh);
     width: auto;
   }
 }
@@ -48,12 +47,10 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 1;
-    // clamp : 65vh (360px) → 70vh (768px)
     height: clamp(65vh, 1.23vw + 60.6vh, 70vh);
     width: auto;
-    // opacity et filter : valeurs stables — clamp() incompatible avec valeurs sans unité et px+vw
-    opacity: 0.3;
-    filter: blur(2px);
+    opacity: 1;
+    filter: none;
     transition: all 0.4s ease;
   }
 }

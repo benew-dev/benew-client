@@ -29,7 +29,7 @@
 @include between('medium-768', 'large-1280') {
   .text-container {
     position: absolute;
-    bottom: 5%;
+    bottom: 8%;
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
@@ -69,11 +69,11 @@
     padding: clamp(1rem, 0.27vw + 0.9rem, 1.25rem)
       clamp(0.8rem, 0.22vw + 0.72rem, 1rem);
     margin: 0;
-    background: transparent;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    border-radius: 0;
-    border: none;
+    background: rgba(220, 220, 230, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: clamp(16px, 1vw + 12px, 20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 }
 
