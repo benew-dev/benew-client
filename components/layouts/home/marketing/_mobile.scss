@@ -29,9 +29,9 @@
     width: 90%;
     padding: 1.25rem 1rem;
     border-radius: 16px;
-    background: rgba(40, 40, 50, 0.72);
+    background: rgba(215, 204, 153, 0.72);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid $color-orange;
   }
 }

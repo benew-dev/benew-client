@@ -95,6 +95,7 @@
   letter-spacing: clamp(0.8px, 0.08vw + 0.51px, 1.5px);
 
   @include mobile-only {
+    color: $color-dark;
     text-shadow:
       0 2px 4px rgba($color-dark, 0.9),
       0 0 15px rgba($color-orange, 0.7),
