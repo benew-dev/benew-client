@@ -43,12 +43,13 @@
 @include mobile-only {
   .profit-image {
     position: absolute;
-    bottom: 5%;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     z-index: 1;
-    height: clamp(65vh, 1.23vw + 60.6vh, 70vh);
-    width: auto;
+    height: clamp(80vh, 2vw + 75vh, 85vh);
+    width: clamp(80%, 1.5vw + 76%, 85%);
+    object-fit: contain;
     opacity: 1;
     filter: none;
     transition: all 0.4s ease;
