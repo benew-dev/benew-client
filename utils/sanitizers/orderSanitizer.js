@@ -105,20 +105,25 @@ export function sanitizeOrderData(orderData) {
 
     const issues = [];
 
-    // ✅ SANITIZATION avec field NAME
+    // Sanitizer les IDs de plateformes
+    const rawPaymentMethods = Array.isArray(orderData.paymentMethods)
+      ? orderData.paymentMethods
+      : [];
+
+    const sanitizedPaymentMethods = rawPaymentMethods
+      .map((id) => cleanString(id, 50))
+      .filter((id) => id.length > 0);
+
     const sanitized = {
       name: cleanName(orderData.name),
       email: cleanEmail(orderData.email),
       phone: cleanPhone(orderData.phone),
-      paymentMethod: cleanString(orderData.paymentMethod, 50),
-      accountName: cleanString(orderData.accountName, 100),
-      accountNumber: cleanString(orderData.accountNumber, 50),
+      paymentMethods: sanitizedPaymentMethods,
+      hasCashPayment: Boolean(orderData.hasCashPayment),
       applicationId: cleanString(orderData.applicationId, 50),
       applicationFee: Number(orderData.applicationFee) || 0,
-      isCashPayment: Boolean(orderData.isCashPayment),
     };
 
-    // ✅ VALIDATION BASIQUE - Champs requis
     if (!sanitized.name || sanitized.name.length < 3) {
       issues.push('Nom complet invalide');
     }
@@ -131,26 +136,12 @@ export function sanitizeOrderData(orderData) {
       issues.push('Téléphone invalide');
     }
 
-    if (!sanitized.paymentMethod) {
-      issues.push('Méthode de paiement manquante');
+    if (sanitized.paymentMethods.length === 0) {
+      issues.push('Au moins une méthode de paiement est requise');
     }
 
     if (sanitized.applicationFee <= 0) {
       issues.push('Montant invalide');
-    }
-
-    // ✅ VALIDATION CONDITIONNELLE - Mode CASH
-    if (!sanitized.isCashPayment) {
-      if (!sanitized.accountName || sanitized.accountName.length < 2) {
-        issues.push('Nom de compte invalide');
-      }
-      if (!sanitized.accountNumber || sanitized.accountNumber.length < 5) {
-        issues.push('Numéro de compte invalide');
-      }
-    } else {
-      // En mode CASH, forcer les valeurs par défaut
-      sanitized.accountName = 'CASH';
-      sanitized.accountNumber = 'N/A';
     }
 
     return {
@@ -180,6 +171,7 @@ export function sanitizeOrderData(orderData) {
  * @param {Object} sanitizedData - Données déjà sanitizées
  * @returns {{valid: boolean, violations: string[]}}
  */
+// Par :
 export function validateBusinessRules(sanitizedData) {
   if (!sanitizedData) {
     return {
@@ -190,7 +182,6 @@ export function validateBusinessRules(sanitizedData) {
 
   const violations = [];
 
-  // Montant
   if (
     sanitizedData.applicationFee < 1 ||
     sanitizedData.applicationFee > 100000
@@ -198,33 +189,25 @@ export function validateBusinessRules(sanitizedData) {
     violations.push('Montant hors limites (1-100,000)');
   }
 
-  // Email format basique
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(sanitizedData.email)) {
     violations.push('Format email invalide');
   }
 
-  // Téléphone minimum 8 chiffres
   const phoneDigits = sanitizedData.phone.replace(/\D/g, '');
   if (phoneDigits.length < 8) {
     violations.push('Téléphone trop court');
   }
 
-  // Nom minimum 3 caractères
   if (sanitizedData.name.length < 3) {
     violations.push('Nom trop court');
   }
 
-  // ✅ VALIDATION CASH - Si non-CASH, vérifier les comptes
-  if (!sanitizedData.isCashPayment) {
-    if (
-      sanitizedData.accountName === 'CASH' ||
-      sanitizedData.accountNumber === 'N/A'
-    ) {
-      violations.push(
-        'Informations de compte incohérentes pour paiement non-cash',
-      );
-    }
+  if (
+    !Array.isArray(sanitizedData.paymentMethods) ||
+    sanitizedData.paymentMethods.length === 0
+  ) {
+    violations.push('Au moins une méthode de paiement est requise');
   }
 
   return {

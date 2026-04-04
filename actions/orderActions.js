@@ -46,12 +46,7 @@ function withTimeout(promise, timeoutMs, errorMessage = 'Timeout') {
  * @param {boolean} isCashPayment - Mode CASH ou non
  * @returns {Promise<Object>} - Résultat de la création
  */
-export async function createOrder(
-  formData,
-  applicationId,
-  applicationFee,
-  isCashPayment = false,
-) {
+export async function createOrder(formData, applicationId, applicationFee) {
   return Sentry.withServerActionInstrumentation(
     'createOrder',
     {
@@ -134,11 +129,11 @@ export async function createOrder(
         // ÉTAPE 3: PRÉPARATION ET SANITIZATION
         // =============================
 
+        // Par :
         const rawData = prepareOrderDataFromFormData(
           formData,
           applicationId,
           numericFee,
-          isCashPayment,
         );
 
         // Détection précoce d'injection
@@ -248,32 +243,25 @@ export async function createOrder(
           };
         }
 
-        // Vérifier que la plateforme de paiement existe et est active
+        // Vérifier que toutes les plateformes existent et sont actives
+        const platformIds = yupValidation.data.paymentMethods;
         const platformCheck = await withTimeout(
           client.query(
-            'SELECT platform_name, is_cash_payment FROM admin.platforms WHERE platform_id = $1 AND is_active = true',
-            [yupValidation.data.paymentMethod],
+            `SELECT platform_id, platform_name, is_cash_payment
+             FROM admin.platforms
+             WHERE platform_id = ANY($1) AND is_active = true`,
+            [platformIds],
           ),
           5000,
           'Platform check timeout',
         );
 
-        if (platformCheck.rows.length === 0) {
+        if (platformCheck.rows.length !== platformIds.length) {
           return {
             success: false,
             message:
-              "La méthode de paiement sélectionnée n'est pas disponible.",
+              'Une ou plusieurs méthodes de paiement ne sont pas disponibles.',
             code: 'PLATFORM_NOT_FOUND',
-          };
-        }
-
-        // ✅ VÉRIFICATION COHÉRENCE MODE CASH
-        const platformIsCash = platformCheck.rows[0].is_cash_payment;
-        if (platformIsCash !== yupValidation.data.isCashPayment) {
-          return {
-            success: false,
-            message: 'Incohérence détectée dans le mode de paiement.',
-            code: 'PAYMENT_MODE_MISMATCH',
           };
         }
 
@@ -296,28 +284,28 @@ export async function createOrder(
           };
         }
 
-        // ✅ INSERTION - order_client avec [name, email, phone]
+        const hasCashPayment = platformCheck.rows.some(
+          (p) => p.is_cash_payment,
+        );
+        const platformNames = platformCheck.rows.map((p) => p.platform_name);
+
         const insertResult = await withTimeout(
           client.query(
             `INSERT INTO admin.orders (
               order_client_name,
               order_client_email,
               order_client_phone,
-              order_platform_id,
-              order_payment_name,
-              order_payment_number,
+              order_platform_ids,
               order_application_id,
               order_price,
               order_payment_status
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7)
             RETURNING order_id, order_created, order_payment_status`,
             [
               yupValidation.data.name,
               yupValidation.data.email,
               yupValidation.data.phone,
-              yupValidation.data.paymentMethod,
-              yupValidation.data.accountName,
-              yupValidation.data.accountNumber,
+              platformIds,
               yupValidation.data.applicationId,
               yupValidation.data.applicationFee,
               'unpaid',
@@ -356,8 +344,8 @@ export async function createOrder(
             created: newOrder.order_created,
             applicationName: appCheck.rows[0].application_name,
             amount: yupValidation.data.applicationFee,
-            platform: platformCheck.rows[0].platform_name,
-            isCashPayment: platformIsCash,
+            platforms: platformNames,
+            hasCashPayment,
           },
         };
       } catch (error) {
@@ -442,28 +430,20 @@ export async function createOrderFromObject(data) {
   try {
     const formData = new FormData();
 
-    // ✅ Mapper avec field NAME
-    const fields = [
-      'name',
-      'email',
-      'phone',
-      'paymentMethod',
-      'accountName',
-      'accountNumber',
-    ];
-
-    fields.forEach((field) => {
+    ['name', 'email', 'phone'].forEach((field) => {
       if (data[field] !== undefined && data[field] !== null) {
         formData.append(field, String(data[field]));
       }
     });
 
-    return await createOrder(
-      formData,
-      data.applicationId,
-      data.applicationFee,
-      data.isCashPayment || false,
-    );
+    // paymentMethods est un tableau — append chaque ID séparément
+    const paymentMethods = Array.isArray(data.paymentMethods)
+      ? data.paymentMethods
+      : [];
+    paymentMethods.forEach((id) => formData.append('paymentMethods', id));
+    formData.append('hasCashPayment', String(Boolean(data.hasCashPayment)));
+
+    return await createOrder(formData, data.applicationId, data.applicationFee);
   } catch (error) {
     captureException(error, {
       tags: {

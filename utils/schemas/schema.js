@@ -38,42 +38,11 @@ export const orderServerSchema = yup.object().shape({
     .trim(),
 
   // Informations de paiement
-  paymentMethod: yup
-    .string()
-    .required('La méthode de paiement est requise')
-    .uuid('ID de plateforme invalide')
-    .trim(),
-
-  // ✅ SUPPORT CASH - Champs conditionnels
-  accountName: yup
-    .string()
-    .when('isCashPayment', {
-      is: false,
-      then: (schema) =>
-        schema
-          .required('Le nom du compte est requis pour les paiements non-cash')
-          .min(2, 'Le nom du compte doit contenir au moins 2 caractères')
-          .max(100, 'Le nom du compte ne peut pas dépasser 100 caractères'),
-      otherwise: (schema) =>
-        schema.default('CASH').oneOf(['CASH'], 'Valeur CASH requise'),
-    })
-    .trim(),
-
-  accountNumber: yup
-    .string()
-    .when('isCashPayment', {
-      is: false,
-      then: (schema) =>
-        schema
-          .required(
-            'Le numéro de compte est requis pour les paiements non-cash',
-          )
-          .min(5, 'Le numéro de compte doit contenir au moins 5 caractères')
-          .max(50, 'Le numéro de compte ne peut pas dépasser 50 caractères'),
-      otherwise: (schema) =>
-        schema.default('N/A').oneOf(['N/A'], 'Valeur N/A requise'),
-    })
-    .trim(),
+  paymentMethods: yup
+    .array()
+    .of(yup.string().uuid('ID de plateforme invalide'))
+    .min(1, 'Veuillez sélectionner au moins une méthode de paiement')
+    .required('La méthode de paiement est requise'),
 
   // IDs et montant
   applicationId: yup
@@ -94,7 +63,7 @@ export const orderServerSchema = yup.object().shape({
     }),
 
   // ✅ NOUVEAU: Flag pour identifier le mode CASH
-  isCashPayment: yup.boolean().default(false),
+  hasCashPayment: yup.boolean().default(false),
 });
 
 // =============================
@@ -144,23 +113,24 @@ export async function validateOrderServer(data) {
  * @param {boolean} isCashPayment - Mode CASH ou non
  * @returns {Object} - Données préparées
  */
+// Par :
 export function prepareOrderDataFromFormData(
   formData,
   applicationId,
   applicationFee,
-  isCashPayment = false,
 ) {
+  // paymentMethods est envoyé comme plusieurs entrées du même nom
+  const paymentMethods = formData.getAll('paymentMethods');
+  const hasCashPayment = formData.get('hasCashPayment') === 'true';
+
   return {
     name: formData.get('name') || '',
     email: formData.get('email') || '',
     phone: formData.get('phone') || '',
-    paymentMethod: formData.get('paymentMethod') || '',
-    accountName: formData.get('accountName') || (isCashPayment ? 'CASH' : ''),
-    accountNumber:
-      formData.get('accountNumber') || (isCashPayment ? 'N/A' : ''),
+    paymentMethods,
+    hasCashPayment,
     applicationId: applicationId || '',
     applicationFee: Number(applicationFee) || 0,
-    isCashPayment,
   };
 }
 

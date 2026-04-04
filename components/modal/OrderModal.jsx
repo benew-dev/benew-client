@@ -17,9 +17,7 @@ const INITIAL_FORM_DATA = {
   name: '',
   email: '',
   phone: '',
-  paymentMethod: '',
-  accountName: '',
-  accountNumber: '',
+  paymentMethods: [], // tableau d'UUIDs sélectionnés
 };
 
 const OrderModal = ({
@@ -38,21 +36,21 @@ const OrderModal = ({
     name: '',
     email: '',
     phone: '',
-    paymentMethod: '',
-    accountName: '',
-    accountNumber: '',
+    paymentMethods: [],
   });
 
   // Ajouter une ref sur la modale
   const modalRef = useRef(null);
 
-  // Trouver la plateforme sélectionnée
-  const selectedPlatform = platforms?.find(
-    (p) => p.platform_id === formData.paymentMethod,
-  );
-  const isCashPayment = selectedPlatform?.is_cash_payment || false;
+  // Plateformes sélectionnées par l'utilisateur
+  const selectedPlatforms =
+    platforms?.filter((p) => formData.paymentMethods.includes(p.platform_id)) ||
+    [];
 
-  // ✅ FILTRER LES PLATEFORMES ÉLECTRONIQUES (non-CASH)
+  // Y a-t-il du cash parmi les sélections ?
+  const hasCashPayment = selectedPlatforms.some((p) => p.is_cash_payment);
+
+  // Toutes les plateformes électroniques disponibles (pour l'étape 4)
   const electronicPlatforms = !platforms
     ? []
     : platforms.filter(
@@ -160,11 +158,19 @@ const OrderModal = ({
     onClose();
   };
 
+  // Par :
   const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value, type, checked } = e.target;
+
+    if (name === 'paymentMethods') {
+      // checkbox — ajouter ou retirer du tableau
+      const updated = checked
+        ? [...formData.paymentMethods, value]
+        : formData.paymentMethods.filter((id) => id !== value);
+      setFormData({ ...formData, paymentMethods: updated });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const validateStep1 = () => {
@@ -208,17 +214,11 @@ const OrderModal = ({
     return true;
   };
 
+  // Par :
   const validateStep2 = () => {
-    if (!formData.paymentMethod) {
-      setError('Veuillez sélectionner une méthode de paiement');
+    if (formData.paymentMethods.length === 0) {
+      setError('Veuillez sélectionner au moins une méthode de paiement');
       return false;
-    }
-
-    if (!isCashPayment) {
-      if (!formData.accountName || !formData.accountNumber) {
-        setError('Veuillez remplir le nom et le numéro de compte');
-        return false;
-      }
     }
 
     setError('');
@@ -248,21 +248,15 @@ const OrderModal = ({
       formDataToSubmit.append('name', formData.name);
       formDataToSubmit.append('email', formData.email);
       formDataToSubmit.append('phone', formData.phone);
-      formDataToSubmit.append('paymentMethod', formData.paymentMethod);
-
-      if (isCashPayment) {
-        formDataToSubmit.append('accountName', 'CASH');
-        formDataToSubmit.append('accountNumber', 'N/A');
-      } else {
-        formDataToSubmit.append('accountName', formData.accountName);
-        formDataToSubmit.append('accountNumber', formData.accountNumber);
-      }
+      formData.paymentMethods.forEach((id) =>
+        formDataToSubmit.append('paymentMethods', id),
+      );
+      formDataToSubmit.append('hasCashPayment', String(hasCashPayment));
 
       const result = await createOrder(
         formDataToSubmit,
         applicationId,
         applicationFee,
-        isCashPayment,
       );
 
       if (!result.success) {
@@ -371,16 +365,20 @@ const OrderModal = ({
           {step === 2 && (
             <div className="step">
               <h2>Étape 2: Méthode de paiement</h2>
+              <p style={{ fontSize: '0.875rem', opacity: 0.7 }}>
+                Vous pouvez sélectionner une ou plusieurs méthodes.
+              </p>
               <div className="checkboxGroup">
                 {platforms?.map((platform) => (
                   <label key={platform?.platform_id} className="radioLabel">
                     <input
-                      type="radio"
-                      name="paymentMethod"
+                      type="checkbox"
+                      name="paymentMethods"
                       value={platform?.platform_id}
                       onChange={handleInputChange}
-                      checked={formData.paymentMethod === platform?.platform_id}
-                      required
+                      checked={formData.paymentMethods.includes(
+                        platform?.platform_id,
+                      )}
                     />
                     <span className="platform-name">
                       {platform?.is_cash_payment ? (
@@ -398,32 +396,10 @@ const OrderModal = ({
                 ))}
               </div>
 
-              {formData.paymentMethod && !isCashPayment && (
-                <>
-                  <input
-                    type="text"
-                    name="accountName"
-                    placeholder="Nom du compte"
-                    value={formData.accountName}
-                    onChange={handleInputChange}
-                    required
-                  />
-                  <input
-                    type="text"
-                    name="accountNumber"
-                    placeholder="Numéro du compte"
-                    value={formData.accountNumber}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </>
-              )}
-
-              {isCashPayment && (
+              {hasCashPayment && (
                 <div className="cash-info">
                   <p className="cash-message">
-                    ✅ Paiement en espèces sélectionné. Aucune information de
-                    compte requise.
+                    💵 Paiement en espèces inclus dans votre sélection.
                   </p>
                 </div>
               )}
@@ -463,53 +439,19 @@ const OrderModal = ({
               </div>
 
               <div className="summary-section">
-                <h3 className="summary-title">Informations de paiement</h3>
-
-                {platforms?.map((platform) => {
-                  if (platform.platform_id !== formData.paymentMethod)
-                    return null;
-
-                  return (
-                    <div
-                      key={platform.platform_id}
-                      className="platform-summary"
-                    >
-                      <div className="summary-item">
-                        <span className="summary-label">Plateforme :</span>
-                        <span className="summary-value platform-name-highlight">
-                          {platform.is_cash_payment ? (
-                            <strong>
-                              💵 {platform.platform_name} (Espèces)
-                            </strong>
-                          ) : (
-                            platform.platform_name
-                          )}
-                        </span>
-                      </div>
-
-                      {!platform.is_cash_payment && (
-                        <>
-                          <div className="summary-item">
-                            <span className="summary-label">
-                              Nom du compte :
-                            </span>
-                            <span className="summary-value">
-                              {formData.accountName}
-                            </span>
-                          </div>
-                          <div className="summary-item">
-                            <span className="summary-label">
-                              Numéro du compte :
-                            </span>
-                            <span className="summary-value">
-                              {formData.accountNumber}
-                            </span>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  );
-                })}
+                <h3 className="summary-title">Méthodes de paiement</h3>
+                {selectedPlatforms.map((platform) => (
+                  <div key={platform.platform_id} className="summary-item">
+                    <span className="summary-label">
+                      {platform.is_cash_payment ? '💵' : '📱'}
+                    </span>
+                    <span className="summary-value platform-name-highlight">
+                      {platform.is_cash_payment
+                        ? `${platform.platform_name} (Espèces)`
+                        : platform.platform_name}
+                    </span>
+                  </div>
+                ))}
               </div>
 
               <div className="summary-section summary-total">
