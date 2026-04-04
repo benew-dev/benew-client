@@ -354,7 +354,9 @@
     // 7ème carte centrée sur 2 colonnes mobile
     @media (max-width: 767px) {
       grid-column: 1 / -1;
-      max-width: 50%;
+      max-width: calc(
+        50% - 0.375rem
+      ); // ← même largeur qu'une carte normale dans la grille 2 colonnes
       margin: 0 auto;
     }
   }
