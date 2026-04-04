@@ -51,8 +51,8 @@
   justify-content: center;
 
   // clamp : 3rem (360px) → 4rem (1280px)
-  padding: clamp(3rem, 1.09vw + 2.61rem, 4rem)
-    clamp(1rem, 1.09vw + 0.61rem, 2rem) clamp(2rem, 1.09vw + 1.61rem, 3rem);
+  padding: clamp(5rem, 2.17vw + 4rem, 7rem) clamp(1rem, 1.09vw + 0.61rem, 2rem)
+    clamp(2rem, 1.09vw + 1.61rem, 3rem);
 
   @include from('large-1280') {
     padding: 4rem 2rem;

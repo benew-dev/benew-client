@@ -10,7 +10,7 @@
 // =============================
 @include mobile-landscape {
   .presentation-content {
-    padding: 1.5rem 1rem;
+    padding: 3rem 1rem; // était 1.5rem
     justify-content: center;
   }
 
@@ -60,7 +60,7 @@
 // =============================
 @media (max-width: 359px) {
   .presentation-content {
-    padding: 1.5rem 0.75rem;
+    padding: 3rem 0.75rem; // était 1.5rem
   }
 
   .benew-title {
@@ -111,7 +111,7 @@
 // =============================
 @include short-screen {
   .presentation-content {
-    padding: 1.5rem 1rem;
+    padding: 2.5rem 1rem; // était 1.5rem
     justify-content: center;
   }
 
