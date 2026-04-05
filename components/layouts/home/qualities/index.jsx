@@ -127,9 +127,7 @@ const QualitiesHome = () => {
         </div>
         {/* TITRE mobile/tablette — sous la vidéo */}
         <div className="services-title-block services-title-block--mobile">
-          <h1 className="section-main-title">
-            Caractéristiques de nos magasins de vente en ligne
-          </h1>
+          <h1 className="section-main-title">nos magasins en ligne</h1>
         </div>
       </div>
     </>
