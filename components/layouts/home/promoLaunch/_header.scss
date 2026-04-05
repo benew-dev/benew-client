@@ -54,7 +54,7 @@
   font-weight: 400;
   color: rgba($color-light, 0.75);
   line-height: 1.5;
-  max-width: clamp(600px, 7.07vw + 574.5px, 650px);
+  max-width: clamp(280px, 80%, 650px);
   margin: 0;
 
   font-size: clamp(0.72rem, 0.3vw + 0.61rem, 1rem);
