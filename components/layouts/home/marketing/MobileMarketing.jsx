@@ -9,7 +9,7 @@ const MobileMarketing = () => {
       <div className="mobile-marketing__text">
         <h2 className="main-title">GÉNÈRES PLUS DE PROFIT,</h2>
         <h2 className="main-title">PAIES MOINS DE CHARGES</h2>
-        <Link href="/blog" className="profit-blog-link">
+        <Link href="/channel" className="profit-blog-link">
           En savoir plus
         </Link>
       </div>
