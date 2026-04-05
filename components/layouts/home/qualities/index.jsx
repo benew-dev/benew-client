@@ -80,7 +80,7 @@ const QualitiesHome = () => {
         <div className="video-wrapper">
           <video
             ref={videoRef}
-            src="/video/Qualities.mp4"
+            src="/video/Qualities (1).mp4"
             preload="none"
             playsInline
             // Contrôles natifs sur mobile/tablette, aucun sur desktop
