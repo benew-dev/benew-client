@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    // @ts-ignore - baseUrl is deprecated in TS 7.0
+    "ignoreDeprecations": "6.0",
+
     // Sets a base directory from which to resolve bare specifier module names.
     "baseUrl": ".",
 
